@@ -21,31 +21,105 @@ fbq('track','PageView');
 
 <style>
 :root{
-  --bg:#0f0f0f;--card:#1b1b1b;--text:#f1f1f1;
-  --muted:#aaa;--accent:#c40000;--ok:#25D366;
+  --bg:#0f0f0f;
+  --card:#1b1b1b;
+  --text:#f1f1f1;
+  --muted:#aaa;
+  --accent:#c40000;
+  --ok:#25D366;
 }
-body{margin:0;font-family:Arial;background:var(--bg);color:var(--text)}
-.container{max-width:760px;margin:auto;padding:16px}
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:720px;
+  margin:auto;
+  padding:16px;
+}
 h1{text-align:center;margin-bottom:0}
 h2{text-align:center;color:var(--muted);font-weight:normal;margin-top:4px}
-.section{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px}
-label{font-size:14px;color:var(--muted)}
-button,input,select{
-  background:#111;color:var(--text);
-  border:1px solid #333;border-radius:8px
+
+.section{
+  background:var(--card);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
 }
-button{padding:12px;margin-top:6px}
-button.selected{background:#260000;border-color:var(--accent)}
-.qty-buttons{display:flex;flex-wrap:wrap;gap:6px}
-.qty-buttons button{flex:1}
-.tabs{display:flex;gap:6px;overflow-x:auto}
-.tab{min-width:90px;text-align:center;padding:8px;background:#111;border-radius:8px}
-.tab.active{background:var(--accent)}
-.model-info{font-size:13px;color:var(--muted);margin-top:6px}
-.pay button{width:100%;font-size:20px;background:var(--ok);border:none;opacity:.4}
+
+label{
+  display:block;
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.control{
+  width:100%;
+  padding:14px;
+  background:#111;
+  color:var(--text);
+  border:1px solid #333;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+
+button.control{
+  text-align:left;
+}
+
+button.selected{
+  border-color:var(--accent);
+  background:#260000;
+}
+
+.tabs{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  margin-bottom:12px;
+}
+.tab{
+  min-width:90px;
+  padding:10px;
+  text-align:center;
+  background:#111;
+  border-radius:8px;
+}
+.tab.active{
+  background:var(--accent);
+}
+
+.model-info{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.summary{
+  font-size:15px;
+  line-height:1.5;
+}
+
+.pay button{
+  width:100%;
+  padding:18px;
+  font-size:20px;
+  background:var(--ok);
+  border:none;
+  border-radius:10px;
+  opacity:.4;
+}
+
 .pay button.enabled{opacity:1}
-.summary{font-size:15px;line-height:1.5}
-.small{text-align:center;font-size:13px;color:var(--muted)}
+
+.small{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+}
 </style>
 </head>
 
@@ -58,119 +132,149 @@ button.selected{background:#260000;border-color:var(--accent)}
 <!-- Cantidad de picadas -->
 <div class="section">
 <label>¿Cuántas picadas querés?</label>
-<div class="qty-buttons" id="qtyBtns"></div>
-<input id="customQty" type="number" min="11" placeholder="Cantidad" style="display:none;width:120px" onchange="setCustomQty()">
+<select id="qtySelect" class="control" onchange="handleQtySelect()">
+  <option value="1">1 picada</option>
+  <option value="2">2 picadas</option>
+  <option value="3">3 picadas</option>
+  <option value="4">4 picadas</option>
+  <option value="5">5 picadas</option>
+  <option value="6">6 picadas</option>
+  <option value="7">7 picadas</option>
+  <option value="8">8 picadas</option>
+  <option value="9">9 picadas</option>
+  <option value="10">10 picadas</option>
+  <option value="more">Necesito más picadas</option>
+</select>
+
+<input id="customQty" type="number" min="11"
+class="control" placeholder="Ingresá la cantidad"
+style="display:none" onchange="setCustomQty()">
 </div>
 
-<!-- Configuración -->
+<!-- Configuración de picadas -->
 <div class="section" id="config"></div>
 
 <!-- Envío -->
 <div class="section">
 <label>Dirección y altura de envío</label>
-<input id="addr" oninput="update()">
+<input id="addr" class="control" oninput="update()">
+
 <label>Localidad</label>
-<select id="zone" onchange="setZone()">
-<option value="">Seleccionar</option>
-<option value="Francisco Álvarez|0">Francisco Álvarez</option>
-<option value="Moreno|0">Moreno</option>
-<option value="Merlo|7000">Merlo</option>
-<option value="Ituzaingó|8000">Ituzaingó</option>
-<option value="Morón|8000">Morón</option>
-<option value="Castelar|8000">Castelar</option>
-<option value="Hurlingham|8000">Hurlingham</option>
-<option value="San Miguel|8000">San Miguel</option>
-<option value="Tres de Febrero|8000">Tres de Febrero</option>
-<option value="La Matanza|8000">La Matanza</option>
-<option value="General Rodríguez|8000">General Rodríguez</option>
-<option value="Luján|8000">Luján</option>
-<option value="CABA|8000">CABA</option>
+<select id="zone" class="control" onchange="setZone()">
+  <option value="">Seleccionar localidad</option>
+  <option value="Francisco Álvarez|0">Francisco Álvarez</option>
+  <option value="Moreno|0">Moreno</option>
+  <option value="Merlo|7000">Merlo</option>
+  <option value="Ituzaingó|8000">Ituzaingó</option>
+  <option value="Morón|8000">Morón</option>
+  <option value="Castelar|8000">Castelar</option>
+  <option value="Hurlingham|8000">Hurlingham</option>
+  <option value="San Miguel|8000">San Miguel</option>
+  <option value="Tres de Febrero|8000">Tres de Febrero</option>
+  <option value="La Matanza|8000">La Matanza</option>
+  <option value="General Rodríguez|8000">General Rodríguez</option>
+  <option value="Luján|8000">Luján</option>
+  <option value="CABA|8000">CABA</option>
 </select>
 </div>
 
-<div class="section summary" id="summary">Completá todos los pasos.</div>
+<div class="section summary" id="summary">
+Completá todos los pasos para poder ir a pagar.
+</div>
 
 <div class="pay">
 <button id="payBtn" onclick="goWA()">IR A PAGAR</button>
 </div>
 
-<p class="small">Reservás con el 50%. El resto al recibir.</p>
+<p class="small">Reservás con el 50%. El resto se paga al recibir.</p>
 
 </div>
 
 <script>
 const modelInfo={
-  'Clásica y Elegante':'Quesos brie, azul y pepato. Sopresatta, lomo ahumado, jamón crudo, panceta. Dip dulce y salado.',
-  'Fresca y Colorida':'Quesos brie, pategrás y sardo. Jamón cocido, salamín, longaniza, panceta. Dip dulce y salado.'
+  "Clásica y Elegante":"Quesos brie, azul y pepato. Sopresatta, lomo ahumado, jamón crudo, panceta. Dip dulce y salado.",
+  "Fresca y Colorida":"Quesos brie, pategrás y sardo. Jamón cocido, salamín, longaniza, panceta. Dip dulce y salado."
 };
-let picadas=[],active=0,ship=0,zoneName='';
 
-function initQty(){
-  const q=document.getElementById('qtyBtns');
-  for(let i=1;i<=10;i++)
-    q.innerHTML+=`<button onclick="setQty(${i})">${i}</button>`;
-  q.innerHTML+=`<button onclick="moreQty()">Necesito más</button>`;
-  setQty(1);
+let picadas=[],active=0,ship=0,zoneName="";
+
+function handleQtySelect(){
+  const v=qtySelect.value;
+  customQty.style.display = v==="more" ? "block" : "none";
+  if(v!=="more") buildPicadas(parseInt(v));
 }
-function setQty(n){
-  document.getElementById('customQty').style.display='none';
-  picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
-  active=0;renderConfig();
-}
-function moreQty(){
-  document.getElementById('customQty').style.display='block';
-}
+
 function setCustomQty(){
-  const n=parseInt(customQty.value)||1;
-  setQty(n);
+  buildPicadas(parseInt(customQty.value)||1);
 }
+
+function buildPicadas(n){
+  picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
+  active=0;
+  renderConfig();
+}
+
 function renderConfig(){
-  let t='<div class="tabs">';
-  picadas.forEach((_,i)=>t+=`<div class="tab ${i===active?'active':''}" onclick="active=${i};renderConfig()">Picada ${i+1}</div>`);
-  t+='</div>';
+  let tabs='<div class="tabs">';
+  picadas.forEach((_,i)=>{
+    tabs+=`<div class="tab ${i===active?'active':''}" onclick="active=${i};renderConfig()">Picada ${i+1}</div>`;
+  });
+  tabs+='</div>';
 
   const p=picadas[active];
   config.innerHTML=`
-  ${t}
-  <label>Modelo</label>
-  <button class="${p.model==='Clásica y Elegante'?'selected':''}" onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
-  <button class="${p.model==='Fresca y Colorida'?'selected':''}" onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
+  ${tabs}
+  <label>Modelo de la picada</label>
+  <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
+    onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
+  <button class="control ${p.model==='Fresca y Colorida'?'selected':''}"
+    onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
   <div class="model-info">${p.model?modelInfo[p.model]:'Por favor, seleccioná un modelo.'}</div>
 
-  <label style="margin-top:10px">Cantidad de personas</label>
-  <button onclick="setSize(4,50000)">4 personas ($50.000)</button>
-  <button onclick="setSize(6,70000)">6 personas ($70.000)</button>
-  <button onclick="setSize(8,90000)">8 personas ($90.000)</button>
+  <label>Cantidad de personas</label>
+  <button class="control ${p.size===4?'selected':''}"
+    onclick="setSize(4,50000)">4 personas ($50.000)</button>
+  <button class="control ${p.size===6?'selected':''}"
+    onclick="setSize(6,70000)">6 personas ($70.000)</button>
+  <button class="control ${p.size===8?'selected':''}"
+    onclick="setSize(8,90000)">8 personas ($90.000)</button>
   `;
   update();
 }
+
 function setModel(m){picadas[active].model=m;renderConfig()}
 function setSize(s,p){picadas[active].size=s;picadas[active].price=p;renderConfig()}
 function setZone(){
-  const v=zone.value;if(!v)return;
-  zoneName=v.split('|')[0];ship=parseInt(v.split('|')[1]);update();
+  const v=zone.value;
+  if(!v)return;
+  zoneName=v.split('|')[0];
+  ship=parseInt(v.split('|')[1]);
+  update();
 }
 function update(){
   let total=ship,valid=addr.value&&zoneName,txt='';
   picadas.forEach((p,i)=>{
     if(!p.model||!p.size) valid=false;
     total+=p.price;
-    txt+=`Picada ${i+1}: ${p.model} (${p.size})<br>`;
+    txt+=`Picada ${i+1}: ${p.model} (${p.size} personas)<br>`;
   });
   if(valid){
     summary.innerHTML=`${txt}<br>Envío a ${addr.value}, ${zoneName}<br><strong>Total $${total.toLocaleString()}</strong>`;
     payBtn.classList.add('enabled');
-  }else payBtn.classList.remove('enabled');
+  }else{
+    payBtn.classList.remove('enabled');
+  }
 }
 function goWA(){
   if(!payBtn.classList.contains('enabled'))return;
   fbq('track','Lead');
   let msg='Hola, quiero pedir:\n';
-  picadas.forEach((p,i)=>msg+=`Picada ${i+1}: ${p.model} para ${p.size}\n`);
+  picadas.forEach((p,i)=>msg+=`Picada ${i+1}: ${p.model} para ${p.size} personas\n`);
   msg+=`Dirección: ${addr.value}, ${zoneName}`;
   window.location.href='https://wa.me/5491123284020?text='+encodeURIComponent(msg);
 }
-initQty();
+
+buildPicadas(1);
 </script>
 </body>
 </html>
