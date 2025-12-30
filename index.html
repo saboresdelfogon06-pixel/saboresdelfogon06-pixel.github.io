@@ -488,13 +488,20 @@ config.innerHTML = `
 
       <label>Modelo de la picada</label>
 
-      <div style="display:flex;gap:8px;margin-bottom:16px; flex-wrap:wrap;">
+      <!-- BOTONES 50% / 50% -->
+      <div style="
+        display:flex;
+        gap:8px;
+        margin-bottom:16px;
+      ">
         <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
+                style="flex:1"
                 onclick="setModel('Clásica y Elegante')">
           Clásica y Elegante
         </button>
 
         <button class="control ${p.model==='Fresca y Colorida'?'selected':''}"
+                style="flex:1"
                 onclick="setModel('Fresca y Colorida')">
           Fresca y Colorida
         </button>
@@ -505,28 +512,27 @@ config.innerHTML = `
         <div style="
           display:flex;
           flex-wrap:wrap;
-          gap:16px;
-          justify-content:flex-start;
+          gap:12px;
         ">
 
-          <div style="flex:0 1 160px; min-width:160px;">
+          <div style="flex:1 1 140px;">
             <b>🥩 Fiambres</b><br>
             ${p.model ? modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>") : ""}
           </div>
 
-          <div style="flex:0 1 140px; min-width:140px;">
+          <div style="flex:1 1 140px;">
             <b>🧀 Quesos</b><br>
             ${p.model ? modelData[p.model].quesos.map(q => `• ${q}`).join("<br>") : ""}
           </div>
 
-          <div style="flex:0 1 140px; min-width:140px;">
+          <div style="flex:1 1 140px;">
             <b>🥣 Dips</b><br>
             ${p.model ? modelData[p.model].dips.map(d => `• ${d}`).join("<br>") : ""}
           </div>
 
           ${
             p.size >= 6
-              ? `<div style="flex:0 1 160px; min-width:160px;">
+              ? `<div style="flex:1 1 140px;">
                   <b>✨ Extra</b><br>
                   • Tomatitos deshidratados
                 </div>`
@@ -552,17 +558,8 @@ config.innerHTML = `
   </div>
 `;
 
+update();
 
-  update();
-}
-
-
-function setModel(m){
-  picadas[active].model = m;
-  syncBannerWithModel(m);
-  saveState();
-  renderConfig();
-}
 
 function setSize(s,p){
   picadas[active].size = s;
