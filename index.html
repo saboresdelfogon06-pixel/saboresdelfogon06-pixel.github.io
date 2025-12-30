@@ -253,6 +253,10 @@ button.selected{
   z-index:5;
 }
 
+.control.date {
+  padding: 10px;
+}
+
 
 </style>
 </head>
@@ -297,8 +301,12 @@ placeholder="Ingresá tu nombre completo"
 oninput="update()">
 
 <label>Fecha del pedido</label>
-<input id="orderDate" type="date" class="control"
-oninput="update()">
+<input
+  id="orderDate"
+  type="date"
+  class="control date"
+  placeholder="Por favor selecciona una fecha"
+  oninput="update()">
 
 <label>Dirección y altura de envío</label>
 <input id="addr" class="control"
@@ -425,6 +433,15 @@ function setActivePicada(i){
   saveState();
   renderConfig();
 }
+function setModel(model){
+  picadas[active].model = model;
+
+  // sincroniza banner
+  syncBannerWithModel(model);
+
+  saveState();
+  renderConfig();
+}
 
 function addPicada(){
   if(picadas.length >= 6) return;
@@ -525,7 +542,7 @@ let tabs = `
         <label>Modelo de la picada</label>
 
         <!-- BOTONES 50% / 50% -->
-        <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
           <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
                   style="flex:1"
                   onclick="setModel('Clásica y Elegante')">
@@ -540,7 +557,7 @@ let tabs = `
         </div>
 
         <!-- CONTENIDO DE LA PICADA -->
-        <div class="section model-info" style="margin-bottom:16px">
+        <div class="section model-info" style="margin-bottom:8px">
           <div style="display:flex;flex-wrap:wrap;gap:12px;">
 
             <div style="flex:1 1 140px;">
@@ -573,13 +590,13 @@ let tabs = `
         <label>Cantidad de personas</label>
 
         <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">
-          4 personas ($50.000) – 20×30 cm
+          4 | Pican 6 ($50.000) – Tabla 20×30 cm
         </button>
         <button class="control ${p.size===6?'selected':''}" onclick="setSize(6,70000)">
-          6 personas ($70.000) – 28×48 cm
+          6 | Pican 8 ($70.000) – Tabla 28×48 cm
         </button>
         <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">
-          8 personas ($90.000) – 28×48 cm
+          8 | Pican 12 ($90.000) – Tabla 28×48 cm
         </button>
 
       </div>
