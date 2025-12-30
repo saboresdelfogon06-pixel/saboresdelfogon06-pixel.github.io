@@ -603,37 +603,51 @@ let tabs = `
             Fresca y Colorida
           </button>
         </div>
-
-        <!-- CONTENIDO DE LA PICADA -->
-        <div class="section model-info" style="margin-bottom:8px">
-          <div style="display:flex;flex-wrap:wrap;gap:12px;">
-
-            <div style="flex:1 1 140px;">
-              <b>🥩 Fiambres</b><br>
-              ${p.model ? modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>") : ""}
-            </div>
-
-            <div style="flex:1 1 140px;">
-              <b>🧀 Quesos</b><br>
-              ${p.model ? modelData[p.model].quesos.map(q => `• ${q}`).join("<br>") : ""}
-            </div>
-
-            <div style="flex:1 1 140px;">
-              <b>🥣 Dips</b><br>
-              ${p.model ? modelData[p.model].dips.map(d => `• ${d}`).join("<br>") : ""}
-            </div>
-
-            ${
-              p.size >= 6
-                ? `<div style="flex:1 1 140px;">
-                    <b>✨ Extra</b><br>
-                    • Tomatitos deshidratados
-                  </div>`
-                : ""
-            }
-
-          </div>
+<!-- CONTENIDO DE LA PICADA -->
+<div class="section model-info" style="margin-bottom:8px">
+  ${
+    !p.model
+      ? `
+        <div style="
+          text-align:center;
+          color:#9a958d;
+          font-size:14px;
+          padding:12px 6px;
+        ">
+          👉 Por favor, seleccioná un modelo de tabla de picada para ver su contenido.
         </div>
+      `
+      : `
+        <div style="display:flex;flex-wrap:wrap;gap:12px;">
+
+          <div style="flex:1 1 140px;">
+            <b>🥩 Fiambres</b><br>
+            ${modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>")}
+          </div>
+
+          <div style="flex:1 1 140px;">
+            <b>🧀 Quesos</b><br>
+            ${modelData[p.model].quesos.map(q => `• ${q}`).join("<br>")}
+          </div>
+
+          <div style="flex:1 1 140px;">
+            <b>🥣 Dips</b><br>
+            ${modelData[p.model].dips.map(d => `• ${d}`).join("<br>")}
+          </div>
+
+          ${
+            p.size >= 6
+              ? `<div style="flex:1 1 140px;">
+                  <b>✨ Extra</b><br>
+                  • Tomatitos deshidratados
+                </div>`
+              : ""
+          }
+
+        </div>
+      `
+  }
+</div>
 
         <label>Cantidad de personas</label>
 
