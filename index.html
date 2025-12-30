@@ -804,7 +804,6 @@ const bannerSlides = [
 ];
 
 let bannerIndex = 0;
-let bannerLocked = false;
 let bannerFrozenModel = null;
 let bannerTimer = null;
 let startX = 0;
@@ -855,12 +854,6 @@ banner.onclick = () => {
   renderConfig();
 };
 
-// lock
-function lockBanner(model){
-  bannerFrozenModel = model;
-  const i = bannerSlides.findIndex(s => s.model === model);
-  if(i >= 0) showSlide(i, false);
-}
 
 banner.addEventListener("touchend", e => {
   const endX = e.changedTouches[0].clientX;
