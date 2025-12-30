@@ -38,9 +38,30 @@ body{
   margin:auto;
   padding:16px;
 }
-h1{text-align:center;margin-bottom:0}
-h2{text-align:center;color:var(--muted);font-weight:normal;margin-top:4px}
 
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:10px;
+}
+.logo{
+  width:42px;
+}
+.brand{
+  font-size:16px;
+  color:var(--muted);
+}
+
+/* TITLES */
+h2{
+  text-align:center;
+  font-weight:normal;
+  margin:10px 0 20px;
+}
+
+/* SECTIONS */
 .section{
   background:var(--card);
   border-radius:12px;
@@ -67,8 +88,8 @@ label{
 }
 
 button.control{
-  text-align:left;
   cursor:pointer;
+  text-align:left;
 }
 
 button.selected{
@@ -76,12 +97,7 @@ button.selected{
   background:rgba(211,174,9,.15);
 }
 
-.model-row{
-  display:flex;
-  gap:10px;
-}
-.model-row button{width:50%}
-
+/* TABS */
 .tabs{
   display:flex;
   gap:6px;
@@ -100,16 +116,56 @@ button.selected{
   color:#1b1b1b;
 }
 
+/* IMAGE BOX */
+.picada-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+.image-box{
+  width:90px;
+  height:90px;
+  background:#000;
+  border-radius:10px;
+  overflow:hidden;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+}
+.image-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* MODEL ROW */
+.model-row{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+.model-row button{
+  width:50%;
+}
+
+/* INFO */
 .model-info{
   font-size:14px;
   line-height:1.5;
   color:var(--muted);
-  margin-bottom:12px;
+  margin:12px 0;
 }
-
 .model-info b{color:var(--text)}
 
-.summary{font-size:15px;line-height:1.5}
+.summary{
+  font-size:15px;
+  line-height:1.5;
+}
 
 .pay button{
   width:100%;
@@ -134,7 +190,12 @@ button.selected{
 <body>
 <div class="container">
 
-<h1>Sabores del Fogón</h1>
+<!-- HEADER -->
+<div class="header">
+  <img src="images/logo.png" class="logo">
+  <div class="brand">@saboresfogon.ar</div>
+</div>
+
 <h2>Hacé tu pedido</h2>
 
 <div class="section">
@@ -147,9 +208,8 @@ button.selected{
   <option value="5">5 picadas</option>
   <option value="more">Necesito más picadas</option>
 </select>
-
-<input id="customQty" type="number" min="6"
-class="control" placeholder="Ingresá la cantidad"
+<input id="customQty" type="number" min="6" class="control"
+placeholder="Ingresá la cantidad"
 style="display:none" onchange="setCustomQty()">
 </div>
 
@@ -188,13 +248,15 @@ Completá todos los pasos para poder ir a pagar.
 <script>
 const modelData={
  "Clásica y Elegante":{
-  quesos:["Brie","Queso azul","Pepato"],
+  img:null,
   fiambres:["Sopresatta italiana","Jamón crudo","Lomo ahumado","Panceta ahumada"],
+  quesos:["Brie","Queso azul","Pepato"],
   dips:["Dip dulce","Dip salado"]
  },
  "Fresca y Colorida":{
-  quesos:["Brie","Pategrás","Sardo"],
+  img:"images/fresca.jpg",
   fiambres:["Jamón cocido","Salamín chacarero","Longaniza","Panceta ahumada"],
+  quesos:["Brie","Pategrás","Sardo"],
   dips:["Dip dulce","Dip salado"]
  }
 };
@@ -217,23 +279,36 @@ function renderConfig(){
  tabs+='</div>';
 
  const p=picadas[active];
+
+ let imageHTML='<div class="image-box">Seleccioná<br>un modelo</div>';
+ if(p.model && modelData[p.model].img){
+  imageHTML=`<div class="image-box"><img src="${modelData[p.model].img}"></div>`;
+ }
+
  let info='Por favor, seleccioná un modelo para ver su contenido.';
  if(p.model){
   const d=modelData[p.model];
   info=`<b>Incluye:</b><br>
   <b>🥩 Fiambres:</b><br>• ${d.fiambres.join("<br>• ")}<br><br>
   <b>🧀 Quesos:</b><br>• ${d.quesos.join("<br>• ")}<br><br>
-  <b>🥣 Dips:</b><br>• ${d.dips.join("<br>• ")}<br>`;
-  if(p.size>=6) info+=`<br><b>✨ Extra:</b><br>• Tomatitos deshidratados artesanales`;
+  <b>🥣 Dips:</b><br>• ${d.dips.join("<br>• ")}`;
+  if(p.size>=6) info+=`<br><br><b>✨ Extra:</b><br>• Tomatitos deshidratados artesanales`;
  }
 
  config.innerHTML=`
  ${tabs}
- <label>Modelo de la picada</label>
+
+ <div class="picada-top">
+   <label>Configuración</label>
+   ${imageHTML}
+ </div>
+
+ <label style="margin-top:14px">Modelo de la picada</label>
  <div class="model-row">
   <button class="control ${p.model==='Clásica y Elegante'?'selected':''}" onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
   <button class="control ${p.model==='Fresca y Colorida'?'selected':''}" onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
  </div>
+
  <div class="model-info">${info}</div>
 
  <label>Cantidad de personas</label>
@@ -275,5 +350,6 @@ function goWA(){
 }
 buildPicadas(1);
 </script>
+
 </body>
 </html>
