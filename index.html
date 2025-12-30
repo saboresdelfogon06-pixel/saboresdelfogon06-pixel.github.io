@@ -422,13 +422,14 @@ function loadState(){
 
 function buildPicadas(n){
  picadas = Array.from({ length: n }, () => ({
-  model: "Clásica y Elegante", // MÓDULO 2: default
-  size: 8,                    // MÓDULO 2: default
-  price: 90000                // MÓDULO 2: default
+  model: null,
+  size: 8,
+  price: 90000
  }));
  active = 0;
  renderConfig();
 }
+
 function setActivePicada(i){
   active = i;
 
@@ -454,7 +455,7 @@ function addPicada(){
   if(picadas.length >= 6) return;
 
   picadas.push({
-    model: "Clásica y Elegante",
+    model: null,
     size: 8,
     price: 90000
   });
@@ -463,6 +464,7 @@ function addPicada(){
   saveState();
   renderConfig();
 }
+
 
 function removePicada(){
   if(picadas.length <= 1) return;
@@ -698,9 +700,10 @@ function openModal(src){
 function closeModal(){
  imgModal.style.display="none";
 }
-// ===== BANNER → SELECCIÓN DIRECTA =====
-// ===== BANNER CARRUSEL =====
-// ===== HERO BANNER INTELIGENTE =====
+function bannerIsLocked(){
+  return !!picadas[active]?.model;
+}
+
 const bannerSlides = [
   {
     model: "Clásica y Elegante",
@@ -749,30 +752,22 @@ function showSlide(i, animate = true){
 
   clearTimeout(bannerTimer);
 
-  if(slide.type === "video"){
-    const v = track.children[i].querySelector("video");
-    v.currentTime = 0;
-    v.loop = bannerLocked;
-    v.play();
-    if(!bannerLocked){
-      v.onended = () => nextSlide();
-    }
-  }else{
-    if(!bannerLocked){
-      bannerTimer = setTimeout(nextSlide, 5000);
-    }
+  if(!bannerIsLocked()){
+    bannerTimer = setTimeout(nextSlide, 5000);
   }
 }
 
+
 function nextSlide(){
-  if(bannerFrozenModel) return;
+  if(bannerIsLocked()) return;
   showSlide((bannerIndex + 1) % bannerSlides.length);
 }
 
-// click = selección
 banner.onclick = () => {
-  lockBanner(bannerSlides[bannerIndex].model);
-  selectFromBanner(bannerSlides[bannerIndex].model);
+  const model = bannerSlides[bannerIndex].model;
+  picadas[active].model = model;
+  saveState();
+  renderConfig();
 };
 
 // lock
@@ -801,15 +796,19 @@ banner.addEventListener("touchend", e => {
   }
 
   const newModel = bannerSlides[bannerIndex].model;
+if(bannerIsLocked()){
   picadas[active].model = newModel;
   saveState();
   renderConfig();
+}
+
 });
 
-// sincronizar desde el formulario
 function syncBannerWithModel(model){
-  bannerLocked = true;
-  lockBanner(model);
+  if(!model) return;
+
+  const i = bannerSlides.findIndex(s => s.model === model);
+  if(i >= 0) showSlide(i, false);
 }
 
 showSlide(0);
