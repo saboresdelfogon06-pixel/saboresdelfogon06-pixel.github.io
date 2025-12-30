@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Comprar Picadas | Sabores del Fogón</title>
+<title>Pedido de Picadas | Sabores del Fogón</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Meta Pixel -->
@@ -23,41 +23,61 @@ fbq('track','PageView');
 body{
   font-family:Arial,sans-serif;
   margin:0;
-  background:#f6f6f6;
+  background:#f4f4f4;
 }
 .container{
-  max-width:900px;
+  max-width:700px;
   margin:auto;
-  padding:20px;
+  padding:16px;
 }
-h1,h2{text-align:center}
-.card{
+h1{text-align:center}
+.step{
   background:#fff;
-  padding:20px;
+  padding:16px;
   border-radius:10px;
-  margin-bottom:15px;
-  border:3px solid transparent;
+  margin-bottom:16px;
 }
-.card.selected{border-color:#c40000}
-.sizes button{
-  margin:5px;
+.step h2{
+  margin-top:0;
+  font-size:18px;
+}
+.hint{
+  font-size:14px;
+  color:#666;
+  margin-bottom:10px;
+}
+.cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.card{
+  border:2px solid #ddd;
+  border-radius:8px;
   padding:12px;
-  width:100%;
+  cursor:pointer;
 }
-.sizes button.selected{
+.card.selected{
+  border-color:#c40000;
+  background:#fff5f5;
+}
+.options button{
+  padding:10px;
+  margin:4px;
+}
+.options button.selected{
   background:#111;
   color:#fff;
 }
 input,select{
   width:100%;
-  padding:14px;
-  margin:10px 0;
+  padding:12px;
+  margin-top:8px;
 }
-.subtotal{
+.summary{
   background:#fff;
-  padding:15px;
-  border-radius:8px;
-  margin-top:20px;
+  padding:16px;
+  border-radius:10px;
 }
 .pay button{
   width:100%;
@@ -67,17 +87,14 @@ input,select{
   color:#fff;
   border:none;
   border-radius:10px;
-  opacity:.5;
+  opacity:.4;
 }
 .pay button.enabled{
   opacity:1;
 }
-.note{
-  font-size:14px;
+.small{
+  font-size:13px;
   color:#555;
-}
-@media(min-width:700px){
-  .sizes button{width:auto}
 }
 </style>
 </head>
@@ -85,105 +102,124 @@ input,select{
 <body>
 <div class="container">
 
-<h1>Elegí tu Picada</h1>
-<p class="note">* Campos obligatorios</p>
+<h1>Hacé tu pedido</h1>
 
-<div class="card" onclick="selectModel('Clásica y Elegante',50000)">
-<h2>🥂 Clásica y Elegante</h2>
-<p>Quesos y embutidos premium.</p>
+<div class="step">
+<h2>1️⃣ Elegí el modelo</h2>
+<p class="hint">Seleccioná una de las opciones</p>
+<div class="cards">
+  <div class="card" onclick="setModel('Clásica y Elegante')">
+    <strong>Clásica y Elegante</strong><br>
+    Quesos y embutidos premium
+  </div>
+  <div class="card" onclick="setModel('Fresca y Colorida')">
+    <strong>Fresca y Colorida</strong><br>
+    Opciones frescas y equilibradas
+  </div>
+</div>
 </div>
 
-<div class="card" onclick="selectModel('Fresca y Colorida',50000)">
-<h2>🌿 Fresca y Colorida</h2>
-<p>Opciones frescas y equilibradas.</p>
+<div class="step">
+<h2>2️⃣ Tamaño de la picada</h2>
+<p class="hint">Cantidad de personas</p>
+<div class="options">
+  <button onclick="setSize(4,50000)">4 personas</button>
+  <button onclick="setSize(6,70000)">6 personas</button>
+  <button onclick="setSize(8,90000)">8 personas</button>
+</div>
 </div>
 
-<h2>¿Para cuántas personas? *</h2>
-<div class="sizes">
-<button onclick="selectSize(4,50000)">4 personas</button>
-<button onclick="selectSize(6,70000)">6 personas</button>
-<button onclick="selectSize(8,90000)">8 personas</button>
+<div class="step">
+<h2>3️⃣ Cantidad de picadas</h2>
+<p class="hint">¿Cuántas iguales querés pedir?</p>
+<input type="number" id="qty" min="1" value="1" oninput="update()">
 </div>
 
-<h2>Datos de envío *</h2>
-<input id="address" placeholder="Dirección y altura de envío" required>
-
-<select id="zone" onchange="selectZone()" required>
-<option value="">Seleccionar ciudad / zona</option>
+<div class="step">
+<h2>4️⃣ Dirección y zona</h2>
+<input id="addr" placeholder="Dirección y altura de envío" oninput="update()">
+<select id="zone" onchange="setZone()">
+<option value="">Seleccionar localidad</option>
 <option value="Francisco Álvarez|0">Francisco Álvarez</option>
 <option value="Moreno|0">Moreno</option>
 <option value="Merlo|7000">Merlo</option>
 <option value="Ituzaingó|8000">Ituzaingó</option>
 <option value="Morón|8000">Morón</option>
+<option value="Castelar|8000">Castelar</option>
+<option value="Hurlingham|8000">Hurlingham</option>
+<option value="San Miguel|8000">San Miguel</option>
+<option value="Tres de Febrero|8000">Tres de Febrero</option>
+<option value="La Matanza|8000">La Matanza</option>
+<option value="General Rodríguez|8000">General Rodríguez</option>
+<option value="Luján|8000">Luján</option>
 <option value="CABA|8000">CABA</option>
 </select>
+</div>
 
-<div class="subtotal" id="summary">
-Completá los datos para ver el total.
+<div class="summary" id="summary">
+Completá todos los pasos para ver el total.
 </div>
 
 <div class="pay">
-<button id="payBtn" onclick="goWhatsApp()">IR A PAGAR</button>
+<button id="payBtn" onclick="goWA()">IR A PAGAR</button>
 </div>
+
+<p class="small">Reservás con el 50%. El resto se paga al recibir.</p>
 
 </div>
 
 <script>
-let model=null,size=null,price=0,shipping=0;
+let model=null,size=null,price=0,zone=null,ship=0;
 
-function selectModel(m){
+function setModel(m){
   model=m;
   document.querySelectorAll('.card').forEach(c=>c.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
   fbq('track','AddToCart');
   update();
 }
-
-function selectSize(s,p){
-  size=s;
-  price=p;
-  document.querySelectorAll('.sizes button').forEach(b=>b.classList.remove('selected'));
+function setSize(s,p){
+  size=s;price=p;
+  document.querySelectorAll('.options button').forEach(b=>b.classList.remove('selected'));
   event.currentTarget.classList.add('selected');
   update();
 }
-
-function selectZone(){
+function setZone(){
   const v=document.getElementById('zone').value;
-  shipping=v?parseInt(v.split('|')[1]):0;
+  if(!v)return;
+  zone=v.split('|')[0];
+  ship=parseInt(v.split('|')[1]);
   update();
 }
-
 function update(){
-  const addr=document.getElementById('address').value.trim();
-  const zone=document.getElementById('zone').value;
+  const q=parseInt(document.getElementById('qty').value)||1;
+  const addr=document.getElementById('addr').value.trim();
   const btn=document.getElementById('payBtn');
-  if(model && size && addr && zone){
-    const z=zone.split('|')[0];
-    const total=price+shipping;
+
+  if(model && size && zone && addr && q>0){
+    const total=(price*q)+ship;
     document.getElementById('summary').innerHTML=
-    `Picada <strong>${model}</strong> para <strong>${size}</strong> personas<br>
-    Envío a <strong>${z}</strong><br>
-    <strong>Total: $${total.toLocaleString()}</strong><br>
-    <small>Reservás con el 50%, el resto al recibir la picada.</small>`;
+    `<strong>${q} picada(s)</strong> ${model}<br>
+    Para ${size} personas cada una<br>
+    Envío a ${zone}<br>
+    <strong>Total: $${total.toLocaleString()}</strong>`;
     btn.classList.add('enabled');
   }else{
     btn.classList.remove('enabled');
   }
 }
 
-document.querySelectorAll('input').forEach(i=>i.addEventListener('input',update));
-
-function goWhatsApp(){
+function goWA(){
   if(!document.getElementById('payBtn').classList.contains('enabled'))return;
-  const addr=document.getElementById('address').value;
-  const z=document.getElementById('zone').value.split('|')[0];
-  const total=price+shipping;
+  const q=document.getElementById('qty').value;
+  const addr=document.getElementById('addr').value;
+  const total=(price*q)+ship;
   fbq('track','Lead');
-  const msg=`Hola, quiero comprar una picada ${model} para ${size} personas.
-Dirección de envío: ${addr}.
-Zona: ${z}.
+  const msg=`Hola, quiero pedir ${q} picada(s) ${model} para ${size} personas.
+Dirección: ${addr}.
+Zona: ${zone}.
 Total: $${total}.
-¿Me pasás la info para abonar la seña del 50%?`;
+¿Me pasás info para pagar la seña del 50%?`;
   window.location.href="https://wa.me/5491123284020?text="+encodeURIComponent(msg);
 }
 </script>
