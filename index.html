@@ -226,42 +226,8 @@ button.selected{
   font-weight: bold;
   color: #fff;
 }
-  
-/* ===== BANNER MODELOS ===== */
-.banner-grid{
-  display: flex;
-  gap: 10px;
-  height: 220px;
-}
 
-.banner-item{
-  flex: 1;
-  position: relative;
-  border-radius: 14px;
-  overflow: hidden;
-  cursor: pointer;
-}
 
-.banner-item img{
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.banner-label{
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #fff;
-  background: linear-gradient(
-    to top,
-    rgba(0,0,0,.7),
-    rgba(0,0,0,.2),
-    transparent
-  );
-}
 </style>
 </head>
 
@@ -283,21 +249,22 @@ button.selected{
 </div>
   <!-- ===== BANNER VISUAL ===== -->
 <!-- ===== BANNER VISUAL ===== -->
-<div class="banner banner-grid">
+<!-- ===== BANNER SUPERIOR ===== -->
+<div class="banner" onclick="selectFromBanner(bannerActiveModel)">
 
-  <div class="banner-item"
-       onclick="selectFromBanner('Clásica y Elegante')">
-    <img src="images/IMG_7762-min.JPG" alt="Clásica y Elegante">
-    <div class="banner-label">Clásica y Elegante</div>
-  </div>
+  <img id="bannerImg"
+       src="images/IMG_7762-min.JPG"
+       alt="Clásica y Elegante">
 
-  <div class="banner-item"
-       onclick="selectFromBanner('Fresca y Colorida')">
-    <img src="images/IMG_7761-min.JPG" alt="Fresca y Colorida">
-    <div class="banner-label">Fresca y Colorida</div>
+  <div class="banner-overlay">
+    <div class="banner-text">
+      Elegí tu picada ideal
+    </div>
   </div>
 
 </div>
+<!-- ===== FIN BANNER ===== -->
+
 <!-- ===== FIN BANNER ===== -->
 
 <!-- ===== FIN BANNER ===== -->
@@ -590,24 +557,40 @@ function closeModal(){
  imgModal.style.display="none";
 }
 // ===== BANNER → SELECCIÓN DIRECTA =====
-function selectFromBanner(model){
-  // asegura que haya al menos 1 picada
-  if(picadas.length === 0){
-    buildPicadas(1);
+// ===== BANNER CARRUSEL =====
+const bannerSlides = [
+  {
+    model: "Clásica y Elegante",
+    img: "images/IMG_7762-min.JPG"
+  },
+  {
+    model: "Fresca y Colorida",
+    img: "images/IMG_7761-min.JPG"
   }
+];
 
-  picadas[0].model = model;
-  active = 0;
-  saveState();
-  renderConfig();
+let bannerIndex = 0;
+let bannerActiveModel = bannerSlides[0].model;
 
-  // scroll suave al configurador
+function rotateBanner(){
+  bannerIndex = (bannerIndex + 1) % bannerSlides.length;
+  const slide = bannerSlides[bannerIndex];
+
+  bannerActiveModel = slide.model;
+
+  const img = document.getElementById("bannerImg");
+  img.style.opacity = 0;
+
   setTimeout(() => {
-    document
-      .getElementById('config')
-      .scrollIntoView({ behavior: 'smooth' });
-  }, 150);
+    img.src = slide.img;
+    img.alt = slide.model;
+    img.style.opacity = 1;
+  }, 250);
 }
+
+// rotación automática
+setInterval(rotateBanner, 3500);
+
 
 loadState();
 </script>
