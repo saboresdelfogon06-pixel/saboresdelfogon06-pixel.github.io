@@ -683,32 +683,49 @@ function update(){
   });
 
   if (valid) {
-    summary.innerHTML = `
-  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-    <div>
-      ${txt}
-      <br>
-      Entrega en ${addr.value}, ${zoneName}
-      <br>
-      <b>Total $${total.toLocaleString()}</b>
-    </div>
 
-    <button
-      onclick="resetAll()"
-      style="
-        background:none;
-        border:none;
-        color:#aaa;
-        font-size:22px;
-        cursor:pointer;
-        line-height:1;
-      ">
-      ✕
-    </button>
-  </div>
-`;
+    // 🔥 EVENTO META: InitiateCheckout (solo una vez por estado válido)
+    if (!window._checkoutTracked) {
+      fbq('track', 'InitiateCheckout', {
+        value: total,
+        currency: 'ARS',
+        num_items: picadas.length
+      });
+      window._checkoutTracked = true;
+    }
+
+    summary.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          ${txt}
+          <br>
+          Entrega en ${addr.value}, ${zoneName}
+          <br>
+          <b>Total $${total.toLocaleString()}</b>
+        </div>
+
+        <button
+          onclick="resetAll()"
+          style="
+            background:none;
+            border:none;
+            color:#aaa;
+            font-size:22px;
+            cursor:pointer;
+            line-height:1;
+          ">
+          ✕
+        </button>
+      </div>
+    `;
+
     payBtn.classList.add('enabled');
+
   } else {
+
+    // 🔁 si deja de ser válido, permite volver a trackear
+    window._checkoutTracked = false;
+
     payBtn.classList.remove('enabled');
     summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
   }
