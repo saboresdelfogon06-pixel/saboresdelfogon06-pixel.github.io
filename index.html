@@ -683,18 +683,20 @@ function update(){
   });
 
   if (valid) {
-
- // 🔥 EVENTO META: FORMULARIO COMPLETO
+    
 if (!window._checkoutTracked) {
-  fbq('track', 'InitiateCheckout', {
+  fbq('trackSingle', '2992234817833383', 'InitiateCheckout', {
     content_name: 'Formulario Picada Completo',
     content_category: 'Picadas',
     value: total,
     currency: 'ARS',
     num_items: picadas.length
   });
+
+  console.log('InitiateCheckout enviado');
   window._checkoutTracked = true;
 }
+
 
 
     summary.innerHTML = `
@@ -770,14 +772,16 @@ function resetAll(){
 function goWA() {
   if (!payBtn.classList.contains('enabled')) return;
 
-fbq('trackCustom', 'StartPayment', {
-  content_name: 'Click Ir a Pagar',
-  content_category: 'Picadas',
-  value: total,
-  currency: 'ARS',
-  num_items: picadas.length
-});
+  // 🔥 EVENTO META: CLICK IR A PAGAR (forzado)
+  fbq('trackSingle', '2992234817833383', 'StartPayment', {
+    content_name: 'Click Ir a Pagar',
+    content_category: 'Picadas',
+    value: total,
+    currency: 'ARS',
+    num_items: picadas.length
+  });
 
+  console.log('StartPayment enviado');
 
   let cantidadPicadas = picadas.length;
 
@@ -791,14 +795,15 @@ fbq('trackCustom', 'StartPayment', {
   msg += `\nEntrega:\n`;
   msg += `Dirección: ${addr.value}\n`;
   msg += `Localidad: ${zoneName}\n\n`;
-
   msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
   msg += `¿Me enviás la información de pago así reservo con el 50%?`;
 
-  location.href =
-    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  // ⏱️ ESPERA REAL para que Meta reciba el evento
+  setTimeout(() => {
+    location.href =
+      'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  }, 400);
 }
-
 
 
 function openModal(src){
