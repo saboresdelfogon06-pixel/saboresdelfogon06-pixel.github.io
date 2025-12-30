@@ -483,46 +483,12 @@ function renderConfig(){
 config.innerHTML = `
   ${tabs}
 
-  <!-- CONTENIDO DE LA PICADA -->
-  <div class="section model-info">
-    <div style="
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
-    ">
-
-      <div style="min-width:160px;flex:1">
-        <b>🥩 Fiambres</b><br>
-        ${p.model ? modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>") : ""}
-      </div>
-
-      <div style="min-width:140px;flex:1">
-        <b>🧀 Quesos</b><br>
-        ${p.model ? modelData[p.model].quesos.map(q => `• ${q}`).join("<br>") : ""}
-      </div>
-
-      <div style="min-width:140px;flex:1">
-        <b>🥣 Dips</b><br>
-        ${p.model ? modelData[p.model].dips.map(d => `• ${d}`).join("<br>") : ""}
-      </div>
-
-      ${
-        p.size >= 6
-          ? `<div style="min-width:160px;flex:1">
-              <b>✨ Extra</b><br>
-              • Tomatitos deshidratados
-            </div>`
-          : ""
-      }
-
-    </div>
-  </div>
-
   <div class="picada-top">
     <div class="model-column">
+
       <label>Modelo de la picada</label>
 
-      <div style="display:flex;gap:8px">
+      <div style="display:flex;gap:8px;margin-bottom:16px">
         <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
                 onclick="setModel('Clásica y Elegante')">
           Clásica y Elegante
@@ -534,7 +500,43 @@ config.innerHTML = `
         </button>
       </div>
 
+      <!-- CONTENIDO DE LA PICADA -->
+      <div class="section model-info" style="margin-bottom:16px">
+        <div style="
+          display:flex;
+          gap:16px;
+          flex-wrap:wrap;
+        ">
+
+          <div style="min-width:160px;flex:1">
+            <b>🥩 Fiambres</b><br>
+            ${p.model ? modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>") : ""}
+          </div>
+
+          <div style="min-width:140px;flex:1">
+            <b>🧀 Quesos</b><br>
+            ${p.model ? modelData[p.model].quesos.map(q => `• ${q}`).join("<br>") : ""}
+          </div>
+
+          <div style="min-width:140px;flex:1">
+            <b>🥣 Dips</b><br>
+            ${p.model ? modelData[p.model].dips.map(d => `• ${d}`).join("<br>") : ""}
+          </div>
+
+          ${
+            p.size >= 6
+              ? `<div style="min-width:160px;flex:1">
+                  <b>✨ Extra</b><br>
+                  • Tomatitos deshidratados
+                </div>`
+              : ""
+          }
+
+        </div>
+      </div>
+
       <label>Cantidad de personas</label>
+
       <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">
         4 personas ($50.000) – 20×30 cm
       </button>
@@ -544,6 +546,7 @@ config.innerHTML = `
       <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">
         8 personas ($90.000) – 28×48 cm
       </button>
+
     </div>
   </div>
 `;
