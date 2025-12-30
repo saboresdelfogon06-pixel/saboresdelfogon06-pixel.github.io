@@ -297,6 +297,38 @@ const modelData={
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
+  // ===== MÓDULO 3: MEMORIA =====
+function saveState(){
+ localStorage.setItem('picadas', JSON.stringify(picadas));
+ localStorage.setItem('clientName', clientName.value);
+ localStorage.setItem('orderDate', orderDate.value);
+ localStorage.setItem('addr', addr.value);
+ localStorage.setItem('zone', zone.value);
+}
+
+function loadState(){
+ const savedPicadas = localStorage.getItem('picadas');
+ if(savedPicadas){
+  picadas = JSON.parse(savedPicadas);
+ }else{
+  // usa el default del módulo 2
+  buildPicadas(1);
+  return;
+ }
+
+ clientName.value = localStorage.getItem('clientName') || "";
+ orderDate.value = localStorage.getItem('orderDate') || "";
+ addr.value = localStorage.getItem('addr') || "";
+
+ if(localStorage.getItem('zone')){
+  zone.value = localStorage.getItem('zone');
+  setZone();
+ }
+
+ renderConfig();
+}
+// ===== FIN MÓDULO 3 =====
+
 
 function handleQtySelect(){
  qtySelect.value==="more"
@@ -361,12 +393,24 @@ function renderConfig(){
  update();
 }
 
-function setModel(m){picadas[active].model=m;renderConfig()}
-function setSize(s,p){picadas[active].size=s;picadas[active].price=p;renderConfig()}
+function setModel(m){
+  picadas[active].model = m;
+  saveState(); // MÓDULO 3.2
+  renderConfig();
+}
+
+function setSize(s,p){
+  picadas[active].size = s;
+  picadas[active].price = p;
+  saveState(); // MÓDULO 3.2
+  renderConfig();
+}
+  
 function setZone(){
  if(!zone.value)return;
- zoneName=zone.value.split('|')[0];
- ship=+zone.value.split('|')[1];
+ zoneName = zone.value.split('|')[0];
+ ship = +zone.value.split('|')[1];
+ saveState(); // MÓDULO 3.2
  update();
 }
 
@@ -395,7 +439,10 @@ function update(){
     payBtn.classList.remove('enabled');
     summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
   }
+
+  saveState(); // MÓDULO 3.2
 }
+
 
 
 function goWA() {
