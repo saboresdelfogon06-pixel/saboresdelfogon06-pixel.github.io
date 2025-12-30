@@ -777,32 +777,32 @@ function lockBanner(model){
   if(i >= 0) showSlide(i, false);
 }
 
-// swipe
-banner.addEventListener("touchstart", e => {
-  startX = e.touches[0].clientX;
-});
-
 banner.addEventListener("touchend", e => {
-  const diff = startX - e.changedTouches[0].clientX;
+  const endX = e.changedTouches[0].clientX;
+  const diff = endX - startX;
 
-  if (Math.abs(diff) < 50) return;
+  if (Math.abs(diff) < 40) return;
 
-  if (diff > 0) {
-    nextSlide();
+  let newIndex;
+
+  if (diff < 0) {
+    // swipe izquierda → siguiente
+    newIndex = (bannerIndex + 1) % bannerSlides.length;
   } else {
-    showSlide(
-      (bannerIndex - 1 + bannerSlides.length) % bannerSlides.length
-    );
+    // swipe derecha → anterior
+    newIndex = (bannerIndex - 1 + bannerSlides.length) % bannerSlides.length;
   }
 
-  const newModel = bannerSlides[bannerIndex].model;
-if(bannerIsLocked()){
+  showSlide(newIndex);
+
+  const newModel = bannerSlides[newIndex].model;
+
+  // 👉 SIN importar bloqueo: swipe selecciona modelo
   picadas[active].model = newModel;
   saveState();
   renderConfig();
-}
-
 });
+
 
 function syncBannerWithModel(model){
   if(!model) return;
