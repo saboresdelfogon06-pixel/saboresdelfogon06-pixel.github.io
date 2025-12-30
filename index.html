@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Picadas Artesanales | Sabores del Fogón</title>
+  <title>Comprar Picadas | Sabores del Fogón</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Meta Pixel -->
@@ -15,21 +15,15 @@
     t.src=v;s=b.getElementsByTagName(e)[0];
     s.parentNode.insertBefore(t,s)}(window, document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-
     fbq('init', '2992234817833383');
     fbq('track', 'PageView');
   </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=2992234817833383&ev=PageView&noscript=1"/>
-  </noscript>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #fafafa;
       margin: 0;
-      padding: 0;
+      background: #f6f6f6;
       color: #222;
     }
     .container {
@@ -37,48 +31,91 @@
       margin: auto;
       padding: 20px;
     }
-    h1, h2, h3 {
+    h1, h2 {
       text-align: center;
     }
-    .model {
-      background: #fff;
+
+    .cta-top {
+      text-align: center;
+      margin: 20px 0 30px;
+    }
+
+    .cta-top button {
+      background: #c40000;
+      color: #fff;
+      padding: 18px 30px;
+      font-size: 20px;
+      border: none;
       border-radius: 8px;
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
       padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 2px 6px rgba(0,0,0,.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,.1);
+      cursor: pointer;
+      border: 3px solid transparent;
     }
-    ul {
-      padding-left: 20px;
+
+    .card.selected {
+      border-color: #c40000;
     }
-    .prices {
+
+    .sizes button {
+      padding: 12px 18px;
+      margin: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      background: #fff;
+    }
+
+    .sizes button.selected {
       background: #111;
       color: #fff;
-      padding: 20px;
-      border-radius: 8px;
+    }
+
+    .form {
+      margin-top: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .pay {
       margin: 30px 0;
       text-align: center;
     }
-    .cta {
-      text-align: center;
-      margin: 40px 0;
-    }
-    .cta a {
-      background: #c40000;
+
+    .pay button {
+      background: #25D366;
       color: #fff;
-      padding: 20px 30px;
       font-size: 22px;
-      text-decoration: none;
-      border-radius: 8px;
-      display: inline-block;
+      padding: 18px 30px;
+      border-radius: 10px;
+      border: none;
+      opacity: .5;
     }
-    .cta a:hover {
-      background: #a30000;
+
+    .pay button.enabled {
+      opacity: 1;
+      cursor: pointer;
     }
-    .footer {
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-      margin: 40px 0 20px;
+
+    @media (min-width: 700px) {
+      .catalog {
+        grid-template-columns: 1fr 1fr;
+      }
     }
   </style>
 </head>
@@ -86,75 +123,96 @@
 <body>
 <div class="container">
 
-  <h1>Picadas Artesanales</h1>
-  <h3>Sabores del Fogón</h3>
-  <p style="text-align:center;">
-    Picadas premium para compartir. Ideal reuniones, eventos y regalos.
-  </p>
+  <h1>Elegí tu Picada</h1>
 
-  <div class="model">
-    <h2>🥂 Clásica y Elegante</h2>
-    <strong>Incluye:</strong>
-    <ul>
-      <li>Dip salado y dip dulce</li>
-      <li>Quesos: brie, queso azul, pepato</li>
-      <li>Embutidos: sopresatta italiana, lomo ahumado, jamón crudo, panceta ahumada, longaniza y jamón cocido</li>
-    </ul>
-    <p>
-      Disponible para 4, 6 u 8 personas.<br>
-      Tablas de 28 × 48 cm incluyen tomatitos deshidratados artesanales.
-    </p>
+  <div class="cta-top">
+    <button onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+      CLICK PARA COMPRAR TU PICADA
+    </button>
   </div>
 
-  <div class="model">
-    <h2>🌿 Fresca y Colorida</h2>
-    <strong>Incluye:</strong>
-    <ul>
-      <li>Dip dulce y dip salado</li>
-      <li>Quesos: brie, pategrás, sardo</li>
-      <li>Embutidos: jamón cocido, salamito chacarero, longaniza, sopresatta italiana, panceta ahumada</li>
-    </ul>
-    <p>
-      Disponible para 4, 6 u 8 personas.<br>
-      Tablas de 28 × 48 cm incluyen tomatitos deshidratados artesanales.
-    </p>
+  <div id="catalogo" class="catalog">
+
+    <div class="card" onclick="selectModel('Clásica y Elegante')">
+      <h2>🥂 Clásica y Elegante</h2>
+      <p>Quesos brie, azul, pepato + embutidos premium.</p>
+    </div>
+
+    <div class="card" onclick="selectModel('Fresca y Colorida')">
+      <h2>🌿 Fresca y Colorida</h2>
+      <p>Quesos pategrás, sardo + variedad de fiambres.</p>
+    </div>
+
   </div>
 
-  <div class="prices">
-    <h2>Tamaños y Precios</h2>
-    <p>🍽️ Comen 4 / Pican 6 → <strong>$50.000</strong></p>
-    <p>🍽️ Comen 6 / Pican 8 → <strong>$70.000</strong></p>
-    <p>🍽️ Comen 8 / Pican 12 → <strong>$90.000</strong></p>
+  <h2>¿Para cuántas personas?</h2>
+  <div class="sizes">
+    <button onclick="selectSize(4)">4 personas – $50.000</button>
+    <button onclick="selectSize(6)">6 personas – $70.000</button>
+    <button onclick="selectSize(8)">8 personas – $90.000</button>
   </div>
 
-  <div class="model">
-    <h3>¿Qué incluyen todas nuestras picadas?</h3>
-    <ul>
-      <li>Dip dulce</li>
-      <li>Dip salado</li>
-      <li>Aceitunas verdes</li>
-      <li>Frutas de estación</li>
-      <li>Frutos secos seleccionados</li>
-      <li>Tomates deshidratados (según tamaño)</li>
-    </ul>
-    <p>
-      📍 Francisco Álvarez, Buenos Aires<br>
-      🚚 Envío gratis (consultar zona)
-    </p>
+  <div class="form">
+    <input type="text" id="address" placeholder="Dirección de envío">
+    <input type="text" id="city" placeholder="Ciudad / Zona">
   </div>
 
-  <div class="cta">
-    <a href="https://wa.me/5491123284020"
-       target="_blank"
-       onclick="fbq('track', 'Lead');">
-      👉 CLICK PARA COMPRAR TU PICADA
-    </a>
-  </div>
-
-  <div class="footer">
-    Instagram: @saboresfogon.ar
+  <div class="pay">
+    <button id="payBtn" onclick="goToWhatsApp()">IR A PAGAR</button>
   </div>
 
 </div>
+
+<script>
+  let model = null;
+  let size = null;
+
+  function selectModel(m) {
+    model = m;
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    fbq('track', 'AddToCart');
+    validate();
+  }
+
+  function selectSize(s) {
+    size = s;
+    document.querySelectorAll('.sizes button').forEach(b => b.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    validate();
+  }
+
+  function validate() {
+    const addr = document.getElementById('address').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const btn = document.getElementById('payBtn');
+
+    if (model && size && addr && city) {
+      btn.classList.add('enabled');
+    } else {
+      btn.classList.remove('enabled');
+    }
+  }
+
+  document.querySelectorAll('input').forEach(i => i.addEventListener('input', validate));
+
+  function goToWhatsApp() {
+    if (!document.getElementById('payBtn').classList.contains('enabled')) return;
+
+    const addr = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
+
+    const msg =
+`Hola, quiero comprar una picada ${model} para ${size} personas.
+Mi dirección de envío es ${addr}, ${city}.
+¿Me pasás la información de pago?`;
+
+    fbq('track', 'Lead');
+
+    const url = "https://wa.me/5491123284020?text=" + encodeURIComponent(msg);
+    window.location.href = url;
+  }
+</script>
+
 </body>
 </html>
