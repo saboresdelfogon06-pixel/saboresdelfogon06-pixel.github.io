@@ -684,19 +684,6 @@ function update(){
 
   if (valid) {
     
-if (!window._checkoutTracked) {
-  fbq('trackSingle', '2992234817833383', 'InitiateCheckout', {
-    content_name: 'Formulario Picada Completo',
-    content_category: 'Picadas',
-    value: total,
-    currency: 'ARS',
-    num_items: picadas.length
-  });
-
-  console.log('InitiateCheckout enviado');
-  window._checkoutTracked = true;
-}
-
 
 
     summary.innerHTML = `
@@ -728,8 +715,6 @@ if (!window._checkoutTracked) {
 
   } else {
 
-    // 🔁 si deja de ser válido, permite volver a trackear
-    window._checkoutTracked = false;
 
     payBtn.classList.remove('enabled');
     summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
@@ -772,13 +757,42 @@ function resetAll(){
 function goWA() {
   if (!payBtn.classList.contains('enabled')) return;
 
-  // 🔥 EVENTO META: CLICK IR A PAGAR (forzado)
-  fbq('trackSingle', '2992234817833383', 'StartPayment', {
-    content_name: 'Click Ir a Pagar',
-    content_category: 'Picadas',
+  // 🟢 EVENTO 1 — PARA CAMPAÑA DE VENTAS
+  fbq('track', 'InitiateCheckout', {
     value: total,
     currency: 'ARS',
     num_items: picadas.length
+  });
+
+  // 🔵 EVENTO 2 — PARA SEGUNDA CAMPAÑA / RETARGETING
+  fbq('trackCustom', 'StartPayment', {
+    value: total,
+    currency: 'ARS',
+    num_items: picadas.length
+  });
+
+  console.log('EVENTOS META DISPARADOS');
+
+  let msg = `Hola soy ${clientName.value}, hice un pedido para el ${orderDate.value}.\n\n`;
+  msg += `Pedido:\n`;
+
+  picadas.forEach((p, i) => {
+    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+  });
+
+  msg += `\nEntrega:\n`;
+  msg += `Dirección: ${addr.value}\n`;
+  msg += `Localidad: ${zoneName}\n\n`;
+  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+  msg += `¿Me enviás la información de pago así reservo con el 50%?`;
+
+  // ⏱️ ESPERA REAL para que Meta reciba los eventos
+  setTimeout(() => {
+    location.href =
+      'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  }, 900);
+}
+
   });
 
   console.log('StartPayment enviado');
