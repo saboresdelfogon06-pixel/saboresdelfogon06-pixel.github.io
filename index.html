@@ -189,10 +189,9 @@ button.selected{
   padding:10px 14px;
   border-radius:8px;
 }
-  /* ===== BANNER SUPERIOR ===== */
 .banner{
   width:100%;
-  height:200px;            /* más rectangular */
+  height:220px;
   border-radius:14px;
   overflow:hidden;
   position:relative;
@@ -201,17 +200,10 @@ button.selected{
   touch-action:pan-y;
 }
 
-
-/* ===== HERO BANNER AVANZADO ===== */
-.banner{
-  width:100%;
-  height:260px;
-  border-radius:14px;
-  overflow:hidden;
-  position:relative;
-  margin-bottom:16px;
-  background:#000;
-  touch-action:pan-y;
+@media (max-width:480px){
+  .banner{
+    height:180px; /* más rectangular */
+  }
 }
 
 .banner-track{
@@ -295,21 +287,6 @@ button.selected{
 
 </div>
 
-
-<div class="section">
-<label>¿Cuántas picadas querés?</label>
-<select id="qtySelect" class="control" onchange="handleQtySelect()">
-  <option value="1">1 picada</option>
-  <option value="2">2 picadas</option>
-  <option value="3">3 picadas</option>
-  <option value="4">4 picadas</option>
-  <option value="5">5 picadas</option>
-  <option value="more">Necesito más picadas</option>
-</select>
-<input id="customQty" type="number" min="6" class="control"
-placeholder="Ingresá la cantidad"
-style="display:none" onchange="setCustomQty()">
-</div>
 
 <div class="section" id="config"></div>
 
@@ -428,14 +405,6 @@ function loadState(){
 }
 // ===== FIN MÓDULO 3 =====
 
-
-function handleQtySelect(){
- qtySelect.value==="more"
- ? customQty.style.display="block"
- : (customQty.style.display="none",buildPicadas(+qtySelect.value));
-}
-function setCustomQty(){buildPicadas(+customQty.value||1)}
-
 function buildPicadas(n){
  picadas = Array.from({ length: n }, () => ({
   model: "Clásica y Elegante", // MÓDULO 2: default
@@ -445,21 +414,59 @@ function buildPicadas(n){
  active = 0;
  renderConfig();
 }
+function setActivePicada(i){
+  active = i;
+  syncBannerWithModel(picadas[active].model);
+  renderConfig();
+}
 
+function addPicada(){
+  if(picadas.length >= 6) return;
 
-function renderConfig(){
- let tabs='<div class="tabs">';
- picadas.forEach((_,i)=>tabs+=`<div class="tab ${i===active?'active':''}" onclick="active=${i};renderConfig()">Picada ${i+1}</div>`);
- tabs+='</div>';
+  picadas.push({
+    model: "Clásica y Elegante",
+    size: 8,
+    price: 90000
+  });
+
+  active = picadas.length - 1;
+  syncBannerWithModel(picadas[active].model);
+  saveState();
+  renderConfig();
+}
+
+function removePicada(){
+  if(picadas.length <= 1) return;
+
+  picadas.splice(active,1);
+
+  if(active >= picadas.length){
+    active = picadas.length - 1;
+  }
+
+  syncBannerWithModel(picadas[active].model);
+  saveState();
+  renderConfig();
+}
+
+let tabs = `<div class="tabs">`;
+
+picadas.forEach((_, i) => {
+  tabs += `
+    <div class="tab ${i===active?'active':''}"
+         onclick="setActivePicada(${i})">
+      Picada ${i+1}
+    </div>`;
+});
+
+tabs += `
+  <div class="tab" onclick="addPicada()">+</div>
+  <div class="tab" onclick="removePicada()">−</div>
+</div>`;
+
 
  const p=picadas[active];
 
- let imageHTML='<div class="image-box">Seleccioná<br>un modelo para ver su imagen</div>';
- if(p.model){
-  imageHTML=`<div class="image-box" onclick="openModal('${modelData[p.model].img}')">
-    <img src="${modelData[p.model].img}" loading="lazy">
-  </div>`;
- }
 
  let info='Seleccioná un modelo para ver su contenido.';
  if(p.model){
@@ -475,13 +482,18 @@ function renderConfig(){
  ${tabs}
  <div class="picada-top">
    <div class="model-column">
-     <label>Modelo de la picada</label>
-     <button class="control ${p.model==='Clásica y Elegante'?'selected':''}" onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
-     <button class="control ${p.model==='Fresca y Colorida'?'selected':''}" onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
-     <div class="model-info">${info}</div>
-   </div>
-   ${imageHTML}
- </div>
+    <label>Modelo de la picada</label>
+<div style="display:flex;gap:8px">
+  <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
+          onclick="setModel('Clásica y Elegante')">
+    Clásica y Elegante
+  </button>
+
+  <button class="control ${p.model==='Fresca y Colorida'?'selected':''}"
+          onclick="setModel('Fresca y Colorida')">
+    Fresca y Colorida
+  </button>
+</div>
 
  <label>Cantidad de personas</label>
  <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
