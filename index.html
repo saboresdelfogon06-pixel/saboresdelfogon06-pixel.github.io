@@ -299,7 +299,7 @@ button.selected{
 </div>
 
 
-<div class="section" id="config"></div>
+<div id="config"></div>
 
 <div class="section">
 <label>Nombre y apellido</label>
@@ -497,35 +497,34 @@ function renderConfig(){
 let tabs = `
 <div style="display:flex;gap:8px;">
 
-
   <!-- CANTIDAD -->
-<div class="section" style="flex:1;padding:8px;">
-  <label style="font-size:12px;">Cantidad</label>
+  <div style="flex:1;">
+    <label style="font-size:12px;">Cantidad</label>
 
-  <div style="display:flex;align-items:center;gap:8px;">
-    <button
-      class="control"
-      style="width:36px;padding:8px;text-align:center;"
-      onclick="removeLastPicada()"
-      ${picadas.length <= 1 ? 'disabled' : ''}>
-      −
-    </button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button
+        class="control"
+        style="width:36px;padding:8px;text-align:center;"
+        onclick="removeLastPicada()"
+        ${picadas.length <= 1 ? 'disabled' : ''}>
+        −
+      </button>
 
-    <div style="flex:1;text-align:center;font-size:16px;">
-      ${picadas.length}
+      <div style="flex:1;text-align:center;font-size:16px;">
+        ${picadas.length}
+      </div>
+
+      <button
+        class="control"
+        style="width:36px;padding:8px;text-align:center;"
+        onclick="addPicada()">
+        +
+      </button>
     </div>
-
-    <button
-      class="control"
-      style="width:36px;padding:8px;text-align:center;"
-      onclick="addPicada()">
-      +
-    </button>
   </div>
-</div>
 
   <!-- EDITAR -->
-  <div class="section" style="flex:1;padding:12px;">
+  <div style="flex:1;">
     <label>Editar</label>
     <select class="control" onchange="setActivePicada(Number(this.value))">
       ${picadas.map((_,i)=>`
