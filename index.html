@@ -416,7 +416,13 @@ function buildPicadas(n){
 }
 function setActivePicada(i){
   active = i;
-  syncBannerWithModel(picadas[active].model);
+
+  const m = picadas[active].model;
+  if(m){
+    syncBannerWithModel(m);
+  }
+
+  saveState();
   renderConfig();
 }
 
@@ -430,7 +436,6 @@ function addPicada(){
   });
 
   active = picadas.length - 1;
-  syncBannerWithModel(picadas[active].model);
   saveState();
   renderConfig();
 }
@@ -444,7 +449,6 @@ function removePicada(){
     active = picadas.length - 1;
   }
 
-  syncBannerWithModel(picadas[active].model);
   saveState();
   renderConfig();
 }
@@ -467,24 +471,38 @@ function removeLastPicada(){
 function renderConfig(){
 
 let tabs = `
-<div style="display:flex;gap:12px;margin-bottom:16px;">
+<div style="display:flex;gap:8px;margin-bottom:8px;">
 
   <!-- CANTIDAD -->
-  <div class="section" style="flex:1;padding:12px;">
-    <label>Cantidad</label>
-    <div style="display:flex;align-items:center;gap:12px;">
-      <button class="control" style="width:44px;text-align:center;" onclick="removeLastPicada()">−</button>
-      <div style="flex:1;text-align:center;font-size:18px;">
-        ${picadas.length}
-      </div>
-      <button class="control" style="width:44px;text-align:center;" onclick="addPicada()">+</button>
+<div class="section" style="flex:1;padding:8px;">
+  <label style="font-size:12px;">Cantidad</label>
+
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button
+      class="control"
+      style="width:36px;padding:8px;text-align:center;"
+      onclick="removeLastPicada()"
+      ${picadas.length <= 1 ? 'disabled' : ''}>
+      −
+    </button>
+
+    <div style="flex:1;text-align:center;font-size:16px;">
+      ${picadas.length}
     </div>
+
+    <button
+      class="control"
+      style="width:36px;padding:8px;text-align:center;"
+      onclick="addPicada()">
+      +
+    </button>
   </div>
+</div>
 
   <!-- EDITAR -->
   <div class="section" style="flex:1;padding:12px;">
     <label>Editar</label>
-    <select class="control" onchange="setActivePicada(this.value)">
+    <select class="control" onchange="setActivePicada(Number(this.value))">
       ${picadas.map((_,i)=>`
         <option value="${i}" ${i===active?'selected':''}>
           Picada ${i+1}
