@@ -46,22 +46,16 @@ body{
   gap:14px;
   margin-bottom:14px;
 }
-.logo{
-  width:54px;
-}
+.logo{width:54px}
 .brand{
   font-size:15px;
   color:var(--muted);
 }
-.brand span{
-  margin:0 6px;
-  opacity:.6;
+.brand a{
+  color:var(--muted);
+  text-decoration:none;
 }
-
-/* TITLES */
-h2{
-  display:none;
-}
+.brand span{margin:0 6px;opacity:.6}
 
 /* SECTIONS */
 .section{
@@ -89,11 +83,7 @@ label{
   box-sizing:border-box;
 }
 
-button.control{
-  cursor:pointer;
-  text-align:left;
-}
-
+button.control{cursor:pointer;text-align:left}
 button.selected{
   border-color:var(--accent);
   background:rgba(211,174,9,.15);
@@ -146,18 +136,10 @@ button.selected{
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center;
 }
 
-/* MODEL COLUMN */
-.model-column{
-  flex:1;
-}
-.model-column button{
-  width:100%;
-}
-
-/* INFO */
+/* MODEL */
+.model-column{flex:1}
 .model-info{
   font-size:14px;
   line-height:1.5;
@@ -166,17 +148,13 @@ button.selected{
 }
 .model-info b{color:var(--text)}
 
-.summary{
-  font-size:15px;
-  line-height:1.5;
-}
+.summary{font-size:15px;line-height:1.5}
 
 /* PAY */
 .pay button{
   width:100%;
   padding:18px;
   font-size:20px;
-  font-weight:bold;
   background:var(--accent);
   border:none;
   border-radius:10px;
@@ -185,13 +163,9 @@ button.selected{
 }
 .pay button.enabled{opacity:1}
 
-.small{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-}
+.small{text-align:center;font-size:13px;color:var(--muted)}
 
-/* MODAL IMAGE */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -214,7 +188,6 @@ button.selected{
   border:none;
   padding:10px 14px;
   border-radius:8px;
-  font-weight:bold;
 }
 </style>
 </head>
@@ -231,7 +204,8 @@ button.selected{
 <div class="header">
   <img src="images/LOGO.png" class="logo">
   <div class="brand">
-    @saboresfogon.ar <span>|</span> Hacé tu pedido
+    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank">@saboresfogon.ar</a>
+    <span>|</span> Hacé tu pedido
   </div>
 </div>
 
@@ -306,9 +280,11 @@ function handleQtySelect(){
  : (customQty.style.display="none",buildPicadas(+qtySelect.value));
 }
 function setCustomQty(){buildPicadas(+customQty.value||1)}
+
 function buildPicadas(n){
  picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
- active=0; renderConfig();
+ active=0;
+ renderConfig();
 }
 
 function renderConfig(){
@@ -337,7 +313,6 @@ function renderConfig(){
 
  config.innerHTML=`
  ${tabs}
-
  <div class="picada-top">
    <div class="model-column">
      <label>Modelo de la picada</label>
@@ -398,6 +373,8 @@ function openModal(src){
 function closeModal(){
  imgModal.style.display="none";
 }
+
+buildPicadas(1);
 </script>
 
 </body>
