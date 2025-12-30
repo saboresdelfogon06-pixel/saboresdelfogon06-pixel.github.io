@@ -348,8 +348,28 @@ oninput="update()">
 </select>
 </div>
 
-<div class="section summary" id="summary">
-Completá todos los pasos para poder ir a pagar.
+<div class="section summary" style="position:relative">
+
+  <button
+    onclick="resetAll()"
+    style="
+      position:absolute;
+      top:8px;
+      right:8px;
+      background:none;
+      border:none;
+      font-size:18px;
+      color:#9a958d;
+      cursor:pointer;
+    "
+    title="Borrar pedido">
+    ✕
+  </button>
+
+  <div id="summary">
+    Completá todos los pasos para poder ir a pagar.
+  </div>
+
 </div>
 
 <div class="pay">
@@ -677,6 +697,35 @@ function update(){
   saveState(); // MÓDULO 3.2
 }
 
+function resetAll(){
+  // 1. borrar estado guardado
+  localStorage.removeItem('picadas');
+  localStorage.removeItem('clientName');
+  localStorage.removeItem('orderDate');
+  localStorage.removeItem('addr');
+  localStorage.removeItem('zone');
+  localStorage.removeItem('scrollY');
+
+  // 2. resetear variables
+  ship = 0;
+  zoneName = "";
+  total = 0;
+  active = 0;
+
+  // 3. limpiar inputs
+  clientName.value = "";
+  orderDate.value = "";
+  addr.value = "";
+  zone.value = "";
+
+  // 4. volver al estado inicial real
+  buildPicadas(1);
+
+  // 5. reset visual
+  showSlide(0, false);
+  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  payBtn.classList.remove("enabled");
+}
 
 
 function goWA() {
