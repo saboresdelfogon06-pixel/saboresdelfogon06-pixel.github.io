@@ -7,6 +7,9 @@
 
 <!-- Meta Pixel -->
 <script>
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -807,8 +810,19 @@ function syncBannerWithModel(model){
 
 showSlide(0);
 
+window.addEventListener('scroll', () => {
+  localStorage.setItem('scrollY', window.scrollY);
+});
 
 loadState();
+  
+window.addEventListener('load', () => {
+  const y = localStorage.getItem('scrollY');
+  if (y !== null) {
+    window.scrollTo(0, parseInt(y, 10));
+  }
+});
+
 </script>
 
 </body>
