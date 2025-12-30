@@ -676,25 +676,25 @@ function update(){
   let valid = addr.value && zoneName && clientName.value && orderDate.value;
   let txt = '';
 
-  picadas.forEach((p, i) => {
-    if (!p.model || !p.size) valid = false;
-    total += p.price;
-    txt += `Picada ${i + 1}: ${p.model} (${p.size} personas)<br>`;
-  });
+picadas.forEach((p, i) => {
+  if (!p.model || !p.size) valid = false;
+  total += p.price;
+  txt += `Picada ${i + 1}: ${p.model} (${p.size} personas)<br>`;
+});
 
-  if (valid) {
+if (valid) {
 
- // 🔥 EVENTO META: FORMULARIO COMPLETO
-if (!window._checkoutTracked) {
-  fbq('track', 'InitiateCheckout', {
-    content_name: 'Formulario Picada Completo',
-    content_category: 'Picadas',
-    value: total,
-    currency: 'ARS',
-    num_items: picadas.length
-  });
-  window._checkoutTracked = true;
-}
+  // 🔥 EVENTO META: FORMULARIO COMPLETO
+  if (!window._checkoutTracked) {
+    fbq('trackCustom', 'FormCompleted', {
+      content_name: 'Formulario Picada Completo',
+      content_category: 'Picadas',
+      value: total,
+      currency: 'ARS',
+      num_items: picadas.length
+    });
+    window._checkoutTracked = true;
+  }
 
 
     summary.innerHTML = `
