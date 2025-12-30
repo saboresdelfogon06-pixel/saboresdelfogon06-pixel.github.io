@@ -610,6 +610,25 @@ function openModal(src){
 function closeModal(){
  imgModal.style.display="none";
 }
+// ===== BANNER → SELECCIÓN DIRECTA =====
+function selectFromBanner(model){
+  // asegura que haya al menos 1 picada
+  if(picadas.length === 0){
+    buildPicadas(1);
+  }
+
+  picadas[0].model = model;
+  active = 0;
+  saveState();
+  renderConfig();
+
+  // scroll suave al configurador
+  setTimeout(() => {
+    document
+      .getElementById('config')
+      .scrollIntoView({ behavior: 'smooth' });
+  }, 150);
+}
 
 loadState();
 </script>
