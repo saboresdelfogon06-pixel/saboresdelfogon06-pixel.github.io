@@ -307,7 +307,7 @@ function renderConfig(){
 
  const p=picadas[active];
 
- let imageHTML='<div class="image-box">Seleccioná<br>un modelo</div>';
+ let imageHTML='<div class="image-box">Seleccioná<br>un modelo para ver su imagen</div>';
  if(p.model){
   imageHTML=`<div class="image-box" onclick="openModal('${modelData[p.model].img}')">
     <img src="${modelData[p.model].img}" loading="lazy">
