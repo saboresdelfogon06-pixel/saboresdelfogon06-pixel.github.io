@@ -23,10 +23,9 @@ fbq('track','PageView');
 :root{
   --bg:#0f0f0f;
   --card:#1b1b1b;
-  --text:#f1f1f1;
-  --muted:#aaa;
-  --accent:#c40000;
-  --ok:#25D366;
+  --text:#cfcac2;        /* gris topo */
+  --muted:#9a958d;
+  --accent:#D3AE09;      /* color marca */
 }
 body{
   margin:0;
@@ -56,6 +55,7 @@ label{
   margin-bottom:6px;
 }
 
+/* 🔥 CONTROL UNIFICADO */
 .control{
   width:100%;
   padding:14px;
@@ -64,18 +64,20 @@ label{
   border:1px solid #333;
   border-radius:8px;
   margin-bottom:10px;
+  box-sizing:border-box;
 }
 
 button.control{
   text-align:left;
+  cursor:pointer;
 }
 
 button.selected{
   border-color:var(--accent);
-  background:#260000;
+  background:rgba(211,174,9,.15);
 }
 
-/* 🔥 SOLO PARA MODELO */
+/* modelo en 2 columnas */
 .model-row{
   display:flex;
   gap:10px;
@@ -97,11 +99,14 @@ button.selected{
   text-align:center;
   background:#111;
   border-radius:8px;
+  color:var(--text);
 }
 .tab.active{
   background:var(--accent);
+  color:#1b1b1b;
 }
 
+/* info modelo */
 .model-info{
   font-size:13px;
   color:var(--muted);
@@ -113,13 +118,15 @@ button.selected{
   line-height:1.5;
 }
 
+/* botón pagar */
 .pay button{
   width:100%;
   padding:18px;
   font-size:20px;
-  background:var(--ok);
+  background:var(--accent);
   border:none;
   border-radius:10px;
+  color:#2a2a2a;
   opacity:.4;
 }
 .pay button.enabled{opacity:1}
@@ -160,13 +167,15 @@ class="control" placeholder="Ingresá la cantidad"
 style="display:none" onchange="setCustomQty()">
 </div>
 
-<!-- Configuración de picadas -->
+<!-- Configuración -->
 <div class="section" id="config"></div>
 
 <!-- Envío -->
 <div class="section">
 <label>Dirección y altura de envío</label>
-<input id="addr" class="control" oninput="update()">
+<input id="addr" class="control"
+placeholder="Por favor ingrese la dirección del envío"
+oninput="update()">
 
 <label>Localidad</label>
 <select id="zone" class="control" onchange="setZone()">
@@ -242,11 +251,11 @@ function renderConfig(){
 
   <label>Cantidad de personas</label>
   <button class="control ${p.size===4?'selected':''}"
-    onclick="setSize(4,50000)">4 personas ($50.000 – 20×30 cm)</button>
+    onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
   <button class="control ${p.size===6?'selected':''}"
-    onclick="setSize(6,70000)">6 personas ($70.000 – 28×48 cm)</button>
+    onclick="setSize(6,70000)">6 personas ($70.000) – 28×48 cm</button>
   <button class="control ${p.size===8?'selected':''}"
-    onclick="setSize(8,90000)">8 personas ($90.000 – 28×48 cm)</button>
+    onclick="setSize(8,90000)">8 personas ($90.000) – 28×48 cm</button>
   `;
   update();
 }
