@@ -449,22 +449,52 @@ function removePicada(){
   renderConfig();
 }
 
+function removeLastPicada(){
+  if(picadas.length <= 1) return;
+
+  picadas.pop();
+
+  if(active >= picadas.length){
+    active = picadas.length - 1;
+  }
+
+  syncBannerWithModel(picadas[active].model);
+  saveState();
+  renderConfig();
+}
+
+
 function renderConfig(){
 
-  let tabs = `<div class="tabs">`;
+let tabs = `
+<div style="display:flex;gap:12px;margin-bottom:16px;">
 
-  picadas.forEach((_, i) => {
-    tabs += `
-      <div class="tab ${i===active?'active':''}"
-           onclick="setActivePicada(${i})">
-        Picada ${i+1}
-      </div>`;
-  });
+  <!-- CANTIDAD -->
+  <div class="section" style="flex:1;padding:12px;">
+    <label>Cantidad</label>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="control" style="width:44px;text-align:center;" onclick="removeLastPicada()">−</button>
+      <div style="flex:1;text-align:center;font-size:18px;">
+        ${picadas.length}
+      </div>
+      <button class="control" style="width:44px;text-align:center;" onclick="addPicada()">+</button>
+    </div>
+  </div>
 
-  tabs += `
-    <div class="tab" onclick="addPicada()">+</div>
-    <div class="tab" onclick="removePicada()">−</div>
-  </div>`;
+  <!-- EDITAR -->
+  <div class="section" style="flex:1;padding:12px;">
+    <label>Editar</label>
+    <select class="control" onchange="setActivePicada(this.value)">
+      ${picadas.map((_,i)=>`
+        <option value="${i}" ${i===active?'selected':''}>
+          Picada ${i+1}
+        </option>
+      `).join("")}
+    </select>
+  </div>
+
+</div>
+`;
 
   const p = picadas[active];
 
