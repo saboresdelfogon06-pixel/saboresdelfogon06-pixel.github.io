@@ -34,7 +34,10 @@ body{
   font-family:Arial, sans-serif;
   background:var(--bg);
   color:var(--text);
-  visibility:hidden; /* ← clave: evita pantallazo al refrescar */
+  visibility:hidden;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+/* ← clave: evita pantallazo al refrescar */
 }
 .container{
   max-width:720px;
@@ -897,6 +900,11 @@ window.addEventListener('load', () => {
     document.body.style.visibility = 'visible';
   });
 });
+
+// 🔒 bloquear zoom por gesto (iOS / Safari)
+document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener('gesturechange', e => e.preventDefault());
+document.addEventListener('gestureend', e => e.preventDefault());
 
 
 </script>
