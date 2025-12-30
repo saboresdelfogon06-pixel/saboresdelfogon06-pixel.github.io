@@ -231,6 +231,15 @@ style="display:none" onchange="setCustomQty()">
 <div class="section" id="config"></div>
 
 <div class="section">
+<label>Nombre y apellido</label>
+<input id="clientName" class="control"
+placeholder="Ingresá tu nombre completo"
+oninput="update()">
+
+<label>Fecha del pedido</label>
+<input id="orderDate" type="date" class="control"
+oninput="update()">
+
 <label>Dirección y altura de envío</label>
 <input id="addr" class="control"
 placeholder="Por favor ingrese la dirección del envío"
