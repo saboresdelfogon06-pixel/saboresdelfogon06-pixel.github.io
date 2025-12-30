@@ -268,8 +268,18 @@ Completá todos los pasos para poder ir a pagar.
 <p class="small">Reservás con el 50%. El resto se paga al recibir.</p>
 
 </div>
-
 <script>
+// ===== MÓDULO 1: FECHA DESDE MAÑANA =====
+document.addEventListener('DOMContentLoaded', () => {
+  const dateInput = document.getElementById('orderDate');
+  if (dateInput) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split('T')[0];
+  }
+});
+// ===== FIN MÓDULO 1 =====
+
 const modelData={
  "Clásica y Elegante":{
   img:"images/IMG_7762-min.JPG",
@@ -296,10 +306,16 @@ function handleQtySelect(){
 function setCustomQty(){buildPicadas(+customQty.value||1)}
 
 function buildPicadas(n){
- picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
- active=0;
+function buildPicadas(n){
+ picadas = Array.from({ length: n }, () => ({
+  model: "Clásica y Elegante", // MÓDULO 2: default
+  size: 8,                    // MÓDULO 2: default
+  price: 90000                // MÓDULO 2: default
+ }));
+ active = 0;
  renderConfig();
 }
+
 
 function renderConfig(){
  let tabs='<div class="tabs">';
