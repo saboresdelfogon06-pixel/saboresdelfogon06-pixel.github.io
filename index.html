@@ -190,15 +190,17 @@ button.selected{
   border-radius:8px;
 }
   /* ===== BANNER SUPERIOR ===== */
-.banner {
-  width: 100%;
-  height: 260px;
-  border-radius: 14px;
-  overflow: hidden;
-  position: relative;
-  margin-bottom: 16px;
-  background: #000;
+.banner{
+  width:100%;
+  height:200px;            /* más rectangular */
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  margin-bottom:16px;
+  background:#000;
+  touch-action:pan-y;
 }
+
 
 /* ===== HERO BANNER AVANZADO ===== */
 .banner{
@@ -234,14 +236,31 @@ button.selected{
   position:absolute;
   top:12px;
   right:12px;
-  padding:8px 12px;
-  background:rgba(0,0,0,.6);
+  padding:6px 12px;
+  background:rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
   color:#fff;
-  font-size:14px;
-  border-radius:8px;
-  font-weight:bold;
+  font-size:13px;
+  letter-spacing:.3px;
+  border-radius:999px;
+  font-weight:500;
   z-index:10;
 }
+.banner::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:60%;
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,.45),
+    rgba(0,0,0,.15),
+    transparent
+  );
+  pointer-events:none;
+  z-index:5;
+}
+
 
 </style>
 </head>
@@ -582,6 +601,7 @@ const bannerSlides = [
 
 let bannerIndex = 0;
 let bannerLocked = false;
+let bannerFrozenModel = null;
 let bannerTimer = null;
 let startX = 0;
 let currentX = 0;
@@ -629,7 +649,7 @@ function showSlide(i, animate = true){
 }
 
 function nextSlide(){
-  if(bannerLocked) return;
+  if(bannerFrozenModel) return;
   showSlide((bannerIndex + 1) % bannerSlides.length);
 }
 
@@ -641,7 +661,7 @@ banner.onclick = () => {
 
 // lock
 function lockBanner(model){
-  bannerLocked = true;
+  bannerFrozenModel = model;
   const i = bannerSlides.findIndex(s => s.model === model);
   if(i >= 0) showSlide(i, false);
 }
@@ -652,12 +672,24 @@ banner.addEventListener("touchstart", e => {
 });
 
 banner.addEventListener("touchend", e => {
-  if(bannerLocked) return;
   const diff = startX - e.changedTouches[0].clientX;
-  if(diff > 50) nextSlide();
-  if(diff < -50){
-    showSlide((bannerIndex - 1 + bannerSlides.length) % bannerSlides.length);
+
+  if (Math.abs(diff) < 50) return;
+
+  if (diff > 0) {
+    nextSlide();
+  } else {
+    showSlide(
+      (bannerIndex - 1 + bannerSlides.length) % bannerSlides.length
+    );
   }
+
+  const newModel = bannerSlides[bannerIndex].model;
+  picadas[active].model = newModel;
+  saveState();
+  renderConfig();
+});
+
 });
 
 // sincronizar desde el formulario
