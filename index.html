@@ -42,26 +42,20 @@ body{
 /* HEADER */
 .header{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   gap:14px;
-  margin-bottom:18px;
+  margin-bottom:14px;
 }
-.logo{width:56px}
-
+.logo{width:54px}
 .brand{
-  display:flex;
-  flex-direction:column;
+  font-size:15px;
+  color:var(--muted);
 }
 .brand a{
   color:var(--muted);
-  text-decoration:underline;
-  font-size:15px;
+  text-decoration:none;
 }
-.subtitle{
-  margin-top:4px;
-  font-size:18px;
-  color:var(--text);
-}
+.brand span{margin:0 6px;opacity:.6}
 
 /* SECTIONS */
 .section{
@@ -89,11 +83,7 @@ label{
   box-sizing:border-box;
 }
 
-button.control{
-  cursor:pointer;
-  text-align:left;
-}
-
+button.control{cursor:pointer;text-align:left}
 button.selected{
   border-color:var(--accent);
   background:rgba(211,174,9,.15);
@@ -119,7 +109,7 @@ button.selected{
   color:#1b1b1b;
 }
 
-/* CONFIG TOP */
+/* TOP */
 .picada-top{
   display:flex;
   gap:16px;
@@ -150,19 +140,15 @@ button.selected{
 
 /* MODEL */
 .model-column{flex:1}
-
 .model-info{
   font-size:14px;
   line-height:1.5;
   color:var(--muted);
-  margin:6px 0 14px;
+  margin:8px 0 14px;
 }
 .model-info b{color:var(--text)}
 
-.summary{
-  font-size:15px;
-  line-height:1.5;
-}
+.summary{font-size:15px;line-height:1.5}
 
 /* PAY */
 .pay button{
@@ -177,13 +163,9 @@ button.selected{
 }
 .pay button.enabled{opacity:1}
 
-.small{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-}
+.small{text-align:center;font-size:13px;color:var(--muted)}
 
-/* MODAL IMAGE */
+/* MODAL */
 .modal{
   position:fixed;
   inset:0;
@@ -202,14 +184,10 @@ button.selected{
   position:absolute;
   top:20px;
   right:20px;
-  width:44px;
-  height:44px;
-  border-radius:50%;
   background:var(--accent);
   border:none;
-  font-size:22px;
-  color:var(--muted);
-  cursor:pointer;
+  padding:10px 14px;
+  border-radius:8px;
 }
 </style>
 </head>
@@ -217,7 +195,7 @@ button.selected{
 <body>
 
 <div class="modal" id="imgModal" onclick="closeModal()">
-  <button aria-label="Cerrar">✕</button>
+  <button>Cerrar</button>
   <img id="modalImg">
 </div>
 
@@ -227,17 +205,176 @@ button.selected{
   <img src="images/LOGO.png" class="logo">
   <div class="brand">
     <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank">@saboresfogon.ar</a>
-    <div class="subtitle">Hacé tu pedido</div>
+    <span>|</span> Hacé tu pedido
   </div>
 </div>
 
-<!-- TODO el resto del código JS y HTML de la landing sigue IGUAL
-(no se modificó nada funcional) -->
+<div class="section">
+<label>¿Cuántas picadas querés?</label>
+<select id="qtySelect" class="control" onchange="handleQtySelect()">
+  <option value="1">1 picada</option>
+  <option value="2">2 picadas</option>
+  <option value="3">3 picadas</option>
+  <option value="4">4 picadas</option>
+  <option value="5">5 picadas</option>
+  <option value="more">Necesito más picadas</option>
+</select>
+<input id="customQty" type="number" min="6" class="control"
+placeholder="Ingresá la cantidad"
+style="display:none" onchange="setCustomQty()">
+</div>
+
+<div class="section" id="config"></div>
+
+<div class="section">
+<label>Dirección y altura de envío</label>
+<input id="addr" class="control"
+placeholder="Por favor ingrese la dirección del envío"
+oninput="update()">
+
+<label>Localidad</label>
+<select id="zone" class="control" onchange="setZone()">
+  <option value="">Seleccionar localidad</option>
+  <option value="Francisco Álvarez|0">Francisco Álvarez</option>
+  <option value="Moreno|0">Moreno</option>
+  <option value="Merlo|7000">Merlo</option>
+  <option value="Ituzaingó|8000">Ituzaingó</option>
+  <option value="Morón|8000">Morón</option>
+  <option value="CABA|8000">CABA</option>
+</select>
+</div>
+
+<div class="section summary" id="summary">
+Completá todos los pasos para poder ir a pagar.
+</div>
+
+<div class="pay">
+<button id="payBtn" onclick="goWA()">IR A PAGAR</button>
+</div>
+
+<p class="small">Reservás con el 50%. El resto se paga al recibir.</p>
 
 </div>
 
 <script>
-/* JS ORIGINAL SIN CAMBIOS FUNCIONALES */
+const modelData={
+ "Clásica y Elegante":{
+  img:"images/IMG_7762-min.JPG",
+  fiambres:["Sopresatta italiana","Jamón crudo","Lomo ahumado","Panceta ahumada"],
+  quesos:["Brie","Queso azul","Pepato"],
+  dips:["Dip dulce","Dip salado"]
+ },
+ "Fresca y Colorida":{
+  img:"images/IMG_7761-min.JPG",
+  fiambres:["Jamón cocido","Salamín chacarero","Longaniza","Panceta ahumada"],
+  quesos:["Brie","Pategrás","Sardo"],
+  dips:["Dip dulce","Dip salado"]
+ }
+};
+
+let picadas=[],active=0,ship=0,zoneName="";
+
+function handleQtySelect(){
+ qtySelect.value==="more"
+ ? customQty.style.display="block"
+ : (customQty.style.display="none",buildPicadas(+qtySelect.value));
+}
+function setCustomQty(){buildPicadas(+customQty.value||1)}
+
+function buildPicadas(n){
+ picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
+ active=0;
+ renderConfig();
+}
+
+function renderConfig(){
+ let tabs='<div class="tabs">';
+ picadas.forEach((_,i)=>tabs+=`<div class="tab ${i===active?'active':''}" onclick="active=${i};renderConfig()">Picada ${i+1}</div>`);
+ tabs+='</div>';
+
+ const p=picadas[active];
+
+ let imageHTML='<div class="image-box">Seleccioná<br>un modelo</div>';
+ if(p.model){
+  imageHTML=`<div class="image-box" onclick="openModal('${modelData[p.model].img}')">
+    <img src="${modelData[p.model].img}" loading="lazy">
+  </div>`;
+ }
+
+ let info='Seleccioná un modelo para ver su contenido.';
+ if(p.model){
+  const d=modelData[p.model];
+  info=`<b>Incluye</b><br>
+  <b>🥩 Fiambres</b><br>• ${d.fiambres.join("<br>• ")}<br><br>
+  <b>🧀 Quesos</b><br>• ${d.quesos.join("<br>• ")}<br><br>
+  <b>🥣 Dips</b><br>• ${d.dips.join("<br>• ")}`;
+  if(p.size>=6) info+=`<br><br><b>✨ Extra</b><br>• Tomatitos deshidratados`;
+ }
+
+ config.innerHTML=`
+ ${tabs}
+ <div class="picada-top">
+   <div class="model-column">
+     <label>Modelo de la picada</label>
+     <button class="control ${p.model==='Clásica y Elegante'?'selected':''}" onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
+     <button class="control ${p.model==='Fresca y Colorida'?'selected':''}" onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
+     <div class="model-info">${info}</div>
+   </div>
+   ${imageHTML}
+ </div>
+
+ <label>Cantidad de personas</label>
+ <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
+ <button class="control ${p.size===6?'selected':''}" onclick="setSize(6,70000)">6 personas ($70.000) – 28×48 cm</button>
+ <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">8 personas ($90.000) – 28×48 cm</button>
+ `;
+ update();
+}
+
+function setModel(m){picadas[active].model=m;renderConfig()}
+function setSize(s,p){picadas[active].size=s;picadas[active].price=p;renderConfig()}
+function setZone(){
+ if(!zone.value)return;
+ zoneName=zone.value.split('|')[0];
+ ship=+zone.value.split('|')[1];
+ update();
+}
+
+function update(){
+ let total=ship,valid=addr.value&&zoneName;
+ let txt='';
+ picadas.forEach((p,i)=>{
+  if(!p.model||!p.size) valid=false;
+  total+=p.price;
+  txt+=`Picada ${i+1}: ${p.model} (${p.size} personas)<br>`;
+ });
+ if(valid){
+  summary.innerHTML=`${txt}<br>Envío a ${addr.value}, ${zoneName}<br><b>Total $${total.toLocaleString()}</b>`;
+  payBtn.classList.add('enabled');
+ }else{
+  payBtn.classList.remove('enabled');
+  summary.innerHTML="Completá todos los pasos para poder ir a pagar.";
+ }
+}
+
+function goWA(){
+ if(!payBtn.classList.contains('enabled'))return;
+ fbq('track','Lead');
+ let msg='Hola, quiero pedir:\n';
+ picadas.forEach((p,i)=>msg+=`Picada ${i+1}: ${p.model} para ${p.size} personas\n`);
+ msg+=`Dirección: ${addr.value}, ${zoneName}`;
+ location.href='https://wa.me/5491123284020?text='+encodeURIComponent(msg);
+}
+
+function openModal(src){
+ modalImg.src=src;
+ imgModal.style.display="flex";
+}
+function closeModal(){
+ imgModal.style.display="none";
+}
+
+buildPicadas(1);
 </script>
 
 </body>
