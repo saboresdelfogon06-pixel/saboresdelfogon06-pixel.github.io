@@ -509,24 +509,24 @@ config.innerHTML = `
           justify-content:flex-start;
         ">
 
-          <div style="flex:0 1 160px;">
+          <div style="flex:0 1 160px; min-width:160px;">
             <b>🥩 Fiambres</b><br>
             ${p.model ? modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>") : ""}
           </div>
 
-          <div style="flex:0 1 140px;">
+          <div style="flex:0 1 140px; min-width:140px;">
             <b>🧀 Quesos</b><br>
             ${p.model ? modelData[p.model].quesos.map(q => `• ${q}`).join("<br>") : ""}
           </div>
 
-          <div style="flex:0 1 140px;">
+          <div style="flex:0 1 140px; min-width:140px;">
             <b>🥣 Dips</b><br>
             ${p.model ? modelData[p.model].dips.map(d => `• ${d}`).join("<br>") : ""}
           </div>
 
           ${
             p.size >= 6
-              ? `<div style="flex:0 1 160px;">
+              ? `<div style="flex:0 1 160px; min-width:160px;">
                   <b>✨ Extra</b><br>
                   • Tomatitos deshidratados
                 </div>`
