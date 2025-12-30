@@ -449,59 +449,72 @@ function removePicada(){
   renderConfig();
 }
 
-let tabs = `<div class="tabs">`;
+function renderConfig(){
 
-picadas.forEach((_, i) => {
+  let tabs = `<div class="tabs">`;
+
+  picadas.forEach((_, i) => {
+    tabs += `
+      <div class="tab ${i===active?'active':''}"
+           onclick="setActivePicada(${i})">
+        Picada ${i+1}
+      </div>`;
+  });
+
   tabs += `
-    <div class="tab ${i===active?'active':''}"
-         onclick="setActivePicada(${i})">
-      Picada ${i+1}
-    </div>`;
-});
+    <div class="tab" onclick="addPicada()">+</div>
+    <div class="tab" onclick="removePicada()">−</div>
+  </div>`;
 
-tabs += `
-  <div class="tab" onclick="addPicada()">+</div>
-  <div class="tab" onclick="removePicada()">−</div>
-</div>`;
+  const p = picadas[active];
 
+  let info = 'Seleccioná un modelo para ver su contenido.';
+  if(p.model){
+    const d = modelData[p.model];
+    info = `<b>Incluye</b><br>
+    <b>🥩 Fiambres</b><br>• ${d.fiambres.join("<br>• ")}<br><br>
+    <b>🧀 Quesos</b><br>• ${d.quesos.join("<br>• ")}<br><br>
+    <b>🥣 Dips</b><br>• ${d.dips.join("<br>• ")}`;
+    if(p.size >= 6){
+      info += `<br><br><b>✨ Extra</b><br>• Tomatitos deshidratados`;
+    }
+  }
 
- const p=picadas[active];
+  config.innerHTML = `
+    ${tabs}
+    <div class="picada-top">
+      <div class="model-column">
+        <label>Modelo de la picada</label>
 
+        <div style="display:flex;gap:8px">
+          <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
+                  onclick="setModel('Clásica y Elegante')">
+            Clásica y Elegante
+          </button>
 
- let info='Seleccioná un modelo para ver su contenido.';
- if(p.model){
-  const d=modelData[p.model];
-  info=`<b>Incluye</b><br>
-  <b>🥩 Fiambres</b><br>• ${d.fiambres.join("<br>• ")}<br><br>
-  <b>🧀 Quesos</b><br>• ${d.quesos.join("<br>• ")}<br><br>
-  <b>🥣 Dips</b><br>• ${d.dips.join("<br>• ")}`;
-  if(p.size>=6) info+=`<br><br><b>✨ Extra</b><br>• Tomatitos deshidratados`;
- }
+          <button class="control ${p.model==='Fresca y Colorida'?'selected':''}"
+                  onclick="setModel('Fresca y Colorida')">
+            Fresca y Colorida
+          </button>
+        </div>
 
- config.innerHTML=`
- ${tabs}
- <div class="picada-top">
-   <div class="model-column">
-    <label>Modelo de la picada</label>
-<div style="display:flex;gap:8px">
-  <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
-          onclick="setModel('Clásica y Elegante')">
-    Clásica y Elegante
-  </button>
+        <label>Cantidad de personas</label>
+        <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">
+          4 personas ($50.000) – 20×30 cm
+        </button>
+        <button class="control ${p.size===6?'selected':''}" onclick="setSize(6,70000)">
+          6 personas ($70.000) – 28×48 cm
+        </button>
+        <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">
+          8 personas ($90.000) – 28×48 cm
+        </button>
+      </div>
+    </div>
+  `;
 
-  <button class="control ${p.model==='Fresca y Colorida'?'selected':''}"
-          onclick="setModel('Fresca y Colorida')">
-    Fresca y Colorida
-  </button>
-</div>
-
- <label>Cantidad de personas</label>
- <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
- <button class="control ${p.size===6?'selected':''}" onclick="setSize(6,70000)">6 personas ($70.000) – 28×48 cm</button>
- <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">8 personas ($90.000) – 28×48 cm</button>
- `;
- update();
+  update();
 }
+
 
 function setModel(m){
   picadas[active].model = m;
