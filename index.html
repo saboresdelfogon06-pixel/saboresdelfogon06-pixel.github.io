@@ -43,14 +43,27 @@ body{
 .header{
   display:flex;
   align-items:center;
-  gap:12px;
-  margin-bottom:10px;
+  gap:14px;
+  margin-bottom:14px;
 }
-.logo{width:42px}
-.brand{font-size:16px;color:var(--muted)}
+.logo{
+  width:54px;
+}
+.brand{
+  font-size:15px;
+  color:var(--muted);
+}
+.brand span{
+  margin:0 6px;
+  opacity:.6;
+}
 
-h2{text-align:center;font-weight:normal;margin:10px 0 20px}
+/* TITLES */
+h2{
+  display:none;
+}
 
+/* SECTIONS */
 .section{
   background:var(--card);
   border-radius:12px;
@@ -76,7 +89,11 @@ label{
   box-sizing:border-box;
 }
 
-button.control{cursor:pointer;text-align:left}
+button.control{
+  cursor:pointer;
+  text-align:left;
+}
+
 button.selected{
   border-color:var(--accent);
   background:rgba(211,174,9,.15);
@@ -102,7 +119,7 @@ button.selected{
   color:#1b1b1b;
 }
 
-/* TOP ROW */
+/* TOP */
 .picada-top{
   display:flex;
   gap:16px;
@@ -111,8 +128,8 @@ button.selected{
 
 /* IMAGE */
 .image-box{
-  width:150px;
-  height:150px;
+  width:160px;
+  height:160px;
   background:#000;
   border-radius:12px;
   overflow:hidden;
@@ -123,6 +140,7 @@ button.selected{
   color:var(--muted);
   font-size:12px;
   text-align:center;
+  cursor:pointer;
 }
 .image-box img{
   width:100%;
@@ -131,7 +149,7 @@ button.selected{
   object-position:center;
 }
 
-/* MODEL BUTTONS */
+/* MODEL COLUMN */
 .model-column{
   flex:1;
 }
@@ -144,16 +162,21 @@ button.selected{
   font-size:14px;
   line-height:1.5;
   color:var(--muted);
-  margin:12px 0;
+  margin:8px 0 14px;
 }
 .model-info b{color:var(--text)}
 
-.summary{font-size:15px;line-height:1.5}
+.summary{
+  font-size:15px;
+  line-height:1.5;
+}
 
+/* PAY */
 .pay button{
   width:100%;
   padding:18px;
   font-size:20px;
+  font-weight:bold;
   background:var(--accent);
   border:none;
   border-radius:10px;
@@ -162,19 +185,55 @@ button.selected{
 }
 .pay button.enabled{opacity:1}
 
-.small{text-align:center;font-size:13px;color:var(--muted)}
+.small{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* MODAL IMAGE */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.modal img{
+  max-width:90%;
+  max-height:80%;
+  border-radius:12px;
+}
+.modal button{
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:var(--accent);
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+  font-weight:bold;
+}
 </style>
 </head>
 
 <body>
+
+<div class="modal" id="imgModal" onclick="closeModal()">
+  <button>Cerrar</button>
+  <img id="modalImg">
+</div>
+
 <div class="container">
 
 <div class="header">
   <img src="images/LOGO.png" class="logo">
-  <div class="brand">@saboresfogon.ar</div>
+  <div class="brand">
+    @saboresfogon.ar <span>|</span> Hacé tu pedido
+  </div>
 </div>
-
-<h2>Hacé tu pedido</h2>
 
 <div class="section">
 <label>¿Cuántas picadas querés?</label>
@@ -261,13 +320,15 @@ function renderConfig(){
 
  let imageHTML='<div class="image-box">Seleccioná<br>un modelo</div>';
  if(p.model){
-  imageHTML=`<div class="image-box"><img src="${modelData[p.model].img}" loading="lazy"></div>`;
+  imageHTML=`<div class="image-box" onclick="openModal('${modelData[p.model].img}')">
+    <img src="${modelData[p.model].img}" loading="lazy">
+  </div>`;
  }
 
- let info='Por favor, seleccioná un modelo para ver su contenido.';
+ let info='Seleccioná un modelo para ver su contenido.';
  if(p.model){
   const d=modelData[p.model];
-  info=`<b>Incluye:</b><br><br>
+  info=`<b>Incluye</b><br>
   <b>🥩 Fiambres</b><br>• ${d.fiambres.join("<br>• ")}<br><br>
   <b>🧀 Quesos</b><br>• ${d.quesos.join("<br>• ")}<br><br>
   <b>🥣 Dips</b><br>• ${d.dips.join("<br>• ")}`;
@@ -282,11 +343,10 @@ function renderConfig(){
      <label>Modelo de la picada</label>
      <button class="control ${p.model==='Clásica y Elegante'?'selected':''}" onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
      <button class="control ${p.model==='Fresca y Colorida'?'selected':''}" onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
+     <div class="model-info">${info}</div>
    </div>
    ${imageHTML}
  </div>
-
- <div class="model-info">${info}</div>
 
  <label>Cantidad de personas</label>
  <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
@@ -331,7 +391,13 @@ function goWA(){
  location.href='https://wa.me/5491123284020?text='+encodeURIComponent(msg);
 }
 
-buildPicadas(1);
+function openModal(src){
+ modalImg.src=src;
+ imgModal.style.display="flex";
+}
+function closeModal(){
+ imgModal.style.display="none";
+}
 </script>
 
 </body>
