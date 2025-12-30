@@ -23,9 +23,9 @@ fbq('track','PageView');
 :root{
   --bg:#0f0f0f;
   --card:#1b1b1b;
-  --text:#cfcac2;        /* gris topo */
+  --text:#cfcac2;
   --muted:#9a958d;
-  --accent:#D3AE09;      /* color marca */
+  --accent:#D3AE09;
 }
 body{
   margin:0;
@@ -55,7 +55,6 @@ label{
   margin-bottom:6px;
 }
 
-/* 🔥 CONTROL UNIFICADO */
 .control{
   width:100%;
   padding:14px;
@@ -77,16 +76,12 @@ button.selected{
   background:rgba(211,174,9,.15);
 }
 
-/* modelo en 2 columnas */
 .model-row{
   display:flex;
   gap:10px;
 }
-.model-row button{
-  width:50%;
-}
+.model-row button{width:50%}
 
-/* tabs */
 .tabs{
   display:flex;
   gap:6px;
@@ -99,26 +94,23 @@ button.selected{
   text-align:center;
   background:#111;
   border-radius:8px;
-  color:var(--text);
 }
 .tab.active{
   background:var(--accent);
   color:#1b1b1b;
 }
 
-/* info modelo */
 .model-info{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:10px;
-}
-
-.summary{
-  font-size:15px;
+  font-size:14px;
   line-height:1.5;
+  color:var(--muted);
+  margin-bottom:12px;
 }
 
-/* botón pagar */
+.model-info b{color:var(--text)}
+
+.summary{font-size:15px;line-height:1.5}
+
 .pay button{
   width:100%;
   padding:18px;
@@ -145,7 +137,6 @@ button.selected{
 <h1>Sabores del Fogón</h1>
 <h2>Hacé tu pedido</h2>
 
-<!-- Cantidad de picadas -->
 <div class="section">
 <label>¿Cuántas picadas querés?</label>
 <select id="qtySelect" class="control" onchange="handleQtySelect()">
@@ -154,23 +145,16 @@ button.selected{
   <option value="3">3 picadas</option>
   <option value="4">4 picadas</option>
   <option value="5">5 picadas</option>
-  <option value="6">6 picadas</option>
-  <option value="7">7 picadas</option>
-  <option value="8">8 picadas</option>
-  <option value="9">9 picadas</option>
-  <option value="10">10 picadas</option>
   <option value="more">Necesito más picadas</option>
 </select>
 
-<input id="customQty" type="number" min="11"
+<input id="customQty" type="number" min="6"
 class="control" placeholder="Ingresá la cantidad"
 style="display:none" onchange="setCustomQty()">
 </div>
 
-<!-- Configuración -->
 <div class="section" id="config"></div>
 
-<!-- Envío -->
 <div class="section">
 <label>Dirección y altura de envío</label>
 <input id="addr" class="control"
@@ -185,13 +169,6 @@ oninput="update()">
   <option value="Merlo|7000">Merlo</option>
   <option value="Ituzaingó|8000">Ituzaingó</option>
   <option value="Morón|8000">Morón</option>
-  <option value="Castelar|8000">Castelar</option>
-  <option value="Hurlingham|8000">Hurlingham</option>
-  <option value="San Miguel|8000">San Miguel</option>
-  <option value="Tres de Febrero|8000">Tres de Febrero</option>
-  <option value="La Matanza|8000">La Matanza</option>
-  <option value="General Rodríguez|8000">General Rodríguez</option>
-  <option value="Luján|8000">Luján</option>
   <option value="CABA|8000">CABA</option>
 </select>
 </div>
@@ -209,89 +186,93 @@ Completá todos los pasos para poder ir a pagar.
 </div>
 
 <script>
-const modelInfo={
-  "Clásica y Elegante":"Quesos brie, azul y pepato. Sopresatta, lomo ahumado, jamón crudo, panceta. Dip dulce y salado.",
-  "Fresca y Colorida":"Quesos brie, pategrás y sardo. Jamón cocido, salamín, longaniza, panceta. Dip dulce y salado."
+const modelData={
+ "Clásica y Elegante":{
+  quesos:["Brie","Queso azul","Pepato"],
+  fiambres:["Sopresatta italiana","Jamón crudo","Lomo ahumado","Panceta ahumada"],
+  dips:["Dip dulce","Dip salado"]
+ },
+ "Fresca y Colorida":{
+  quesos:["Brie","Pategrás","Sardo"],
+  fiambres:["Jamón cocido","Salamín chacarero","Longaniza","Panceta ahumada"],
+  dips:["Dip dulce","Dip salado"]
+ }
 };
 
 let picadas=[],active=0,ship=0,zoneName="";
 
 function handleQtySelect(){
-  const v=qtySelect.value;
-  customQty.style.display = v==="more" ? "block" : "none";
-  if(v!=="more") buildPicadas(parseInt(v));
+ qtySelect.value==="more"
+ ? customQty.style.display="block"
+ : (customQty.style.display="none",buildPicadas(+qtySelect.value));
 }
-function setCustomQty(){
-  buildPicadas(parseInt(customQty.value)||1);
-}
+function setCustomQty(){buildPicadas(+customQty.value||1)}
 function buildPicadas(n){
-  picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
-  active=0;
-  renderConfig();
+ picadas=Array.from({length:n},()=>({model:null,size:null,price:0}));
+ active=0; renderConfig();
 }
 function renderConfig(){
-  let tabs='<div class="tabs">';
-  picadas.forEach((_,i)=>{
-    tabs+=`<div class="tab ${i===active?'active':''}" onclick="active=${i};renderConfig()">Picada ${i+1}</div>`;
-  });
-  tabs+='</div>';
+ let tabs='<div class="tabs">';
+ picadas.forEach((_,i)=>tabs+=`<div class="tab ${i===active?'active':''}" onclick="active=${i};renderConfig()">Picada ${i+1}</div>`);
+ tabs+='</div>';
 
-  const p=picadas[active];
-  config.innerHTML=`
-  ${tabs}
+ const p=picadas[active];
+ let info='Por favor, seleccioná un modelo para ver su contenido.';
+ if(p.model){
+  const d=modelData[p.model];
+  info=`<b>Incluye:</b><br>
+  <b>🥩 Fiambres:</b><br>• ${d.fiambres.join("<br>• ")}<br><br>
+  <b>🧀 Quesos:</b><br>• ${d.quesos.join("<br>• ")}<br><br>
+  <b>🥣 Dips:</b><br>• ${d.dips.join("<br>• ")}<br>`;
+  if(p.size>=6) info+=`<br><b>✨ Extra:</b><br>• Tomatitos deshidratados artesanales`;
+ }
 
-  <label>Modelo de la picada</label>
-  <div class="model-row">
-    <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
-      onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
-    <button class="control ${p.model==='Fresca y Colorida'?'selected':''}"
-      onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
-  </div>
-  <div class="model-info">${p.model?modelInfo[p.model]:'Por favor, seleccioná un modelo.'}</div>
+ config.innerHTML=`
+ ${tabs}
+ <label>Modelo de la picada</label>
+ <div class="model-row">
+  <button class="control ${p.model==='Clásica y Elegante'?'selected':''}" onclick="setModel('Clásica y Elegante')">Clásica y Elegante</button>
+  <button class="control ${p.model==='Fresca y Colorida'?'selected':''}" onclick="setModel('Fresca y Colorida')">Fresca y Colorida</button>
+ </div>
+ <div class="model-info">${info}</div>
 
-  <label>Cantidad de personas</label>
-  <button class="control ${p.size===4?'selected':''}"
-    onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
-  <button class="control ${p.size===6?'selected':''}"
-    onclick="setSize(6,70000)">6 personas ($70.000) – 28×48 cm</button>
-  <button class="control ${p.size===8?'selected':''}"
-    onclick="setSize(8,90000)">8 personas ($90.000) – 28×48 cm</button>
-  `;
-  update();
+ <label>Cantidad de personas</label>
+ <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">4 personas ($50.000) – 20×30 cm</button>
+ <button class="control ${p.size===6?'selected':''}" onclick="setSize(6,70000)">6 personas ($70.000) – 28×48 cm</button>
+ <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">8 personas ($90.000) – 28×48 cm</button>
+ `;
+ update();
 }
 
 function setModel(m){picadas[active].model=m;renderConfig()}
 function setSize(s,p){picadas[active].size=s;picadas[active].price=p;renderConfig()}
 function setZone(){
-  const v=zone.value;
-  if(!v)return;
-  zoneName=v.split('|')[0];
-  ship=parseInt(v.split('|')[1]);
-  update();
+ if(!zone.value)return;
+ zoneName=zone.value.split('|')[0];
+ ship=+zone.value.split('|')[1];
+ update();
 }
 function update(){
-  let total=ship,valid=addr.value&&zoneName,txt='';
-  picadas.forEach((p,i)=>{
-    if(!p.model||!p.size) valid=false;
-    total+=p.price;
-    txt+=`Picada ${i+1}: ${p.model} (${p.size} personas)<br>`;
-  });
-  if(valid){
-    summary.innerHTML=`${txt}<br>Envío a ${addr.value}, ${zoneName}<br><strong>Total $${total.toLocaleString()}</strong>`;
-    payBtn.classList.add('enabled');
-  }else{
-    payBtn.classList.remove('enabled');
-  }
+ let total=ship,valid=addr.value&&zoneName;
+ let txt='';
+ picadas.forEach((p,i)=>{
+  if(!p.model||!p.size) valid=false;
+  total+=p.price;
+  txt+=`Picada ${i+1}: ${p.model} (${p.size} personas)<br>`;
+ });
+ if(valid){
+  summary.innerHTML=`${txt}<br>Envío a ${addr.value}, ${zoneName}<br><b>Total $${total.toLocaleString()}</b>`;
+  payBtn.classList.add('enabled');
+ }else payBtn.classList.remove('enabled');
 }
 function goWA(){
-  if(!payBtn.classList.contains('enabled'))return;
-  fbq('track','Lead');
-  let msg='Hola, quiero pedir:\n';
-  picadas.forEach((p,i)=>msg+=`Picada ${i+1}: ${p.model} para ${p.size} personas\n`);
-  msg+=`Dirección: ${addr.value}, ${zoneName}`;
-  window.location.href='https://wa.me/5491123284020?text='+encodeURIComponent(msg);
+ if(!payBtn.classList.contains('enabled'))return;
+ fbq('track','Lead');
+ let msg='Hola, quiero pedir:\n';
+ picadas.forEach((p,i)=>msg+=`Picada ${i+1}: ${p.model} para ${p.size} personas\n`);
+ msg+=`Dirección: ${addr.value}, ${zoneName}`;
+ location.href='https://wa.me/5491123284020?text='+encodeURIComponent(msg);
 }
-
 buildPicadas(1);
 </script>
 </body>
