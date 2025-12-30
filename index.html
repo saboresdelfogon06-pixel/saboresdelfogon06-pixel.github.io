@@ -767,10 +767,11 @@ function resetAll(){
 function goWA() {
   if (!payBtn.classList.contains('enabled')) return;
 
-  // Evento de compra Meta (NO TOCAR)
-  fbq('track', 'Purchase', {
+  // 🔥 EVENTO META: Segunda capa, clic en IR A PAGAR
+  fbq('trackCustom', 'StartPayment', {
     value: total,
-    currency: 'ARS'
+    currency: 'ARS',
+    num_items: picadas.length
   });
 
   let cantidadPicadas = picadas.length;
