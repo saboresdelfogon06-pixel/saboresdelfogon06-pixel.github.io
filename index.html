@@ -645,12 +645,29 @@ function update(){
 
   if (valid) {
     summary.innerHTML = `
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <div>
       ${txt}
       <br>
       Entrega en ${addr.value}, ${zoneName}
       <br>
       <b>Total $${total.toLocaleString()}</b>
-    `;
+    </div>
+
+    <button
+      onclick="resetOrder()"
+      style="
+        background:none;
+        border:none;
+        color:#aaa;
+        font-size:22px;
+        cursor:pointer;
+        line-height:1;
+      ">
+      ✕
+    </button>
+  </div>
+`;
     payBtn.classList.add('enabled');
   } else {
     payBtn.classList.remove('enabled');
