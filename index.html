@@ -488,7 +488,7 @@ config.innerHTML = `
 
       <label>Modelo de la picada</label>
 
-      <div style="display:flex;gap:8px;margin-bottom:16px">
+      <div style="display:flex;gap:8px;margin-bottom:16px; flex-wrap:wrap;">
         <button class="control ${p.model==='Clásica y Elegante'?'selected':''}"
                 onclick="setModel('Clásica y Elegante')">
           Clásica y Elegante
@@ -504,28 +504,29 @@ config.innerHTML = `
       <div class="section model-info" style="margin-bottom:16px">
         <div style="
           display:flex;
-          gap:16px;
           flex-wrap:wrap;
+          gap:16px;
+          justify-content:flex-start;
         ">
 
-          <div style="min-width:160px;flex:1">
+          <div style="flex:0 1 160px;">
             <b>🥩 Fiambres</b><br>
             ${p.model ? modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>") : ""}
           </div>
 
-          <div style="min-width:140px;flex:1">
+          <div style="flex:0 1 140px;">
             <b>🧀 Quesos</b><br>
             ${p.model ? modelData[p.model].quesos.map(q => `• ${q}`).join("<br>") : ""}
           </div>
 
-          <div style="min-width:140px;flex:1">
+          <div style="flex:0 1 140px;">
             <b>🥣 Dips</b><br>
             ${p.model ? modelData[p.model].dips.map(d => `• ${d}`).join("<br>") : ""}
           </div>
 
           ${
             p.size >= 6
-              ? `<div style="min-width:160px;flex:1">
+              ? `<div style="flex:0 1 160px;">
                   <b>✨ Extra</b><br>
                   • Tomatitos deshidratados
                 </div>`
