@@ -354,48 +354,62 @@ function setZone(){
 }
 
 function update(){
- let total=ship,valid=addr.value&&zoneName;
- let txt='';
- picadas.forEach((p,i)=>{
-  if(!p.model||!p.size) valid=false;
-  total+=p.price;
-  txt+=`Picada ${i+1}: ${p.model} (${p.size} personas)<br>`;
- });
- if(valid){
-  summary.innerHTML=`${txt}<br>Envío a ${addr.value}, ${zoneName}<br><b>Total $${total.toLocaleString()}</b>`;
-  payBtn.classList.add('enabled');
- }else{
-  payBtn.classList.remove('enabled');
-  summary.innerHTML="Completá todos los pasos para poder ir a pagar.";
- }
+  total = ship;
+
+  let valid = addr.value && zoneName && clientName.value && orderDate.value;
+  let txt = '';
+
+  picadas.forEach((p, i) => {
+    if (!p.model || !p.size) valid = false;
+    total += p.price;
+    txt += `Picada ${i + 1}: ${p.model} (${p.size} personas)<br>`;
+  });
+
+  if (valid) {
+    summary.innerHTML = `
+      ${txt}
+      <br>
+      Entrega en ${addr.value}, ${zoneName}
+      <br>
+      <b>Total $${total.toLocaleString()}</b>
+    `;
+    payBtn.classList.add('enabled');
+  } else {
+    payBtn.classList.remove('enabled');
+    summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  }
 }
+
 
 function goWA() {
   if (!payBtn.classList.contains('enabled')) return;
 
-  // Evento de compra Meta (correcto)
+  // Evento de compra Meta (NO TOCAR)
   fbq('track', 'Purchase', {
     value: total,
     currency: 'ARS'
   });
 
   let cantidadPicadas = picadas.length;
-  let msg = `Hola, quiero pedir ${cantidadPicadas} picada${cantidadPicadas > 1 ? 's' : ''}:\n\n`;
+
+  let msg = `Hola soy ${clientName.value}, hice un pedido para el ${orderDate.value}.\n\n`;
+  msg += `Pedido:\n`;
 
   picadas.forEach((p, i) => {
-    if (cantidadPicadas > 1) msg += `Picada ${i + 1}:\n`;
-    msg += `Modelo: ${p.model}\n`;
-    msg += `Cantidad de personas: ${p.size}\n\n`;
+    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
   });
 
+  msg += `\nEntrega:\n`;
   msg += `Dirección: ${addr.value}\n`;
-  msg += `Localidad: ${zoneName}\n`;
-  msg += `Total: $${total.toLocaleString()}\n`;
-  msg += `¿Me pasás la info de pago para reservar con el 50%?`;
+  msg += `Localidad: ${zoneName}\n\n`;
+
+  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+  msg += `¿Me enviás la información de pago así reservo con el 50%?`;
 
   location.href =
     'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 }
+
 
 
 function openModal(src){
