@@ -247,6 +247,42 @@ button.selected{
   color: rgba(255,255,255,.35);
   pointer-events: none;
 }
+
+/* ===== BANNER MODELOS ===== */
+.banner-grid{
+  display: flex;
+  gap: 10px;
+  height: 220px;
+}
+
+.banner-item{
+  flex: 1;
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.banner-item img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.banner-label{
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.7),
+    rgba(0,0,0,.2),
+    transparent
+  );
+}
 </style>
 </head>
 
@@ -267,13 +303,24 @@ button.selected{
   </div>
 </div>
   <!-- ===== BANNER VISUAL ===== -->
-<div class="banner">
-  <div class="banner-overlay">
-    <div class="banner-text">
-      Elegí tu estilo de picada
-    </div>
+<!-- ===== BANNER VISUAL ===== -->
+<div class="banner banner-grid">
+
+  <div class="banner-item"
+       onclick="selectFromBanner('Clásica y Elegante')">
+    <img src="images/IMG_7762-min.JPG" alt="Clásica y Elegante">
+    <div class="banner-label">Clásica y Elegante</div>
   </div>
+
+  <div class="banner-item"
+       onclick="selectFromBanner('Fresca y Colorida')">
+    <img src="images/IMG_7761-min.JPG" alt="Fresca y Colorida">
+    <div class="banner-label">Fresca y Colorida</div>
+  </div>
+
 </div>
+<!-- ===== FIN BANNER ===== -->
+
 <!-- ===== FIN BANNER ===== -->
 
 
