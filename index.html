@@ -357,14 +357,33 @@ function update(){
  }
 }
 
-function goWA(){
- if(!payBtn.classList.contains('enabled'))return;
- fbq('track','Lead');
- let msg='Hola, quiero pedir:\n';
- picadas.forEach((p,i)=>msg+=`Picada ${i+1}: ${p.model} para ${p.size} personas\n`);
- msg+=`Dirección: ${addr.value}, ${zoneName}`;
- location.href='https://wa.me/5491123284020?text='+encodeURIComponent(msg);
+function goWA() {
+  if (!payBtn.classList.contains('enabled')) return;
+
+  // Dispara el evento de compra a Meta
+  fbq('track', 'Purchase', { value: total, currency: 'ARS' });
+
+  // Construir mensaje
+  let cantidadPicadas = picadas.length;
+  let msg = `Hola, quiero pedir ${cantidadPicadas} picada${cantidadPicadas > 1 ? 's' : ''}:\n\n`;
+
+  picadas.forEach((p, i) => {
+    if (cantidadPicadas > 1) {
+      msg += `Picada ${i + 1}:\n`;
+    }
+    msg += `Modelo: ${p.model}\n`;
+    msg += `Cantidad de personas: ${p.size}\n\n`;
+  });
+
+  msg += `Mi dirección: ${addr.value}\n`;
+  msg += `Localidad: ${zoneName}\n`;
+  msg += `Mi pedido es de un total de $${total.toLocaleString()}\n`;
+  msg += '¿Me pasas la información de pago así reservo con el 50%?';
+
+  // Redirige a WhatsApp con el mensaje codificado
+  location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 }
+
 
 function openModal(src){
  modalImg.src=src;
