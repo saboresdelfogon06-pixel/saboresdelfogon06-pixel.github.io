@@ -64,7 +64,7 @@ body{
 .section{
   background:var(--card);
   border-radius:12px;
-  padding:16px;
+  padding:10px;
   margin-bottom:16px;
 }
 
@@ -258,6 +258,14 @@ button.selected{
 
 .control.date{
   padding:10px;
+}
+#config .picada-top{
+  margin-top:4px;
+}
+@media (max-width:480px){
+  #config{
+    margin-bottom:8px;
+  }
 }
 </style>
 
@@ -487,7 +495,8 @@ function removeLastPicada(){
 function renderConfig(){
 
 let tabs = `
-<div style="display:flex;gap:8px;margin-bottom:8px;">
+<div style="display:flex;gap:8px;">
+
 
   <!-- CANTIDAD -->
 <div class="section" style="flex:1;padding:8px;">
