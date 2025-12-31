@@ -837,23 +837,27 @@ function setZone(){
 }
 
 function update(){
-  total = 0;
+  const p = picadas[active]; // picada activa
+  const summaryDiv = document.querySelector('.section.summary');
+
+  // 🔒 Ocultar el cuadro si no hay modelo o tamaño
+  if (!p.model || !p.size) {
+    summaryDiv.style.display = 'none';
+    payBtn.classList.remove("enabled");
+    return;
+  } else {
+    summaryDiv.style.display = 'block';
+  }
+
+  // ===== CONTENIDO DEL RESUMEN =====
+  let total = 0;
   let txt = "";
-  let tienePicadas = true;
 
-  // ===== PICADAS =====
   picadas.forEach((p, i) => {
-    if (!p.model || !p.size) {
-      tienePicadas = false;
-      txt += `Picada ${i + 1}: sin completar<br>`;
-      return;
-    }
-
-    total += p.price;
-    txt += `Picada ${i + 1}: ${p.model} (${p.size} personas) — $${p.price.toLocaleString()}<br>`;
+    total += p.price || 0;
+    txt += `Picada ${i + 1}: ${p.model} (${p.size} personas) — $${(p.price||0).toLocaleString()}<br>`;
   });
 
-  // ===== ENVÍO =====
   if (zoneName) {
     txt += `<br>Envío a ${zoneName}: $${ship.toLocaleString()}<br>`;
     total += ship;
@@ -861,7 +865,6 @@ function update(){
     txt += `<br>Envío: sin seleccionar<br>`;
   }
 
-  // ===== TOTAL SOLO SI HAY MODELO Y TAMAÑO =====
   const mostrarTotal = picadas.every(p => p.model && p.size && zoneName);
   if (mostrarTotal) {
     txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
@@ -892,17 +895,11 @@ function update(){
   `;
 
   // ===== VALIDACIÓN FINAL (solo para pagar) =====
-  let valid =
-    tienePicadas &&
-    clientName.value &&
-    orderDate.value &&
-    addr.value &&
-    zoneName;
+  const valid = p.model && p.size && clientName.value && orderDate.value && addr.value && zoneName;
 
   if (valid) {
     payBtn.classList.add("enabled");
 
-    // 🔥 EVENTO META
     if (!window._checkoutTracked) {
       fbq('trackCustom', 'FormCompleted', {
         content_name: 'Formulario Picada Completo',
@@ -921,6 +918,7 @@ function update(){
 
   saveState();
 }
+
 
 function resetAll(){
   // 1. borrar estado guardado
