@@ -620,14 +620,22 @@ function setActivePicada(i){
   renderConfig();
 }
 function setModel(model){
-  picadas[active].model = model;
+  const current = picadas[active];
+
+  if(current.model === model){
+    // si el modelo ya está seleccionado, lo deselecciona
+    current.model = null;
+  } else {
+    current.model = model;
+  }
 
   // sincroniza banner
-  syncBannerWithModel(model);
+  syncBannerWithModel(current.model);
 
   saveState();
   renderConfig();
 }
+
 
 function addPicada(){
   if(picadas.length >= 6) return;
@@ -834,21 +842,33 @@ function setSize(s,p){
 function handleSizeClick(s, p){
   const current = picadas[active];
 
-if(!current.model){
-  // 1. Parpadeo en botones de modelo
-  const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
-  modelBtns.forEach(btn=>{
-    btn.classList.remove('model-hint'); // reinicia animación
-    void btn.offsetWidth;
-    btn.classList.add('model-hint');
-  });
+  if(!current.model){
+    // parpadeo de aviso si no hay modelo
+    const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
+    modelBtns.forEach(btn=>{
+      btn.classList.remove('model-hint');
+      void btn.offsetWidth;
+      btn.classList.add('model-hint');
+    });
 
-  // 2. Cambiar color del aviso a blanco
-  const hint = document.getElementById('modelHint');
-  if(hint) hint.style.color = '#ffffff';
+    const hint = document.getElementById('modelHint');
+    if(hint) hint.style.color = '#ffffff';
+    return;
+  }
 
-  return; // 🚫 no selecciona tamaño
+  if(current.size === s){
+    // si el tamaño ya está seleccionado, deselecciona
+    current.size = null;
+    current.price = 0;
+  } else {
+    current.size = s;
+    current.price = p;
+  }
+
+  saveState();
+  renderConfig();
 }
+
 
 
 
