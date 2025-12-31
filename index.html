@@ -869,7 +869,7 @@ function handleSizeClick(s, p){
   }
 
   if(current.size === s){
-    // si el tamaño ya está seleccionado, deselecciona
+    // Deseleccionar tamaño
     current.size = null;
     current.price = 0;
   } else {
@@ -878,7 +878,7 @@ function handleSizeClick(s, p){
   }
 
   saveState();
-  renderConfig();
+  update(); // 🔹 llamamos a update() para recalcular total en mini-banner
 }
 
 function handleZoneChange() {
@@ -929,11 +929,27 @@ function setZone(){
 }
 
 function update(){
-  const p = picadas[active]; // picada activa
   const summaryDiv = document.querySelector('.section.summary');
 
-  // 🔒 Ocultar el cuadro si no hay modelo o tamaño
-  if (!p.model || !p.size) {
+  total = 0; // recalcular total
+
+  picadas.forEach(p => {
+    if(p.model && p.size){
+      total += p.price;
+    }
+  });
+
+  if(zoneName){
+    total += ship;
+  }
+
+  // Actualizamos mini-banner en tiempo real
+  const cartTotalDiv = document.getElementById('cartTotal');
+  if(cartTotalDiv) cartTotalDiv.textContent = `$${total.toLocaleString()}`;
+
+  // Mostrar resumen solo si hay modelo y tamaño en la picada activa
+  const p = picadas[active];
+  if(!p.model || !p.size){
     summaryDiv.style.display = 'none';
     payBtn.classList.remove("enabled");
     return;
@@ -941,25 +957,10 @@ function update(){
     summaryDiv.style.display = 'block';
   }
 
-  // ===== CONTENIDO DEL RESUMEN =====
- total = 0; // actualizar variable global
-let txt = "";
+  // Renderizamos la config normal
+  renderConfig();
+}
 
-picadas.forEach((p, i) => {
-  // 🔹 solo sumar si hay tamaño seleccionado
-  if(p.model && p.size){
-    total += p.price || 0;
-    txt += `Picada ${i + 1}: ${p.model} (${p.size} personas) — $${(p.price||0).toLocaleString()}<br>`;
-  }
-});
-
-
-  if (zoneName) {
-    txt += `<br>Envío a ${zoneName}: $${ship.toLocaleString()}<br>`;
-    total += ship;
-  } else {
-    txt += `<br>Envío: sin seleccionar<br>`;
-  }
 
   const mostrarTotal = picadas.every(p => p.model && p.size && zoneName);
   if (mostrarTotal) {
