@@ -633,6 +633,10 @@ function setModel(model){
   if(current.model === model){
     // si el modelo ya está seleccionado, lo deselecciona
     current.model = null;
+
+    // 🔹 Resetear tamaño y precio también
+    current.size = null;
+    current.price = 0;
   } else {
     current.model = model;
   }
@@ -938,13 +942,17 @@ function update(){
   }
 
   // ===== CONTENIDO DEL RESUMEN =====
-  total = 0; // actualizar variable global
-  let txt = "";
+ total = 0; // actualizar variable global
+let txt = "";
 
-  picadas.forEach((p, i) => {
+picadas.forEach((p, i) => {
+  // 🔹 solo sumar si hay tamaño seleccionado
+  if(p.model && p.size){
     total += p.price || 0;
     txt += `Picada ${i + 1}: ${p.model} (${p.size} personas) — $${(p.price||0).toLocaleString()}<br>`;
-  });
+  }
+});
+
 
   if (zoneName) {
     txt += `<br>Envío a ${zoneName}: $${ship.toLocaleString()}<br>`;
