@@ -471,8 +471,8 @@ function loadState(){
 function buildPicadas(n){
  picadas = Array.from({ length: n }, () => ({
   model: null,
-  size: 8,
-  price: 90000
+  size: null,
+  price: 0
  }));
  active = 0;
  renderConfig();
@@ -717,70 +717,66 @@ function setZone(){
 }
 
 function update(){
-  total = ship;
+  total = 0;
+  let txt = "";
+  let tienePicadas = true;
 
-  let valid = addr.value && zoneName && clientName.value && orderDate.value;
-  let txt = '';
+  // ===== PICADAS =====
+  picadas.forEach((p, i) => {
+    if (!p.model || !p.size) {
+      tienePicadas = false;
+      txt += `Picada ${i + 1}: sin completar<br>`;
+      return;
+    }
 
-picadas.forEach((p, i) => {
-  if (!p.model || !p.size) valid = false;
-  total += p.price;
-  txt += `Picada ${i + 1}: ${p.model} (${p.size} personas)<br>`;
-});
+    total += p.price;
+    txt += `Picada ${i + 1}: ${p.model} (${p.size} personas) — $${p.price.toLocaleString()}<br>`;
+  });
 
-if (valid) {
-
-  // 🔥 EVENTO META: FORMULARIO COMPLETO
-  if (!window._checkoutTracked) {
-    fbq('trackCustom', 'FormCompleted', {
-      content_name: 'Formulario Picada Completo',
-      content_category: 'Picadas',
-      value: total,
-      currency: 'ARS',
-      num_items: picadas.length
-    });
-    window._checkoutTracked = true;
+  // ===== ENVÍO =====
+  if (zoneName) {
+    txt += `<br>Envío a ${zoneName}: $${ship.toLocaleString()}<br>`;
+    total += ship;
+  } else {
+    txt += `<br>Envío: sin seleccionar<br>`;
   }
 
+  // ===== TOTAL SIEMPRE VISIBLE =====
+  txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
 
-    summary.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
-        <div>
-          ${txt}
-          <br>
-          Entrega en ${addr.value}, ${zoneName}
-          <br>
-          <b>Total $${total.toLocaleString()}</b>
-        </div>
+  summary.innerHTML = txt;
 
-        <button
-          onclick="resetAll()"
-          style="
-            background:none;
-            border:none;
-            color:#aaa;
-            font-size:22px;
-            cursor:pointer;
-            line-height:1;
-          ">
-          ✕
-        </button>
-      </div>
-    `;
+  // ===== VALIDACIÓN FINAL (solo para pagar) =====
+  let valid =
+    tienePicadas &&
+    clientName.value &&
+    orderDate.value &&
+    addr.value &&
+    zoneName;
 
-    payBtn.classList.add('enabled');
+  if (valid) {
+    payBtn.classList.add("enabled");
+
+    // 🔥 EVENTO META
+    if (!window._checkoutTracked) {
+      fbq('trackCustom', 'FormCompleted', {
+        content_name: 'Formulario Picada Completo',
+        content_category: 'Picadas',
+        value: total,
+        currency: 'ARS',
+        num_items: picadas.length
+      });
+      window._checkoutTracked = true;
+    }
 
   } else {
-
-    // 🔁 si deja de ser válido, permite volver a trackear
+    payBtn.classList.remove("enabled");
     window._checkoutTracked = false;
-
-    payBtn.classList.remove('enabled');
-    summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
   }
 
-  saveState(); // MÓDULO 3.2
+  saveState();
 }
+
 
 function resetAll(){
   // 1. borrar estado guardado
