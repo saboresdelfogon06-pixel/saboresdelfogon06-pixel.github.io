@@ -1011,36 +1011,6 @@ function update(){
 }
 
 
-function resetAll(){
-  // 1. borrar estado guardado
-  localStorage.removeItem('picadas');
-  localStorage.removeItem('clientName');
-  localStorage.removeItem('orderDate');
-  localStorage.removeItem('addr');
-  localStorage.removeItem('zone');
-  localStorage.removeItem('scrollY');
-
-  // 2. resetear variables
-  ship = 0;
-  zoneName = "";
-  total = 0;
-  active = 0;
-
-  // 3. limpiar inputs
-  clientName.value = "";
-  orderDate.value = "";
-  addr.value = "";
-  zone.value = "";
-
-  // 4. volver al estado inicial real
-  buildPicadas(1);
-
-  // 5. reset visual
-  showSlide(0, false);
-  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
-  payBtn.classList.remove("enabled");
-}
-
 
 function goWA() {
   // limpiar mensajes previos
