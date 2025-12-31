@@ -322,32 +322,55 @@ button.selected{
   margin-top: -6px;
   margin-bottom: 6px;
 }
+.mini-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1b1b1b;  /* gris oscuro como los otros cards */
+  padding: 4px 12px;     /* un poco más fino que antes */
+  font-size: 13px;
+  color: #fff;           /* texto general blanco */
+  border-radius: 12px;   /* más redondeado como tus cards */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  margin-bottom: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3); /* opcional: leve sombra para destacar */
+}
 
-.mini-banner{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background:#000;
-  padding:6px 12px;
-  font-size:13px;
-  color:#fff;
-  border-radius:0 0 8px 8px;
-  margin-bottom:16px;
+.mini-banner .left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-.mini-banner .left{
-  display:flex;
-  align-items:center;
-  gap:6px;
+
+.mini-banner .left a {
+  color: #fff;           /* IG siempre blanco */
+  text-decoration: none;
+  font-weight: 500;
 }
-.mini-banner .left .logo{
-  width:36px;
+
+.mini-banner .left .logo {
+  width: 32px;           /* un poquito más pequeño */
 }
-.mini-banner .right .cart-total{
-  background:#555;
-  padding:4px 8px;
-  border-radius:8px;
-  font-weight:bold;
+
+.mini-banner .right .cart-total {
+  background: #333;      /* gris más oscuro, uniforme con la estética */
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 12px;
 }
+
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 16px;
+  padding-top: 54px; /* ajustado al nuevo tamaño más fino */
+}
+
 
 </style>
 
