@@ -667,17 +667,25 @@ let tabs = `
   }
 </div>
 
-        <label>Seleccioná la cantidad de personas:</label>
+       <label>Seleccioná la cantidad de personas:</label>
 
-        <button class="control ${p.size===4?'selected':''}" onclick="setSize(4,50000)">
-          4 | Pican 6 ($50.000) – Tabla 20×30 cm
-        </button>
-        <button class="control ${p.size===6?'selected':''}" onclick="setSize(6,70000)">
-          6 | Pican 8 ($70.000) – Tabla 28×48 cm
-        </button>
-        <button class="control ${p.size===8?'selected':''}" onclick="setSize(8,90000)">
-          8 | Pican 12 ($90.000) – Tabla 28×48 cm
-        </button>
+<button
+  class="control size-btn ${p.size===4?'selected':''}"
+  onclick="handleSizeClick(4,50000)">
+  4 | Pican 6 ($50.000) – Tabla 20×30 cm
+</button>
+
+<button
+  class="control size-btn ${p.size===6?'selected':''}"
+  onclick="handleSizeClick(6,70000)">
+  6 | Pican 8 ($70.000) – Tabla 28×48 cm
+</button>
+
+<button
+  class="control size-btn ${p.size===8?'selected':''}"
+  onclick="handleSizeClick(8,90000)">
+  8 | Pican 12 ($90.000) – Tabla 28×48 cm
+</button>
 
       </div>
     </div>
@@ -692,6 +700,30 @@ function setSize(s,p){
   picadas[active].price = p;
   saveState(); // MÓDULO 3.2
   renderConfig();
+}
+
+function handleSizeClick(s, p){
+  const current = picadas[active];
+
+  // ❌ si no hay modelo → guía visual
+  if(!current.model){
+
+    // texto en blanco
+    const info = document.querySelector('.model-info');
+    if(info) info.classList.add('model-warning');
+
+    // parpadeo dorado UNA sola vez
+    document.querySelectorAll('.size-btn').forEach(btn=>{
+      btn.classList.remove('size-hint');
+      void btn.offsetWidth; // reinicia animación
+      btn.classList.add('size-hint');
+    });
+
+    return; // 🚫 no suma, no selecciona
+  }
+
+  // ✅ si hay modelo → funciona normal
+  setSize(s, p);
 }
 
 function handleZoneChange() {
