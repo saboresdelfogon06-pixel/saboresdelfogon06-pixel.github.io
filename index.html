@@ -334,7 +334,7 @@ button.selected{
 
 
 <div id="config"></div>
-<label style="font-size:12px;">Completá tus datos para el envío:</label>
+<label style="font-size:12px;"> tus datos para el envío:</label>
 <div class="section">
 <label>Nombre y apellido</label>
 <input id="clientName" class="control"
@@ -689,15 +689,31 @@ function handleZoneChange() {
   const zoneSelect = document.getElementById('zone');
   const manualInput = document.getElementById('manualZone');
 
+  // 👉 Opción "Seleccionar localidad"
+  if (zoneSelect.value === "") {
+    manualInput.style.display = 'none';
+    zoneName = "";
+    ship = 0;
+    saveState();
+    update();
+    return;
+  }
+
+  // 👉 Opción manual
   if (zoneSelect.value === 'manual') {
     manualInput.style.display = 'block';
-    zoneName = '';
+    zoneName = "";
     ship = 0;
-  } else {
-    manualInput.style.display = 'none';
-    setZone();
+    saveState();
+    update();
+    return;
   }
+
+  // 👉 Localidad normal
+  manualInput.style.display = 'none';
+  setZone();
 }
+
 
 function setZoneManual() {
   const manualInput = document.getElementById('manualZone');
