@@ -342,7 +342,7 @@ button.selected{
 
 
 <div id="config"></div>
-<label style="font-size:12px;"> tus datos para el envío:</label>
+<label style="font-size:12px;">Completa tus datos para el envío:</label>
 <div class="section">
 <label>Nombre y apellido</label>
 <input id="clientName" class="control"
@@ -714,8 +714,9 @@ function handleSizeClick(s, p){
   const current = picadas[active];
 
 if(!current.model){
-  const modelBtns = document.querySelectorAll('.picada-top .control');
-  
+  // Solo los botones de modelos
+  const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
+
   modelBtns.forEach(btn=>{
     btn.classList.remove('model-hint'); // reinicia animación
     void btn.offsetWidth; // fuerza reflow
@@ -724,6 +725,7 @@ if(!current.model){
 
   return; // 🚫 no suma, no selecciona
 }
+
 
 
   // ✅ si hay modelo → funciona normal
