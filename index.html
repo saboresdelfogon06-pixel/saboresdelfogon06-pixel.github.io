@@ -769,7 +769,25 @@ function update(){
   // ===== TOTAL SIEMPRE VISIBLE =====
   txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
 
-  summary.innerHTML = txt;
+  summary.innerHTML = `
+  <button onclick="resetAll()"
+    style="
+      position:absolute;
+      top:8px;
+      right:8px;
+      background:none;
+      border:none;
+      color:#9a958d;
+      font-size:18px;
+      cursor:pointer;
+    "
+    aria-label="Reiniciar pedido">
+    ✕
+  </button>
+
+  ${txt}
+`;
+
 
   // ===== VALIDACIÓN FINAL (solo para pagar) =====
   let valid =
