@@ -445,62 +445,99 @@ const modelData={
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
   // ===== MÓDULO 3: MEMORIA =====
+// ===== MÓDULO 3: MEMORIA =====
 function saveState(){
- localStorage.setItem('picadas', JSON.stringify(picadas));
- localStorage.setItem('clientName', clientName.value);
- localStorage.setItem('orderDate', orderDate.value);
- localStorage.setItem('addr', addr.value);
- localStorage.setItem('zone', zone.value);
+  localStorage.setItem('picadas', JSON.stringify(picadas));
+  localStorage.setItem('clientName', clientName.value);
+  localStorage.setItem('orderDate', orderDate.value);
+  localStorage.setItem('addr', addr.value);
+  localStorage.setItem('zone', zone.value);
 }
 
 function loadState(){
- const savedPicadas = localStorage.getItem('picadas');
- if(savedPicadas){
-  picadas = JSON.parse(savedPicadas);
- } else {
-  buildPicadas(1);
-  return;
- }
-
- clientName.value = localStorage.getItem('clientName') || "";
- orderDate.value = localStorage.getItem('orderDate') || "";
- addr.value = localStorage.getItem('addr') || "";
-
- const savedZone = localStorage.getItem('zone');
-
- if (savedZone !== null) {
-  zone.value = savedZone;
-
-  if (savedZone) {
-    setZone();
-  } else {
-    zoneName = "";
-    ship = 0;
+  // 🔹 Si venimos de un reset, no cargar nada
+  if(localStorage.getItem('reset') === 'true'){
+    localStorage.removeItem('reset');
+    buildPicadas(1);
+    return;
   }
- }
 
- // 🔹 NUEVO: sincroniza banner con modelo guardado
- if(picadas[active]?.model){
-   syncBannerWithModel(picadas[active].model);
- }
+  const savedPicadas = localStorage.getItem('picadas');
+  if(savedPicadas){
+    picadas = JSON.parse(savedPicadas);
+  } else {
+    buildPicadas(1);
+    return;
+  }
 
- renderConfig();
+  clientName.value = localStorage.getItem('clientName') || "";
+  orderDate.value = localStorage.getItem('orderDate') || "";
+  addr.value = localStorage.getItem('addr') || "";
 
- // 🔹 NUEVO: reset color del aviso a gris si hay modelo
- const hint = document.getElementById('modelHint');
- if(hint && picadas[active]?.model){
-   hint.style.color = '#9a958d';
- }
+  const savedZone = localStorage.getItem('zone');
+
+  if (savedZone !== null) {
+    zone.value = savedZone;
+
+    if (savedZone) {
+      setZone();
+    } else {
+      zoneName = "";
+      ship = 0;
+    }
+  }
+
+  if(picadas[active]?.model){
+    syncBannerWithModel(picadas[active].model);
+  }
+
+  renderConfig();
+
+  const hint = document.getElementById('modelHint');
+  if(hint && picadas[active]?.model){
+    hint.style.color = '#9a958d';
+  }
 }
 
 function buildPicadas(n){
- picadas = Array.from({ length: n }, () => ({
-  model: null,
-  size: null,
-  price: 0
- }));
- active = 0;
- renderConfig();
+  picadas = Array.from({ length: n }, () => ({
+    model: null,
+    size: null,
+    price: 0
+  }));
+  active = 0;
+  renderConfig();
+}
+
+function resetAll(){
+  // 1. borrar estado guardado
+  localStorage.removeItem('picadas');
+  localStorage.removeItem('clientName');
+  localStorage.removeItem('orderDate');
+  localStorage.removeItem('addr');
+  localStorage.removeItem('zone');
+  localStorage.removeItem('scrollY');
+  localStorage.setItem('reset', 'true'); // 🔹 FLAG reset
+
+  // 2. resetear variables
+  ship = 0;
+  zoneName = "";
+  total = 0;
+  active = 0;
+
+  // 3. limpiar inputs
+  clientName.value = "";
+  orderDate.value = "";
+  addr.value = "";
+  zone.value = "";
+
+  // 4. volver al estado inicial real
+  buildPicadas(1);
+
+  // 5. reset visual
+  showSlide(0, false);
+  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  payBtn.classList.remove("enabled");
 }
 
 function setActivePicada(i){
