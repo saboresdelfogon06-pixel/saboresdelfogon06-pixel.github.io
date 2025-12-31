@@ -457,8 +457,7 @@ function loadState(){
  const savedPicadas = localStorage.getItem('picadas');
  if(savedPicadas){
   picadas = JSON.parse(savedPicadas);
- }else{
-  // usa el default del módulo 2
+ } else {
   buildPicadas(1);
   return;
  }
@@ -467,9 +466,9 @@ function loadState(){
  orderDate.value = localStorage.getItem('orderDate') || "";
  addr.value = localStorage.getItem('addr') || "";
 
-const savedZone = localStorage.getItem('zone');
+ const savedZone = localStorage.getItem('zone');
 
-if (savedZone !== null) {
+ if (savedZone !== null) {
   zone.value = savedZone;
 
   if (savedZone) {
@@ -478,12 +477,22 @@ if (savedZone !== null) {
     zoneName = "";
     ship = 0;
   }
-}
+ }
 
+ // 🔹 NUEVO: sincroniza banner con modelo guardado
+ if(picadas[active]?.model){
+   syncBannerWithModel(picadas[active].model);
+ }
 
  renderConfig();
+
+ // 🔹 NUEVO: reset color del aviso a gris si hay modelo
+ const hint = document.getElementById('modelHint');
+ if(hint && picadas[active]?.model){
+   hint.style.color = '#9a958d';
+ }
 }
-// ===== FIN MÓDULO 3 =====
+==== FIN MÓDULO 3 =====
 
 function buildPicadas(n){
  picadas = Array.from({ length: n }, () => ({
@@ -605,7 +614,14 @@ let tabs = `
 </div>
 `;
 
-  const p = picadas[active];
+ const p = picadas[active];
+
+// 🔹 NUEVO: reset color del aviso a gris si hay modelo
+const hint = document.getElementById('modelHint');
+if(hint){
+  hint.style.color = p.model ? '#9a958d' : '#9a958d';
+}
+
 
   config.innerHTML = `
     ${tabs}
@@ -1045,7 +1061,6 @@ function syncBannerWithModel(model){
   if(i >= 0) showSlide(i, false);
 }
 
-showSlide(0);
 
 window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
