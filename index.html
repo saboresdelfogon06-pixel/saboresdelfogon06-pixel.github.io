@@ -603,6 +603,8 @@ function resetAll(){
   showSlide(0, false);
   summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
   payBtn.classList.remove("enabled");
+
+  document.getElementById('cartTotal').textContent = '$0';
 }
 
 function setActivePicada(i){
