@@ -459,10 +459,19 @@ function loadState(){
  orderDate.value = localStorage.getItem('orderDate') || "";
  addr.value = localStorage.getItem('addr') || "";
 
- if(localStorage.getItem('zone')){
-  zone.value = localStorage.getItem('zone');
-  setZone();
- }
+const savedZone = localStorage.getItem('zone');
+
+if (savedZone !== null) {
+  zone.value = savedZone;
+
+  if (savedZone) {
+    setZone();
+  } else {
+    zoneName = "";
+    ship = 0;
+  }
+}
+
 
  renderConfig();
 }
