@@ -156,7 +156,7 @@ button.selected{
 
 .summary{font-size:15px;line-height:1.5}
 
-/* PAY */
+
 .pay button{
   width:100%;
   padding:18px;
@@ -165,9 +165,16 @@ button.selected{
   border:none;
   border-radius:10px;
   color:#2a2a2a;
-  opacity:.4;
+  cursor:pointer;
+  /* siempre opaco para no parecer deshabilitado */
+  opacity:1;
+  transition: background .3s;
 }
-.pay button.enabled{opacity:1}
+.pay button.enabled{
+  /* opcional: cambio leve de color al habilitar */
+  background: #e0b800;
+}
+
 
 .small{text-align:center;font-size:13px;color:var(--muted)}
 
@@ -309,6 +316,13 @@ button.selected{
   animation: blink-gold 0.8s ease-in-out 2; /* parpadea dos veces */
 }
 
+.error-msg {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: -6px;
+  margin-bottom: 6px;
+}
+
 </style>
 
 
@@ -345,22 +359,17 @@ button.selected{
 <label style="font-size:12px;">Completa tus datos para el envío:</label>
 <div class="section">
 <label>Nombre y apellido</label>
-<input id="clientName" class="control"
-placeholder="Ingresá tu nombre completo"
-oninput="update()">
+<input id="clientName" class="control" placeholder="Ingresá tu nombre completo" oninput="update()">
+<div class="error-msg" id="error-clientName"></div>
 
 <label>Fecha del pedido</label>
-<input
-  id="orderDate"
-  type="date"
-  class="control date"
-  placeholder="Por favor selecciona una fecha"
-  oninput="update()">
+<input id="orderDate" type="date" class="control date" placeholder="Por favor selecciona una fecha" oninput="update()">
+<div class="error-msg" id="error-orderDate"></div>
 
 <label>Dirección y altura de envío</label>
-<input id="addr" class="control"
-placeholder="Por favor ingrese la dirección del envío"
-oninput="update()">
+<input id="addr" class="control" placeholder="Por favor ingrese la dirección del envío" oninput="update()">
+<div class="error-msg" id="error-addr"></div>
+
 
 <label>Localidad</label>
 <select id="zone" class="control" onchange="handleZoneChange()">
@@ -394,9 +403,9 @@ oninput="update()">
   </option>
 
 </select>
-
+<div class="error-msg" id="error-zone"></div>
 <input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
-
+<div class="error-msg" id="error-manualZone"></div>
 </div>
 
 <div class="section summary" style="position:relative">
@@ -952,16 +961,58 @@ function resetAll(){
 
 
 function goWA() {
-  if (!payBtn.classList.contains('enabled')) return;
+  // limpiar mensajes previos
+  document.querySelectorAll('.error-msg').forEach(el => el.remove());
 
-fbq('trackCustom', 'StartPayment', {
-  content_name: 'Click Ir a Pagar',
-  content_category: 'Picadas',
-  value: total,
-  currency: 'ARS',
-  num_items: picadas.length
-});
+  const campos = [
+    { id: 'clientName', label: 'Nombre y apellido' },
+    { id: 'orderDate', label: 'Fecha del pedido' },
+    { id: 'addr', label: 'Dirección' },
+    { id: 'zone', label: 'Localidad' }
+  ];
 
+  let primeroInvalido = null;
+
+  campos.forEach(c => {
+    const elem = document.getElementById(c.id);
+    let valor = elem.value.trim();
+    if (c.id === 'zone' && valor === 'manual') {
+      valor = document.getElementById('manualZone').value.trim();
+    }
+    if (!valor) {
+      if (!primeroInvalido) primeroInvalido = elem;
+      const msg = document.createElement('div');
+      msg.className = 'error-msg';
+      msg.style.color = 'red';
+      msg.style.fontSize = '12px';
+      msg.style.marginTop = '4px';
+      msg.textContent = `Por favor complete el campo ${c.label} para ir a pagar su pedido`;
+      elem.insertAdjacentElement('afterend', msg);
+    }
+  });
+
+  // scroll al primer campo incompleto
+  if (primeroInvalido) {
+    primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // chequeo de picada y tamaño
+  const p = picadas[active];
+  if (!p.model || !p.size) {
+    alert('Por favor seleccioná un modelo y tamaño de picada');
+    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // --- Pixel de Meta original ---
+  fbq('trackCustom', 'StartPayment', {
+    content_name: 'Click Ir a Pagar',
+    content_category: 'Picadas',
+    value: total,
+    currency: 'ARS',
+    num_items: picadas.length
+  });
 
   let cantidadPicadas = picadas.length;
 
@@ -982,7 +1033,6 @@ fbq('trackCustom', 'StartPayment', {
   location.href =
     'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 }
-
 
 
 function openModal(src){
