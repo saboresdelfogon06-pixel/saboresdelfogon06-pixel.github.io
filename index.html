@@ -357,12 +357,9 @@ oninput="update()">
 <label>Localidad</label>
 <select id="zone" class="control" onchange="handleZoneChange()">
   <option value="">Seleccionar localidad</option>
+  <option value="manual">Ingresar manualmente</option>
 
   <option value="Francisco Álvarez|0">Francisco Álvarez</option>
-  <option value="Country club Banco provincia|0">Country club Banco provincia</option>
-  <option value="La providencia|0">La providencia</option>
-  <option value="La reja|0">Campos de Álvarez</option>
-  <option value="San Diego|0">San Diego</option>
   <option value="La reja|0">La reja</option>
   <option value="Moreno|0">Moreno</option>
 
@@ -388,7 +385,6 @@ oninput="update()">
     Ciudad Autónoma de Buenos Aires (CABA)
   </option>
 
-  <option value="manual">Ingresar manualmente</option>
 </select>
 
 <input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
