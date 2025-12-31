@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -846,37 +847,35 @@ function setSize(s,p){
   renderConfig();
 }
 
-function handleSizeClick(s, p) {
+function handleSizeClick(s, p){
   const current = picadas[active];
 
-  if (!current.model) {
-    // Parpadeo de aviso si no hay modelo seleccionado
+  if(!current.model){
+    // parpadeo de aviso si no hay modelo
     const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
-    modelBtns.forEach(btn => {
+    modelBtns.forEach(btn=>{
       btn.classList.remove('model-hint');
       void btn.offsetWidth;
       btn.classList.add('model-hint');
     });
 
     const hint = document.getElementById('modelHint');
-    if (hint) hint.style.color = '#ffffff';
+    if(hint) hint.style.color = '#ffffff';
     return;
   }
 
-  if (current.size === s) {
-    // Si el tamaño ya está seleccionado, deselecciona
+  if(current.size === s){
+    // si el tamaño ya está seleccionado, deselecciona
     current.size = null;
     current.price = 0;
   } else {
-    // Selecciona nuevo tamaño
     current.size = s;
     current.price = p;
   }
 
-  saveState(); // Guarda estado en localStorage
-  update();    // Actualiza mini-banner, totales y resumen
+  saveState();
+  renderConfig();
 }
-
 
 function handleZoneChange() {
   const zoneSelect = document.getElementById('zone');
