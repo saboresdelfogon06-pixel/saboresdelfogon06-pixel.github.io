@@ -300,6 +300,14 @@ button.selected{
   }
 }
 
+@keyframes blink-gold {
+  0%, 100% { border-color: var(--accent); background: rgba(211,174,9,0.15); }
+  50% { border-color: var(--accent); background: transparent; }
+}
+
+.model-hint {
+  animation: blink-gold 0.8s ease-in-out 2; /* parpadea dos veces */
+}
 
 </style>
 
@@ -705,22 +713,18 @@ function setSize(s,p){
 function handleSizeClick(s, p){
   const current = picadas[active];
 
-  // ❌ si no hay modelo → guía visual
-  if(!current.model){
+if(!current.model){
+  const modelBtns = document.querySelectorAll('.picada-top .control');
+  
+  modelBtns.forEach(btn=>{
+    btn.classList.remove('model-hint'); // reinicia animación
+    void btn.offsetWidth; // fuerza reflow
+    btn.classList.add('model-hint');
+  });
 
-    // texto en blanco
-    const info = document.querySelector('.model-info');
-    if(info) info.classList.add('model-warning');
+  return; // 🚫 no suma, no selecciona
+}
 
-    // parpadeo dorado UNA sola vez
-    document.querySelectorAll('.size-btn').forEach(btn=>{
-      btn.classList.remove('size-hint');
-      void btn.offsetWidth; // reinicia animación
-      btn.classList.add('size-hint');
-    });
-
-    return; // 🚫 no suma, no selecciona
-  }
 
   // ✅ si hay modelo → funciona normal
   setSize(s, p);
