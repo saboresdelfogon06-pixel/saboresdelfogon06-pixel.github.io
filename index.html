@@ -635,41 +635,42 @@ let tabs = `
   ${
     !p.model
       ? `
-        <div style="
-          text-align:center;
-          color:#9a958d;
-          font-size:14px;
-          padding:12px 6px;
-        ">
-          👉 Por favor, seleccioná un modelo de tabla de picada para ver su contenido.
-        </div>
+       <div id="modelHint" style="
+  text-align:center;
+  color:#9a958d;
+  font-size:14px;
+  padding:12px 6px;
+">
+  👉 Por favor, seleccioná un modelo de tabla de picada para ver su contenido.
+</div>
       `
       : `
-  <div style="display:flex;flex-wrap:wrap;gap:12px; justify-content:center; text-align:center;">
-  <div style="flex:1 1 140px; display:flex; flex-direction:column; align-items:center;">
-    <b>🥩 Fiambres</b><br>
-    ${modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>")}
+ <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; text-align:center;">
+  <div style="flex:1 1 45%;">
+    <b>🥩 Fiambres</b>
+    <div>${modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>")}</div>
   </div>
 
-  <div style="flex:1 1 140px; display:flex; flex-direction:column; align-items:center;">
-    <b>🧀 Quesos</b><br>
-    ${modelData[p.model].quesos.map(q => `• ${q}`).join("<br>")}
+  <div style="flex:1 1 45%;">
+    <b>🧀 Quesos</b>
+    <div>${modelData[p.model].quesos.map(q => `• ${q}`).join("<br>")}</div>
   </div>
 
-  <div style="flex:1 1 140px; display:flex; flex-direction:column; align-items:center;">
-    <b>🥣 Dips</b><br>
-    ${modelData[p.model].dips.map(d => `• ${d}`).join("<br>")}
+  <div style="flex:1 1 45%;">
+    <b>🥣 Dips</b>
+    <div>${modelData[p.model].dips.map(d => `• ${d}`).join("<br>")}</div>
   </div>
 
   ${
     p.size >= 6
-      ? `<div style="flex:1 1 140px; display:flex; flex-direction:column; align-items:center;">
-          <b>✨ Extra</b><br>
-          <span style="display:inline-block; width:100%;">• Tomatitos deshidratados</span>
+      ? `<div style="flex:1 1 45%;">
+          <b>✨ Extra</b>
+          <div>• Tomatitos deshidratados</div>
         </div>`
       : ""
   }
 </div>
+
 
       `
   }
@@ -714,17 +715,21 @@ function handleSizeClick(s, p){
   const current = picadas[active];
 
 if(!current.model){
-  // Solo los botones de modelos
+  // 1. Parpadeo en botones de modelo
   const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
-
   modelBtns.forEach(btn=>{
     btn.classList.remove('model-hint'); // reinicia animación
-    void btn.offsetWidth; // fuerza reflow
+    void btn.offsetWidth;
     btn.classList.add('model-hint');
   });
 
-  return; // 🚫 no suma, no selecciona
+  // 2. Cambiar color del aviso a blanco
+  const hint = document.getElementById('modelHint');
+  if(hint) hint.style.color = '#ffffff';
+
+  return; // 🚫 no selecciona tamaño
 }
+
 
 
 
