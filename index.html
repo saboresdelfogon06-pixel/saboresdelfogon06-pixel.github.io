@@ -861,33 +861,35 @@ function update(){
     txt += `<br>Envío: sin seleccionar<br>`;
   }
 
-  // ===== TOTAL SIEMPRE VISIBLE =====
-  txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
+  // ===== TOTAL SOLO SI HAY MODELO Y TAMAÑO =====
+  const mostrarTotal = picadas.every(p => p.model && p.size && zoneName);
+  if (mostrarTotal) {
+    txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
+  }
 
   summary.innerHTML = `
-  <button onclick="resetAll()"
-    style="
-      position:absolute;
-      top:8px;
-      right:8px;
-      background:none;
-      border:none;
-      color:#9a958d;
-      font-size:18px;
-      cursor:pointer;
-      z-index:2;
+    <button onclick="resetAll()"
+      style="
+        position:absolute;
+        top:8px;
+        right:8px;
+        background:none;
+        border:none;
+        color:#9a958d;
+        font-size:18px;
+        cursor:pointer;
+        z-index:2;
+      ">
+      ✕
+    </button>
+
+    <div style="
+      padding-right:32px;
+      word-wrap:break-word;
     ">
-    ✕
-  </button>
-
-  <div style="
-    padding-right:32px;
-    word-wrap:break-word;
-  ">
-    ${txt}
-  </div>
-`;
-
+      ${txt}
+    </div>
+  `;
 
   // ===== VALIDACIÓN FINAL (solo para pagar) =====
   let valid =
@@ -919,7 +921,6 @@ function update(){
 
   saveState();
 }
-
 
 function resetAll(){
   // 1. borrar estado guardado
