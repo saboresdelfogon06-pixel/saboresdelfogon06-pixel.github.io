@@ -927,12 +927,11 @@ function setZone(){
  saveState(); // MÓDULO 3.2
  update();
 }
-
 function update() {
   const summaryDiv = document.querySelector('.section.summary');
   total = 0;
 
-  let txt = ""; // 🔹 inicializar txt
+  let txt = ""; // inicializar txt
 
   picadas.forEach((p, i) => {
     if(p.model && p.size){
@@ -948,8 +947,8 @@ function update() {
     txt += `<br>Envío: sin seleccionar<br>`;
   }
 
-  const mostrarTotal = picadas.every(p => p.model && p.size && zoneName);
-  if (mostrarTotal) {
+  // Mostrar total si todas las picadas y zona están completas
+  if (picadas.every(p => p.model && p.size && zoneName)) {
     txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
   }
 
@@ -987,12 +986,6 @@ function update() {
   saveState();
 }
 
-
-
-  const mostrarTotal = picadas.every(p => p.model && p.size && zoneName);
-  if (mostrarTotal) {
-    txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
-  }
 
   summary.innerHTML = `
     <button onclick="resetAll()"
