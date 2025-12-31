@@ -6,15 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <!-- Meta Pixel -->
-<script>
-const clientName = document.getElementById('clientName');
-const orderDate  = document.getElementById('orderDate');
-const addr       = document.getElementById('addr');
-const zone       = document.getElementById('zone');
-const summary    = document.getElementById('summary');
-const payBtn     = document.getElementById('payBtn');
-const config     = document.getElementById('config');
-
+<script>    
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
@@ -491,7 +483,13 @@ button.selected{
 
 </div>
 <script>
-// ===== MÓDULO 1: FECHA DESDE MAÑANA =====
+const clientName = document.getElementById('clientName');
+const orderDate  = document.getElementById('orderDate');
+const addr       = document.getElementById('addr');
+const zone       = document.getElementById('zone');
+const summary    = document.getElementById('summary');
+const payBtn     = document.getElementById('payBtn');
+const config     = document.getElementById('config');
 document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
   if (dateInput) {
