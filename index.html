@@ -420,11 +420,11 @@ oninput="update()">
 document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
   if (dateInput) {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    dateInput.min = tomorrow.toISOString().split('T')[0];
+    const today = new Date();
+    dateInput.min = today.toISOString().split('T')[0];
   }
 });
+
 // ===== FIN MÓDULO 1 =====
 
 const modelData={
@@ -566,8 +566,8 @@ function addPicada(){
 
   picadas.push({
     model: null,
-    size: 8,
-    price: 90000
+    size: null,
+    price: 0
   });
 
   active = picadas.length - 1;
@@ -850,7 +850,7 @@ function update(){
   }
 
   // ===== CONTENIDO DEL RESUMEN =====
-  let total = 0;
+  total = 0; // actualizar variable global
   let txt = "";
 
   picadas.forEach((p, i) => {
