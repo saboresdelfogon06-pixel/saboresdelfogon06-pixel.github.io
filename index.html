@@ -323,7 +323,7 @@ button.selected{
   margin-top: -6px;
   margin-bottom: 6px;
 }
-..mini-banner {
+.mini-banner {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -334,13 +334,11 @@ button.selected{
   font-size: 13px;
   color: #fff;
   border-radius: 12px;  
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  margin-bottom: 0;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  margin-bottom: 16px;   /* espacio con el contenido siguiente */
+  /* position: fixed; */  /* quitado para que siga el scroll */
+  /* top: 0; left: 0; right: 0; */ /* quitado */
+  z-index: 999;
 }
 
 .mini-banner .left {
@@ -371,7 +369,7 @@ button.selected{
   max-width: 720px;
   margin: auto;
   padding: 16px;
-  padding-top: 64px; /* altura del mini-banner + pequeño espacio extra */
+  /* padding-top: 64px; */ /* quitado porque el banner ya no es fijo */
 }
 
 
