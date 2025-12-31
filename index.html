@@ -534,13 +534,11 @@ function resetAll(){
   // 4. volver al estado inicial real
   buildPicadas(1);
 
- // 5. reset visual
-showSlide(0, false);
-clearTimeout(bannerTimer);                  // 🔹 limpiar cualquier timer previo
-bannerTimer = setTimeout(nextSlide, 5000); // 🔹 reiniciar ciclo automático
-summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
-payBtn.classList.remove("enabled");
-
+  // 5. reset visual
+  showSlide(0, false);
+  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  payBtn.classList.remove("enabled");
+}
 
 function setActivePicada(i){
   active = i;
@@ -699,7 +697,7 @@ if(hint){
 </div>
       `
       : `
-<div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; text-align:center;">
+ <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; text-align:center;">
   <div style="flex:1 1 45%;">
     <b>🥩 Fiambres</b>
     <div>${modelData[p.model].fiambres.map(f => `• ${f}`).join("<br>")}</div>
@@ -709,13 +707,11 @@ if(hint){
     <b>🧀 Quesos</b>
     <div>${modelData[p.model].quesos.map(q => `• ${q}`).join("<br>")}</div>
   </div>
-</div>
 
-<!-- NUEVO: DIP debajo -->
-<div style="margin-top:8px; text-align:left;">
-  <b>🥣 Dips</b>
-  <div>${modelData[p.model].dips.map(d => `• ${d}`).join("<br>")}</div>
-</div>
+  <div style="flex:1 1 45%;">
+    <b>🥣 Dips</b>
+    <div>${modelData[p.model].dips.map(d => `• ${d}`).join("<br>")}</div>
+  </div>
 
   ${
     p.size >= 6
