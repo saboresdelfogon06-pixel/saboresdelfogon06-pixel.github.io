@@ -355,39 +355,44 @@ placeholder="Por favor ingrese la dirección del envío"
 oninput="update()">
 
 <label>Localidad</label>
-<select id="zone" class="control" onchange="setZone()">
+<select id="zone" class="control" onchange="handleZoneChange()">
   <option value="">Seleccionar localidad</option>
 
- <option value="Francisco Álvarez|0">Francisco Álvarez</option>
+  <option value="Francisco Álvarez|0">Francisco Álvarez</option>
   <option value="Country club Banco provincia|0">Country club Banco provincia</option>
   <option value="La providencia|0">La providencia</option>
   <option value="La reja|0">Campos de Álvarez</option>
   <option value="San Diego|0">San Diego</option>
- <option value="La reja|0">La reja</option>
-<option value="Moreno|0">Moreno</option>
+  <option value="La reja|0">La reja</option>
+  <option value="Moreno|0">Moreno</option>
 
-<option value="Paso del Rey|5000">Paso del Rey</option>  
-<option value="General Rodríguez|8000">General Rodríguez</option>
-<option value="Merlo|8000">Merlo</option>
-<option value="Ituzaingó|8000">Ituzaingó</option>
-<option value="San Antonio de Padua|8000">San Antonio de Padua</option>
-<option value="Morón|8000">Morón</option>
-<option value="Castelar|8000">Castelar</option>
-<option value="Hurlingham|8000">Hurlingham</option>
-<option value="La Matanza|8000">La Matanza</option>
-<option value="Ramos Mejía|8000">Ramos Mejía</option>
-<option value="San Justo|8000">San Justo</option>
+  <option value="Paso del Rey|5000">Paso del Rey</option>  
+  <option value="General Rodríguez|8000">General Rodríguez</option>
+  <option value="Merlo|8000">Merlo</option>
+  <option value="Ituzaingó|8000">Ituzaingó</option>
+  <option value="San Antonio de Padua|8000">San Antonio de Padua</option>
+  <option value="Morón|8000">Morón</option>
+  <option value="Castelar|8000">Castelar</option>
+  <option value="Hurlingham|8000">Hurlingham</option>
+  <option value="La Matanza|8000">La Matanza</option>
+  <option value="Ramos Mejía|8000">Ramos Mejía</option>
+  <option value="San Justo|8000">San Justo</option>
 
-<option value="San Miguel|8000">San Miguel</option>
-<option value="Vicente López|8000">Vicente López</option>
-<option value="Olivos|8000">Olivos</option>
-<option value="San Isidro|8000">San Isidro</option>
-<option value="Pilar|8000">Pilar</option>
+  <option value="San Miguel|8000">San Miguel</option>
+  <option value="Vicente López|8000">Vicente López</option>
+  <option value="Olivos|8000">Olivos</option>
+  <option value="San Isidro|8000">San Isidro</option>
+  <option value="Pilar|8000">Pilar</option>
 
-<option value="Ciudad Autónoma de Buenos Aires (CABA)|8000">
-  Ciudad Autónoma de Buenos Aires (CABA)
-</option>
+  <option value="Ciudad Autónoma de Buenos Aires (CABA)|8000">
+    Ciudad Autónoma de Buenos Aires (CABA)
+  </option>
+
+  <option value="manual">Ingresar manualmente</option>
 </select>
+
+<input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
+
 </div>
 
 <div class="section summary" style="position:relative">
@@ -683,6 +688,29 @@ function setSize(s,p){
   saveState(); // MÓDULO 3.2
   renderConfig();
 }
+
+function handleZoneChange() {
+  const zoneSelect = document.getElementById('zone');
+  const manualInput = document.getElementById('manualZone');
+
+  if (zoneSelect.value === 'manual') {
+    manualInput.style.display = 'block';
+    zoneName = '';
+    ship = 0;
+  } else {
+    manualInput.style.display = 'none';
+    setZone();
+  }
+}
+
+function setZoneManual() {
+  const manualInput = document.getElementById('manualZone');
+  zoneName = manualInput.value;
+  ship = 0;
+  saveState();
+  update();
+}
+
   
 function setZone(){
  if(!zone.value)return;
