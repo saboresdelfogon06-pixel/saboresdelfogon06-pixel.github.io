@@ -857,21 +857,18 @@ function handleSizeClick(s, p){
   const current = picadas[active];
 
   if(!current.model){
-    // parpadeo de aviso si no hay modelo
     const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
     modelBtns.forEach(btn=>{
       btn.classList.remove('model-hint');
       void btn.offsetWidth;
       btn.classList.add('model-hint');
     });
-
     const hint = document.getElementById('modelHint');
     if(hint) hint.style.color = '#ffffff';
     return;
   }
 
   if(current.size === s){
-    // Deseleccionar tamaño
     current.size = null;
     current.price = 0;
   } else {
@@ -880,8 +877,20 @@ function handleSizeClick(s, p){
   }
 
   saveState();
-  update(); // 🔹 llamamos a update() para recalcular total en mini-banner
+
+  // 🔹 actualizar clase selected en los botones de tamaño
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    const btnSize = Number(btn.textContent.split('|')[0].trim());
+    if(btnSize === current.size){
+      btn.classList.add('selected');
+    } else {
+      btn.classList.remove('selected');
+    }
+  });
+
+  update();
 }
+
 
 function handleZoneChange() {
   const zoneSelect = document.getElementById('zone');
