@@ -1084,13 +1084,18 @@ bannerSlides.forEach(s => {
   const slide = document.createElement("div");
   slide.className = "banner-slide";
 
-  slide.innerHTML =
-    s.type === "video"
-      ? `<video src="${s.src}" muted playsinline></video>`
-      : `<img src="${s.src}">`;
+  if(s.type === "video"){
+    slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
+  } else {
+    const img = document.createElement('img');
+    img.src = s.src;
+    img.loading = 'lazy'; // ← esto hace que solo se descargue cuando sea visible
+    slide.appendChild(img);
+  }
 
   track.appendChild(slide);
 });
+
 
 function showSlide(i, animate = true){
   bannerIndex = i;
@@ -1162,17 +1167,15 @@ window.addEventListener('scroll', () => {
 
 loadState();
   
-window.addEventListener('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   const y = localStorage.getItem('scrollY');
 
   if (y !== null) {
     window.scrollTo(0, parseInt(y, 10));
   }
 
-  // esperar 1 frame para asegurar layout final
-  requestAnimationFrame(() => {
-    document.body.style.visibility = 'visible';
-  });
+  // ⚡ Mostrar la página inmediatamente
+  document.body.style.visibility = 'visible';
 });
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
