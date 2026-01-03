@@ -6,7 +6,6 @@
 <title>Sabores del Fogón</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <link rel="preload" as="image" href="images/IMG_7762.webp">
-
 <!-- Meta Pixel -->
 <script>    
 if ('scrollRestoration' in history) {
@@ -36,11 +35,10 @@ body{
   font-family:Arial, sans-serif;
   background:var(--bg);
   color:var(--text);
-  visibility:hidden;
   touch-action: manipulation;
   overscroll-behavior: none;
-/* ← clave: evita pantallazo al refrescar */
 }
+  
 .container{
   max-width:720px;
   margin:auto;
@@ -1183,17 +1181,19 @@ window.addEventListener('scroll', () => {
 });
 
 loadState();
-  
-document.addEventListener('DOMContentLoaded', () => {
+
+// 🧠 restaurar scroll SOLO si no es la primera carga
+const isFirstLoad = !sessionStorage.getItem('loadedOnce');
+sessionStorage.setItem('loadedOnce', 'true');
+
+if (!isFirstLoad) {
   const y = localStorage.getItem('scrollY');
-
   if (y !== null) {
-    window.scrollTo(0, parseInt(y, 10));
+    requestAnimationFrame(() => {
+      window.scrollTo(0, parseInt(y, 10));
+    });
   }
-
-  // ⚡ Mostrar la página inmediatamente
-  document.body.style.visibility = 'visible';
-});
+}
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
