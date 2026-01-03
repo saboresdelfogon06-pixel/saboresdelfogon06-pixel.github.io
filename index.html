@@ -5,12 +5,15 @@
 <meta charset="UTF-8">
 <title>Sabores del Fogón</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<link rel="preload" as="image" href="images/IMG_7762.webp">
+<link rel="preload" as="image" href="images/IMG_7762.webp" type="image/webp" fetchpriority="high">
 <!-- Meta Pixel -->
 <script>    
-if ('scrollRestoration' in history) {
-  history.scrollRestoration = 'manual';
+if (!navigator.userAgent.includes('Instagram')) {
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
 }
+
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
