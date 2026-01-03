@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>Sabores del Fogón</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="preload" as="image" href="images/IMG_7762.webp">
 
 <!-- Meta Pixel -->
 <script>    
@@ -1080,7 +1081,7 @@ const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
 
 // construir slides
-bannerSlides.forEach(s => {
+bannerSlides.forEach((s, index) => {
   const slide = document.createElement("div");
   slide.className = "banner-slide";
 
@@ -1088,8 +1089,16 @@ bannerSlides.forEach(s => {
     slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
   } else {
     const img = document.createElement('img');
-    img.src = s.src;
-    img.loading = 'lazy'; // ← esto hace que solo se descargue cuando sea visible
+
+    if(index === 0){
+      // primera imagen se carga de inmediato
+      img.src = s.src;
+    } else {
+      // resto de imágenes solo al entrar en viewport
+      img.dataset.src = s.src;
+      img.loading = 'lazy';
+    }
+
     slide.appendChild(img);
   }
 
@@ -1104,6 +1113,14 @@ function showSlide(i, animate = true){
 
   const slide = bannerSlides[i];
   bannerModel.textContent = slide.model;
+
+  // ⚡ Lazy-load de imagen si es slide > 0
+  const slideEl = track.children[i];
+  const img = slideEl.querySelector('img[data-src]');
+  if(img){
+    img.src = img.dataset.src;
+    img.removeAttribute('data-src');
+  }
 
   clearTimeout(bannerTimer);
 
