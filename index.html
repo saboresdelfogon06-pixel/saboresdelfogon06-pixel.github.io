@@ -7,7 +7,7 @@
 <title>Sabores del Fogón</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <link rel="preload" as="image" href="images/IMG_7762.webp" type="image/webp" fetchpriority="high">
-<link rel="icon" href="images/LOGO.webp" sizes="32x32" type="image/webp">
+ <link rel="icon" href="images/LOGO.webp" type="image/webp" sizes="32x32">
 <!-- Meta Pixel -->
 <script>    
 if (!navigator.userAgent.includes('Instagram')) {
@@ -382,6 +382,14 @@ button.selected{
   padding-top: 72px; /* altura del mini-banner + margen extra */
 }
 
+.favicon {
+  width: 32px;           /* Tamaño del favicon (cuadrado) */
+  height: 32px;          /* Tamaño del favicon (cuadrado) */
+  background-image: url('images/LOGO.webp');  /* Ruta de tu imagen */
+  background-size: contain;  /* Asegura que la imagen no se deforme */
+  background-repeat: no-repeat;  /* No repetir la imagen */
+  background-position: center;  /* Centra la imagen dentro del contenedor */
+}
 
 </style>
 </head>
