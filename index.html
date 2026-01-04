@@ -468,14 +468,14 @@ button.selected{
   </option>
 
 </select>
-  
+<input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
+<div class="error-msg" id="error-manualZone"></div>
 <label>Dirección y altura de envío (opcional, podes agregarla luego)</label>
 <input id="addr" class="control" placeholder="Por favor ingrese la dirección del envío" oninput="update()">
 <div class="error-msg" id="error-addr"></div>
   
 <div class="error-msg" id="error-zone"></div>
-<input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
-<div class="error-msg" id="error-manualZone"></div>
+
 </div>
 
 <div class="section summary" style="position:relative">
