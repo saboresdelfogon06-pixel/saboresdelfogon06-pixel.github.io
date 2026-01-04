@@ -417,7 +417,7 @@ button.selected{
 
 
 <div id="config"></div>
-<label style="font-size:12px;">Completa tus datos para el envío:</label>
+<label style="font-size:12px;">Último paso para confirmar tu pedido:</label>
 <div class="section">
 <label>Nombre y apellido</label>
 <input id="clientName" class="control" placeholder="Ingresá tu nombre completo" oninput="update()">
@@ -426,12 +426,6 @@ button.selected{
 <label>Fecha del pedido</label>
 <input id="orderDate" type="date" class="control date" placeholder="Por favor selecciona una fecha" oninput="update()">
 <div class="error-msg" id="error-orderDate"></div>
-
-<label>Dirección y altura de envío</label>
-<input id="addr" class="control" placeholder="Por favor ingrese la dirección del envío" oninput="update()">
-<div class="error-msg" id="error-addr"></div>
-
-
 <label>Localidad</label>
 <select id="zone" class="control" onchange="handleZoneChange()">
   <option value="">Seleccionar localidad</option>
@@ -464,6 +458,11 @@ button.selected{
   </option>
 
 </select>
+  
+<label>Dirección y altura de envío (opcional, podes agregarla luego)</label>
+<input id="addr" class="control" placeholder="Por favor ingrese la dirección del envío" oninput="update()">
+<div class="error-msg" id="error-addr"></div>
+  
 <div class="error-msg" id="error-zone"></div>
 <input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
 <div class="error-msg" id="error-manualZone"></div>
@@ -482,7 +481,7 @@ button.selected{
 <button id="payBtn" onclick="goWA()">CONFIRMAR PEDIDO</button>
 </div>
 
-<p class="small">Reservás con el 50%. El resto se paga al recibir.</p>
+<p class="small">La entrega y el pago se coordinan luego de la confirmación.</p>
 
 </div>
 <script>
