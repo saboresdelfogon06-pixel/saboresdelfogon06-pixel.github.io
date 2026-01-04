@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -379,13 +380,6 @@ button.selected{
   padding: 16px;
   padding-top: 72px; /* altura del mini-banner + margen extra */
 }
-
-  .input-error {
-  border-color: #ff4d4f !important;
-  background: rgba(255, 77, 79, 0.1);
-  transition: border-color 0.3s, background 0.3s;
-}
-
 
 
 </style>
@@ -930,25 +924,18 @@ function setZone(){
 }
 function update() {
   const summaryDiv = document.querySelector('.section.summary');
+  total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
-  // ⚠️ asegúrate de que picadas[active] exista
-  const p = picadas[active] || { model: null, size: null, price: 0 };
-
-  // ⚠️ calcula total sin NaN
-  total = picadas.reduce((sum, pic) => sum + (pic.price || 0), 0);
-  if (zoneName && !isNaN(ship)) total += ship;
-
-  // texto resumen
-  let txt = picadas.map((pic, i) => {
-    if(pic.model && pic.size){
-      return `Picada ${i+1}: ${pic.model} (${pic.size} personas) — $${(pic.price || 0).toLocaleString()}`;
+  let txt = picadas.map((p,i) => {
+    if(p.model && p.size){
+      return `Picada ${i+1}: ${p.model} (${p.size} personas) — $${(p.price || 0).toLocaleString()}`;
     }
     return null;
   }).filter(Boolean).join("<br>") + "<br>";
 
   txt += zoneName ? `<br>Envío a ${zoneName}: $${ship.toLocaleString()}<br>` : `<br>Envío: sin seleccionar<br>`;
 
-  if(picadas.every(pic => pic.model && pic.size) && zoneName){
+  if(picadas.every(p => p.model && p.size) && zoneName){
     txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
   }
 
@@ -962,54 +949,36 @@ function update() {
     </div>
   `;
 
-  // mostrar resumen solo si hay modelo y tamaño
-  summaryDiv.style.display = (p.model && p.size) ? 'block' : 'none';
+  const p = picadas[active];
+  const valid = p.model && p.size && clientName.value && orderDate.value && addr.value && zoneName;
 
-  // habilitar botón solo si todos los campos están completos
-  const valid = p.model && p.size && clientName.value.trim() && orderDate.value && addr.value.trim() && zoneName;
+  summaryDiv.style.display = (p.model && p.size) ? 'block' : 'none';
   payBtn.classList.toggle("enabled", valid);
 
-  // Pixel seguro
   if(valid && !window._checkoutTracked){
-    if(typeof fbq === "function"){
-      fbq('trackCustom', 'FormCompleted', {
-        content_name: 'Formulario Picada Completo',
-        content_category: 'Picadas',
-        value: total,
-        currency: 'ARS',
-        num_items: picadas.length
-      });
-    }
+    fbq('trackCustom', 'FormCompleted', {
+      content_name: 'Formulario Picada Completo',
+      content_category: 'Picadas',
+      value: total,
+      currency: 'ARS',
+      num_items: picadas.length
+    });
     window._checkoutTracked = true;
   }
   if(!valid) window._checkoutTracked = false;
 
-  // actualizar total en mini-banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 }
 
 
-
-function markInvalidField(field) {
-  field.style.borderColor = "red";  // marca borde en rojo
-  field.addEventListener('input', function clearBorder() {
-    field.style.borderColor = "#333"; // vuelve al color original
-    field.removeEventListener('input', clearBorder);
-  });
-}
-
 function goWA() {
-  const p = picadas[active] || { model: null, size: null };
-
-  if(!p.model || !p.size){
-    alert('Por favor seleccioná un modelo y tamaño de picada');
-    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
+  // limpiar mensajes previos
+  document.querySelectorAll('.error-msg').forEach(el => el.remove());
 
   const campos = [
     { id: 'clientName', label: 'Nombre y apellido' },
     { id: 'orderDate', label: 'Fecha del pedido' },
+    { id: 'addr', label: 'Dirección' },
     { id: 'zone', label: 'Localidad' }
   ];
 
@@ -1021,32 +990,31 @@ function goWA() {
     if (c.id === 'zone' && valor === 'manual') {
       valor = document.getElementById('manualZone').value.trim();
     }
-    if(!valor && !primeroInvalido){
-      primeroInvalido = elem;
-      markInvalidField(elem);
+    if (!valor) {
+      if (!primeroInvalido) primeroInvalido = elem;
+      const msg = document.createElement('div');
+      msg.className = 'error-msg';
+      msg.style.color = 'red';
+      msg.style.fontSize = '12px';
+      msg.style.marginTop = '4px';
+      msg.textContent = `Por favor complete el campo ${c.label} para ir a pagar su pedido`;
+      elem.insertAdjacentElement('afterend', msg);
     }
   });
 
-  if(primeroInvalido){
+  // scroll al primer campo incompleto
+  if (primeroInvalido) {
     primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
-  // total seguro
-  const safeTotal = isNaN(total) ? 0 : total;
-
-  let msg = `Hola soy ${clientName.value}, hice un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido:\n`;
-  picadas.forEach((pic, i) => {
-    msg += `• Picada ${i+1}: ${pic.model || 'sin modelo'}, para ${pic.size || '?'} personas\n`;
-  });
-  msg += `\nEntrega:\nDirección: ${addr.value}\nLocalidad: ${zoneName || '?'}\n\n`;
-  msg += `Total del pedido: $${safeTotal.toLocaleString()}\n\n`;
-  msg += `¿Me enviás la información de pago así reservo con el 50%?`;
-
-  location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-}
-
+  // chequeo de picada y tamaño
+  const p = picadas[active];
+  if (!p.model || !p.size) {
+    alert('Por favor seleccioná un modelo y tamaño de picada');
+    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
 
   // --- Pixel de Meta original ---
   fbq('trackCustom', 'StartPayment', {
