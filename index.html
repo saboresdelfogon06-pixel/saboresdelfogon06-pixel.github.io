@@ -993,6 +993,16 @@ function goWA() {
     { id: 'zone', label: 'Localidad' }
   ];
 
+  
+  // chequeo de picada y tamaño
+  const p = picadas[active];
+  if (!p.model || !p.size) {
+    alert('Por favor seleccioná un modelo y tamaño de picada');
+    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+
   campos.forEach(c => {
     const elem = document.getElementById(c.id);
     let valor = elem.value.trim();
@@ -1013,14 +1023,6 @@ function goWA() {
   // ... resto de la función sigue igual
 }
 
-
-  // chequeo de picada y tamaño
-  const p = picadas[active];
-  if (!p.model || !p.size) {
-    alert('Por favor seleccioná un modelo y tamaño de picada');
-    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
 
   // --- Pixel de Meta original ---
   fbq('trackCustom', 'StartPayment', {
