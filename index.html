@@ -977,10 +977,16 @@ function update() {
 }
 
 
-function goWA() {
-  // 1️⃣ Limpiar errores previos
-  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+function markInvalidField(field) {
+  field.style.borderColor = "red";  // marca borde en rojo
+  field.addEventListener('input', function clearBorder() {
+    field.style.borderColor = "#333"; // vuelve al color original
+    field.removeEventListener('input', clearBorder);
+  });
+}
 
+function goWA() {
+  let primeroInvalido = null;
   const campos = [
     { id: 'clientName', label: 'Nombre y apellido' },
     { id: 'orderDate', label: 'Fecha del pedido' },
@@ -988,38 +994,25 @@ function goWA() {
     { id: 'zone', label: 'Localidad' }
   ];
 
-  let primeroInvalido = null;
-
   campos.forEach(c => {
     const elem = document.getElementById(c.id);
     let valor = elem.value.trim();
     if (c.id === 'zone' && valor === 'manual') {
       valor = document.getElementById('manualZone').value.trim();
-      if(!valor){
-        document.getElementById('manualZone').classList.add('input-error');
-        if (!primeroInvalido) primeroInvalido = document.getElementById('manualZone');
-      }
     }
     if (!valor) {
-      elem.classList.add('input-error'); // 🔴 Marca el input en rojo
       if (!primeroInvalido) primeroInvalido = elem;
+      markInvalidField(elem); // marca borde rojo
     }
   });
 
   if (primeroInvalido) {
     primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return; // detiene el envío hasta completar
-  }
-
-  // 🔹 Chequeo picada y tamaño
-  const p = picadas[active];
-  if (!p.model || !p.size) {
-    alert('Por favor seleccioná un modelo y tamaño de picada');
-    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
 
-  // --- resto de goWA() sigue igual ---
+  // ... resto de la función sigue igual
+}
 }
 
 
