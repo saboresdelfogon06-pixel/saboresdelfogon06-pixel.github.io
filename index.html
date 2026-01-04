@@ -380,6 +380,13 @@ button.selected{
   padding-top: 72px; /* altura del mini-banner + margen extra */
 }
 
+  .input-error {
+  border-color: #ff4d4f !important;
+  background: rgba(255, 77, 79, 0.1);
+  transition: border-color 0.3s, background 0.3s;
+}
+
+
 
 </style>
 </head>
@@ -971,8 +978,8 @@ function update() {
 
 
 function goWA() {
-  // limpiar mensajes previos
-  document.querySelectorAll('.error-msg').forEach(el => el.remove());
+  // 1️⃣ Limpiar errores previos
+  document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
 
   const campos = [
     { id: 'clientName', label: 'Nombre y apellido' },
@@ -988,24 +995,33 @@ function goWA() {
     let valor = elem.value.trim();
     if (c.id === 'zone' && valor === 'manual') {
       valor = document.getElementById('manualZone').value.trim();
+      if(!valor){
+        document.getElementById('manualZone').classList.add('input-error');
+        if (!primeroInvalido) primeroInvalido = document.getElementById('manualZone');
+      }
     }
     if (!valor) {
+      elem.classList.add('input-error'); // 🔴 Marca el input en rojo
       if (!primeroInvalido) primeroInvalido = elem;
-      const msg = document.createElement('div');
-      msg.className = 'error-msg';
-      msg.style.color = 'red';
-      msg.style.fontSize = '12px';
-      msg.style.marginTop = '4px';
-      msg.textContent = `Por favor complete el campo ${c.label} para ir a pagar su pedido`;
-      elem.insertAdjacentElement('afterend', msg);
     }
   });
 
-  // scroll al primer campo incompleto
   if (primeroInvalido) {
     primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return; // detiene el envío hasta completar
+  }
+
+  // 🔹 Chequeo picada y tamaño
+  const p = picadas[active];
+  if (!p.model || !p.size) {
+    alert('Por favor seleccioná un modelo y tamaño de picada');
+    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
+
+  // --- resto de goWA() sigue igual ---
+}
+
 
   // chequeo de picada y tamaño
   const p = picadas[active];
