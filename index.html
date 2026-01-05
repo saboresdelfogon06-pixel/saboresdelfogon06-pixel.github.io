@@ -999,7 +999,7 @@ function update() {
 
 
 function goWA() {
-  // limpiar clases previas
+  // Limpiar clases previas
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
   const campos = [
@@ -1016,13 +1016,16 @@ function goWA() {
     if (c.id === 'zone' && valor === 'manual') {
       valor = document.getElementById('manualZone').value.trim();
     }
+
     if (!valor) {
       elem.classList.add('error');
       if (!primeroInvalido) primeroInvalido = elem;
+    } else {
+      elem.classList.remove('error');  // Si el campo es completado, quitar error
     }
   });
 
-  // scroll al primer campo incompleto
+  // Scroll al primer campo incompleto
   if (primeroInvalido) {
     primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
