@@ -954,7 +954,7 @@ function update() {
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
  let txt = picadas.map((p,i) => {
-    const modelName = p.model || "Sin modelo";
+    const modelName = p.model || "Seleccione un modelo";
     const size = p.size || 0;
     const price = p.price || 0;
     return `Picada ${i+1}: ${modelName} (${size} personas) — $${price.toLocaleString()}`;
