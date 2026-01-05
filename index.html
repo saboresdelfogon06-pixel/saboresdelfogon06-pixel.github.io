@@ -885,14 +885,26 @@ function setSize(s,p){
 function handleSizeClick(s, p){
   const current = picadas[active];
 
+  // 🔹 si no hay modelo seleccionado
   if(!current.model){
-    document.querySelectorAll('.picada-top > .model-column > div > button.control')
-      .forEach(btn => btn.classList.add('model-hint'));
+    const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
     const hint = document.getElementById('modelHint');
     if(hint) hint.style.color = '#ffffff';
+
+    // Hacer scroll primero hacia la sección
+    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Reiniciar animación: quitar y volver a agregar la clase
+    modelBtns.forEach(btn => {
+      btn.classList.remove('model-hint');
+      // 🔹 timeout corto para forzar que la animación vuelva a correr
+      setTimeout(() => btn.classList.add('model-hint'), 50);
+    });
+
     return;
   }
 
+  // Si hay modelo, seleccionar/deseleccionar tamaño
   current.size = current.size === s ? null : s;
   current.price = current.size ? p : 0;
 
@@ -902,6 +914,7 @@ function handleSizeClick(s, p){
 
   update();
 }
+
 
 function handleZoneChange() {
   const zoneSelect = document.getElementById('zone');
