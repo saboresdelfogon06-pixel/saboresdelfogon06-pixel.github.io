@@ -953,18 +953,19 @@ function update() {
   const summaryDiv = document.querySelector('.section.summary');
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
-  let txt = picadas.map((p,i) => {
-    if(p.model && p.size){
-      return `Picada ${i+1}: ${p.model} (${p.size} personas) — $${(p.price || 0).toLocaleString()}`;
-    }
-    return null;
-  }).filter(Boolean).join("<br>") + "<br>";
+ let txt = picadas.map((p,i) => {
+    const modelName = p.model || "Sin modelo";
+    const size = p.size || 0;
+    const price = p.price || 0;
+    return `Picada ${i+1}: ${modelName} (${size} personas) — $${price.toLocaleString()}`;
+}).join("<br>") + "<br>";
 
-  txt += zoneName ? `<br>Envío a ${zoneName}: $${ship.toLocaleString()}<br>` : `<br>Envío: sin seleccionar<br>`;
+const envio = zoneName ? `$${ship.toLocaleString()}` : "$0";
+txt += `<br>Envío a ${zoneName || "Sin localidad"}: ${envio}<br><br>`;
 
-  if(picadas.every(p => p.model && p.size) && zoneName){
-    txt += `<br><b>Total hasta ahora: $${total.toLocaleString()}</b>`;
-  }
+// Total siempre visible, aunque sea cero
+const totalVisible = total || 0;
+txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 
   summaryDiv.innerHTML = `
     <button onclick="resetAll()"
