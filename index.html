@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -35,27 +36,29 @@ fbq('track','PageView');
   --muted:#9a958d;
   --accent:#D3AE09;
 }
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
   touch-action: manipulation;
-  height: 100%;               /* Ocupa toda la altura del viewport */
-  overflow: hidden;           /* Evita scroll en body */
+  overscroll-behavior: none;
+}
+
+ height: 100%;      /* Ocupa toda la altura del viewport */
+ overflow: hidden;  /* Evita scroll más allá del contenido */
 }
 
 .container {
   max-width: 720px;
   margin: auto;
   padding: 16px;
-  padding-top: 72px;          /* altura del mini-banner + margen extra */
-  height: 100%;               /* ocupa toda la pantalla */
-  overflow-y: auto;           /* scroll solo dentro del contenido */
+  padding-top: 72px; /* altura del mini-banner + margen extra */
+  
+  height: 100%;       /* ocupa toda la pantalla */
+  overflow-y: auto;   /* scroll solo dentro del contenido */
   -webkit-overflow-scrolling: touch; /* suaviza scroll en iOS */
-  overscroll-behavior: contain;      /* evita efecto de rebote al final */
 }
-
 /* HEADER */
 .header{
   display:flex;
@@ -185,7 +188,8 @@ button.selected{
   /* opcional: cambio leve de color al habilitar */
   background: #e0b800;
 }
- 
+
+
 .small{text-align:center;font-size:13px;color:var(--muted)}
 
 /* MODAL */
@@ -289,6 +293,10 @@ button.selected{
   }
 }
 
+/* ===============================
+   MEJOR LEGIBILIDAD EN MÓVIL
+   estilo Instagram / Twitter
+   =============================== */
 @media (max-width:480px){
 
   body{
@@ -349,7 +357,8 @@ button.selected{
   right: 12px;           /* separación lateral */
   transition: transform 0.3s ease; /* opcional, suaviza el movimiento al aparecer/desaparecer */
 }
- 
+
+
 .mini-banner .left {
   display: flex;
   align-items: center;
@@ -389,16 +398,6 @@ button.selected{
   background-size: 100% 100%;  /* Asegura que la imagen no se deforme */
   background-repeat: no-repeat;  /* No repetir la imagen */
   background-position: center;  /* Centra la imagen dentro del contenedor */
-}
-.control.error {
-  border-color: #ff4d4f;
-  background: rgba(255, 77, 79, 0.1);
-  animation: blink-red 0.8s ease-in-out 2;
-}
-
-@keyframes blink-red {
-  0%, 100% { border-color: #ff4d4f; background: rgba(255,77,79,0.1); }
-  50% { border-color: #ff4d4f; background: transparent; }
 }
 
 </style>
@@ -991,8 +990,8 @@ function update() {
 
 
 function goWA() {
-  // limpiar clases previas
-  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+  // limpiar mensajes previos
+  document.querySelectorAll('.error-msg').forEach(el => el.remove());
 
   const campos = [
     { id: 'clientName', label: 'Nombre y apellido' },
@@ -1009,8 +1008,14 @@ function goWA() {
       valor = document.getElementById('manualZone').value.trim();
     }
     if (!valor) {
-      elem.classList.add('error');
       if (!primeroInvalido) primeroInvalido = elem;
+      const msg = document.createElement('div');
+      msg.className = 'error-msg';
+      msg.style.color = 'red';
+      msg.style.fontSize = '12px';
+      msg.style.marginTop = '4px';
+      msg.textContent = `Por favor complete el campo ${c.label} para ir a pagar su pedido`;
+      elem.insertAdjacentElement('afterend', msg);
     }
   });
 
@@ -1036,7 +1041,7 @@ function goWA() {
     currency: 'ARS',
     num_items: picadas.length
   });
- 
+
   let cantidadPicadas = picadas.length;
 
   let msg = `Hola soy ${clientName.value}, hice un pedido para el ${orderDate.value}.\n\n`;
