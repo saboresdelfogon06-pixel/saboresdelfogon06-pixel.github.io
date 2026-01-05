@@ -1071,7 +1071,7 @@ function goWA() {
 
   let cantidadPicadas = picadas.length;
 
-  let msg = `Hola soy ${clientName.value}, hice un pedido para el ${orderDate.value}.\n\n`;
+  let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
   msg += `Pedido:\n`;
 
   picadas.forEach((p, i) => {
@@ -1083,8 +1083,8 @@ function goWA() {
   msg += `Localidad: ${zoneName}\n\n`;
 
   msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-  msg += `¿Me enviás la información de pago así reservo con el 50%?`;
-
+  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega`;
+  msg += `Gracias!`;
   location.href =
     'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 }
