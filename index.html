@@ -36,14 +36,17 @@ fbq('track','PageView');
   --muted:#9a958d;
   --accent:#D3AE09;
 }
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:var(--bg);
-  color:var(--text);
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
   touch-action: manipulation;
   overscroll-behavior: none;
+  height: 100%;      /* Ocupa toda la altura del viewport */
+  overflow-y: auto;  /* Permite el scroll en el eje vertical */
 }
+
 
  height: 100%;      /* Ocupa toda la altura del viewport */
  overflow: hidden;  /* Evita scroll más allá del contenido */
