@@ -179,12 +179,19 @@ button.selected{
   color:#2a2a2a;
   cursor:pointer;
   opacity:1;
-  transition: background .3s;
-  font-weight: 600; /* Semi-bold */
+  transition: all .3s ease; /* <- transición más suave */
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* sombra base */
 }
+
 .pay button.enabled{
-  /* opcional: cambio leve de color al habilitar */
   background: #e0b800;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4); /* sombra más grande al habilitar */
+}
+
+.pay button.enabled:hover{
+  transform: translateY(-2px);   /* efecto de “levantarse” al hover */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5); /* sombra más intensa */
 }
 
 
