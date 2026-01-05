@@ -979,7 +979,7 @@ function update() {
   const p = picadas[active];
   const valid = p.model && p.size && clientName.value && orderDate.value && addr.value && zoneName;
 
-  summaryDiv.style.display = (p.model && p.size) ? 'block' : 'none';
+  summaryDiv.style.display = 'block'; // siempre visible
   payBtn.classList.toggle("enabled", valid);
 
   if(valid && !window._checkoutTracked){
