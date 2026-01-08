@@ -557,6 +557,16 @@ const modelData={
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
+// 🔹 Generar order_id y token en la landing
+function generateOrderId() {
+  const random = Math.floor(Math.random() * 1000000); // 6 dígitos
+  return `SF-${String(random).padStart(6,'0')}`;
+}
+
+function generateToken() {
+  return crypto.randomUUID().replace(/-/g,'');
+}
+
   // ===== MÓDULO 3: MEMORIA =====
 // ===== MÓDULO 3: MEMORIA =====
 function saveState(){
@@ -1024,6 +1034,9 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 }
+
+
+ 
 function goWA() {
   // Limpiar clases previas
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
@@ -1081,51 +1094,58 @@ function goWA() {
     currency: 'ARS',
     num_items: picadas.length
   });
+// ===============================
+// ARMAR MENSAJE WHATSAPP
+// ===============================
+let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+msg += `Pedido (ID: ${orderId}):\n`;
 
-  // ===============================
-  // ARMAR MENSAJE WHATSAPP
-  // ===============================
-  let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido:\n`;
-  picadas.forEach((p, i) => {
-    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-  });
-  msg += `\nEntrega:\n`;
-  msg += `Dirección: ${addr.value}\n`;
-  msg += `Localidad: ${zoneName}\n\n`;
-  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega\n`;
-  msg += `Gracias!\n`;
+picadas.forEach((p, i) => {
+  msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+});
+
+msg += `\nEntrega:\n`;
+msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+
+msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega.\n`;
+msg += `¡Gracias!`;
 
   // 🔹 REDIRECCIÓN INMEDIATA A WHATSAPP
   window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 
-  // ===============================
-  // ENVIAR DATOS A GOOGLE SHEET EN SEGUNDO PLANO
-  // ===============================
-  const orderPayload = {
+// 🔹 Generar order_id y token
+const orderId = generateOrderId();
+const token = generateToken();
+
+// 🔹 Enviar cada picada como fila independiente
+picadas.forEach((p) => {
+  const payload = {
+    order_id: orderId,
+    token: token,
     nombre: clientName.value,
-    modelo: picadas.map(p => p.model).join(' | '),
-    tamano: picadas.map(p => p.size).join(' | '),
-    cantidad: picadas.length,
-    subtotal: total - ship,
-    envio: ship,
-    total: total
+    modelo: p.model,
+    tamano: p.size,
+    cantidad: 1,
+    subtotal: p.price,
+    envio: ship / picadas.length, // repartir envío proporcional si hay varias picadas
+    total: p.price + ship / picadas.length,
+    estado: "CREADO",
+    link_confirmacion: `${BASE_CONFIRM_URL}?order_id=${orderId}&token=${token}`,
+    mensaje_confirmacion: `Pedido ${orderId} para ${clientName.value}`
   };
 
   fetch(ORDERS_API_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(orderPayload)
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
   })
   .then(res => res.json())
-  .then(data => {
-    console.log('Pedido enviado a Sheets:', data);
-  })
-  .catch(err => {
-    console.error('Error enviando pedido a Sheets:', err);
-  });
-}
+  .then(data => console.log('Picada enviada a Sheets:', data))
+  .catch(err => console.error('Error enviando picada a Sheets:', err));
+});
+
 
 
 
