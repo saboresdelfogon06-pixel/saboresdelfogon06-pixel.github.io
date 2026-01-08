@@ -1084,12 +1084,10 @@ function goWA() {
 
 fetch(ORDERS_API_URL, {
   method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
   body: JSON.stringify(orderPayload)
 })
-.then(res => res.json())
+.then(res => res.text())
+.then(txt => JSON.parse(txt))
 
 
     const orderId = data && data.success ? data.order_id : null;
