@@ -999,7 +999,13 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
   `;
 
   const p = picadas[active];
-  const valid = p.model && p.size && clientName.value && orderDate.value && addr.value && zoneName;
+  const valid =
+  p.model &&
+  p.size &&
+  clientName.value.trim() &&
+  orderDate.value &&
+  zoneName;
+
 
   summaryDiv.style.display = 'block'; // siempre visible
   payBtn.classList.toggle("enabled", valid);
@@ -1018,7 +1024,6 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 }
-
 function goWA() {
   // Limpiar clases previas
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
@@ -1034,6 +1039,7 @@ function goWA() {
   campos.forEach(c => {
     const elem = document.getElementById(c.id);
     let valor = elem.value.trim();
+
     if (c.id === 'zone' && valor === 'manual') {
       valor = document.getElementById('manualZone').value.trim();
     }
@@ -1052,7 +1058,14 @@ function goWA() {
     return;
   }
 
-  // chequeo de picada y tamaño
+  // 🔹 VALIDAR FECHA (Safari / Instagram fix)
+  if (!orderDate.value) {
+    orderDate.classList.add('error');
+    orderDate.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // 🔹 Validar modelo y tamaño
   const p = picadas[active];
   if (!p.model || !p.size) {
     alert('Por favor seleccioná un modelo y tamaño de picada');
@@ -1060,7 +1073,7 @@ function goWA() {
     return;
   }
 
-  // --- Pixel de Meta ---
+  // 🔹 Pixel Meta – StartPayment
   fbq('trackCustom', 'StartPayment', {
     content_name: 'Click Ir a Pagar',
     content_category: 'Picadas',
@@ -1081,46 +1094,45 @@ function goWA() {
     envio: ship,
     total: total
   };
-fetch(ORDERS_API_URL, {
-  method: 'POST',
-  body: JSON.stringify(orderPayload)
-})
-.then(res => res.text())
-.then(txt => {
-  const data = JSON.parse(txt);
 
-  const orderId = data && data.success ? data.order_id : null;
+  fetch(ORDERS_API_URL, {
+    method: 'POST',
+    body: JSON.stringify(orderPayload)
+  })
+    .then(res => res.text())
+    .then(txt => {
+      const data = JSON.parse(txt);
+      const orderId = data && data.success ? data.order_id : null;
 
-  // ===============================
-  // ARMAR MENSAJE WHATSAPP
-  // ===============================
-  let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido:\n`;
+      // ===============================
+      // ARMAR MENSAJE WHATSAPP
+      // ===============================
+      let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+      msg += `Pedido:\n`;
 
-  picadas.forEach((p, i) => {
-    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-  });
+      picadas.forEach((p, i) => {
+        msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+      });
 
-  msg += `\nEntrega:\n`;
-  msg += `Dirección: ${addr.value}\n`;
-  msg += `Localidad: ${zoneName}\n\n`;
+      msg += `\nEntrega:\n`;
+      msg += `Dirección: ${addr.value}\n`;
+      msg += `Localidad: ${zoneName}\n\n`;
+      msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+      msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega\n`;
+      msg += `Gracias!\n`;
 
-  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega\n`;
-  msg += `Gracias!\n`;
+      if (orderId) {
+        msg += `🧾 N° de pedido: ${orderId}\n`;
+      }
 
-  if (orderId) {
-    msg += `🧾 N° de pedido: ${orderId}\n`;
-  }
-
-  location.href =
-    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-})
-.catch(err => {
-  console.error(err);
-  alert('Error al generar el pedido, intentá nuevamente');
-});
-
+      location.href =
+        'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Error al generar el pedido, intentá nuevamente');
+    });
+}
 
 
 function openModal(src){
