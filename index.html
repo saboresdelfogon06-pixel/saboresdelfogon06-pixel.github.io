@@ -1038,9 +1038,18 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 
  
 function goWA() {
+  // 🔹 Evitar múltiples clics
+  if (payBtn.disabled) return;
+
+  // Bloquear botón y cambiar estilo
+  payBtn.disabled = true;
+  payBtn.style.opacity = 0.6;
+  payBtn.textContent = "Procesando...";
+
   // Limpiar clases previas
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
+  // Validación de campos
   const campos = [
     { id: 'clientName', label: 'Nombre y apellido' },
     { id: 'orderDate', label: 'Fecha del pedido' },
@@ -1065,24 +1074,24 @@ function goWA() {
     }
   });
 
-  // Scroll al primer campo incompleto
+  // Scroll al primer campo incompleto y reactivar botón
   if (primeroInvalido) {
     primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Enviar pedido";
     return;
   }
 
-  // 🔹 VALIDAR FECHA (Safari / Instagram fix)
-  if (!orderDate.value) {
-    orderDate.classList.add('error');
-    orderDate.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    return;
-  }
-
-  // 🔹 Validar modelo y tamaño
+  // Validar modelo y tamaño
   const p = picadas[active];
   if (!p.model || !p.size) {
     alert('Por favor seleccioná un modelo y tamaño de picada');
     document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Enviar pedido";
     return;
   }
 
@@ -1094,58 +1103,58 @@ function goWA() {
     currency: 'ARS',
     num_items: picadas.length
   });
-// ===============================
-// ARMAR MENSAJE WHATSAPP
-// ===============================
-let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-msg += `Pedido (ID: ${orderId}):\n`;
 
-picadas.forEach((p, i) => {
-  msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-});
+  // ===============================
+  // ARMAR MENSAJE WHATSAPP
+  // ===============================
+  let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+  msg += `Pedido (ID: ${orderId}):\n`;
 
-msg += `\nEntrega:\n`;
-msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+  picadas.forEach((p, i) => {
+    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+  });
 
-msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega.\n`;
-msg += `¡Gracias!`;
+  msg += `\nEntrega:\n`;
+  msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+  msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega.\n`;
+  msg += `¡Gracias!`;
 
-  // 🔹 REDIRECCIÓN INMEDIATA A WHATSAPP
+  // 🔹 Redirección inmediata a WhatsApp
   window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 
-// 🔹 Generar order_id y token
-const orderId = generateOrderId();
-const token = generateToken();
+  // 🔹 Generar order_id y token
+  const orderId = generateOrderId();
+  const token = generateToken();
 
-// 🔹 Enviar cada picada como fila independiente
-picadas.forEach((p) => {
-  const payload = {
-    order_id: orderId,
-    token: token,
-    nombre: clientName.value,
-    modelo: p.model,
-    tamano: p.size,
-    cantidad: 1,
-    subtotal: p.price,
-    envio: ship / picadas.length, // repartir envío proporcional si hay varias picadas
-    total: p.price + ship / picadas.length,
-    estado: "CREADO",
-    link_confirmacion: `${BASE_CONFIRM_URL}?order_id=${orderId}&token=${token}`,
-    mensaje_confirmacion: `Pedido ${orderId} para ${clientName.value}`
-  };
+  // 🔹 Enviar cada picada como fila independiente a Google Sheets
+  picadas.forEach((p) => {
+    const payload = {
+      order_id: orderId,
+      token: token,
+      nombre: clientName.value,
+      modelo: p.model,
+      tamano: p.size,
+      cantidad: 1,
+      subtotal: p.price,
+      envio: ship / picadas.length,
+      total: p.price + ship / picadas.length,
+      estado: "CREADO",
+      link_confirmacion: `${BASE_CONFIRM_URL}?order_id=${orderId}&token=${token}`,
+      mensaje_confirmacion: `Pedido ${orderId} para ${clientName.value}`
+    };
 
-  fetch(ORDERS_API_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload)
-  })
-  .then(res => res.json())
-  .then(data => console.log('Picada enviada a Sheets:', data))
-  .catch(err => console.error('Error enviando picada a Sheets:', err));
-});
-
+    fetch(ORDERS_API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => console.log('Picada enviada a Sheets:', data))
+    .catch(err => console.error('Error enviando picada a Sheets:', err));
+  });
+}
 
 
 
