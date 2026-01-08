@@ -1083,7 +1083,25 @@ function goWA() {
   });
 
   // ===============================
-  // CREAR ORDEN EN GOOGLE SHEET
+  // ARMAR MENSAJE WHATSAPP
+  // ===============================
+  let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+  msg += `Pedido:\n`;
+  picadas.forEach((p, i) => {
+    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+  });
+  msg += `\nEntrega:\n`;
+  msg += `Dirección: ${addr.value}\n`;
+  msg += `Localidad: ${zoneName}\n\n`;
+  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega\n`;
+  msg += `Gracias!\n`;
+
+  // 🔹 REDIRECCIÓN INMEDIATA A WHATSAPP
+  window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+
+  // ===============================
+  // ENVIAR DATOS A GOOGLE SHEET EN SEGUNDO PLANO
   // ===============================
   const orderPayload = {
     nombre: clientName.value,
@@ -1095,48 +1113,20 @@ function goWA() {
     total: total
   };
 
-fetch(ORDERS_API_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(orderPayload)
-})
-
-    .then(res => res.text())
-    .then(txt => {
-      const data = JSON.parse(txt);
-      const orderId = data && data.success ? data.order_id : null;
-
-      // ===============================
-      // ARMAR MENSAJE WHATSAPP
-      // ===============================
-      let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-      msg += `Pedido:\n`;
-
-      picadas.forEach((p, i) => {
-        msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-      });
-
-      msg += `\nEntrega:\n`;
-      msg += `Dirección: ${addr.value}\n`;
-      msg += `Localidad: ${zoneName}\n\n`;
-      msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-      msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega\n`;
-      msg += `Gracias!\n`;
-
-      if (orderId) {
-        msg += `🧾 N° de pedido: ${orderId}\n`;
-      }
-
-      location.href =
-        'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Error al generar el pedido, intentá nuevamente');
-    });
+  fetch(ORDERS_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderPayload)
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log('Pedido enviado a Sheets:', data);
+  })
+  .catch(err => {
+    console.error('Error enviando pedido a Sheets:', err);
+  });
 }
+
 
 
 function openModal(src){
