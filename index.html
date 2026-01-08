@@ -1140,7 +1140,7 @@ async function goWA() {
   window.currentOrderId = orderId;
   window.currentToken = token;
 
-  // 🔹 Preparar payload para App Script
+  // 🔹 Preparar payload para App Script (todas las picadas juntas)
   const payload = {
     nombre: clientName.value,
     envio: ship,
@@ -1183,6 +1183,7 @@ async function goWA() {
     // 🔹 Redirección a WhatsApp
     window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 
+    // 🔹 Reset formulario
     resetForNextOrder();
 
   } catch (err) {
@@ -1193,7 +1194,6 @@ async function goWA() {
     payBtn.textContent = "Enviar pedido";
   }
 }
-
 
 
 function openModal(src){
