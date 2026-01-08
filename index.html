@@ -1071,8 +1071,7 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 }
 
 
-function goWA() {
-  // 🔹 Evitar múltiples clics
+async function goWA() {
   if (payBtn.disabled) return;
 
   // Bloquear botón y cambiar estilo
@@ -1108,7 +1107,6 @@ function goWA() {
     }
   });
 
-  // Scroll al primer campo incompleto y reactivar botón
   if (primeroInvalido) {
     primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
     payBtn.disabled = false;
@@ -1117,12 +1115,10 @@ function goWA() {
     return;
   }
 
-  // Validar modelo y tamaño
   const p = picadas[active];
   if (!p.model || !p.size) {
     alert('Por favor seleccioná un modelo y tamaño de picada');
     document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
-
     payBtn.disabled = false;
     payBtn.style.opacity = 1;
     payBtn.textContent = "Enviar pedido";
@@ -1138,57 +1134,64 @@ function goWA() {
     num_items: picadas.length
   });
 
-  // 🔹 Generar order_id y token ANTES de armar mensaje
+  // 🔹 Generar order_id y token
   const orderId = generateOrderId();
   const token = generateToken();
+  window.currentOrderId = orderId;
+  window.currentToken = token;
 
-  // ===============================
-  // ARMAR MENSAJE WHATSAPP
-  // ===============================
-  let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido (ID: ${orderId}):\n`;
+  // 🔹 Preparar payload para App Script
+  const payload = {
+    nombre: clientName.value,
+    envio: ship,
+    picadas: picadas.map(p => ({
+      model: p.model,
+      size: p.size,
+      subtotal: p.price
+    }))
+  };
 
-  picadas.forEach((p, i) => {
-    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-  });
-
-  msg += `\nEntrega:\n`;
-  msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-  msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega.\n`;
-  msg += `¡Gracias!`;
-
-  // 🔹 Redirección inmediata a WhatsApp
-  window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-
-  // 🔹 Enviar cada picada como fila independiente a Google Sheets
-  picadas.forEach((p) => {
-    const payload = {
-      order_id: orderId,
-      token: token,
-      nombre: clientName.value,
-      modelo: p.model,
-      tamano: p.size,
-      cantidad: 1,
-      subtotal: p.price,
-      envio: ship / picadas.length,
-      total: p.price + ship / picadas.length,
-      estado: "CREADO",
-      link_confirmacion: `${BASE_CONFIRM_URL}?order_id=${orderId}&token=${token}`,
-      mensaje_confirmacion: `Pedido ${orderId} para ${clientName.value}`
-    };
-
-    fetch(ORDERS_API_URL, {
+  try {
+    // 🔹 Enviar TODAS las picadas en un solo fetch
+    const res = await fetch(ORDERS_API_URL, {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    })
-    .then(res => res.json())
-    .then(data => console.log('Picada enviada a Sheets:', data))
-    .catch(err => console.error('Error enviando picada a Sheets:', err));
-  });
- resetForNextOrder();
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      throw new Error(data.error || 'Error desconocido al enviar pedido');
+    }
+
+    // 🔹 Preparar mensaje WhatsApp
+    let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+    msg += `Pedido (ID: ${data.order_id}):\n`;
+
+    picadas.forEach((p, i) => {
+      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+    });
+
+    msg += `\nEntrega:\n`;
+    msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+    msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+    msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+    msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega.\n`;
+    msg += `¡Gracias!`;
+
+    // 🔹 Redirección a WhatsApp
+    window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+
+    resetForNextOrder();
+
+  } catch (err) {
+    console.error('Error enviando pedido a Sheets:', err);
+    alert('Ocurrió un error al enviar tu pedido. Por favor, intenta nuevamente.');
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Enviar pedido";
+  }
 }
 
 
