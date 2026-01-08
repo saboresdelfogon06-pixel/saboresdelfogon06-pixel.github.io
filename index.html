@@ -665,6 +665,41 @@ function resetAll(){
   document.getElementById('cartTotal').textContent = '$0';
 }
 
+
+function resetForNextOrder() {
+  // 🔹 Reset de inputs y variables locales
+  clientName.value = "";
+  orderDate.value = "";
+  addr.value = "";
+  zone.value = "";
+  zoneName = "";
+  ship = 0;
+  total = 0;
+  active = 0;
+
+  // 🔹 Limpiar picadas y generar un nuevo array vacío con 1 picada
+  buildPicadas(1);
+
+  // 🔹 Reset visual y botones
+  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  payBtn.classList.remove("enabled");
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Enviar pedido";
+  document.getElementById('cartTotal').textContent = '$0';
+
+  // 🔹 Limpiar errores visuales
+  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+
+  // 🔹 Guardar estado vacío en localStorage para la nueva sesión de pedido
+  saveState();
+
+  // 🔹 Generar un nuevo token y order_id automáticamente al iniciar la nueva orden
+  window.currentOrderId = generateOrderId();
+  window.currentToken = generateToken();
+}
+
+
 function setActivePicada(i){
   active = i;
 
@@ -1036,7 +1071,6 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 }
 
 
- 
 function goWA() {
   // 🔹 Evitar múltiples clics
   if (payBtn.disabled) return;
@@ -1104,6 +1138,10 @@ function goWA() {
     num_items: picadas.length
   });
 
+  // 🔹 Generar order_id y token ANTES de armar mensaje
+  const orderId = generateOrderId();
+  const token = generateToken();
+
   // ===============================
   // ARMAR MENSAJE WHATSAPP
   // ===============================
@@ -1123,10 +1161,6 @@ function goWA() {
 
   // 🔹 Redirección inmediata a WhatsApp
   window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-
-  // 🔹 Generar order_id y token
-  const orderId = generateOrderId();
-  const token = generateToken();
 
   // 🔹 Enviar cada picada como fila independiente a Google Sheets
   picadas.forEach((p) => {
@@ -1154,6 +1188,7 @@ function goWA() {
     .then(data => console.log('Picada enviada a Sheets:', data))
     .catch(err => console.error('Error enviando picada a Sheets:', err));
   });
+ resetForNextOrder();
 }
 
 
