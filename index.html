@@ -520,6 +520,7 @@ button.selected{
 
 </div>
 <script>
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbzpfvyMda7y1Til6c9stvdKaNyLFiy4os3MqQuhF3E2VY2q3BsWkcJUhjIDIJ6Hk2SihQ/exec';
 const clientName = document.getElementById('clientName');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
@@ -1018,7 +1019,6 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 }
 
-
 function goWA() {
   // Limpiar clases previas
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
@@ -1042,7 +1042,7 @@ function goWA() {
       elem.classList.add('error');
       if (!primeroInvalido) primeroInvalido = elem;
     } else {
-      elem.classList.remove('error');  // Si el campo es completado, quitar error
+      elem.classList.remove('error');
     }
   });
 
@@ -1060,7 +1060,7 @@ function goWA() {
     return;
   }
 
-  // --- Pixel de Meta original ---
+  // --- Pixel de Meta ---
   fbq('trackCustom', 'StartPayment', {
     content_name: 'Click Ir a Pagar',
     content_category: 'Picadas',
@@ -1069,24 +1069,61 @@ function goWA() {
     num_items: picadas.length
   });
 
-  let cantidadPicadas = picadas.length;
+  // ===============================
+  // CREAR ORDEN EN GOOGLE SHEET
+  // ===============================
+  const orderPayload = {
+    nombre: clientName.value,
+    modelo: picadas.map(p => p.model).join(' | '),
+    tamano: picadas.map(p => p.size).join(' | '),
+    cantidad: picadas.length,
+    subtotal: total - ship,
+    envio: ship,
+    total: total
+  };
 
-  let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido:\n`;
+  fetch(ORDERS_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderPayload)
+  })
+  .then(res => res.json())
+  .then(data => {
 
-  picadas.forEach((p, i) => {
-    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+    const orderId = data && data.success ? data.order_id : null;
+
+    // ===============================
+    // ARMAR MENSAJE WHATSAPP
+    // ===============================
+    let msg = `Hola soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+    msg += `Pedido:\n`;
+
+    picadas.forEach((p, i) => {
+      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+    });
+
+    msg += `\nEntrega:\n`;
+    msg += `Dirección: ${addr.value}\n`;
+    msg += `Localidad: ${zoneName}\n\n`;
+
+    msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
+    msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega\n`;
+    msg += `Gracias!\n`;
+
+    if (orderId) {
+      msg += `🧾 N° de pedido: ${orderId}\n`;
+    }
+
+    location.href =
+      'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Error al generar el pedido, intentá nuevamente');
   });
-
-  msg += `\nEntrega:\n`;
-  msg += `Dirección: ${addr.value}\n`;
-  msg += `Localidad: ${zoneName}\n\n`;
-
-  msg += `Total del pedido: $${total.toLocaleString()}\n\n`;
-  msg += `Quería confirmar disponibilidad para la fecha y coordinar la entrega`;
-  msg += `Gracias!`;
-  location.href =
-    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 }
 
 
