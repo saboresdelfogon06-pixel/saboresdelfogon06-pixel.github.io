@@ -556,12 +556,13 @@ const modelData={
 };
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
+
 function generateOrderId() {
-  // Genera un ID temporal (solo para la landing, backend reemplaza con el real)
-  const currentYear = new Date().getFullYear();
+  // Genera un ID temporal para mostrar mientras se hace el pedido
   const randomNum = Math.floor(Math.random() * 999999) + 1;
-  return `${currentYear}-${String(randomNum).padStart(6, "0")}`;
+  return `SF-${String(randomNum).padStart(6, "0")}`;
 }
+
 
 
 function generateToken() {
