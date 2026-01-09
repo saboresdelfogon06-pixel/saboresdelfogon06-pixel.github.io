@@ -1140,13 +1140,6 @@ async function goWA() {
 if(!window.currentOrderId) window.currentOrderId = generateOrderId();
 if(!window.currentToken) window.currentToken = generateToken();
 
-// Además, validar que todas las picadas tengan model y size
-const incompletePicada = picadas.find(p => !p.model || !p.size);
-if(incompletePicada){
-  alert("Por favor seleccioná modelo y tamaño para todas las picadas");
-  return;
-}
-
 
 // Preparar payload para Apps Script
 const payload = {
