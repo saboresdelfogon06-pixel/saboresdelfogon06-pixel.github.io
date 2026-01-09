@@ -556,25 +556,13 @@ const modelData={
 };
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
-
 function generateOrderId() {
-  // Accede al Sheet donde se guardan los pedidos
-  const ss = SpreadsheetApp.openById("https://docs.google.com/spreadsheets/d/1T4SUpn7DLJeF86pVpQh-yTN0mwzv-HwgW49-86ZgwqY/edit?gid=1408224339#gid=1408224339"); // <-- reemplazá con tu ID real
-  const sheet = ss.getSheetByName(new Date().getFullYear().toString()); // hoja del año actual
-  const data = sheet.getRange("A2:A" + sheet.getLastRow()).getValues().flat(); // columna A: order_id
-
+  // Genera un ID temporal (solo para la landing, backend reemplaza con el real)
   const currentYear = new Date().getFullYear();
-
-  // Filtrar IDs del año actual y extraer el número
-  const nums = data
-    .filter(id => id && id.startsWith(currentYear))
-    .map(id => parseInt(id.split("-")[1]))
-    .filter(n => !isNaN(n));
-
-  const nextNum = (nums.length ? Math.max(...nums) + 1 : 1);
-  const orderId = `${currentYear}-${String(nextNum).padStart(6, "0")}`;
-  return orderId;
+  const randomNum = Math.floor(Math.random() * 999999) + 1;
+  return `${currentYear}-${String(randomNum).padStart(6, "0")}`;
 }
+
 
 function generateToken() {
   return crypto.randomUUID().replace(/-/g,'');
