@@ -557,10 +557,23 @@ const modelData={
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
-// 🔹 Generar order_id y token en la landing
 function generateOrderId() {
-  const random = Math.floor(Math.random() * 1000000); // 6 dígitos
-  return `SF-${String(random).padStart(6,'0')}`;
+  // Accede al Sheet donde se guardan los pedidos
+  const ss = SpreadsheetApp.openById("TU_SHEET_ID"); // <-- reemplazá con tu ID real
+  const sheet = ss.getSheetByName(new Date().getFullYear().toString()); // hoja del año actual
+  const data = sheet.getRange("A2:A" + sheet.getLastRow()).getValues().flat(); // columna A: order_id
+
+  const currentYear = new Date().getFullYear();
+
+  // Filtrar IDs del año actual y extraer el número
+  const nums = data
+    .filter(id => id && id.startsWith(currentYear))
+    .map(id => parseInt(id.split("-")[1]))
+    .filter(n => !isNaN(n));
+
+  const nextNum = (nums.length ? Math.max(...nums) + 1 : 1);
+  const orderId = `${currentYear}-${String(nextNum).padStart(6, "0")}`;
+  return orderId;
 }
 
 function generateToken() {
