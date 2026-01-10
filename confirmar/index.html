@@ -33,7 +33,6 @@
       --accent:#D3AE09;
       --border:#2a2a2a;
     }
-
     *{box-sizing:border-box;}
     body{margin:0;background:var(--bg);color:var(--text);font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;}
     h1{text-align:center;font-size:22px;font-weight:600;margin:20px 0;color:var(--accent);}
@@ -134,7 +133,7 @@ function confirmarWhatsApp() {
   msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
   msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
 
-  // 2️⃣ Enviar evento Purchase al Worker
+  // 2️⃣ Enviar evento Purchase al Worker con fbc y fbp
   const purchasePayload = {
     action: 'purchase',
     order_id: pedido.order_id,
@@ -146,7 +145,9 @@ function confirmarWhatsApp() {
       model: i.modelo,
       size: i.tamano,
       price: i.subtotal
-    }))
+    })),
+    fbc: getCookie('_fbc'),
+    fbp: getCookie('_fbp')
   };
 
   fetch(WORKER_URL, {
@@ -157,9 +158,14 @@ function confirmarWhatsApp() {
     .then(console.log)
     .catch(err => console.warn('Worker Purchase error', err));
 
-
-  // 4️⃣ Redirigir a WhatsApp
+  // 3️⃣ Redirigir a WhatsApp
   window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+// =================== Helper: Leer cookies ====================
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
 }
 
 // =================== SHA256 helper ====================
@@ -171,4 +177,3 @@ async function sha256(str) {
 
 </body>
 </html>
-
