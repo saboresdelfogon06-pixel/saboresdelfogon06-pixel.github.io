@@ -5,6 +5,25 @@
   <title>Confirmar pedido | Sabores del Fogón</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- =================== META PIXEL =================== -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)}
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}
+  (window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2992234817833383'); // Tu Pixel ID
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=2992234817833383&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- =================== FIN META PIXEL =================== -->
+
   <style>
     :root{
       --bg:#0f0f0f;
@@ -15,9 +34,7 @@
       --border:#2a2a2a;
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{box-sizing:border-box;}
 
     body{
       margin:0;
@@ -77,9 +94,7 @@
       margin-top:20px;
     }
 
-    button:hover{
-      opacity:.9;
-    }
+    button:hover{opacity:.9;}
 
     .msg{
       background:var(--card);
@@ -89,10 +104,7 @@
       border:1px solid var(--border);
     }
 
-    .err{
-      color:#ff6b6b;
-    }
-
+    .err{color:#ff6b6b;}
     .small{
       font-size:13px;
       color:var(--muted);
@@ -186,6 +198,13 @@
       msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
       msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
 
+      // =================== DISPARAR EVENTO PURCHASE ===================
+      fbq('track', 'Purchase', {
+        value: Number(pedido.total),
+        currency: 'ARS',
+      });
+
+      // Redirigir a WhatsApp
       window.location.href =
         `https://wa.me/${WHATSAPP_NUMBER}?text=` + encodeURIComponent(msg);
     }
