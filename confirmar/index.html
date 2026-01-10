@@ -1,1 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Confirmar pedido | Sabores del Fogón</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f6f6f6;
+      margin: 0;
+      padding: 16px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+
+    .item {
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
+
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 12px;
+      text-align: right;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    button:hover {
+      opacity: .9;
+    }
+
+    .msg {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    }
+
+    .err {
+      color: #b00020;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Confirmar pedido</h1>
+
+  <div id="content">
+    <div class="msg">Cargando pedido…</div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxhgcXCNKcj7vCdHPQFdVx5O-dmwTWPsnQ0wKnxI9JUn1UiRH_poKoOctHCgWY4oKjNPw/exec';
+    const WHATSAPP_NUMBER = '5491123284020'; // 👈 TU NÚMERO
+
+    const params = new URLSearchParams(window.location.search);
+    const order_id = params.get('order_id');
+    const token = params.get('token');
+
+    const content = document.getElementById('content');
+    let pedido = null;
+
+    if (!order_id || !token) {
+      content.innerHTML = `<div class="msg err">Link inválido o incompleto</div>`;
+      throw new Error('Link inválido');
+    }
+
+    // ================== CARGAR PEDIDO ==================
+    fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
+      .then(r => r.json())
+      .then(data => {
+        if (!data.success) throw new Error(data.error || 'Pedido no encontrado');
+
+        pedido = data.preview;
+
+        content.innerHTML = `
+          <div class="card">
+            <b>Pedido ID:</b> ${pedido.order_id}<br>
+            <b>Nombre:</b> ${pedido.nombre}
+          </div>
+
+          <div class="card">
+            ${pedido.items.map((i, idx) => `
+              <div class="item">
+                <b>Picada ${idx + 1}</b><br>
+                Modelo: ${i.modelo}<br>
+                Tamaño: ${i.tamano} personas<br>
+                Subtotal: $${Number(i.subtotal).toLocaleString()}
+              </div>
+            `).join('')}
+
+            <div class="item">
+              Envío: $${Number(pedido.envio).toLocaleString()}
+            </div>
+
+            <div class="total">
+              Total: $${Number(pedido.total).toLocaleString()}
+            </div>
+          </div>
+
+          <button onclick="confirmarWhatsApp()">Confirmar pedido</button>
+
+          <p class="small">
+            Al confirmar se enviará el pedido por WhatsApp para finalizar la coordinación.
+          </p>
+        `;
+      })
+      .catch(err => {
+        content.innerHTML = `<div class="msg err">${err.message}</div>`;
+      });
+
+    // ================== WHATSAPP ==================
+    function confirmarWhatsApp() {
+      if (!pedido) return;
+
+      let msg = `Pedido confirmado\n\n`;
+      msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
+      msg += `👤 Nombre: ${pedido.nombre}\n\n`;
+
+      pedido.items.forEach((i, idx) => {
+        msg += `🥩 Picada ${idx + 1}\n`;
+        msg += `• Modelo: ${i.modelo}\n`;
+        msg += `• Tamaño: ${i.tamano} personas\n`;
+        msg += `• Subtotal: $${Number(i.subtotal).toLocaleString()}\n\n`;
+      });
+
+      msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
+      msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
+
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=` + encodeURIComponent(msg);
+      window.location.href = url;
+    }
+  </script>
+
+</body>
+</html>
 
