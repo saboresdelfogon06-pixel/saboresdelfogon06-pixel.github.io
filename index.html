@@ -1153,10 +1153,6 @@ async function goWA() {
     num_items: picadas.length
   });
 
-// Antes de hacer fetch, asegurarte de generar token y order_id
-if(!window.currentOrderId) window.currentOrderId = generateOrderId();
-if(!window.currentToken) window.currentToken = generateToken();
-
 fetch('https://saboresfogon.com/api/pedido', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
