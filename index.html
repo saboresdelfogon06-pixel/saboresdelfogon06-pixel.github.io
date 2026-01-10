@@ -1140,7 +1140,33 @@ async function goWA() {
 if(!window.currentOrderId) window.currentOrderId = generateOrderId();
 if(!window.currentToken) window.currentToken = generateToken();
 
+// 🔹 === NUEVO: enviar evento InitiateCheckout a Meta CAPI ===
+const initiateCheckoutPayload = {
+  event_name: "InitiateCheckout",
+  event_time: Math.floor(Date.now()/1000),
+  event_id: window.currentOrderId,
+  user_data: {
+    client_ip_address: "", // lo podés setear desde tu backend si querés más precisión
+    client_user_agent: navigator.userAgent,
+    fbp: fbq && fbq.getState ? fbq.getState().fbp : undefined,
+    fbc: fbq && fbq.getState ? fbq.getState().fbc : undefined
+  },
+  custom_data: {
+    currency: "ARS",
+    value: total,
+    num_items: picadas.length
+  }
+};
 
+// 🔹 Si tenés un endpoint CAPI en tu backend, envías con fetch
+fetch('https://saboresdelfogon06.saboresdelfogon06.workers.dev/', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(initiateCheckoutPayload)
+}).catch(err => console.warn('CAPI InitiateCheckout error', err));
+
+
+ 
 // Preparar payload para Apps Script
 const payload = {
   order_id: window.currentOrderId,
