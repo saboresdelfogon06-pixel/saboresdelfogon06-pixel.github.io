@@ -35,82 +35,17 @@
     }
 
     *{box-sizing:border-box;}
-
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-
-    h1{
-      text-align:center;
-      font-size:22px;
-      font-weight:600;
-      margin:20px 0;
-      color:var(--accent);
-    }
-
-    #content{
-      max-width:720px;
-      margin:auto;
-      padding:16px;
-    }
-
-    .card{
-      background:var(--card);
-      border-radius:12px;
-      padding:16px;
-      margin-bottom:16px;
-      border:1px solid var(--border);
-    }
-
-    .item{
-      border-top:1px solid var(--border);
-      padding-top:12px;
-      margin-top:12px;
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .total{
-      font-size:20px;
-      font-weight:600;
-      margin-top:16px;
-      text-align:right;
-      color:var(--accent);
-    }
-
-    button{
-      width:100%;
-      padding:18px;
-      font-size:18px;
-      background:var(--accent);
-      color:#000;
-      border:none;
-      border-radius:10px;
-      font-weight:600;
-      cursor:pointer;
-      margin-top:20px;
-    }
-
+    body{margin:0;background:var(--bg);color:var(--text);font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;}
+    h1{text-align:center;font-size:22px;font-weight:600;margin:20px 0;color:var(--accent);}
+    #content{max-width:720px;margin:auto;padding:16px;}
+    .card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid var(--border);}
+    .item{border-top:1px solid var(--border);padding-top:12px;margin-top:12px;font-size:14px;line-height:1.5;}
+    .total{font-size:20px;font-weight:600;margin-top:16px;text-align:right;color:var(--accent);}
+    button{width:100%;padding:18px;font-size:18px;background:var(--accent);color:#000;border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:20px;}
     button:hover{opacity:.9;}
-
-    .msg{
-      background:var(--card);
-      padding:20px;
-      border-radius:12px;
-      text-align:center;
-      border:1px solid var(--border);
-    }
-
+    .msg{background:var(--card);padding:20px;border-radius:12px;text-align:center;border:1px solid var(--border);}
     .err{color:#ff6b6b;}
-    .small{
-      font-size:13px;
-      color:var(--muted);
-      text-align:center;
-      margin-top:12px;
-    }
+    .small{font-size:13px;color:var(--muted);text-align:center;margin-top:12px;}
   </style>
 </head>
 
@@ -125,6 +60,8 @@
   <script>
     const API_URL = '/api/pedido';
     const WHATSAPP_NUMBER = '5491123284020';
+    const PIXEL_ID = '2992234817833383';
+    const ACCESS_TOKEN = 'EAAQWMwBG8x8BQFVH2MBJBP9otMMAfQvz7mA4INhDxbUeb5jW9OmxGVCVG4KZCICbLfZAZApfHkC7HrJAY3kT7XxerGdAPAC7KiLUzXEsLquEk4hZCiZBjv46XQQU6yheBW7gUZBnqGVG23vNngC4KhjkYEl3CQZC522xx76wulX04y8Q4PpIYUrYoLK3UkkmLJd5wZDZD';
 
     const params = new URLSearchParams(window.location.search);
     const order_id = params.get('order_id');
@@ -142,7 +79,6 @@
       .then(r => r.json())
       .then(data => {
         if (!data.success) throw new Error(data.error || 'Pedido no encontrado');
-
         pedido = data.preview;
 
         content.innerHTML = `
@@ -181,32 +117,65 @@
         content.innerHTML = `<div class="msg err">${err.message}</div>`;
       });
 
+    // =================== FUNCION CONFIRMAR ===================
     function confirmarWhatsApp() {
       if (!pedido) return;
 
+      // 1️⃣ Mensaje de WhatsApp
       let msg = `Pedido confirmado\n\n`;
       msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
       msg += `👤 Nombre: ${pedido.nombre}\n\n`;
-
       pedido.items.forEach((i, idx) => {
         msg += `🥩 Picada ${idx + 1}\n`;
         msg += `• Modelo: ${i.modelo}\n`;
         msg += `• Tamaño: ${i.tamano} personas\n`;
         msg += `• Subtotal: $${Number(i.subtotal).toLocaleString()}\n\n`;
       });
-
       msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
       msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
 
-      // =================== DISPARAR EVENTO PURCHASE ===================
+      // 2️⃣ DISPARAR EVENTO PIXEL (browser-side)
       fbq('track', 'Purchase', {
         value: Number(pedido.total),
         currency: 'ARS',
       });
 
-      // Redirigir a WhatsApp
+      // 3️⃣ DISPARAR EVENTO CAPI (server-side) desde navegador
+      const userData = {
+        ph: [sha256(pedido.telefono || '')], // si tenés teléfono en pedido
+      };
+
+      const payload = {
+        data: [{
+          event_name: 'Purchase',
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: pedido.order_id,
+          action_source: 'website',
+          user_data: userData,
+          custom_data: {
+            value: Number(pedido.total),
+            currency: 'ARS'
+          }
+        }]
+      };
+
+      fetch(`https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      }).then(res => res.json())
+        .then(console.log)
+        .catch(console.error);
+
+      // 4️⃣ Redirigir a WhatsApp
       window.location.href =
         `https://wa.me/${WHATSAPP_NUMBER}?text=` + encodeURIComponent(msg);
+    }
+
+    // =================== SHA256 para CAPI ===================
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => ('0'+b.toString(16)).slice(-2)).join('');
     }
   </script>
 
