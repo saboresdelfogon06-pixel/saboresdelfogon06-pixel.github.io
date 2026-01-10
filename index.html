@@ -1155,50 +1155,49 @@ const payload = {
 };
 
 
-  try {
-    const res = await fetch(ORDERS_API_URL, {
-  method: 'POST',
-  body: JSON.stringify(payload)
-});
+try {
+  // 🔹 Enviar pedido a Google Sheets SIN esperar respuesta (evita CORS)
+  navigator.sendBeacon(
+    ORDERS_API_URL,
+    JSON.stringify(payload)
+  );
 
+  // 🔹 Usar el order_id ya generado localmente
+  const orderId = window.currentOrderId;
 
-    const data = await res.json();
-    if (!data.success) throw new Error(data.error || "Error desconocido");
+  // 🔹 Preparar mensaje WhatsApp
+  let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+  msg += `Pedido (ID: ${orderId}):\n`;
 
-    // 🔹 Preparar mensaje WhatsApp
-    let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-    msg += `Pedido (ID: ${data.order_id}):\n`;
+  picadas.forEach((p, i) => {
+    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+  });
 
-    picadas.forEach((p, i) => {
-      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-    });
+  msg += `\nEntrega:\n`;
+  msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+  msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+  msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
-    msg += `\nEntrega:\n`;
-    msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-    msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-    msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
+  // 🔹 Redirigir a WhatsApp
+  window.location.href =
+    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 
-    // 🔹 Redirigir a WhatsApp
-    window.location.href = 'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  // 🔹 Reset visual
+  resetForNextOrder();
 
-    // 🔹 Reset landing
-    resetForNextOrder();
 } catch (err) {
   console.error("ERROR COMPLETO:", err);
 
   alert(
     "Error técnico al enviar el pedido.\n\n" +
     "Detalle:\n" +
-    (err?.message || err) +
-    "\n\nAbrí la consola (F12) y copiá el error."
+    (err?.message || err)
   );
 
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
   payBtn.textContent = "Enviar pedido";
 }
- }
-
 
 
 function openModal(src){
