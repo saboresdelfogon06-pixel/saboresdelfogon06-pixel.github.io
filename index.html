@@ -1183,14 +1183,19 @@ const payload = {
 
     // 🔹 Reset landing
     resetForNextOrder();
+} catch (err) {
+  console.error("ERROR COMPLETO:", err);
 
-  } catch (err) {
-    console.error("Error enviando pedido:", err);
-    alert("Ocurrió un error al enviar tu pedido. Por favor intentá nuevamente.");
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Enviar pedido";
-  }
+  alert(
+    "Error técnico al enviar el pedido.\n\n" +
+    "Detalle:\n" +
+    (err?.message || err) +
+    "\n\nAbrí la consola (F12) y copiá el error."
+  );
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Enviar pedido";
 }
 
 
