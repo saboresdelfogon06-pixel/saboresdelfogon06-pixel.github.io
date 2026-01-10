@@ -157,11 +157,6 @@ function confirmarWhatsApp() {
     .then(console.log)
     .catch(err => console.warn('Worker Purchase error', err));
 
-  // 3️⃣ Disparar evento Pixel browser-side
-  fbq('track', 'Purchase', {
-    value: Number(pedido.total),
-    currency: 'ARS',
-  });
 
   // 4️⃣ Redirigir a WhatsApp
   window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
