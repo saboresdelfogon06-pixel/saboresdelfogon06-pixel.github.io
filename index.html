@@ -569,6 +569,16 @@ function generateToken() {
   return crypto.randomUUID().replace(/-/g,'');
 }
 
+ if (!sessionStorage.getItem('order_id')) {
+  sessionStorage.setItem('order_id', generateOrderId());
+}
+
+if (!sessionStorage.getItem('token')) {
+  sessionStorage.setItem('token', generateToken());
+}
+
+window.currentOrderId = sessionStorage.getItem('order_id');
+window.currentToken   = sessionStorage.getItem('token');
   // ===== MÓDULO 3: MEMORIA =====
 // ===== MÓDULO 3: MEMORIA =====
 function saveState(){
@@ -697,8 +707,15 @@ function resetForNextOrder() {
   saveState();
 
   // 🔹 Generar un nuevo token y order_id automáticamente al iniciar la nueva orden
-  window.currentOrderId = generateOrderId();
-  window.currentToken = generateToken();
+ sessionStorage.removeItem('order_id');
+sessionStorage.removeItem('token');
+
+sessionStorage.setItem('order_id', generateOrderId());
+sessionStorage.setItem('token', generateToken());
+
+window.currentOrderId = sessionStorage.getItem('order_id');
+window.currentToken   = sessionStorage.getItem('token');
+
 }
 
 
