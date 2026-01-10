@@ -51,133 +51,128 @@
 
 <body>
 
-  <h1>Confirmar pedido</h1>
+<h1>Confirmar pedido</h1>
 
-  <div id="content">
-    <div class="msg">Cargando pedido…</div>
-  </div>
+<div id="content">
+  <div class="msg">Cargando pedido…</div>
+</div>
 
-  <script>
-    const API_URL = '/api/pedido';
-    const WHATSAPP_NUMBER = '5491123284020';
-    const PIXEL_ID = '2992234817833383';
-    const ACCESS_TOKEN = 'EAAQWMwBG8x8BQFVH2MBJBP9otMMAfQvz7mA4INhDxbUeb5jW9OmxGVCVG4KZCICbLfZAZApfHkC7HrJAY3kT7XxerGdAPAC7KiLUzXEsLquEk4hZCiZBjv46XQQU6yheBW7gUZBnqGVG23vNngC4KhjkYEl3CQZC522xx76wulX04y8Q4PpIYUrYoLK3UkkmLJd5wZDZD';
+<script>
+const API_URL = '/api/pedido';
+const WHATSAPP_NUMBER = '5491123284020';
+const WORKER_URL = 'https://saboresdelfogon06.saboresdelfogon06.workers.dev/';
 
-    const params = new URLSearchParams(window.location.search);
-    const order_id = params.get('order_id');
-    const token = params.get('token');
+const params = new URLSearchParams(window.location.search);
+const order_id = params.get('order_id');
+const token = params.get('token');
 
-    const content = document.getElementById('content');
-    let pedido = null;
+const content = document.getElementById('content');
+let pedido = null;
 
-    if (!order_id || !token) {
-      content.innerHTML = `<div class="msg err">Link inválido o incompleto</div>`;
-      throw new Error('Link inválido');
-    }
+if (!order_id || !token) {
+  content.innerHTML = `<div class="msg err">Link inválido o incompleto</div>`;
+  throw new Error('Link inválido');
+}
 
-    fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
-      .then(r => r.json())
-      .then(data => {
-        if (!data.success) throw new Error(data.error || 'Pedido no encontrado');
-        pedido = data.preview;
+// ==================== CARGAR PEDIDO ====================
+fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
+  .then(r => r.json())
+  .then(data => {
+    if (!data.success) throw new Error(data.error || 'Pedido no encontrado');
+    pedido = data.preview;
 
-        content.innerHTML = `
-          <div class="card">
-            <b>Pedido ID:</b> ${pedido.order_id}<br>
-            <b>Nombre:</b> ${pedido.nombre}
+    content.innerHTML = `
+      <div class="card">
+        <b>Pedido ID:</b> ${pedido.order_id}<br>
+        <b>Nombre:</b> ${pedido.nombre}
+      </div>
+
+      <div class="card">
+        ${pedido.items.map((i, idx) => `
+          <div class="item">
+            <b>Picada ${idx + 1}</b><br>
+            Modelo: ${i.modelo}<br>
+            Tamaño: ${i.tamano} personas<br>
+            Subtotal: $${Number(i.subtotal).toLocaleString()}
           </div>
+        `).join('')}
 
-          <div class="card">
-            ${pedido.items.map((i, idx) => `
-              <div class="item">
-                <b>Picada ${idx + 1}</b><br>
-                Modelo: ${i.modelo}<br>
-                Tamaño: ${i.tamano} personas<br>
-                Subtotal: $${Number(i.subtotal).toLocaleString()}
-              </div>
-            `).join('')}
+        <div class="item">
+          Envío: $${Number(pedido.envio).toLocaleString()}
+        </div>
 
-            <div class="item">
-              Envío: $${Number(pedido.envio).toLocaleString()}
-            </div>
+        <div class="total">
+          Total: $${Number(pedido.total).toLocaleString()}
+        </div>
+      </div>
 
-            <div class="total">
-              Total: $${Number(pedido.total).toLocaleString()}
-            </div>
-          </div>
+      <button onclick="confirmarWhatsApp()">Confirmar pedido</button>
 
-          <button onclick="confirmarWhatsApp()">Confirmar pedido</button>
+      <p class="small">
+        Al confirmar se enviará el pedido por WhatsApp para finalizar la coordinación.
+      </p>
+    `;
+  })
+  .catch(err => {
+    content.innerHTML = `<div class="msg err">${err.message}</div>`;
+  });
 
-          <p class="small">
-            Al confirmar se enviará el pedido por WhatsApp para finalizar la coordinación.
-          </p>
-        `;
-      })
-      .catch(err => {
-        content.innerHTML = `<div class="msg err">${err.message}</div>`;
-      });
+// =================== FUNCION CONFIRMAR ====================
+function confirmarWhatsApp() {
+  if (!pedido) return;
 
-    // =================== FUNCION CONFIRMAR ===================
-    function confirmarWhatsApp() {
-      if (!pedido) return;
+  // 1️⃣ Preparar mensaje WhatsApp
+  let msg = `Pedido confirmado\n\n`;
+  msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
+  msg += `👤 Nombre: ${pedido.nombre}\n\n`;
+  pedido.items.forEach((i, idx) => {
+    msg += `🥩 Picada ${idx + 1}\n`;
+    msg += `• Modelo: ${i.modelo}\n`;
+    msg += `• Tamaño: ${i.tamano} personas\n`;
+    msg += `• Subtotal: $${Number(i.subtotal).toLocaleString()}\n\n`;
+  });
+  msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
+  msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
 
-      // 1️⃣ Mensaje de WhatsApp
-      let msg = `Pedido confirmado\n\n`;
-      msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
-      msg += `👤 Nombre: ${pedido.nombre}\n\n`;
-      pedido.items.forEach((i, idx) => {
-        msg += `🥩 Picada ${idx + 1}\n`;
-        msg += `• Modelo: ${i.modelo}\n`;
-        msg += `• Tamaño: ${i.tamano} personas\n`;
-        msg += `• Subtotal: $${Number(i.subtotal).toLocaleString()}\n\n`;
-      });
-      msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
-      msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
+  // 2️⃣ Enviar evento Purchase al Worker
+  const purchasePayload = {
+    action: 'purchase',
+    order_id: pedido.order_id,
+    token: token,
+    clientName: pedido.nombre,
+    total: pedido.total,
+    currency: 'ARS',
+    items: pedido.items.map(i => ({
+      model: i.modelo,
+      size: i.tamano,
+      price: i.subtotal
+    }))
+  };
 
-      // 2️⃣ DISPARAR EVENTO PIXEL (browser-side)
-      fbq('track', 'Purchase', {
-        value: Number(pedido.total),
-        currency: 'ARS',
-      });
+  fetch(WORKER_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(purchasePayload)
+  }).then(res => res.json())
+    .then(console.log)
+    .catch(err => console.warn('Worker Purchase error', err));
 
-      // 3️⃣ DISPARAR EVENTO CAPI (server-side) desde navegador
-      const userData = {
-        ph: [sha256(pedido.telefono || '')], // si tenés teléfono en pedido
-      };
+  // 3️⃣ Disparar evento Pixel browser-side
+  fbq('track', 'Purchase', {
+    value: Number(pedido.total),
+    currency: 'ARS',
+  });
 
-      const payload = {
-        data: [{
-          event_name: 'Purchase',
-          event_time: Math.floor(Date.now() / 1000),
-          event_id: pedido.order_id,
-          action_source: 'website',
-          user_data: userData,
-          custom_data: {
-            value: Number(pedido.total),
-            currency: 'ARS'
-          }
-        }]
-      };
+  // 4️⃣ Redirigir a WhatsApp
+  window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
 
-      fetch(`https://graph.facebook.com/v18.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      }).then(res => res.json())
-        .then(console.log)
-        .catch(console.error);
-
-      // 4️⃣ Redirigir a WhatsApp
-      window.location.href =
-        `https://wa.me/${WHATSAPP_NUMBER}?text=` + encodeURIComponent(msg);
-    }
-
-    // =================== SHA256 para CAPI ===================
-    async function sha256(str) {
-      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => ('0'+b.toString(16)).slice(-2)).join('');
-    }
-  </script>
+// =================== SHA256 helper ====================
+async function sha256(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => ('0'+b.toString(16)).slice(-2)).join('');
+}
+</script>
 
 </body>
 </html>
