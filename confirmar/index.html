@@ -16,12 +16,14 @@
   s.parentNode.insertBefore(t,s)}
   (window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '2992234817833383'); // Tu Pixel ID
+  fbq('init', '2992234817833383');
   fbq('track', 'PageView');
   </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=2992234817833383&ev=PageView&noscript=1"
-  /></noscript>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=2992234817833383&ev=PageView&noscript=1"
+    />
+  </noscript>
   <!-- =================== FIN META PIXEL =================== -->
 
   <style>
@@ -58,8 +60,8 @@
 
 <script>
 const API_URL = 'https://saboresfogon.com/api/pedido';
-const WHATSAPP_NUMBER = '5491123284020';
 const WORKER_URL = 'https://saboresfogon.com/api/pedido';
+const WHATSAPP_NUMBER = '5491123284020';
 
 const params = new URLSearchParams(window.location.search);
 const order_id = params.get('order_id');
@@ -83,21 +85,21 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
     content.innerHTML = `
       <div class="card">
         <b>Pedido ID:</b> ${pedido.order_id}<br>
-        <b>Nombre:</b> ${pedido.nombre}
+        <b>Nombre:</b> ${pedido.clientName}
       </div>
 
       <div class="card">
         ${pedido.items.map((i, idx) => `
           <div class="item">
             <b>Picada ${idx + 1}</b><br>
-            Modelo: ${i.modelo}<br>
-            Tamaño: ${i.tamano} personas<br>
-            Subtotal: $${Number(i.subtotal).toLocaleString()}
+            Modelo: ${i.model}<br>
+            Tamaño: ${i.size} personas<br>
+            Subtotal: $${Number(i.price).toLocaleString()}
           </div>
         `).join('')}
 
         <div class="item">
-          Envío: $${Number(pedido.envio).toLocaleString()}
+          Envío: $0
         </div>
 
         <div class="total">
@@ -115,41 +117,40 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
   .catch(err => {
     content.innerHTML = `<div class="msg err">${err.message}</div>`;
   });
+
+// ==================== CONFIRMAR ====================
 async function confirmarWhatsApp() {
   if (!pedido) return;
 
-  // 1️⃣ Evento CLIENTE (Pixel)
+  // 1️⃣ Pixel (browser)
   fbq('track', 'Purchase', {
     value: pedido.total,
     currency: 'ARS'
   });
 
-  // 2️⃣ Preparar mensaje WhatsApp
+  // 2️⃣ Mensaje WhatsApp
   let msg = `Pedido confirmado\n\n`;
   msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
-  msg += `👤 Nombre: ${pedido.nombre}\n\n`;
+  msg += `👤 Nombre: ${pedido.clientName}\n\n`;
+
   pedido.items.forEach((i, idx) => {
     msg += `🥩 Picada ${idx + 1}\n`;
-    msg += `• Modelo: ${i.modelo}\n`;
-    msg += `• Tamaño: ${i.tamano} personas\n`;
-    msg += `• Subtotal: $${Number(i.subtotal).toLocaleString()}\n\n`;
+    msg += `• Modelo: ${i.model}\n`;
+    msg += `• Tamaño: ${i.size} personas\n`;
+    msg += `• Subtotal: $${Number(i.price).toLocaleString()}\n\n`;
   });
-  msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
+
   msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
 
-  // 3️⃣ Enviar Purchase al Worker (CAPI)
+  // 3️⃣ CAPI
   const purchasePayload = {
     action: 'purchase',
     order_id: pedido.order_id,
     token: token,
-    clientName: pedido.nombre,
+    clientName: pedido.clientName,
     total: pedido.total,
     currency: 'ARS',
-    items: pedido.items.map(i => ({
-      model: i.modelo,
-      size: i.tamano,
-      price: i.subtotal
-    })),
+    items: pedido.items,
     fbc: getCookie('_fbc'),
     fbp: getCookie('_fbp'),
     test_event_code: 'TEST48963'
@@ -170,26 +171,20 @@ async function confirmarWhatsApp() {
       return;
     }
 
-    // 4️⃣ Redirigir SOLO cuando el Worker responde OK
+    // 4️⃣ Redirect WhatsApp
     window.location.href =
-      `https://wa.me/${5491123284020R}?text=${encodeURIComponent(msg)}`;
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
   } catch (err) {
-    console.warn('Worker Purchase error', err);
+    console.warn('Worker error', err);
     alert('Error técnico al confirmar el pedido');
   }
 }
 
-// =================== Helper: Leer cookies ====================
+// =================== Cookies ====================
 function getCookie(name) {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
   return match ? match[2] : null;
-}
-
-// =================== SHA256 helper ====================
-async function sha256(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => ('0'+b.toString(16)).slice(-2)).join('');
 }
 </script>
 
