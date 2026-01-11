@@ -1166,13 +1166,13 @@ async function goWA() {
     num_items: picadas.length
   });
 
- const fbIds = getFacebookIdentifiers();
+const fbIds = getFacebookIdentifiers();
 
 fetch('https://saboresfogon.com/api/pedido', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
-    action: 'purchase',  // 🟢 Aquí se dispara la compra CAPI
+    action: 'initiate',          // ✅ CORRECTO
     order_id: window.currentOrderId,
     token: window.currentToken,
     clientName: clientName.value,
@@ -1183,26 +1183,8 @@ fetch('https://saboresfogon.com/api/pedido', {
       size: p.size,
       price: p.price
     })),
-    fbc: fbIds.fbc,
-    fbp: fbIds.fbp
-  })
-}).catch(err => console.warn('Purchase CAPI error', err));
-
-fetch('https://saboresfogon.com/api/pedido', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    action: 'initiate',
-    order_id: window.currentOrderId,
-    token: window.currentToken,
-    clientName: clientName.value,
-    total: total,
-    currency: 'ARS',
-    items: picadas.map(p => ({
-      model: p.model,
-      size: p.size,
-      price: p.price
-    }))
+    fbc: fbIds.fbc,              // ✅ AGREGAR
+    fbp: fbIds.fbp               // ✅ AGREGAR
   })
 }).catch(err => console.warn('InitiateCheckout error', err));
 
