@@ -115,12 +115,16 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
   .catch(err => {
     content.innerHTML = `<div class="msg err">${err.message}</div>`;
   });
-
-// =================== FUNCION CONFIRMAR ====================
-function confirmarWhatsApp() {
+async function confirmarWhatsApp() {
   if (!pedido) return;
 
-  // 1️⃣ Preparar mensaje WhatsApp
+  // 1️⃣ Evento CLIENTE (Pixel)
+  fbq('track', 'Purchase', {
+    value: pedido.total,
+    currency: 'ARS'
+  });
+
+  // 2️⃣ Preparar mensaje WhatsApp
   let msg = `Pedido confirmado\n\n`;
   msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
   msg += `👤 Nombre: ${pedido.nombre}\n\n`;
@@ -133,7 +137,7 @@ function confirmarWhatsApp() {
   msg += `🚚 Envío: $${Number(pedido.envio).toLocaleString()}\n`;
   msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
 
-  // 2️⃣ Enviar evento Purchase al Worker con fbc y fbp
+  // 3️⃣ Enviar Purchase al Worker (CAPI)
   const purchasePayload = {
     action: 'purchase',
     order_id: pedido.order_id,
@@ -147,19 +151,33 @@ function confirmarWhatsApp() {
       price: i.subtotal
     })),
     fbc: getCookie('_fbc'),
-    fbp: getCookie('_fbp')
+    fbp: getCookie('_fbp'),
+    test_event_code: 'TEST48963'
   };
 
-  fetch(WORKER_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(purchasePayload)
-  }).then(res => res.json())
-    .then(console.log)
-    .catch(err => console.warn('Worker Purchase error', err));
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(purchasePayload)
+    });
 
-  // 3️⃣ Redirigir a WhatsApp
-  window.location.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    const json = await res.json();
+    console.log('Worker Purchase:', json);
+
+    if (!json.success) {
+      alert('Error confirmando pedido');
+      return;
+    }
+
+    // 4️⃣ Redirigir SOLO cuando el Worker responde OK
+    window.location.href =
+      `https://wa.me/${5491123284020R}?text=${encodeURIComponent(msg)}`;
+
+  } catch (err) {
+    console.warn('Worker Purchase error', err);
+    alert('Error técnico al confirmar el pedido');
+  }
 }
 
 // =================== Helper: Leer cookies ====================
