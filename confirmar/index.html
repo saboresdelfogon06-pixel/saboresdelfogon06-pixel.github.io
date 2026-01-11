@@ -82,38 +82,45 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
     if (!data.success) throw new Error(data.error || 'Pedido no encontrado');
     pedido = data.preview;
 
-    content.innerHTML = `
-      <div class="card">
-        <b>Pedido ID:</b> ${pedido.order_id}<br>
-        <b>Nombre:</b> ${pedido.clientName}
+  const estado = pedido.status === "confirmed";
+
+content.innerHTML = `
+  <div class="card">
+    <b>Pedido ID:</b> ${pedido.order_id}<br>
+    <b>Nombre:</b> ${pedido.clientName}<br>
+    <b>Estado:</b>
+    <span style="color:${estado ? '#4caf50' : '#ffb300'}">
+      ${estado ? 'Pedido confirmado' : 'Pendiente de confirmación'}
+    </span>
+  </div>
+
+  <div class="card">
+    ${pedido.items.map((i, idx) => `
+      <div class="item">
+        <b>Picada ${idx + 1}</b><br>
+        Modelo: ${i.model}<br>
+        Tamaño: ${i.size} personas<br>
+        Subtotal: $${Number(i.price).toLocaleString()}
       </div>
+    `).join('')}
 
-      <div class="card">
-        ${pedido.items.map((i, idx) => `
-          <div class="item">
-            <b>Picada ${idx + 1}</b><br>
-            Modelo: ${i.model}<br>
-            Tamaño: ${i.size} personas<br>
-            Subtotal: $${Number(i.price).toLocaleString()}
-          </div>
-        `).join('')}
+    <div class="total">
+      Total: $${Number(pedido.total).toLocaleString()}
+    </div>
+  </div>
 
-        <div class="item">
-          Envío: $0
-        </div>
+  ${
+    estado
+      ? `<div class="msg">✅ Este pedido ya fue confirmado.</div>`
+      : `<button onclick="confirmarPedido()">Confirmar pedido</button>`
+  }
 
-        <div class="total">
-          Total: $${Number(pedido.total).toLocaleString()}
-        </div>
-      </div>
-
-      <button onclick="WhatsApp()"> pedido</button>
-
-      <p class="small">
-        Al confirmar se enviará el pedido por WhatsApp para finalizar la coordinación.
-      </p>
-    `;
-  })
+  <p class="small">
+    ${estado
+      ? 'Este comprobante sirve como registro interno del pedido.'
+      : 'Confirmá el pedido para finalizar el registro.'}
+  </p>
+`;
   .catch(err => {
     content.innerHTML = `<div class="msg err">${err.message}</div>`;
   });
