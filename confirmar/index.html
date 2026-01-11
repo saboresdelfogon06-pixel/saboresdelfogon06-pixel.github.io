@@ -52,7 +52,7 @@
 
 <body>
 
-<h1>Confirmar pedido</h1>
+<h1> pedido</h1>
 
 <div id="content">
   <div class="msg">Cargando pedido…</div>
@@ -107,7 +107,7 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
         </div>
       </div>
 
-      <button onclick="confirmarWhatsApp()">Confirmar pedido</button>
+      <button onclick="WhatsApp()"> pedido</button>
 
       <p class="small">
         Al confirmar se enviará el pedido por WhatsApp para finalizar la coordinación.
@@ -119,30 +119,15 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
   });
 
 // ==================== CONFIRMAR ====================
-async function confirmarWhatsApp() {
+async function confirmarPedido() {
   if (!pedido) return;
 
-  // 1️⃣ Pixel (browser)
+  // Pixel browser
   fbq('track', 'Purchase', {
     value: pedido.total,
     currency: 'ARS'
   });
 
-  // 2️⃣ Mensaje WhatsApp
-  let msg = `Pedido confirmado\n\n`;
-  msg += `🧾 Pedido ID: ${pedido.order_id}\n`;
-  msg += `👤 Nombre: ${pedido.clientName}\n\n`;
-
-  pedido.items.forEach((i, idx) => {
-    msg += `🥩 Picada ${idx + 1}\n`;
-    msg += `• Modelo: ${i.model}\n`;
-    msg += `• Tamaño: ${i.size} personas\n`;
-    msg += `• Subtotal: $${Number(i.price).toLocaleString()}\n\n`;
-  });
-
-  msg += `💰 Total: $${Number(pedido.total).toLocaleString()}`;
-
-  // 3️⃣ CAPI
   const purchasePayload = {
     action: 'purchase',
     order_id: pedido.order_id,
@@ -163,19 +148,15 @@ async function confirmarWhatsApp() {
     });
 
     const json = await res.json();
-    console.log('Worker Purchase:', json);
 
-    if (!json.success) {
-      alert('Error confirmando pedido');
-      return;
+    if (json.stage === "already_confirmed") {
+      alert("Este pedido ya estaba confirmado.");
     }
 
-    // 4️⃣ Redirect WhatsApp
-    window.location.href =
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    // 🔄 Recargar para mostrar estado confirmado
+    location.reload();
 
   } catch (err) {
-    console.warn('Worker error', err);
     alert('Error técnico al confirmar el pedido');
   }
 }
