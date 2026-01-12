@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -19,6 +20,12 @@
   fbq('init', '2992234817833383');
   fbq('track', 'PageView');
   </script>
+  <noscript>
+    <img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=2992234817833383&ev=PageView&noscript=1"
+    />
+  </noscript>
+  <!-- =================== FIN META PIXEL =================== -->
 
   <style>
     :root{
@@ -30,23 +37,23 @@
       --border:#2a2a2a;
     }
     *{box-sizing:border-box;}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui;}
-    h1{text-align:center;font-size:22px;margin:20px 0;color:var(--accent);}
+    body{margin:0;background:var(--bg);color:var(--text);font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;}
+    h1{text-align:center;font-size:22px;font-weight:600;margin:20px 0;color:var(--accent);}
     #content{max-width:720px;margin:auto;padding:16px;}
     .card{background:var(--card);border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid var(--border);}
-    .item{border-top:1px solid var(--border);padding-top:12px;margin-top:12px;font-size:14px;}
+    .item{border-top:1px solid var(--border);padding-top:12px;margin-top:12px;font-size:14px;line-height:1.5;}
     .total{font-size:20px;font-weight:600;margin-top:16px;text-align:right;color:var(--accent);}
-    button{width:100%;padding:18px;font-size:18px;background:var(--accent);border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:14px;}
-    input{width:100%;padding:8px;margin-top:4px;border-radius:6px;border:1px solid var(--border);background:#111;color:var(--text);}
-    .msg{text-align:center;padding:18px;border-radius:12px;background:var(--card);}
+    button{width:100%;padding:18px;font-size:18px;background:var(--accent);color:#000;border:none;border-radius:10px;font-weight:600;cursor:pointer;margin-top:20px;}
+    button:hover{opacity:.9;}
+    .msg{background:var(--card);padding:20px;border-radius:12px;text-align:center;border:1px solid var(--border);}
     .err{color:#ff6b6b;}
-    .small{text-align:center;font-size:13px;color:var(--muted);}
+    .small{font-size:13px;color:var(--muted);text-align:center;margin-top:12px;}
   </style>
 </head>
 
 <body>
 
-<h1>Estado del pedido</h1>
+<h1> Estado del pedido</h1>
 
 <div id="content">
   <div class="msg">Cargando pedido…</div>
@@ -55,7 +62,7 @@
 <script>
 const API_URL = 'https://saboresfogon.com/api/pedido';
 const WORKER_URL = 'https://saboresfogon.com/api/pedido';
-const SHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxe8O8SvhDS0-21TRQgFyxTOCsMPlnuF5sdbdtzIt4wLnY92P4Y9ykQp-u30mmTGa5dNw/exec';
+const WHATSAPP_NUMBER = '5491123284020';
 
 const params = new URLSearchParams(window.location.search);
 const order_id = params.get('order_id');
@@ -65,25 +72,24 @@ const content = document.getElementById('content');
 let pedido = null;
 
 if (!order_id || !token) {
-  content.innerHTML = '<div class="msg err">Link inválido</div>';
+  content.innerHTML = `<div class="msg err">Link inválido o incompleto</div>`;
   throw new Error('Link inválido');
 }
-
 fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
   .then(r => r.json())
   .then(data => {
-    if (!data.success) throw new Error(data.error);
+    if (!data.success) throw new Error(data.error || 'Pedido no encontrado');
     pedido = data.preview || data.pedido;
 
-    const confirmado = pedido.estado === 'CONFIRMADO';
+    const estado = pedido.status === "confirmed";
 
     content.innerHTML = `
       <div class="card">
-        <b>Pedido:</b> ${pedido.order_id}<br>
-        <b>Nombre:</b> ${pedido.nombre}<br>
+        <b>Pedido ID:</b> ${pedido.order_id}<br>
+        <b>Nombre:</b> ${pedido.clientName}<br>
         <b>Estado:</b>
-        <span style="color:${confirmado ? '#4caf50' : '#ffb300'}">
-          ${confirmado ? 'Confirmado' : 'Pendiente'}
+        <span style="color:${estado ? '#4caf50' : '#ffb300'}">
+          ${estado ? 'Pedido confirmado' : 'Pendiente de confirmación'}
         </span>
       </div>
 
@@ -91,20 +97,9 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
         ${pedido.items.map((i, idx) => `
           <div class="item">
             <b>Picada ${idx + 1}</b><br>
-
-            Modelo:
-            ${confirmado
-              ? i.modelo
-              : `<input data-idx="${idx}" data-field="modelo" value="${i.modelo}">`
-            }
-
-            Tamaño:
-            ${confirmado
-              ? i.tamano + ' personas'
-              : `<input type="number" min="1" data-idx="${idx}" data-field="tamano" value="${i.tamano}">`
-            }
-
-            <div>Subtotal: $${Number(i.subtotal).toLocaleString()}</div>
+            Modelo: ${i.model}<br>
+            Tamaño: ${i.size} personas<br>
+            Subtotal: $${Number(i.price).toLocaleString()}
           </div>
         `).join('')}
 
@@ -113,17 +108,16 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
         </div>
       </div>
 
-      ${confirmado ? `
-        <div class="msg">✅ Pedido confirmado</div>
-      ` : `
-        <button onclick="guardarCambios()">Guardar cambios</button>
-        <button onclick="confirmarPedido()">Confirmar pedido</button>
-      `}
+      ${
+        estado
+          ? `<div class="msg">✅ Este pedido ya fue confirmado.</div>`
+          : `<button onclick="confirmarPedido()">Confirmar pedido</button>`
+      }
 
       <p class="small">
-        ${confirmado
-          ? 'Este pedido ya no puede modificarse.'
-          : 'Podés editar el pedido antes de confirmarlo.'}
+        ${estado
+          ? 'Este comprobante sirve como registro interno del pedido.'
+          : 'Confirmá el pedido para finalizar el registro.'}
       </p>
     `;
   })
@@ -131,65 +125,47 @@ fetch(`${API_URL}?order_id=${order_id}&token=${token}`)
     content.innerHTML = `<div class="msg err">${err.message}</div>`;
   });
 
-// ===== GUARDAR CAMBIOS EN SHEET =====
-async function guardarCambios() {
-  const inputs = document.querySelectorAll('[data-idx]');
-  const picadas = {};
-
-  inputs.forEach(i => {
-    const idx = i.dataset.idx;
-    const field = i.dataset.field;
-    picadas[idx] ??= {};
-    picadas[idx][field] = i.value;
-  });
-
-  const payload = {
-    action: 'update',
-    order_id,
-    token,
-    picadas: Object.values(picadas)
-  };
-
-  const res = await fetch(SHEET_API_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload)
-  });
-
-  const json = await res.json();
-  if (!json.success) {
-    alert('Error al guardar cambios');
-    return;
-  }
-
-  alert('Cambios guardados correctamente');
-}
-
-// ===== CONFIRMAR (CAPI) =====
+// ==================== CONFIRMAR ====================
 async function confirmarPedido() {
-  const payload = {
+  if (!pedido) return;
+
+  const purchasePayload = {
     action: 'purchase',
     order_id: pedido.order_id,
-    token,
+    token: token,
+    clientName: pedido.clientName,
     total: pedido.total,
     currency: 'ARS',
     items: pedido.items,
     fbc: getCookie('_fbc'),
-    fbp: getCookie('_fbp')
+    fbp: getCookie('_fbp'),
   };
 
-  await fetch(WORKER_URL, {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(purchasePayload)
+    });
 
-  location.reload();
+    const json = await res.json();
+
+    if (json.stage === "already_confirmed") {
+      alert("Este pedido ya estaba confirmado.");
+    }
+
+    // 🔄 Recargar para mostrar estado confirmado
+    location.reload();
+
+  } catch (err) {
+    alert('Error técnico al confirmar el pedido');
+  }
 }
 
+// =================== Cookies ====================
 function getCookie(name) {
-  const m = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
-  return m ? m[2] : null;
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
 }
 </script>
 
