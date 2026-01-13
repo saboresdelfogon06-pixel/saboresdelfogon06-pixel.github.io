@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -500,7 +504,7 @@ button.selected{
 
 </div>
 <script>
-const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbw_bSTjI-6qoUImI6lrqMJTlk81iT8vvFa7Ek_qRfjYjzeg4gq3FiuAaSzmL82LnBkYDg/exec';
 const clientName = document.getElementById('clientName');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
@@ -1146,85 +1150,86 @@ async function goWA() {
     num_items: picadas.length
   });
 
-  const fbIds = getFacebookIdentifiers();
+const fbIds = getFacebookIdentifiers();
 
-  // 🔹 Evento backend (no bloquea)
-  fetch('https://saboresfogon.com/api/pedido', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'initiate',
-      order_id: window.currentOrderId,
-      token: window.currentToken,
-      clientName: clientName.value,
-      total: total,
-      currency: 'ARS',
-      items: picadas.map(p => ({
-        model: p.model,
-        size: p.size,
-        price: p.price
-      })),
-      fbc: fbIds.fbc,
-      fbp: fbIds.fbp
-    })
-  }).catch(err => console.warn('InitiateCheckout error', err));
-
-  // 🔹 Payload para Google Sheets
-  const payload = {
+fetch('https://saboresfogon.com/api/pedido', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    action: 'initiate',          // ✅ CORRECTO
     order_id: window.currentOrderId,
     token: window.currentToken,
-    nombre: clientName.value,
-    envio: ship,
-    picadas: picadas.map(p => ({
+    clientName: clientName.value,
+    total: total,
+    currency: 'ARS',
+    items: picadas.map(p => ({
       model: p.model,
       size: p.size,
       price: p.price
-    }))
-  };
+    })),
+    fbc: fbIds.fbc,              // ✅ AGREGAR
+    fbp: fbIds.fbp               // ✅ AGREGAR
+  })
+}).catch(err => console.warn('InitiateCheckout error', err));
+  
+const payload = {
+  order_id: window.currentOrderId,
+  token: window.currentToken,
+  nombre: clientName.value,
+  envio: ship,
+  picadas: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  }))
+};
 
-  try {
-    // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
-    fetch(ORDERS_API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: new URLSearchParams({
-        data: JSON.stringify(payload)
-      })
-    });
+try {
+fetch(ORDERS_API_URL, {
+  method: 'POST',
+  mode: 'no-cors',   // 🔥 ESTO ES LO QUE FALTABA
+  body: JSON.stringify(payload)
+});
+  
+// 🔹 Usar el order_id ya generado localmente
+const orderId = window.currentOrderId;
 
-    const orderId = window.currentOrderId;
+// 🔹 Preparar mensaje WhatsApp
+let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+msg += `Pedido (ID: ${orderId}):\n`;
 
-    let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-    msg += `Pedido (ID: ${orderId}):\n`;
+picadas.forEach((p, i) => {
+  msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+});
 
-    picadas.forEach((p, i) => {
-      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-    });
+msg += `\nEntrega:\n`;
+msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
-    msg += `\nEntrega:\n`;
-    msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-    msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-    msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
+// 🔹 Redirigir a WhatsApp
+window.location.href =
+  'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
 
-    setTimeout(() => {
-      window.location.href =
-        'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-    }, 300);
+// 🔹 Reset visual
+resetForNextOrder();
 
-    resetForNextOrder();
 
-  } catch (err) {
-    console.error("ERROR goWA:", err);
-    alert("Error técnico al enviar el pedido");
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Enviar pedido";
-  }
+} catch (err) {
+  console.error("ERROR COMPLETO:", err);
+
+  alert(
+    "Error técnico al enviar el pedido.\n\n" +
+    "Detalle:\n" +
+    (err?.message || err)
+  );
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Enviar pedido";
+}
 }
 
-  
 function openModal(src){
  modalImg.src=src;
  imgModal.style.display="flex";
@@ -1400,29 +1405,20 @@ window.addEventListener('load', () => {
     }
 
     !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){
-      n.callMethod ?
-        n.callMethod.apply(n,arguments) :
-        n.queue.push(arguments)
-    };
-    if(!f._fbq)f._fbq=n;
-    n.push=n;
-    n.loaded=!0;
-    n.version='2.0';
-    n.queue=[];
-    t=b.createElement(e);t.async=!0;
-    t.src=v;
-    s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)
-    }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}
+    (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
     fbq('init','2992234817833383');
     fbq('track','PageView');
 
-  }, 1200);
+  }, 1200); // ⏱ delay seguro
 });
 </script>
-
 
 </body>
 </html>
