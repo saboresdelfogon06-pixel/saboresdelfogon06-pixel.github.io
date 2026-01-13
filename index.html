@@ -1146,77 +1146,84 @@ async function goWA() {
     num_items: picadas.length
   });
 
-const fbIds = getFacebookIdentifiers();
+  const fbIds = getFacebookIdentifiers();
 
-fetch('https://saboresfogon.com/api/pedido', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    action: 'initiate',          // ✅ CORRECTO
+  // 🔹 Evento backend (no bloquea)
+  fetch('https://saboresfogon.com/api/pedido', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'initiate',
+      order_id: window.currentOrderId,
+      token: window.currentToken,
+      clientName: clientName.value,
+      total: total,
+      currency: 'ARS',
+      items: picadas.map(p => ({
+        model: p.model,
+        size: p.size,
+        price: p.price
+      })),
+      fbc: fbIds.fbc,
+      fbp: fbIds.fbp
+    })
+  }).catch(err => console.warn('InitiateCheckout error', err));
+
+  // 🔹 Payload para Google Sheets
+  const payload = {
     order_id: window.currentOrderId,
     token: window.currentToken,
-    clientName: clientName.value,
-    total: total,
-    currency: 'ARS',
-    items: picadas.map(p => ({
+    nombre: clientName.value,
+    envio: ship,
+    picadas: picadas.map(p => ({
       model: p.model,
       size: p.size,
       price: p.price
-    })),
-    fbc: fbIds.fbc,              // ✅ AGREGAR
-    fbp: fbIds.fbp               // ✅ AGREGAR
-  })
-}).catch(err => console.warn('InitiateCheckout error', err));
-  
-const payload = {
-  order_id: window.currentOrderId,
-  token: window.currentToken,
-  nombre: clientName.value,
-  envio: ship,
-  picadas: picadas.map(p => ({
-    model: p.model,
-    size: p.size,
-    price: p.price
-  }))
-};
+    }))
+  };
 
-try {
-  navigator.sendBeacon(
-    ORDERS_API_URL,
-    new URLSearchParams({
-      data: JSON.stringify(payload)
-    })
-  );
+  try {
+    // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
+    fetch(ORDERS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: new URLSearchParams({
+        data: JSON.stringify(payload)
+      })
+    });
 
-  const orderId = window.currentOrderId;
+    const orderId = window.currentOrderId;
 
-  let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido (ID: ${orderId}):\n`;
+    let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+    msg += `Pedido (ID: ${orderId}):\n`;
 
-  picadas.forEach((p, i) => {
-    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-  });
+    picadas.forEach((p, i) => {
+      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+    });
 
-  msg += `\nEntrega:\n`;
-  msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-  msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-  msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
+    msg += `\nEntrega:\n`;
+    msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+    msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+    msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
-  setTimeout(() => {
-    window.location.href =
-      'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-  }, 300);
+    setTimeout(() => {
+      window.location.href =
+        'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+    }, 300);
 
-  resetForNextOrder();
+    resetForNextOrder();
 
-} catch (err) {
-  console.error("ERROR goWA:", err);
-  alert("Error técnico al enviar el pedido");
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Enviar pedido";
+  } catch (err) {
+    console.error("ERROR goWA:", err);
+    alert("Error técnico al enviar el pedido");
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Enviar pedido";
+  }
 }
-}
+
   
 function openModal(src){
  modalImg.src=src;
