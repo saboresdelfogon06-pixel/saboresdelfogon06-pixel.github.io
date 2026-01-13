@@ -1189,14 +1189,7 @@ fetch(ORDERS_API_URL, {
   mode: 'no-cors',   // 🔥 ESTO ES LO QUE FALTABA
   body: JSON.stringify(payload)
 });
-
-
-const result = await res.json();
-
-if (!result.success) {
-  throw new Error(result.error || 'Error escribiendo en Google Sheets');
-}
-
+  
 // 🔹 Usar el order_id ya generado localmente
 const orderId = window.currentOrderId;
 
