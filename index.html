@@ -1184,20 +1184,13 @@ const payload = {
 };
 
 try {
-const formData = new URLSearchParams();
-formData.append('data', JSON.stringify(payload));
-
-const res = await fetch(ORDERS_API_URL, {
-  method: 'POST',
-  body: formData
-});
-  
-
-  const result = await res.json();
-
-  if (!result.success) {
-    throw new Error(result.error || 'No se pudo escribir en el Sheet');
-  }
+  // 1️⃣ ENVIAR A GOOGLE SHEET (NO BLOQUEANTE, NO SE CANCELA)
+  navigator.sendBeacon(
+    ORDERS_API_URL,
+    new URLSearchParams({
+      data: JSON.stringify(payload)
+    })
+  );
 
   // 2️⃣ ARMAR MENSAJE WHATSAPP
   const orderId = window.currentOrderId;
@@ -1214,12 +1207,23 @@ const res = await fetch(ORDERS_API_URL, {
   msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
   msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
-  // 3️⃣ RECIÉN AHORA REDIRIGIR
-  window.location.href =
-    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  // 3️⃣ ESPERAR UN POCO Y REDIRIGIR (CLAVE)
+  setTimeout(() => {
+    window.location.href =
+      'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  }, 300);
 
   // 4️⃣ RESET
   resetForNextOrder();
+
+} catch (err) {
+  console.error(err);
+  alert("Error técnico al enviar el pedido");
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Enviar pedido";
+}
+
 
 } catch (err) {
   console.error("ERROR COMPLETO:", err);
