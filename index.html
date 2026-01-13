@@ -1203,11 +1203,13 @@ const payload = {
 
 
 try {
-  // 🔹 Enviar pedido a Google Sheets SIN esperar respuesta (evita CORS)
-  navigator.sendBeacon(
-    ORDERS_API_URL,
-    JSON.stringify(payload)
-  );
+// 🔹 Enviar pedido a Google Sheets con fetch (más confiable que sendBeacon)
+await fetch(ORDERS_API_URL, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+}).catch(err => console.warn('Error enviando pedido al Sheet:', err));
+
 
   // 🔹 Usar el order_id ya generado localmente
   const orderId = window.currentOrderId;
