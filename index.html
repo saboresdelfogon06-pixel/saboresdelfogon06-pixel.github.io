@@ -10,24 +10,7 @@
 <link rel="preload" as="image" href="images/IMG_7762.webp" type="image/webp" fetchpriority="high">
  <link rel="icon" href="images/LOGO96.webp" type="image/webp" sizes="96x96">
 <!-- Meta Pixel -->
-<script>    
-if (!navigator.userAgent.includes('Instagram')) {
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'manual';
-  }
-}
 
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}
-(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','2992234817833383');
-fbq('track','PageView');
-</script>
 <style>
 :root{
   --bg:#0f0f0f;
@@ -1386,20 +1369,25 @@ window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
 });
 
-loadState();
+document.addEventListener('DOMContentLoaded', () => {
+  requestIdleCallback(() => {
 
-// 🧠 restaurar scroll SOLO si no es la primera carga
-const isFirstLoad = !sessionStorage.getItem('loadedOnce');
-sessionStorage.setItem('loadedOnce', 'true');
+    loadState();
 
-if (!isFirstLoad) {
-  const y = localStorage.getItem('scrollY');
-  if (y !== null) {
-    requestAnimationFrame(() => {
-      window.scrollTo(0, parseInt(y, 10));
-    });
-  }
-}
+    const isFirstLoad = !sessionStorage.getItem('loadedOnce');
+    sessionStorage.setItem('loadedOnce', 'true');
+
+    if (!isFirstLoad) {
+      const y = localStorage.getItem('scrollY');
+      if (y !== null) {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, parseInt(y, 10));
+        });
+      }
+    }
+
+  });
+});
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
@@ -1407,6 +1395,31 @@ document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
 
 
+</script>
+<script>
+window.addEventListener('load', () => {
+  setTimeout(() => {
+
+    if (!navigator.userAgent.includes('Instagram')) {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+    }
+
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}
+    (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+    fbq('init','2992234817833383');
+    fbq('track','PageView');
+
+  }, 1200); // ⏱ delay seguro
+});
 </script>
 
 </body>
