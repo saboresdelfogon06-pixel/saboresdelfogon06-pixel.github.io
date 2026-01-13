@@ -1260,29 +1260,33 @@ const banner = document.getElementById("heroBanner");
 const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
 
-// construir slides
-bannerSlides.forEach((s, index) => {
-  const slide = document.createElement("div");
-  slide.className = "banner-slide";
+// construir slides (idle, optimizado)
+(window.requestIdleCallback || function(cb){ setTimeout(cb, 1); })(() => {
+  bannerSlides.forEach((s, index) => {
+    const slide = document.createElement("div");
+    slide.className = "banner-slide";
 
-  if(s.type === "video"){
-    slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
-  } else {
-    const img = document.createElement('img');
-
-    if(index === 0){
-      // primera imagen se carga de inmediato
-      img.src = s.src;
+    if (s.type === "video") {
+      slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
     } else {
-      // resto de imágenes solo al entrar en viewport
-      img.dataset.src = s.src;
-      img.loading = 'lazy';
+      const img = document.createElement("img");
+
+      img.width = 720;
+      img.height = 220;
+      img.decoding = "async";
+
+      if (index === 0) {
+        img.src = s.src;          // primera imagen inmediata
+      } else {
+        img.dataset.src = s.src; // resto lazy
+        img.loading = "lazy";
+      }
+
+      slide.appendChild(img);
     }
 
-    slide.appendChild(img);
-  }
-
-  track.appendChild(slide);
+    track.appendChild(slide);
+  });
 });
 
 
@@ -1363,30 +1367,26 @@ window.addEventListener('scroll', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  (window.requestIdleCallback || function(cb){ setTimeout(cb, 1); })(() => {
+  loadState();
 
-    loadState();
+  const isFirstLoad = !sessionStorage.getItem('loadedOnce');
+  sessionStorage.setItem('loadedOnce', 'true');
 
-    const isFirstLoad = !sessionStorage.getItem('loadedOnce');
-    sessionStorage.setItem('loadedOnce', 'true');
-
-    if (!isFirstLoad) {
-      const y = localStorage.getItem('scrollY');
-      if (y !== null) {
-        requestAnimationFrame(() => {
-          window.scrollTo(0, parseInt(y, 10));
-        });
-      }
+  if (!isFirstLoad) {
+    const y = localStorage.getItem('scrollY');
+    if (y !== null) {
+      requestAnimationFrame(() => {
+        window.scrollTo(0, parseInt(y, 10));
+      });
     }
-
-  });
+  }
 });
+
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
-
 
 </script>
 <script>
