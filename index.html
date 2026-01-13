@@ -1184,7 +1184,6 @@ const payload = {
 };
 
 try {
-  // 1️⃣ ENVIAR A GOOGLE SHEET (NO BLOQUEANTE, NO SE CANCELA)
   navigator.sendBeacon(
     ORDERS_API_URL,
     new URLSearchParams({
@@ -1192,7 +1191,6 @@ try {
     })
   );
 
-  // 2️⃣ ARMAR MENSAJE WHATSAPP
   const orderId = window.currentOrderId;
 
   let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
@@ -1207,36 +1205,19 @@ try {
   msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
   msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
-  // 3️⃣ ESPERAR UN POCO Y REDIRIGIR (CLAVE)
   setTimeout(() => {
     window.location.href =
       'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
   }, 300);
 
-  // 4️⃣ RESET
   resetForNextOrder();
 
 } catch (err) {
-  console.error(err);
+  console.error("ERROR goWA:", err);
   alert("Error técnico al enviar el pedido");
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
   payBtn.textContent = "Enviar pedido";
-}
-
-
-} catch (err) {
-  console.error("ERROR COMPLETO:", err);
-
-  alert(
-    "Error técnico al enviar el pedido.\n\n" +
-    (err?.message || err)
-  );
-
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Enviar pedido";
-}
 }
 
 function openModal(src){
