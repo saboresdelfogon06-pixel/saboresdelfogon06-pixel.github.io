@@ -503,7 +503,7 @@ button.selected{
 
 </div>
 <script>
-const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbz3MrZ5YaU8B6zX3byTeoQX6PJxKJ0gzEnQ3rjLOB_Q_G18jqdJO9NSIPljBbGQu-efNA/exec';
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
 const clientName = document.getElementById('clientName');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
@@ -1184,14 +1184,14 @@ const payload = {
 };
 
 try {
-  // 1️⃣ GUARDAR EN GOOGLE SHEET (ESPERAR)
-  const res = await fetch(ORDERS_API_URL, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+const formData = new URLSearchParams();
+formData.append('data', JSON.stringify(payload));
+
+const res = await fetch(ORDERS_API_URL, {
+  method: 'POST',
+  body: formData
+});
+  
 
   const result = await res.json();
 
