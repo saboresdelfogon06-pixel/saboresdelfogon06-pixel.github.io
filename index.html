@@ -503,7 +503,7 @@ button.selected{
 
 </div>
 <script>
-const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbw_bSTjI-6qoUImI6lrqMJTlk81iT8vvFa7Ek_qRfjYjzeg4gq3FiuAaSzmL82LnBkYDg/exec';
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbz3MrZ5YaU8B6zX3byTeoQX6PJxKJ0gzEnQ3rjLOB_Q_G18jqdJO9NSIPljBbGQu-efNA/exec';
 const clientName = document.getElementById('clientName');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
@@ -1186,10 +1186,12 @@ const payload = {
 try {
 fetch(ORDERS_API_URL, {
   method: 'POST',
-  mode: 'no-cors',   // 🔥 ESTO ES LO QUE FALTABA
+  headers: {
+    'Content-Type': 'application/json'
+  },
   body: JSON.stringify(payload)
 });
-  
+
 // 🔹 Usar el order_id ya generado localmente
 const orderId = window.currentOrderId;
 
