@@ -1390,8 +1390,17 @@ document.addEventListener('gestureend', e => e.preventDefault());
 
 </script>
 <script>
-window.addEventListener('load', () => {
-  setTimeout(() => {
+(function () {
+  let pixelLoaded = false;
+
+  function loadPixelOnce() {
+    if (pixelLoaded) return;
+    pixelLoaded = true;
+
+    // 🛟 Cola de eventos por si fbq se llama antes
+    window.fbq = window.fbq || function(){
+      (window.fbq.queue = window.fbq.queue || []).push(arguments);
+    };
 
     if (!navigator.userAgent.includes('Instagram')) {
       if ('scrollRestoration' in history) {
@@ -1410,9 +1419,12 @@ window.addEventListener('load', () => {
 
     fbq('init','2992234817833383');
     fbq('track','PageView');
+  }
 
-  }, 1200); // ⏱ delay seguro
-});
+  window.addEventListener('scroll', loadPixelOnce, { once: true, passive: true });
+  window.addEventListener('click', loadPixelOnce, { once: true });
+
+})();
 </script>
 
 </body>
