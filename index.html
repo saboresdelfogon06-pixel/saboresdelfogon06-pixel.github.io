@@ -500,7 +500,7 @@ button.selected{
 
 </div>
 <script>
-const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbxkag_wAj9utpEogCfcPg9E7EsVk-0hhwN5eDIgVSvkiVPeacvJZmrJD8SiA1COI5KyoA/exec';
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
 const clientName = document.getElementById('clientName');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
@@ -1146,89 +1146,85 @@ async function goWA() {
     num_items: picadas.length
   });
 
-const fbIds = getFacebookIdentifiers();
+  const fbIds = getFacebookIdentifiers();
 
-fetch('https://saboresfogon.com/api/pedido', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    action: 'initiate',          // ✅ CORRECTO
+  // 🔹 Evento backend (no bloquea)
+  fetch('https://saboresfogon.com/api/pedido', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'initiate',
+      order_id: window.currentOrderId,
+      token: window.currentToken,
+      clientName: clientName.value,
+      total: total,
+      currency: 'ARS',
+      items: picadas.map(p => ({
+        model: p.model,
+        size: p.size,
+        price: p.price
+      })),
+      fbc: fbIds.fbc,
+      fbp: fbIds.fbp
+    })
+  }).catch(err => console.warn('InitiateCheckout error', err));
+
+  // 🔹 Payload para Google Sheets
+  const payload = {
     order_id: window.currentOrderId,
     token: window.currentToken,
-    clientName: clientName.value,
-    total: total,
-    currency: 'ARS',
-    items: picadas.map(p => ({
+    nombre: clientName.value,
+    envio: ship,
+    picadas: picadas.map(p => ({
       model: p.model,
       size: p.size,
       price: p.price
-    })),
-    fbc: fbIds.fbc,              // ✅ AGREGAR
-    fbp: fbIds.fbp               // ✅ AGREGAR
-  })
-}).catch(err => console.warn('InitiateCheckout error', err));
+    }))
+  };
 
-// Preparar payload para Apps Script
-const payload = {
-  order_id: window.currentOrderId,
-  token: window.currentToken,
-  nombre: clientName.value,
-  envio: ship,
-  picadas: picadas.map(p => ({
-    model: p.model,
-    size: p.size,
-    subtotal: p.price
-  }))
-};
+  try {
+    // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
+    fetch(ORDERS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: new URLSearchParams({
+        data: JSON.stringify(payload)
+      })
+    });
 
+    const orderId = window.currentOrderId;
 
-try {
-// 🔹 Enviar pedido a Google Sheets con fetch (más confiable que sendBeacon)
-await fetch(ORDERS_API_URL, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(payload)
-}).catch(err => console.warn('Error enviando pedido al Sheet:', err));
+    let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+    msg += `Pedido (ID: ${orderId}):\n`;
 
+    picadas.forEach((p, i) => {
+      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+    });
 
-  // 🔹 Usar el order_id ya generado localmente
-  const orderId = window.currentOrderId;
+    msg += `\nEntrega:\n`;
+    msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+    msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+    msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
-  // 🔹 Preparar mensaje WhatsApp
-  let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-  msg += `Pedido (ID: ${orderId}):\n`;
+    setTimeout(() => {
+      window.location.href =
+        'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+    }, 300);
 
-  picadas.forEach((p, i) => {
-    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-  });
+    resetForNextOrder();
 
-  msg += `\nEntrega:\n`;
-  msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-  msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-  msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
-
-  // 🔹 Redirigir a WhatsApp
-  window.location.href =
-    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-
-  // 🔹 Reset visual
-  resetForNextOrder();
-
-} catch (err) {
-  console.error("ERROR COMPLETO:", err);
-
-  alert(
-    "Error técnico al enviar el pedido.\n\n" +
-    "Detalle:\n" +
-    (err?.message || err)
-  );
-
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Enviar pedido";
-}
+  } catch (err) {
+    console.error("ERROR goWA:", err);
+    alert("Error técnico al enviar el pedido");
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Enviar pedido";
+  }
 }
 
+  
 function openModal(src){
  modalImg.src=src;
  imgModal.style.display="flex";
