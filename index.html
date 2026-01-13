@@ -1184,44 +1184,48 @@ const payload = {
 };
 
 try {
-fetch(ORDERS_API_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(payload)
-});
+  // 1️⃣ GUARDAR EN GOOGLE SHEET (ESPERAR)
+  const res = await fetch(ORDERS_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
 
-// 🔹 Usar el order_id ya generado localmente
-const orderId = window.currentOrderId;
+  const result = await res.json();
 
-// 🔹 Preparar mensaje WhatsApp
-let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-msg += `Pedido (ID: ${orderId}):\n`;
+  if (!result.success) {
+    throw new Error(result.error || 'No se pudo escribir en el Sheet');
+  }
 
-picadas.forEach((p, i) => {
-  msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-});
+  // 2️⃣ ARMAR MENSAJE WHATSAPP
+  const orderId = window.currentOrderId;
 
-msg += `\nEntrega:\n`;
-msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
+  let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
+  msg += `Pedido (ID: ${orderId}):\n`;
 
-// 🔹 Redirigir a WhatsApp
-window.location.href =
-  'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+  picadas.forEach((p, i) => {
+    msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
+  });
 
-// 🔹 Reset visual
-resetForNextOrder();
+  msg += `\nEntrega:\n`;
+  msg += `Dirección: ${addr.value || 'No especificada'}\n`;
+  msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
+  msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
 
+  // 3️⃣ RECIÉN AHORA REDIRIGIR
+  window.location.href =
+    'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
+
+  // 4️⃣ RESET
+  resetForNextOrder();
 
 } catch (err) {
   console.error("ERROR COMPLETO:", err);
 
   alert(
     "Error técnico al enviar el pedido.\n\n" +
-    "Detalle:\n" +
     (err?.message || err)
   );
 
