@@ -493,10 +493,10 @@ button.selected{
 </div>
 
 <div class="pay">
-<button id="payBtn" onclick="goWA()">Enviar pedido</button>
+<button id="payBtn" onclick="goWA()">Confirmar pedido</button>
 </div>
 
-<p class="small">La entrega y el pago se coordinan por Whatsapp, este paso es solo para simular tu pedido.</p>
+<p class="small">Serás redirigido a Mercado Pago para completar el pago de forma segura.</p>
 
 </div>
 <script>
@@ -1196,24 +1196,28 @@ async function goWA() {
 
     const orderId = window.currentOrderId;
 
-    let msg = `Hola, soy ${clientName.value}, te hablo por un pedido para el ${orderDate.value}.\n\n`;
-    msg += `Pedido (ID: ${orderId}):\n`;
+// 👉 Crear preferencia de Mercado Pago
+const mpRes = await fetch("https://saboresfogon.com/api/mp/create-preference", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    order_id: window.currentOrderId
+  })
+});
 
-    picadas.forEach((p, i) => {
-      msg += `• Picada ${i + 1}: ${p.model}, para ${p.size} personas\n`;
-    });
+const mpData = await mpRes.json();
 
-    msg += `\nEntrega:\n`;
-    msg += `Dirección: ${addr.value || 'No especificada'}\n`;
-    msg += `Localidad: ${zoneName || 'No especificada'}\n\n`;
-    msg += `Total del pedido: $${total.toLocaleString()}\n\n¡Gracias!`;
+if (!mpData.init_point) {
+  alert("No se pudo iniciar el pago. Intentá nuevamente.");
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar con Mercado Pago";
+  return;
+}
 
-    setTimeout(() => {
-      window.location.href =
-        'https://wa.me/5491123284020?text=' + encodeURIComponent(msg);
-    }, 300);
+// 👉 Redirigir a Mercado Pago
+window.location.href = mpData.init_point;
 
-    resetForNextOrder();
 
   } catch (err) {
     console.error("ERROR goWA:", err);
