@@ -545,6 +545,14 @@ const PRICES = {
   8: 90000
 };
 
+function getOrderFingerprint() {
+  return JSON.stringify({
+    picadas,
+    envio: ship,
+    zoneName
+  });
+}
+
 function generateOrderId() {
   // Genera un ID temporal para mostrar mientras se hace el pedido
   const randomNum = Math.floor(Math.random() * 999999) + 1;
@@ -1090,6 +1098,12 @@ const valid =
   window._checkoutTracked = true;
 }
   if(!valid) window._checkoutTracked = false;
+// 🔄 Si el pedido cambió, invalidar checkout previo
+const savedFingerprint = sessionStorage.getItem('order_fingerprint');
+if (savedFingerprint && savedFingerprint !== getOrderFingerprint()) {
+  sessionStorage.removeItem('mp_init_point');
+  sessionStorage.removeItem('order_fingerprint');
+}
 
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 }
@@ -1265,8 +1279,10 @@ if (!mpData.init_point) {
   return;
 }
 
-// 💾 Guardar init_point para evitar duplicados
+// 💾 Guardar init_point y fingerprint del pedido
 sessionStorage.setItem('mp_init_point', mpData.init_point);
+sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
+
 
 // 🚀 REDIRECCIÓN ÚNICA, SEGURA (mobile + desktop)
 window.location.assign(mpData.init_point);
@@ -1420,6 +1436,7 @@ window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
 });
 
+  
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
 
@@ -1434,6 +1451,21 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
+    // 🔁 Si vuelve de Mercado Pago y el pedido no cambió
+  const existingInitPoint = sessionStorage.getItem('mp_init_point');
+  const savedFingerprint = sessionStorage.getItem('order_fingerprint');
+
+if (
+  existingInitPoint &&
+  savedFingerprint === getOrderFingerprint() &&
+  payBtn.classList.contains("enabled")
+) {
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Continuar pago";
+}
+
+
 });
 
 
