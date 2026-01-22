@@ -586,12 +586,6 @@ function saveState(){
 }
 
 function loadState(){
-  // 🔹 Si venimos de un reset, no cargar nada
-  if(localStorage.getItem('reset') === 'true'){
-    localStorage.removeItem('reset');
-    buildPicadas(1);
-    return;
-  }
 
   const savedPicadas = localStorage.getItem('picadas');
   if(savedPicadas){
@@ -1440,6 +1434,11 @@ window.addEventListener('scroll', () => {
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
 
+  // 🔓 SIEMPRE resetear estado visual del botón al cargar
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+
   const isFirstLoad = !sessionStorage.getItem('loadedOnce');
   sessionStorage.setItem('loadedOnce', 'true');
 
@@ -1451,21 +1450,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   }
-    // 🔁 Si vuelve de Mercado Pago y el pedido no cambió
+
+  // 🔁 Si vuelve de Mercado Pago y el pedido no cambió
   const existingInitPoint = sessionStorage.getItem('mp_init_point');
   const savedFingerprint = sessionStorage.getItem('order_fingerprint');
 
-if (
-  existingInitPoint &&
-  savedFingerprint === getOrderFingerprint() &&
-  payBtn.classList.contains("enabled")
-) {
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Continuar pago";
-}
-
-
+  if (existingInitPoint && savedFingerprint === getOrderFingerprint()) {
+    payBtn.textContent = "Continuar pago";
+  }
 });
 
 
