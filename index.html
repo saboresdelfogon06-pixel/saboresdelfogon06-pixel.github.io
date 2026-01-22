@@ -1467,7 +1467,7 @@ window.addEventListener('scroll', () => {
 });
   
 window.addEventListener('pageshow', (event) => {
-  // 🔥 ÚNICO punto de restauración del estado
+  // 🔥 Punto principal de restauración (volver desde MP / historial)
   loadState();
   update();
 
@@ -1488,6 +1488,17 @@ window.addEventListener('pageshow', (event) => {
     payBtn.textContent = "Pagar";
   }
 });
+
+// 🔁 Fallback para refresh duro (F5 / Ctrl+R)
+// Algunos navegadores NO disparan pageshow en reload
+if (document.readyState === "complete") {
+  setTimeout(() => {
+    if (!config.innerHTML.trim()) {
+      loadState();
+      update();
+    }
+  }, 0);
+}
 
 
 
