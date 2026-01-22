@@ -1183,7 +1183,28 @@ async function goWA() {
 
     const orderId = window.currentOrderId;
 
-// 👉 Crear preferencia de Mercado Pago
+
+// 👉 1️⃣ GUARDAR PEDIDO EN KV (OBLIGATORIO)
+await fetch("https://saboresdelfogon.com/pedido", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    action: "initiate",
+    order_id: window.currentOrderId,
+    token: window.currentToken,
+    clientName: clientName.value,
+    total,
+    currency: "ARS",
+    items: picadas.map(p => ({
+      model: p.model,
+      size: p.size,
+      price: p.price
+    })),
+    fbc: fbIds.fbc,
+    fbp: fbIds.fbp
+  })
+});
+
 let mpRes;
 try {
   mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
