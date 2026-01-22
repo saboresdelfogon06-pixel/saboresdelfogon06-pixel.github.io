@@ -642,7 +642,6 @@ function resetAll(){
   localStorage.removeItem('addr');
   localStorage.removeItem('zone');
   localStorage.removeItem('scrollY');
-  localStorage.setItem('reset', 'true'); // 🔹 FLAG reset
 
   // 2. resetear variables
   ship = 0;
@@ -1455,9 +1454,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const existingInitPoint = sessionStorage.getItem('mp_init_point');
   const savedFingerprint = sessionStorage.getItem('order_fingerprint');
 
-  if (existingInitPoint && savedFingerprint === getOrderFingerprint()) {
-    payBtn.textContent = "Continuar pago";
-  }
+if (
+  existingInitPoint &&
+  savedFingerprint === getOrderFingerprint() &&
+  payBtn.classList.contains("enabled")
+) {
+  payBtn.textContent = "Continuar pago";
+}
 });
 
 
