@@ -513,10 +513,12 @@ const modalImg = document.getElementById('modalImg');
 document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
   if (dateInput) {
-    const today = new Date();
-    dateInput.min = today.toISOString().split('T')[0];
+    const minDate = new Date();
+    minDate.setDate(minDate.getDate() + 2); // 48 hs
+    dateInput.min = minDate.toISOString().split('T')[0];
   }
 });
+
 
 // ===== FIN MÓDULO 1 =====
 
@@ -536,6 +538,12 @@ const modelData={
 };
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
+
+const PRICES = {
+  4: 50000,
+  6: 70000,
+  8: 90000
+};
 
 function generateOrderId() {
   // Genera un ID temporal para mostrar mientras se hace el pedido
@@ -654,7 +662,12 @@ function resetAll(){
   summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
   payBtn.classList.remove("enabled");
 
-  document.getElementById('cartTotal').textContent = '$0';
+    document.getElementById('cartTotal').textContent = '$0';
+
+  // 🔐 Limpiar preferencia de Mercado Pago
+  sessionStorage.removeItem('mp_init_point');
+}
+
 }
 
 
@@ -688,7 +701,7 @@ function resetForNextOrder() {
 
   // 🔹 Generar un nuevo token y order_id automáticamente al iniciar la nueva orden
  sessionStorage.removeItem('order_id');
-sessionStorage.removeItem('token');
+ sessionStorage.removeItem('token');
 
 sessionStorage.setItem('order_id', generateOrderId());
 sessionStorage.setItem('token', generateToken());
@@ -696,7 +709,11 @@ sessionStorage.setItem('token', generateToken());
 window.currentOrderId = sessionStorage.getItem('order_id');
 window.currentToken   = sessionStorage.getItem('token');
 
+// 🔐 Limpiar preferencia de Mercado Pago
+sessionStorage.removeItem('mp_init_point');
+
 }
+
 
 
 function setActivePicada(i){
@@ -900,24 +917,25 @@ if(hint){
 </div>
 
        <label>Seleccioná la cantidad de personas:</label>
-
+       
 <button
   class="control size-btn ${p.size===4?'selected':''}"
-  onclick="handleSizeClick(4,50000)">
+  onclick="handleSizeClick(4, PRICES[4])">
   4 | Pican 6 ($50.000) – Tabla 20×30 cm
 </button>
 
 <button
   class="control size-btn ${p.size===6?'selected':''}"
-  onclick="handleSizeClick(6,70000)">
+  onclick="handleSizeClick(6, PRICES[6])">
   6 | Pican 8 ($70.000) – Tabla 28×48 cm
 </button>
 
 <button
   class="control size-btn ${p.size===8?'selected':''}"
-  onclick="handleSizeClick(8,90000)">
+  onclick="handleSizeClick(8, PRICES[8])">
   8 | Pican 12 ($90.000) – Tabla 28×48 cm
 </button>
+
 
       </div>
     </div>
@@ -1032,6 +1050,13 @@ txt += `<br>Envío a ${zoneName || "Sin localidad"}: ${envio}<br><br>`;
 const totalVisible = total || 0;
 txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
 
+if (!picadas.every(p => p.model && p.size)) {
+  txt += `<br><span style="color:#ff4d4f;font-size:13px;">
+    ⚠️ Hay picadas sin modelo o tamaño seleccionado
+  </span>`;
+}
+
+
   summaryDiv.innerHTML = `
     <button onclick="resetAll()"
       style="position:absolute; top:8px; right:8px; background:none; border:none; color:#9a958d; font-size:18px; cursor:pointer; z-index:2;">
@@ -1042,13 +1067,14 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
     </div>
   `;
 
-  const p = picadas[active];
-  const valid =
-  p.model &&
-  p.size &&
+const allPicadasValid = picadas.every(p => p.model && p.size);
+
+const valid =
+  allPicadasValid &&
   clientName.value.trim() &&
   orderDate.value &&
   zoneName;
+
 
 
   summaryDiv.style.display = 'block'; // siempre visible
@@ -1181,8 +1207,12 @@ async function goWA() {
       })
     });
 
-    const orderId = window.currentOrderId;
-
+// 🔐 Si ya existe una preferencia, reutilizarla
+const existingInitPoint = sessionStorage.getItem('mp_init_point');
+if (existingInitPoint) {
+  window.location.assign(existingInitPoint);
+  return;
+}
 
 let mpRes;
 try {
@@ -1238,17 +1268,16 @@ if (!mpData.init_point) {
   return;
 }
 
+// 💾 Guardar init_point para evitar duplicados
+sessionStorage.setItem('mp_init_point', mpData.init_point);
+
 // 🚀 REDIRECCIÓN ÚNICA, SEGURA (mobile + desktop)
 window.location.assign(mpData.init_point);
-
-
 
   } catch (err) {
     console.error("ERROR goWA:", err);
     alert("Error técnico al enviar el pedido");
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Enviar pedido";
+    resetPayButton();
   }
 }
 
