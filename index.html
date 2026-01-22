@@ -1150,26 +1150,6 @@ async function goWA() {
 
   const fbIds = getFacebookIdentifiers();
 
-  // 🔹 Evento backend (no bloquea)
-  fetch('https://saboresdelfogon.com/api/pedido', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      action: 'initiate',
-      order_id: window.currentOrderId,
-      token: window.currentToken,
-      clientName: clientName.value,
-      total: total,
-      currency: 'ARS',
-      items: picadas.map(p => ({
-        model: p.model,
-        size: p.size,
-        price: p.price
-      })),
-      fbc: fbIds.fbc,
-      fbp: fbIds.fbp
-    })
-  }).catch(err => console.warn('InitiateCheckout error', err));
 
   // 🔹 Payload para Google Sheets
   const payload = {
@@ -1202,9 +1182,25 @@ async function goWA() {
 const mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    order_id: window.currentOrderId
-  })
+ body: JSON.stringify({
+  order_id: window.currentOrderId,
+  clientName: clientName.value,
+  total,
+  currency: "ARS",
+  items: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  })),
+  envio: ship,
+  orderDate: orderDate.value,
+  zone: zoneName,
+  address: addr.value,
+
+  // 🔥 META (se mantiene)
+  fbc: fbIds.fbc,
+  fbp: fbIds.fbp
+})
 });
 
 const mpData = await mpRes.json();
@@ -1213,7 +1209,7 @@ if (!mpData.init_point) {
   alert("No se pudo iniciar el pago. Intentá nuevamente.");
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar con Mercado Pago";
+  payBtn.textContent = "Pagar";
   return;
 }
 
