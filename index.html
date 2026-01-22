@@ -1430,37 +1430,35 @@ window.addEventListener('scroll', () => {
 });
 
   
-document.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('pageshow', (event) => {
+  // 🔁 Siempre rehidratar estado
   loadState();
+  renderConfig();
+  update();
 
-  // 🔓 SIEMPRE resetear estado visual del botón al cargar
+  // 🔓 Resetear botón SIEMPRE
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar";
 
-  const isFirstLoad = !sessionStorage.getItem('loadedOnce');
-  sessionStorage.setItem('loadedOnce', 'true');
-
-  if (!isFirstLoad) {
-    const y = localStorage.getItem('scrollY');
-    if (y !== null) {
-      requestAnimationFrame(() => {
-        window.scrollTo(0, parseInt(y, 10));
-      });
-    }
-  }
-
-  // 🔁 Si vuelve de Mercado Pago y el pedido no cambió
   const existingInitPoint = sessionStorage.getItem('mp_init_point');
   const savedFingerprint = sessionStorage.getItem('order_fingerprint');
 
-if (
-  existingInitPoint &&
-  savedFingerprint === getOrderFingerprint() &&
-  payBtn.classList.contains("enabled")
-) {
-  payBtn.textContent = "Continuar pago";
-}
+  if (
+    existingInitPoint &&
+    savedFingerprint === getOrderFingerprint() &&
+    payBtn.classList.contains("enabled")
+  ) {
+    payBtn.textContent = "Continuar pago";
+  } else {
+    payBtn.textContent = "Pagar";
+  }
+
+  // 🧹 MUY IMPORTANTE:
+  // Si volvió desde historial (bfcache), limpiamos estado visual roto
+  if (event.persisted) {
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+  }
 });
 
 
