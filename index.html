@@ -1151,7 +1151,7 @@ async function goWA() {
   const fbIds = getFacebookIdentifiers();
 
   // 🔹 Evento backend (no bloquea)
-  fetch('https://saboresfogon.com/api/pedido', {
+  fetch('https://saboresdelfogon.com/api/pedido', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -1199,7 +1199,7 @@ async function goWA() {
     const orderId = window.currentOrderId;
 
 // 👉 Crear preferencia de Mercado Pago
-const mpRes = await fetch("https://saboresfogon.com/api/mp/create-preference", {
+const mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
