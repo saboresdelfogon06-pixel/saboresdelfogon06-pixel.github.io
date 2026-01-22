@@ -588,8 +588,12 @@ function generateToken() {
   return crypto.randomUUID().replace(/-/g,'');
 }
 
- if (!sessionStorage.getItem('order_id')) {
-  sessionStorage.setItem('order_id', generateOrderId());
+if (!sessionStorage.getItem('order_id')) {
+  const hasSavedOrder = !!localStorage.getItem('picadas');
+  sessionStorage.setItem(
+    'order_id',
+    hasSavedOrder ? generateOrderId() : generateOrderId()
+  );
 }
 
 if (!sessionStorage.getItem('token')) {
@@ -1456,11 +1460,10 @@ window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
 });
 
-  
 window.addEventListener('pageshow', (event) => {
   loadState();
-  renderConfig();
   update();
+
 
   // 🔓 Resetear botón SIEMPRE
   payBtn.disabled = false;
