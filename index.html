@@ -517,7 +517,12 @@ document.addEventListener('DOMContentLoaded', () => {
     minDate.setDate(minDate.getDate() + 2); // 48 hs
     dateInput.min = minDate.toISOString().split('T')[0];
   }
+
+  // 🔥 CLAVE: inicializar estado SIEMPRE
+  loadState();
+  update();
 });
+
 
 
 // ===== FIN MÓDULO 1 =====
@@ -555,6 +560,8 @@ const TAB_KEY = 'sf_tab_initialized';
     localStorage.removeItem('addr');
     localStorage.removeItem('zone');
     localStorage.removeItem('scrollY');
+    localStorage.removeItem('activePicada');
+
 
     sessionStorage.removeItem('mp_init_point');
     sessionStorage.removeItem('order_fingerprint');
@@ -602,15 +609,16 @@ if (!sessionStorage.getItem('token')) {
 
 window.currentOrderId = sessionStorage.getItem('order_id');
 window.currentToken   = sessionStorage.getItem('token');
-  // ===== MÓDULO 3: MEMORIA =====
-// ===== MÓDULO 3: MEMORIA =====
+
 function saveState(){
   localStorage.setItem('picadas', JSON.stringify(picadas));
+  localStorage.setItem('activePicada', active); // 👈 NUEVO
   localStorage.setItem('clientName', clientName.value);
   localStorage.setItem('orderDate', orderDate.value);
   localStorage.setItem('addr', addr.value);
   localStorage.setItem('zone', zone.value);
 }
+
 
 function loadState() {
   const savedPicadas = localStorage.getItem('picadas');
@@ -627,6 +635,12 @@ function loadState() {
     return;
   }
 
+  // 👇 restaurar picada activa
+  const savedActive = Number(localStorage.getItem('activePicada'));
+  active = Number.isInteger(savedActive) && savedActive < picadas.length
+    ? savedActive
+    : 0;
+
   clientName.value = localStorage.getItem('clientName') || "";
   orderDate.value = localStorage.getItem('orderDate') || "";
   addr.value = localStorage.getItem('addr') || "";
@@ -642,16 +656,12 @@ function loadState() {
     }
   }
 
-  if (!picadas.length) {
-    buildPicadas(1);
-    return;
-  }
-
+  // 🔥 CLAVE: sincronizar banner y UI
   if (picadas[active]?.model) {
     syncBannerWithModel(picadas[active].model);
   }
 
-  renderConfig();
+  renderConfig();   // 👈 reconstruye TODA la UI
 }
 
 
