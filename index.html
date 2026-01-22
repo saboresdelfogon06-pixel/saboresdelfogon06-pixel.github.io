@@ -1179,31 +1179,73 @@ async function goWA() {
     const orderId = window.currentOrderId;
 
 // 👉 Crear preferencia de Mercado Pago
-const mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
- body: JSON.stringify({
-  order_id: window.currentOrderId,
-  clientName: clientName.value,
-  total,
-  currency: "ARS",
-  items: picadas.map(p => ({
-    model: p.model,
-    size: p.size,
-    price: p.price
-  })),
-  envio: ship,
-  orderDate: orderDate.value,
-  zone: zoneName,
-  address: addr.value,
+let mpRes;
+try {
+  mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      order_id: window.currentOrderId,
+      clientName: clientName.value,
+      total,
+      currency: "ARS",
+      items: picadas.map(p => ({
+        model: p.model,
+        size: p.size,
+        price: p.price
+      })),
+      envio: ship,
+      orderDate: orderDate.value,
+      zone: zoneName,
+      address: addr.value,
 
-  // 🔥 META (se mantiene)
-  fbc: fbIds.fbc,
-  fbp: fbIds.fbp
-})
-});
+      // 🔥 META (se mantiene)
+      fbc: fbIds.fbc,
+      fbp: fbIds.fbp
+    })
+  });
+} catch (err) {
+  console.error("Network error MP:", err);
+  throw new Error("Network error MP");
+}
 
-const mpData = await mpRes.json();
+// 🔎 Safari / iOS NO tolera respuestas no-OK
+if (!mpRes || !mpRes.ok) {
+  console.error("MP HTTP error:", mpRes && mpRes.status);
+  throw new Error("MP HTTP error");
+}
+
+// 🔐 Parse seguro (Safari/WebView friendly)
+const mpText = await mpRes.text();
+
+let mpData;
+try {
+  mpData = JSON.parse(mpText);
+} catch (err) {
+  console.error("MP invalid JSON:", mpText);
+  throw new Error("MP invalid JSON");
+}
+
+// ❌ Sin init_point → no seguimos
+if (!mpData.init_point) {
+  console.error("MP missing init_point:", mpData);
+  alert("No se pudo iniciar el pago. Intentá nuevamente.");
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  return;
+}
+
+// 🔓 iOS / WebView necesita botón habilitado
+payBtn.disabled = false;
+
+// 🚀 Redirección segura (Safari / Instagram / FB)
+setTimeout(() => {
+  window.location.assign(mpData.init_point);
+}, 50);
+
 
 if (!mpData.init_point) {
   alert("No se pudo iniciar el pago. Intentá nuevamente.");
