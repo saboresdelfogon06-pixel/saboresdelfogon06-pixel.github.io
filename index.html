@@ -546,8 +546,10 @@ let picadas=[],active=0,ship=0,zoneName="", total=0;
 const TAB_KEY = 'sf_tab_initialized';
 
 (function tabGuard() {
-  if (!sessionStorage.getItem(TAB_KEY)) {
-    // 👉 pestaña nueva = pedido nuevo
+  const navType = performance.getEntriesByType("navigation")[0]?.type;
+
+  // SOLO nueva pestaña real
+  if (navType === "navigate" && !sessionStorage.getItem(TAB_KEY)) {
     sessionStorage.setItem(TAB_KEY, '1');
 
     localStorage.removeItem('picadas');
@@ -558,11 +560,11 @@ const TAB_KEY = 'sf_tab_initialized';
     localStorage.removeItem('scrollY');
     localStorage.removeItem('activePicada');
 
-
     sessionStorage.removeItem('mp_init_point');
     sessionStorage.removeItem('order_fingerprint');
   }
 })();
+
 
 
 const PRICES = {
@@ -1360,7 +1362,6 @@ const banner = document.getElementById("heroBanner");
 const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
 
-// construir slides (idle, optimizado)
 (window.requestIdleCallback || function(cb){ setTimeout(cb, 1); })(() => {
   bannerSlides.forEach((s, index) => {
     const slide = document.createElement("div");
@@ -1370,15 +1371,14 @@ const bannerModel = document.getElementById("bannerModel");
       slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
     } else {
       const img = document.createElement("img");
-
       img.width = 720;
       img.height = 220;
       img.decoding = "async";
 
       if (index === 0) {
-        img.src = s.src;          // primera imagen inmediata
+        img.src = s.src;
       } else {
-        img.dataset.src = s.src; // resto lazy
+        img.dataset.src = s.src;
         img.loading = "lazy";
       }
 
@@ -1387,8 +1387,10 @@ const bannerModel = document.getElementById("bannerModel");
 
     track.appendChild(slide);
   });
-});
 
+  bannerReady = true;          // 🔥 CLAVE
+  showSlide(bannerIndex, false); // 🔥 fuerza render inicial
+});
 
 function showSlide(i, animate = true){
   bannerIndex = i;
@@ -1455,10 +1457,10 @@ banner.addEventListener("touchend", e => {
 
 
 function syncBannerWithModel(model){
-  if(!model) return;
+  if (!model || !bannerReady) return;
 
   const i = bannerSlides.findIndex(s => s.model === model);
-  if(i >= 0) showSlide(i, false);
+  if (i >= 0) showSlide(i, false);
 }
 
 
