@@ -1054,7 +1054,8 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
   summaryDiv.style.display = 'block'; // siempre visible
   payBtn.classList.toggle("enabled", valid);
 
-  if(valid && !window._checkoutTracked){
+ if(valid && !window._checkoutTracked){
+  if (typeof fbq === "function") {
     fbq('trackCustom', 'FormCompleted', {
       content_name: 'Formulario Picada Completo',
       content_category: 'Picadas',
@@ -1062,8 +1063,9 @@ txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
       currency: 'ARS',
       num_items: picadas.length
     });
-    window._checkoutTracked = true;
   }
+  window._checkoutTracked = true;
+}
   if(!valid) window._checkoutTracked = false;
 
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
