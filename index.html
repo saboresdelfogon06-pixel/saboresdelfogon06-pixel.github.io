@@ -1084,6 +1084,11 @@ function getFacebookIdentifiers() {
   return { fbc, fbp };
 }
 
+function resetPayButton() {
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+}
 
 async function goWA() {
   // ⚠️ Solo continuar si el botón está habilitado
