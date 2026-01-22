@@ -1250,12 +1250,22 @@ async function goWA() {
       })
     });
 
-// 🔐 Si ya existe una preferencia, reutilizarla
 const existingInitPoint = sessionStorage.getItem('mp_init_point');
-if (existingInitPoint) {
+const savedFingerprint = sessionStorage.getItem('order_fingerprint');
+
+if (
+  existingInitPoint &&
+  savedFingerprint === getOrderFingerprint()
+) {
+  // 🔁 Pedido idéntico → reutilizar pago
   window.location.assign(existingInitPoint);
   return;
 }
+
+// ❌ Pedido cambió → forzar nueva preferencia
+sessionStorage.removeItem('mp_init_point');
+sessionStorage.removeItem('order_fingerprint');
+
 
 let mpRes;
 try {
