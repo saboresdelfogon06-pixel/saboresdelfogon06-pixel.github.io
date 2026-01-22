@@ -514,13 +514,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
   if (dateInput) {
     const minDate = new Date();
-    minDate.setDate(minDate.getDate() + 2); // 48 hs
+    minDate.setDate(minDate.getDate() + 2);
     dateInput.min = minDate.toISOString().split('T')[0];
   }
-
-  // 🔥 CLAVE: inicializar estado SIEMPRE
-  loadState();
-  update();
 });
 
 
@@ -1469,13 +1465,13 @@ function syncBannerWithModel(model){
 window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
 });
-
+  
 window.addEventListener('pageshow', (event) => {
+  // 🔥 ÚNICO punto de restauración del estado
   loadState();
   update();
 
-
-  // 🔓 Resetear botón SIEMPRE
+  // 🔓 Reset visual del botón
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
 
@@ -1491,14 +1487,8 @@ window.addEventListener('pageshow', (event) => {
   } else {
     payBtn.textContent = "Pagar";
   }
-
-  // 🧹 MUY IMPORTANTE:
-  // Si volvió desde historial (bfcache), limpiamos estado visual roto
-  if (event.persisted) {
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-  }
 });
+
 
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
