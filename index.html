@@ -539,6 +539,29 @@ const modelData={
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
+// =========================
+// TAB GUARD (PEDIDO POR PESTAÑA)
+// =========================
+const TAB_KEY = 'sf_tab_initialized';
+
+(function tabGuard() {
+  if (!sessionStorage.getItem(TAB_KEY)) {
+    // 👉 pestaña nueva = pedido nuevo
+    sessionStorage.setItem(TAB_KEY, '1');
+
+    localStorage.removeItem('picadas');
+    localStorage.removeItem('clientName');
+    localStorage.removeItem('orderDate');
+    localStorage.removeItem('addr');
+    localStorage.removeItem('zone');
+    localStorage.removeItem('scrollY');
+
+    sessionStorage.removeItem('mp_init_point');
+    sessionStorage.removeItem('order_fingerprint');
+  }
+})();
+
+
 const PRICES = {
   4: 50000,
   6: 70000,
@@ -585,12 +608,17 @@ function saveState(){
   localStorage.setItem('zone', zone.value);
 }
 
-function loadState(){
-
+function loadState() {
   const savedPicadas = localStorage.getItem('picadas');
-  if(savedPicadas){
+
+  if (!savedPicadas) {
+    buildPicadas(1);
+    return;
+  }
+
+  try {
     picadas = JSON.parse(savedPicadas);
-  } else {
+  } catch {
     buildPicadas(1);
     return;
   }
@@ -600,10 +628,8 @@ function loadState(){
   addr.value = localStorage.getItem('addr') || "";
 
   const savedZone = localStorage.getItem('zone');
-
   if (savedZone !== null) {
     zone.value = savedZone;
-
     if (savedZone) {
       setZone();
     } else {
@@ -612,17 +638,18 @@ function loadState(){
     }
   }
 
-  if(picadas[active]?.model){
+  if (!picadas.length) {
+    buildPicadas(1);
+    return;
+  }
+
+  if (picadas[active]?.model) {
     syncBannerWithModel(picadas[active].model);
   }
 
   renderConfig();
-
-  const hint = document.getElementById('modelHint');
-  if(hint && picadas[active]?.model){
-    hint.style.color = '#9a958d';
-  }
 }
+
 
 function buildPicadas(n){
   picadas = Array.from({ length: n }, () => ({
@@ -1431,7 +1458,6 @@ window.addEventListener('scroll', () => {
 
   
 window.addEventListener('pageshow', (event) => {
-  // 🔁 Siempre rehidratar estado
   loadState();
   renderConfig();
   update();
