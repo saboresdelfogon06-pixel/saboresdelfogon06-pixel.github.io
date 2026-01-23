@@ -1144,8 +1144,8 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   sessionStorage.setItem('order_id', generateOrderId());
   window.currentOrderId = sessionStorage.getItem('order_id');
 }
-// 🚀 Precargar Mercado Pago solo si el pedido sigue siendo el mismo
-if (valid && savedFingerprint === currentFingerprint) {
+
+if (valid && (!savedFingerprint || savedFingerprint === currentFingerprint)) {
   preloadMercadoPago();
 }
 
