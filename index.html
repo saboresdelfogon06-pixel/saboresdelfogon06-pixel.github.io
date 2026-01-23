@@ -478,7 +478,16 @@ button.selected{
 <label>Dirección y altura (opcional)</label>
 <input id="addr" class="control" placeholder="Ingrese la dirección del envío" oninput="update()">
 <div class="error-msg" id="error-addr"></div>
-  
+<label>WhatsApp</label>
+<input
+  id="clientWhatsapp"
+  class="control"
+  placeholder="Ej: 11 2345 6789"
+  inputmode="numeric"
+  oninput="update()"
+/>
+<div class="error-msg" id="error-clientWhatsapp"></div>
+
 <div class="error-msg" id="error-zone"></div>
 
 </div>
@@ -510,6 +519,7 @@ const payBtn     = document.getElementById('payBtn');
 const config     = document.getElementById('config');
 const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
+const clientWhatsapp = document.getElementById('clientWhatsapp');
 document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
   if (dateInput) {
@@ -559,6 +569,7 @@ const TAB_KEY = 'sf_tab_initialized';
     localStorage.removeItem('zone');
     localStorage.removeItem('scrollY');
     localStorage.removeItem('activePicada');
+    localStorage.removeItem('clientWhatsapp');
 
     sessionStorage.removeItem('mp_init_point');
     sessionStorage.removeItem('order_fingerprint');
@@ -615,10 +626,12 @@ function saveState(){
   localStorage.setItem('orderDate', orderDate.value);
   localStorage.setItem('addr', addr.value);
   localStorage.setItem('zone', zone.value);
+  localStorage.setItem('clientWhatsapp', clientWhatsapp.value);
 }
 
 
 function loadState() {
+  clientWhatsapp.value = localStorage.getItem('clientWhatsapp') || "";
   const savedPicadas = localStorage.getItem('picadas');
 
   if (!savedPicadas) {
@@ -681,6 +694,8 @@ function resetAll(){
   localStorage.removeItem('addr');
   localStorage.removeItem('zone');
   localStorage.removeItem('scrollY');
+  clientWhatsapp.value = "";
+localStorage.removeItem('clientWhatsapp');
 
   // 2. resetear variables
   ship = 0;
@@ -1109,9 +1124,9 @@ const allPicadasValid = picadas.every(p => p.model && p.size);
 const valid =
   allPicadasValid &&
   clientName.value.trim() &&
+  clientWhatsapp.value.trim() &&
   orderDate.value &&
   zoneName;
-
 
 
   summaryDiv.style.display = 'block'; // siempre visible
@@ -1238,12 +1253,13 @@ async function goWA() {
   // Limpiar errores visuales
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
-  // Validación de campos obligatorios
-  const campos = [
-    { id: 'clientName', label: 'Nombre y apellido' },
-    { id: 'orderDate', label: 'Fecha del pedido' },
-    { id: 'zone', label: 'Localidad' }
-  ];
+const campos = [
+  { id: 'clientName', label: 'Nombre y apellido' },
+  { id: 'clientWhatsapp', label: 'WhatsApp' },
+  { id: 'orderDate', label: 'Fecha del pedido' },
+  { id: 'zone', label: 'Localidad' }
+];
+
 
   let primeroInvalido = null;
 
@@ -1291,19 +1307,18 @@ async function goWA() {
 
   const fbIds = getFacebookIdentifiers();
 
-
-  // 🔹 Payload para Google Sheets
-  const payload = {
-    order_id: window.currentOrderId,
-    token: window.currentToken,
-    nombre: clientName.value,
-    envio: ship,
-    picadas: picadas.map(p => ({
-      model: p.model,
-      size: p.size,
-      price: p.price
-    }))
-  };
+const payload = {
+  order_id: window.currentOrderId,
+  token: window.currentToken,
+  nombre: clientName.value,
+  whatsapp: clientWhatsapp.value,
+  envio: ship,
+  picadas: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  }))
+};
 
   try {
     // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
