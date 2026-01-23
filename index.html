@@ -1132,9 +1132,17 @@ const valid =
   if(!valid) window._checkoutTracked = false;
 // 🔄 Si el pedido cambió, invalidar checkout previo
 const savedFingerprint = sessionStorage.getItem('order_fingerprint');
-if (savedFingerprint && savedFingerprint !== getOrderFingerprint()) {
+const currentFingerprint = getOrderFingerprint();
+
+if (savedFingerprint && savedFingerprint !== currentFingerprint) {
+  // 🔐 limpiar checkout previo
   sessionStorage.removeItem('mp_init_point');
   sessionStorage.removeItem('order_fingerprint');
+
+  // 🔥 CLAVE: nuevo order_id para nuevo pedido
+  sessionStorage.removeItem('order_id');
+  sessionStorage.setItem('order_id', generateOrderId());
+  window.currentOrderId = sessionStorage.getItem('order_id');
 }
 
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
