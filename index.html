@@ -1144,10 +1144,12 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   sessionStorage.setItem('order_id', generateOrderId());
   window.currentOrderId = sessionStorage.getItem('order_id');
 }
-  // 🚀 Precargar Mercado Pago solo con estado ya limpio
-if (valid) {
+// 🚀 Precargar Mercado Pago solo si el pedido sigue siendo el mismo
+if (valid && savedFingerprint === currentFingerprint) {
   preloadMercadoPago();
 }
+
+
 
 
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
