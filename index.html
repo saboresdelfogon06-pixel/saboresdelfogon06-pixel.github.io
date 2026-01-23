@@ -1196,17 +1196,19 @@ async function preloadMercadoPago() {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          order_id: window.currentOrderId,
-          clientName: clientName.value,
-          total,
-          items: picadas.map(p => ({
-            model: p.model,
-            size: p.size,
-            price: p.price
-          })),
-          envio: ship
-        })
+     body: JSON.stringify({
+  order_id: window.currentOrderId,
+  clientName: clientName.value,
+  total,
+  fingerprint: getOrderFingerprint(),
+  items: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  })),
+  envio: ship
+})
+
       }
     );
 
@@ -1335,23 +1337,25 @@ try {
   mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      order_id: window.currentOrderId,
-      clientName: clientName.value,
-      total,
-      currency: "ARS",
-      items: picadas.map(p => ({
-        model: p.model,
-        size: p.size,
-        price: p.price
-      })),
-      envio: ship,
-      orderDate: orderDate.value,
-      zone: zoneName,
-      address: addr.value,
-      fbc: fbIds.fbc,
-      fbp: fbIds.fbp
-    })
+   body: JSON.stringify({
+  order_id: window.currentOrderId,
+  clientName: clientName.value,
+  total,
+  fingerprint: getOrderFingerprint(),
+  currency: "ARS",
+  items: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  })),
+  envio: ship,
+  orderDate: orderDate.value,
+  zone: zoneName,
+  address: addr.value,
+  fbc: fbIds.fbc,
+  fbp: fbIds.fbp
+})
+
   });
 } catch (err) {
   console.error("Network error MP:", err);
