@@ -704,8 +704,8 @@ function resetAll(){
 
     document.getElementById('cartTotal').textContent = '$0';
 
-  // 🔐 Limpiar preferencia de Mercado Pago
-  sessionStorage.removeItem('mp_init_point');
+ sessionStorage.removeItem('mp_init_point');
+sessionStorage.removeItem('order_fingerprint');
 }
 
 function resetForNextOrder() {
