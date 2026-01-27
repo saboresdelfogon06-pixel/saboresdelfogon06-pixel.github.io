@@ -1153,11 +1153,6 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   // 🔐 limpiar checkout previo
   sessionStorage.removeItem('mp_init_point');
   sessionStorage.removeItem('order_fingerprint');
-
-  // 🔥 CLAVE: nuevo order_id para nuevo pedido
-  sessionStorage.removeItem('order_id');
-  sessionStorage.setItem('order_id', generateOrderId());
-  window.currentOrderId = sessionStorage.getItem('order_id');
 }
 
 if (valid && (!savedFingerprint || savedFingerprint === currentFingerprint)) {
