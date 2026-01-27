@@ -1211,9 +1211,12 @@ async function preloadMercadoPago() {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
+body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
+
+  clientEmail: "saboresdelfogon06@gmail.com", // 👈 NUEVO
+
   total,
   fingerprint: getOrderFingerprint(),
   items: picadas.map(p => ({
@@ -1361,9 +1364,12 @@ try {
   mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-   body: JSON.stringify({
+body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
+
+  clientEmail: "saboresdelfogon06@gmail.com", // 👈 NUEVO
+
   total,
   fingerprint: getOrderFingerprint(),
   currency: "ARS",
@@ -1379,6 +1385,7 @@ try {
   fbc: fbIds.fbc,
   fbp: fbIds.fbp
 })
+
 
   });
 } catch (err) {
