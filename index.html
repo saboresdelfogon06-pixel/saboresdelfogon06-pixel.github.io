@@ -1160,6 +1160,10 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   window.currentOrderId = sessionStorage.getItem('order_id');
 }
 
+if (valid && (!savedFingerprint || savedFingerprint === currentFingerprint)) {
+  preloadMercadoPago();
+}
+
 
 
 
@@ -1186,6 +1190,56 @@ function resetPayButton() {
 }
 let preloadInFlight = false;
 
+async function preloadMercadoPago() {
+  // 🔒 no duplicar llamadas
+  if (preloadInFlight) return;
+
+  // 🔁 si ya hay checkout válido, no hacer nada
+  const savedFingerprint = sessionStorage.getItem('order_fingerprint');
+  if (
+    sessionStorage.getItem('mp_init_point') &&
+    savedFingerprint === getOrderFingerprint()
+  ) {
+    return;
+  }
+
+  preloadInFlight = true;
+
+  try {
+    const res = await fetch(
+      "https://saboresdelfogon.com/api/mp/create-preference",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+     body: JSON.stringify({
+  order_id: window.currentOrderId,
+  clientName: clientName.value,
+  total,
+  fingerprint: getOrderFingerprint(),
+  items: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  })),
+  envio: ship
+})
+
+      }
+    );
+
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (data.init_point) {
+      sessionStorage.setItem('mp_init_point', data.init_point);
+      sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
+    }
+  } catch {
+    // 🤫 silencio total
+  } finally {
+    preloadInFlight = false;
+  }
+}
 
 async function goWA() {
   // ⚠️ Solo continuar si el botón está habilitado
@@ -1288,7 +1342,18 @@ const payload = {
     });
 
 
-saveState(); 
+saveState();
+const existingInitPoint = sessionStorage.getItem('mp_init_point');
+const savedFingerprint = sessionStorage.getItem('order_fingerprint');
+
+if (
+  existingInitPoint &&
+  savedFingerprint === getOrderFingerprint()
+) {
+  // 🔁 Pedido idéntico → reutilizar pago
+  window.location.assign(existingInitPoint);
+  return;
+}
 
 
 let mpRes;
