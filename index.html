@@ -1169,8 +1169,6 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   sessionStorage.removeItem('order_fingerprint');
 }
 
-if (valid && (!savedFingerprint || savedFingerprint === currentFingerprint)) {
-  preloadMercadoPago();
 }
 
 
@@ -1197,20 +1195,7 @@ function resetPayButton() {
   payBtn.style.opacity = 1;
   payBtn.textContent = "Pagar";
 }
-let preloadInFlight = false;
 
-async function preloadMercadoPago() {
-  // 🔒 no duplicar llamadas
-  if (preloadInFlight) return;
-
-  // 🔁 si ya hay checkout válido, no hacer nada
-  const savedFingerprint = sessionStorage.getItem('order_fingerprint');
-  if (
-    sessionStorage.getItem('mp_init_point') &&
-    savedFingerprint === getOrderFingerprint()
-  ) {
-    return;
-  }
 
   preloadInFlight = true;
 
@@ -1361,6 +1346,14 @@ if (
 
 let mpRes;
 try {
+  // 🔥 SIEMPRE generar nuevo order_id para un pago nuevo
+sessionStorage.setItem('order_id', generateOrderId());
+window.currentOrderId = sessionStorage.getItem('order_id');
+
+// limpiar preferencia previa
+sessionStorage.removeItem('mp_init_point');
+sessionStorage.removeItem('order_fingerprint');
+
   mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
