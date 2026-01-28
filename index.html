@@ -577,12 +577,13 @@ const TAB_KEY = 'sf_tab_initialized';
 })();
 
 
-
 const PRICES = {
+  1: 300,      // 👈 TEST
   4: 50000,
   6: 70000,
   8: 90000
 };
+
 
 function getOrderFingerprint() {
   return JSON.stringify({
@@ -969,7 +970,13 @@ if(hint){
 </div>
 
        <label>Seleccioná la cantidad de personas:</label>
-       
+
+<button
+  class="control size-btn ${p.size===1?'selected':''}"
+  onclick="handleSizeClick(1, PRICES[1])">
+  TEST | Ejemplo ($300) – Tamaño demo
+</button>
+
 <button
   class="control size-btn ${p.size===4?'selected':''}"
   onclick="handleSizeClick(4, PRICES[4])">
