@@ -752,15 +752,6 @@ function resetForNextOrder() {
   // 🔹 Guardar estado vacío en localStorage para la nueva sesión de pedido
   saveState();
 
-  // 🔹 Generar un nuevo token y order_id automáticamente al iniciar la nueva orden
- sessionStorage.removeItem('order_id');
- sessionStorage.removeItem('token');
-
-sessionStorage.setItem('order_id', generateOrderId());
-sessionStorage.setItem('token', generateToken());
-
-window.currentOrderId = sessionStorage.getItem('order_id');
-window.currentToken   = sessionStorage.getItem('token');
 
 // 🔐 Limpiar preferencia de Mercado Pago
 sessionStorage.removeItem('mp_init_point');
