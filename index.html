@@ -1223,9 +1223,6 @@ async function preloadMercadoPago() {
 body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
-
-  clientEmail: "saboresdelfogon06@gmail.com", // 👈 NUEVO
-
   total,
   fingerprint: getOrderFingerprint(),
   items: picadas.map(p => ({
@@ -1235,6 +1232,7 @@ body: JSON.stringify({
   })),
   envio: ship
 })
+
 
       }
     );
@@ -1369,9 +1367,6 @@ try {
 body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
-
-  clientEmail: "saboresdelfogon06@gmail.com", // 👈 NUEVO
-
   total,
   fingerprint: getOrderFingerprint(),
   currency: "ARS",
