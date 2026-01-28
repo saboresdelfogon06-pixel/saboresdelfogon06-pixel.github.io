@@ -1195,6 +1195,10 @@ async function goWA() {
   // ⚠️ Solo continuar si el botón está habilitado
   if (!payBtn.classList.contains("enabled")) return;
 
+  const orderId = generateOrderId();
+  sessionStorage.setItem('order_id', orderId);
+  window.currentOrderId = orderId;
+
   // Bloquear botón y cambiar estilo
   payBtn.disabled = true;
   payBtn.style.opacity = 0.6;
@@ -1289,9 +1293,7 @@ saveState();
     
 let mpRes;
 try {
-  // 🔥 SIEMPRE generar nuevo order_id para un pago nuevo
-sessionStorage.setItem('order_id', generateOrderId());
-window.currentOrderId = sessionStorage.getItem('order_id');
+
 
 // limpiar preferencia previa
 sessionStorage.removeItem('mp_init_point');
