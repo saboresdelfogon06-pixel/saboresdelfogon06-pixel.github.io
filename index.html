@@ -1194,11 +1194,7 @@ function resetPayButton() {
 async function goWA() {
   // ⚠️ Solo continuar si el botón está habilitado
   if (!payBtn.classList.contains("enabled")) return;
-
-  const orderId = generateOrderId();
-  sessionStorage.setItem('order_id', orderId);
-  window.currentOrderId = orderId;
-
+  const orderId = window.currentOrderId; 
   // Bloquear botón y cambiar estilo
   payBtn.disabled = true;
   payBtn.style.opacity = 0.6;
