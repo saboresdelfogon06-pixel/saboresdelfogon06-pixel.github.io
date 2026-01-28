@@ -982,18 +982,21 @@ if(hint){
   class="control size-btn ${p.size===4?'selected':''}"
   data-size="4"
   onclick="handleSizeClick(4, PRICES[4])">
+  4 | Pican 6 ($50.000) – Tabla 20×30 cm
 </button>
 
 <button
   class="control size-btn ${p.size===6?'selected':''}"
   data-size="6"
   onclick="handleSizeClick(6, PRICES[6])">
+  6 | Pican 8 ($70.000) – Tabla 28×48 cm
 </button>
 
 <button
   class="control size-btn ${p.size===8?'selected':''}"
   data-size="8"
   onclick="handleSizeClick(8, PRICES[8])">
+  8 | Pican 12 ($90.000) – Tabla 28×48 cm
 </button>
 
 
@@ -1016,7 +1019,7 @@ function handleSizeClick(s, p){
   const current = picadas[active];
 
   // 🔹 si no hay modelo seleccionado
-  if(!current.model){
+ if(!current.model && s !== 1){
     const modelBtns = document.querySelectorAll('.picada-top > .model-column > div > button.control');
     const hint = document.getElementById('modelHint');
     if(hint) hint.style.color = '#ffffff';
