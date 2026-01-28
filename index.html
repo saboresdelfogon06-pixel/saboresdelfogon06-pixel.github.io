@@ -1509,31 +1509,15 @@ window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
 });
   
-window.addEventListener('pageshow', (event) => {
-  // 🔥 Punto principal de restauración (volver desde MP / historial)
+window.addEventListener('pageshow', () => {
   loadState();
   update();
 
-  // 🔓 Reset visual del botón
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
-
-  const existingInitPoint = sessionStorage.getItem('mp_init_point');
-  const savedFingerprint = sessionStorage.getItem('order_fingerprint');
-
-  if (
-    existingInitPoint &&
-    savedFingerprint === getOrderFingerprint() &&
-    payBtn.classList.contains("enabled")
-  ) {
-    payBtn.textContent = "Continuar pago";
-  } else {
-    payBtn.textContent = "Pagar";
-  }
 });
 
 // 🔁 Fallback para refresh duro (F5 / Ctrl+R)
-// Algunos navegadores NO disparan pageshow en reload
 if (document.readyState === "complete") {
   setTimeout(() => {
     if (!config.innerHTML.trim()) {
@@ -1542,7 +1526,6 @@ if (document.readyState === "complete") {
     }
   }, 0);
 }
-
 
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
