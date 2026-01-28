@@ -1286,19 +1286,7 @@ const payload = {
 
 
 saveState();
-const existingInitPoint = sessionStorage.getItem('mp_init_point');
-const savedFingerprint = sessionStorage.getItem('order_fingerprint');
-
-if (
-  existingInitPoint &&
-  savedFingerprint === getOrderFingerprint()
-) {
-  // 🔁 Pedido idéntico → reutilizar pago
-  window.location.assign(existingInitPoint);
-  return;
-}
-
-
+    
 let mpRes;
 try {
   // 🔥 SIEMPRE generar nuevo order_id para un pago nuevo
