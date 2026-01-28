@@ -1292,6 +1292,7 @@ sessionStorage.removeItem('order_fingerprint');
 body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
+  clientWhatsapp: clientWhatsapp.value, // ✅ AGREGAR
   total,
   fingerprint: getOrderFingerprint(),
   currency: "ARS",
@@ -1307,7 +1308,6 @@ body: JSON.stringify({
   fbc: fbIds.fbc,
   fbp: fbIds.fbp
 })
-
 
   });
 } catch (err) {
