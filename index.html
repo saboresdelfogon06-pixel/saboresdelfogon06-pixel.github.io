@@ -1295,7 +1295,7 @@ sessionStorage.removeItem('order_fingerprint');
 body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
-  clientWhatsapp: clientWhatsapp.value, // ✅ AGREGAR
+  clientWhatsapp: clientWhatsapp.value,
   total,
   fingerprint: getOrderFingerprint(),
   currency: "ARS",
@@ -1308,10 +1308,9 @@ body: JSON.stringify({
   orderDate: orderDate.value,
   zone: zoneName,
   address: addr.value,
-  fbc: fbIds.fbc,
-  fbp: fbIds.fbp
+  fbp: fbIds.fbp || null,
+  fbc: fbIds.fbc || null
 })
-
   });
 } catch (err) {
   console.error("Network error MP:", err);
