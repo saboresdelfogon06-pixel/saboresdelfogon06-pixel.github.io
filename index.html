@@ -1239,7 +1239,8 @@ const campos = [
     return;
   }
 
-  // 🔹 Pixel Meta – StartPayment
+// 🔹 Pixel Meta – StartPayment (protegido)
+if (typeof fbq === "function") {
   fbq('trackCustom', 'StartPayment', {
     content_name: 'Click Ir a Pagar',
     content_category: 'Picadas',
@@ -1247,6 +1248,8 @@ const campos = [
     currency: 'ARS',
     num_items: picadas.length
   });
+}
+
 
   const fbIds = getFacebookIdentifiers();
 
