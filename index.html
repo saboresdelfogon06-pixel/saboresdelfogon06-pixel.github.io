@@ -1310,9 +1310,13 @@ body: JSON.stringify({
   orderDate: orderDate.value,
   zone: zoneName,
   address: addr.value,
+
+  // 🔑 META IDENTIFIERS
   fbp: fbIds.fbp || null,
-  fbc: fbIds.fbc || null
+  fbc: fbIds.fbc || null,
+  user_agent: clientUserAgent
 })
+
   });
 } catch (err) {
   console.error("Network error MP:", err);
