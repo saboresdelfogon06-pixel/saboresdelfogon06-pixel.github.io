@@ -63,12 +63,12 @@ h1{
 }
 .list{
   font-size:14px;
-  line-height:1.5;
+  line-height:1.6;
 }
 .total{
   font-size:18px;
   font-weight:600;
-  margin-top:12px;
+  margin-top:14px;
 }
 .btn{
   display:block;
@@ -98,21 +98,24 @@ h1{
 
 <div class="container">
 
+  <!-- ===== ESTADO ===== -->
   <div class="section center">
     <h1>¡Gracias por tu compra! 🥩🧀</h1>
     <p class="muted" id="statusText">Estamos confirmando tu pago…</p>
     <p class="muted" id="orderId"></p>
   </div>
 
+  <!-- ===== DETALLES ===== -->
   <div class="section" id="details" style="display:none">
-    <div class="list" id="items"></div>
+    <div class="list" id="orderSummary"></div>
 
-    <div class="list" id="shipping"></div>
+    <div class="list" id="deliveryInfo" style="margin-top:12px"></div>
 
     <div class="total" id="total"></div>
 
-    <p class="muted" style="margin-top:12px">
-      Nos vamos a comunicar por WhatsApp para coordinar la entrega.
+    <p class="muted" style="margin-top:14px">
+      🕒 En breve uno de nuestros agentes se va a comunicar con vos por WhatsApp
+      para coordinar el horario de entrega.
     </p>
   </div>
 
@@ -149,23 +152,36 @@ async function loadOrder() {
     return;
   }
 
+  // ✅ pago confirmado
   document.getElementById("statusText").innerText =
     "Pago confirmado correctamente ✅";
 
-  const itemsDiv = document.getElementById("items");
-  itemsDiv.innerHTML = data.items.map((p, i) =>
-    `• Picada ${i+1}: ${p.model} (${p.size} personas) — $${p.price.toLocaleString()}`
-  ).join("<br>");
+  // ===== RESUMEN =====
+  const summary = document.getElementById("orderSummary");
 
-  document.getElementById("shipping").innerHTML =
-    `<br>Envío a <b>${data.zone}</b> ${data.address ? "· " + data.address : ""}`;
+  summary.innerHTML = `
+    <b>Resumen de tu pedido</b><br><br>
+    • Cantidad de picadas: <b>${data.items.length}</b><br><br>
+    ${data.items.map((p, i) =>
+      `• Picada ${i + 1}: ${p.model} (${p.size} personas)`
+    ).join("<br>")}
+  `;
 
+  // ===== ENVÍO =====
+  const delivery = document.getElementById("deliveryInfo");
+
+  delivery.innerHTML = `
+    <b>📍 Dirección de entrega</b><br>
+    ${data.zone || "-"}${data.address ? " – " + data.address : ""}
+  `;
+
+  // ===== TOTAL =====
   document.getElementById("total").innerHTML =
     "Total pagado: $" + data.total.toLocaleString();
 
   document.getElementById("details").style.display = "block";
 
-  // 🔥 limpiar estado
+  // 🔥 limpiar estado del pedido
   try{
     localStorage.clear();
     sessionStorage.clear();
@@ -177,4 +193,3 @@ loadOrder();
 
 </body>
 </html>
-
