@@ -1,1 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Gracias por tu compra · Sabores del Fogón</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="icon" href="/images/LOGO96.webp">
+
+<style>
+:root{
+  --bg:#0f0f0f;
+  --card:#1b1b1b;
+  --text:#cfcac2;
+  --muted:#9a958d;
+  --accent:#D3AE09;
+}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.container{
+  max-width:720px;
+  margin:auto;
+  padding:16px;
+  padding-top:72px;
+}
+.mini-banner{
+  position:fixed;
+  top:12px;
+  left:12px;
+  right:12px;
+  height:48px;
+  background:#1b1b1b;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 12px;
+  z-index:10;
+}
+.mini-banner img{width:36px}
+.mini-banner a{
+  color:#fff;
+  text-decoration:none;
+  font-size:13px;
+}
+.section{
+  background:var(--card);
+  border-radius:14px;
+  padding:20px;
+  margin-bottom:16px;
+}
+h1{
+  color:var(--accent);
+  font-size:22px;
+  margin-bottom:8px;
+}
+.muted{
+  color:var(--muted);
+  font-size:14px;
+}
+.list{
+  font-size:14px;
+  line-height:1.5;
+}
+.total{
+  font-size:18px;
+  font-weight:600;
+  margin-top:12px;
+}
+.btn{
+  display:block;
+  margin-top:16px;
+  padding:14px;
+  background:var(--accent);
+  color:#2a2a2a;
+  text-align:center;
+  border-radius:10px;
+  font-weight:600;
+  text-decoration:none;
+}
+.center{text-align:center}
+</style>
+</head>
+
+<body>
+
+<div class="mini-banner">
+  <div>
+    <img src="/images/LOGO.webp">
+  </div>
+  <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank">
+    @saboresfogon.ar
+  </a>
+</div>
+
+<div class="container">
+
+  <div class="section center">
+    <h1>¡Gracias por tu compra! 🥩🧀</h1>
+    <p class="muted" id="statusText">Estamos confirmando tu pago…</p>
+    <p class="muted" id="orderId"></p>
+  </div>
+
+  <div class="section" id="details" style="display:none">
+    <div class="list" id="items"></div>
+
+    <div class="list" id="shipping"></div>
+
+    <div class="total" id="total"></div>
+
+    <p class="muted" style="margin-top:12px">
+      Nos vamos a comunicar por WhatsApp para coordinar la entrega.
+    </p>
+  </div>
+
+  <a class="btn" href="https://www.instagram.com/saboresfogon.ar/" target="_blank">
+    Volver a Instagram
+  </a>
+
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const orderId =
+  params.get("external_reference") ||
+  sessionStorage.getItem("order_id");
+
+if (orderId) {
+  document.getElementById("orderId").innerHTML =
+    "Pedido <b>" + orderId + "</b>";
+}
+
+async function loadOrder() {
+  if (!orderId) return;
+
+  const res = await fetch(
+    "/api/order/details?order_id=" + encodeURIComponent(orderId)
+  );
+
+  const data = await res.json();
+
+  if (data.status !== "confirmed") {
+    document.getElementById("statusText").innerText =
+      "Tu pago está siendo confirmado…";
+    setTimeout(loadOrder, 2000);
+    return;
+  }
+
+  document.getElementById("statusText").innerText =
+    "Pago confirmado correctamente ✅";
+
+  const itemsDiv = document.getElementById("items");
+  itemsDiv.innerHTML = data.items.map((p, i) =>
+    `• Picada ${i+1}: ${p.model} (${p.size} personas) — $${p.price.toLocaleString()}`
+  ).join("<br>");
+
+  document.getElementById("shipping").innerHTML =
+    `<br>Envío a <b>${data.zone}</b> ${data.address ? "· " + data.address : ""}`;
+
+  document.getElementById("total").innerHTML =
+    "Total pagado: $" + data.total.toLocaleString();
+
+  document.getElementById("details").style.display = "block";
+
+  // 🔥 limpiar estado
+  try{
+    localStorage.clear();
+    sessionStorage.clear();
+  }catch(e){}
+}
+
+loadOrder();
+</script>
+
+</body>
+</html>
 
