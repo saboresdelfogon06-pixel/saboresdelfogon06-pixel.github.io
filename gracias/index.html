@@ -101,16 +101,14 @@ h1{
   <!-- ===== ESTADO ===== -->
   <div class="section center">
     <h1>¡Gracias por tu compra! 🥩🧀</h1>
-    <p class="muted" id="statusText">Estamos confirmando tu pago…</p>
+    <p class="muted" id="statusText">Estamos confirmando tu pago… ⏳</p>
     <p class="muted" id="orderId"></p>
   </div>
 
   <!-- ===== DETALLES ===== -->
   <div class="section" id="details" style="display:none">
     <div class="list" id="orderSummary"></div>
-
     <div class="list" id="deliveryInfo" style="margin-top:12px"></div>
-
     <div class="total" id="total"></div>
 
     <p class="muted" style="margin-top:14px">
@@ -136,6 +134,8 @@ if (orderId) {
     "Pedido <b>" + orderId + "</b>";
 }
 
+let detailsRendered = false;
+
 async function loadOrder() {
   if (!orderId) return;
 
@@ -145,47 +145,49 @@ async function loadOrder() {
 
   const data = await res.json();
 
-  if (data.status !== "confirmed") {
+  // ===== ESTADO =====
+  if (data.status === "confirmed") {
     document.getElementById("statusText").innerText =
-      "Tu pago está siendo confirmado…";
+      "Pago confirmado correctamente ✅";
+  } else {
+    document.getElementById("statusText").innerText =
+      "Estamos confirmando tu pago… ⏳";
+  }
+
+  // ===== DETALLES (se renderizan una sola vez) =====
+  if (!detailsRendered) {
+    detailsRendered = true;
+
+    document.getElementById("orderSummary").innerHTML = `
+      <b>Resumen de tu pedido</b><br><br>
+      • Cantidad de picadas: <b>${data.items.length}</b><br><br>
+      ${data.items.map((p, i) =>
+        `• Picada ${i + 1}: ${p.model} (${p.size} personas)`
+      ).join("<br>")}
+    `;
+
+    document.getElementById("deliveryInfo").innerHTML = `
+      <b>📍 Dirección de entrega</b><br>
+      ${data.zone || "-"}${data.address ? " – " + data.address : ""}
+    `;
+
+    document.getElementById("total").innerHTML =
+      "Total pagado: $" + data.total.toLocaleString();
+
+    document.getElementById("details").style.display = "block";
+  }
+
+  // ===== SEGUIR CONFIRMANDO =====
+  if (data.status !== "confirmed") {
     setTimeout(loadOrder, 2000);
     return;
   }
 
-  // ✅ pago confirmado
-  document.getElementById("statusText").innerText =
-    "Pago confirmado correctamente ✅";
-
-  // ===== RESUMEN =====
-  const summary = document.getElementById("orderSummary");
-
-  summary.innerHTML = `
-    <b>Resumen de tu pedido</b><br><br>
-    • Cantidad de picadas: <b>${data.items.length}</b><br><br>
-    ${data.items.map((p, i) =>
-      `• Picada ${i + 1}: ${p.model} (${p.size} personas)`
-    ).join("<br>")}
-  `;
-
-  // ===== ENVÍO =====
-  const delivery = document.getElementById("deliveryInfo");
-
-  delivery.innerHTML = `
-    <b>📍 Dirección de entrega</b><br>
-    ${data.zone || "-"}${data.address ? " – " + data.address : ""}
-  `;
-
-  // ===== TOTAL =====
-  document.getElementById("total").innerHTML =
-    "Total pagado: $" + data.total.toLocaleString();
-
-  document.getElementById("details").style.display = "block";
-
-  // 🔥 limpiar estado del pedido
-  try{
+  // ===== LIMPIEZA =====
+  try {
     localStorage.clear();
     sessionStorage.clear();
-  }catch(e){}
+  } catch (e) {}
 }
 
 loadOrder();
