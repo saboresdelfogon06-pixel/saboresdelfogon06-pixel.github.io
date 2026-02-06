@@ -396,6 +396,38 @@ button.selected{
   50% { border-color: #ff4d4f; background: transparent; }
 }
 
+/* ===== FECHA + HORARIO ===== */
+.date-time-row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+/* Desktop */
+@media (min-width: 481px){
+  .date-time-row .date{
+    flex: 0 0 45%;   /* achica SOLO el campo visible */
+  }
+
+  #deliveryTime{
+    flex: 1;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px){
+  .date-time-row{
+    flex-direction: column;
+  }
+}
+
+/* Aclaración */
+.delivery-hint{
+  font-size:12px;
+  color: var(--muted);
+  margin-top:4px;
+}
+
 </style>
 </head>
 <body>
@@ -438,9 +470,32 @@ button.selected{
 <input id="clientName" class="control" placeholder="Ingrese su nombre completo" oninput="update()">
 <div class="error-msg" id="error-clientName"></div>
 
-<label>Fecha del pedido</label>
-<input id="orderDate" type="date" class="control date" placeholder="Por favor selecciona una fecha" oninput="update()">
+<label>Fecha y horario de entrega</label>
+
+<div class="date-time-row">
+  <!-- FECHA -->
+  <input
+    id="orderDate"
+    type="date"
+    class="control date"
+    placeholder="Por favor selecciona una fecha"
+    oninput="update()"
+  >
+
+  <!-- HORARIO -->
+  <select id="deliveryTime" class="control" onchange="update()">
+    <option value="">Horarios de entrega</option>
+    <option value="11-14">11:00 a.m – 14:00 p.m</option>
+    <option value="15-19">15:00 p.m – 19:00 p.m</option>
+  </select>
+</div>
+
+<div class="delivery-hint">
+  El horario puede variar hasta una hora más tarde.
+</div>
+
 <div class="error-msg" id="error-orderDate"></div>
+
 <label>Localidad</label>
 <select id="zone" class="control" onchange="handleZoneChange()">
   <option value="">Seleccionar localidad</option>
@@ -512,6 +567,7 @@ button.selected{
 <script>
 const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
 const clientName = document.getElementById('clientName');
+const deliveryTime = document.getElementById('deliveryTime');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
 const zone       = document.getElementById('zone');
@@ -629,12 +685,14 @@ function saveState(){
   localStorage.setItem('addr', addr.value);
   localStorage.setItem('zone', zone.value);
   localStorage.setItem('clientWhatsapp', clientWhatsapp.value);
+  localStorage.setItem('deliveryTime', deliveryTime.value);
 }
 
 
 function loadState() {
   clientWhatsapp.value = localStorage.getItem('clientWhatsapp') || "";
   const savedPicadas = localStorage.getItem('picadas');
+  deliveryTime.value = localStorage.getItem('deliveryTime') || "";
 
   if (!savedPicadas) {
     buildPicadas(1);
