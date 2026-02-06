@@ -1280,13 +1280,14 @@ if (typeof fbq === "function") {
 
   const fbIds = getFacebookIdentifiers();
   const clientUserAgent = navigator.userAgent;
+  const whatsappFinal = "549" + clientWhatsapp.value;
 
 
 const payload = {
   order_id: window.currentOrderId,
   token: window.currentToken,
   nombre: clientName.value,
-  whatsapp: clientWhatsapp.value,
+  whatsapp: whatsappFinal,
   envio: ship,
   picadas: picadas.map(p => ({
     model: p.model,
@@ -1324,7 +1325,7 @@ sessionStorage.removeItem('order_fingerprint');
 body: JSON.stringify({
   order_id: window.currentOrderId,
   clientName: clientName.value,
-  clientWhatsapp: clientWhatsapp.value,
+  clientWhatsapp: whatsappFinal,
   total,
   fingerprint: getOrderFingerprint(),
   currency: "ARS",
