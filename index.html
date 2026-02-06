@@ -393,12 +393,12 @@ button.selected{
   50% { border-color: #ff4d4f; background: transparent; }
 }
 
-/* ===== FECHA + HORARIO ===== */
 .date-time-row{
   display:flex;
   gap:10px;
-  align-items:center;
+  align-items:flex-start; /* 👈 clave */
 }
+
 
 /* Desktop */
 @media (min-width: 481px){
@@ -418,12 +418,13 @@ button.selected{
   }
 }
 
-/* Aclaración */
 .delivery-hint{
   font-size:12px;
   color: var(--muted);
-  margin-top:4px;
+  margin-top:-4px;   /* 👈 lo acerca al horario */
+  margin-bottom:12px; /* 👈 separa de Localidad */
 }
+
 
 /* ===== NORMALIZAR INPUT DATE ===== */
 input[type="date"].control{
@@ -519,18 +520,18 @@ input[type="date"]::-moz-focus-inner{
   >
 
   <!-- HORARIO -->
-  <div style="width:100%;">
-    <select id="deliveryTime" class="control" onchange="update()">
-      <option value="">Horarios de entrega</option>
-      <option value="11-14">11:00 a.m – 14:00 p.m</option>
-      <option value="15-19">15:00 p.m – 19:00 p.m</option>
-    </select>
-
-    <div class="delivery-hint">
-      El horario puede variar hasta una hora más tarde.
-    </div>
-  </div>
+  <select id="deliveryTime" class="control" onchange="update()">
+    <option value="">Horarios de entrega</option>
+    <option value="11-14">11:00 a.m – 14:00 p.m</option>
+    <option value="15-19">15:00 p.m – 19:00 p.m</option>
+  </select>
 </div>
+
+<!-- TEXTO ACLARATIVO (FUERA DEL FLEX) -->
+<div class="delivery-hint">
+  El horario puede variar hasta una hora más tarde.
+</div>
+
 
 <div class="error-msg" id="error-orderDate"></div>
 
