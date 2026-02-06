@@ -482,9 +482,10 @@ button.selected{
 <input
   id="clientWhatsapp"
   class="control"
-  placeholder="Ej: 11 2345 6789"
+  placeholder="Ej: 1123456789"
   inputmode="numeric"
-  oninput="update()"
+  maxlength="10"
+  oninput="handleWhatsappInput()"
 />
 <div class="error-msg" id="error-clientWhatsapp"></div>
 
@@ -1089,6 +1090,19 @@ function setZone(){
  saveState(); // MÓDULO 3.2
  update();
 }
+
+function handleWhatsappInput() {
+  let v = clientWhatsapp.value.replace(/\D/g, '');
+
+  // máximo 10 números
+  if (v.length > 10) {
+    v = v.slice(0, 10);
+  }
+
+  clientWhatsapp.value = v;
+  saveState();
+}
+
 function update() {
   const summaryDiv = document.querySelector('.section.summary');
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
@@ -1192,41 +1206,54 @@ async function goWA() {
   payBtn.textContent = "Procesando...";
 
 
-
-  // Limpiar errores visuales
-  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+// 🔴 Limpiar errores previos
+document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
 const campos = [
-  { id: 'clientName', label: 'Nombre y apellido' },
-  { id: 'clientWhatsapp', label: 'WhatsApp' },
-  { id: 'orderDate', label: 'Fecha del pedido' },
-  { id: 'zone', label: 'Localidad' }
+  { id: 'clientName' },
+  { id: 'clientWhatsapp' },
+  { id: 'orderDate' },
+  { id: 'zone' }
 ];
 
+let primeroInvalido = null;
 
-  let primeroInvalido = null;
+campos.forEach(c => {
+  const elem = document.getElementById(c.id);
+  let valor = elem.value.trim();
 
-  campos.forEach(c => {
-    const elem = document.getElementById(c.id);
-    let valor = elem.value.trim();
-
-    if (c.id === 'zone' && valor === 'manual') {
-      valor = document.getElementById('manualZone').value.trim();
-    }
+  // Localidad manual
+  if (c.id === 'zone' && valor === 'manual') {
+    const manual = document.getElementById('manualZone');
+    valor = manual.value.trim();
 
     if (!valor) {
-      elem.classList.add('error');
-      if (!primeroInvalido) primeroInvalido = elem;
+      manual.classList.add('error');
+      if (!primeroInvalido) primeroInvalido = manual;
+      return;
     }
-  });
-
-  if (primeroInvalido) {
-    primeroInvalido.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Enviar pedido";
-    return;
   }
+
+  if (!valor) {
+    elem.classList.add('error');
+    if (!primeroInvalido) primeroInvalido = elem;
+  }
+});
+
+if (primeroInvalido) {
+  setTimeout(() => {
+    primeroInvalido.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+    primeroInvalido.focus({ preventScroll: true });
+  }, 50);
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  return;
+}
 
   // Validar que todas las picadas tengan modelo y tamaño
   const incompletePicada = picadas.find(p => !p.model || !p.size);
