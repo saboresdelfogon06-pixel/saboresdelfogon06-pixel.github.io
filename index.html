@@ -266,9 +266,6 @@ button.selected{
   z-index:5;
 }
 
-.control.date{
-  padding:10px;
-}
 #config .picada-top{
   margin-top:4px;
 }
@@ -427,6 +424,34 @@ button.selected{
   color: var(--muted);
   margin-top:4px;
 }
+
+/* ===== NORMALIZAR INPUT DATE ===== */
+input[type="date"].control{
+  padding:14px;               /* igual que .control */
+  background:#111;
+  color:var(--text);
+  border:1px solid #333;
+  border-radius:8px;
+  font-size:14px;
+  line-height: normal;
+
+  /* quita estilos nativos */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* icono calendario (WebKit: Chrome, Safari, iOS) */
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter: invert(1) opacity(0.6);
+  cursor:pointer;
+}
+
+/* Firefox */
+input[type="date"]::-moz-focus-inner{
+  border:0;
+}
+
 
 </style>
 </head>
@@ -1203,6 +1228,7 @@ const valid =
   clientName.value.trim() &&
   clientWhatsapp.value.trim() &&
   orderDate.value &&
+  deliveryTime.value &&
   zoneName;
 
 
@@ -1347,12 +1373,14 @@ const payload = {
   nombre: clientName.value,
   whatsapp: whatsappFinal,
   envio: ship,
+  horario: deliveryTime.value,
   picadas: picadas.map(p => ({
     model: p.model,
     size: p.size,
     price: p.price
   }))
 };
+
 
   try {
     // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
