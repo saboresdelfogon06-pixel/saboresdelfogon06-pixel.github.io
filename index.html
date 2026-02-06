@@ -441,6 +441,12 @@ input[type="date"].control{
   appearance: none;
 }
 
+input[type="date"].control{
+  min-height:48px;     /* fuerza el mismo alto que los otros */
+  display:flex;
+  align-items:center;  /* centra el texto verticalmente */
+}
+  
 /* icono calendario (WebKit: Chrome, Safari, iOS) */
 input[type="date"]::-webkit-calendar-picker-indicator{
   filter: invert(1) opacity(0.6);
@@ -451,7 +457,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 input[type="date"]::-moz-focus-inner{
   border:0;
 }
-
 
 </style>
 </head>
@@ -604,12 +609,23 @@ const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
 document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
-  if (dateInput) {
-    const minDate = new Date();
-    minDate.setDate(minDate.getDate() + 2);
-    dateInput.min = minDate.toISOString().split('T')[0];
+  if (!dateInput) return;
+
+  // fecha mínima = hoy + 2
+  const minDate = new Date();
+  minDate.setDate(minDate.getDate() + 2);
+  const minDateStr = minDate.toISOString().split('T')[0];
+
+  dateInput.min = minDateStr;
+
+  // 👉 si no hay fecha guardada, usar la más cercana disponible
+  const savedDate = localStorage.getItem('orderDate');
+  if (!savedDate) {
+    dateInput.value = minDateStr;
+    localStorage.setItem('orderDate', minDateStr);
   }
 });
+
 
 
 
