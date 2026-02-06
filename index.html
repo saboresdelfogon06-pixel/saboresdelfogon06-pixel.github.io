@@ -442,10 +442,13 @@ input[type="date"].control{
 }
 
 input[type="date"].control{
-  min-height:48px;     /* fuerza el mismo alto que los otros */
+  min-height:48px;
   display:flex;
-  align-items:center;  /* centra el texto verticalmente */
+  align-items:center;
+  justify-content:flex-start; /* 👈 fuerza texto a la izquierda */
+  text-align:left;            /* 👈 consistente con otros campos */
 }
+
   
 /* icono calendario (WebKit: Chrome, Safari, iOS) */
 input[type="date"]::-webkit-calendar-picker-indicator{
@@ -508,20 +511,21 @@ input[type="date"]::-moz-focus-inner{
     id="orderDate"
     type="date"
     class="control date"
-    placeholder="Por favor selecciona una fecha"
     oninput="update()"
   >
 
   <!-- HORARIO -->
-  <select id="deliveryTime" class="control" onchange="update()">
-    <option value="">Horarios de entrega</option>
-    <option value="11-14">11:00 a.m – 14:00 p.m</option>
-    <option value="15-19">15:00 p.m – 19:00 p.m</option>
-  </select>
-</div>
+  <div style="width:100%;">
+    <select id="deliveryTime" class="control" onchange="update()">
+      <option value="">Horarios de entrega</option>
+      <option value="11-14">11:00 a.m – 14:00 p.m</option>
+      <option value="15-19">15:00 p.m – 19:00 p.m</option>
+    </select>
 
-<div class="delivery-hint">
-  El horario puede variar hasta una hora más tarde.
+    <div class="delivery-hint">
+      El horario puede variar hasta una hora más tarde.
+    </div>
+  </div>
 </div>
 
 <div class="error-msg" id="error-orderDate"></div>
