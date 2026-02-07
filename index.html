@@ -1326,8 +1326,6 @@ function resetPayButton() {
 
 
 async function goWA() {
-  // ⚠️ Solo continuar si el botón está habilitado
-  if (!payBtn.classList.contains("enabled")) return;
   const orderId = window.currentOrderId; 
   // Bloquear botón y cambiar estilo
   payBtn.disabled = true;
