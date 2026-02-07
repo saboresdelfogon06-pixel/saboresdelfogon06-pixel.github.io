@@ -411,12 +411,17 @@ button.selected{
   }
 }
 
-/* Mobile */
 @media (max-width: 480px){
   .date-time-row{
-    flex-direction: column;
+    flex-direction: row;   /* 👈 en fila */
+  }
+
+  .date-time-row .date,
+  #deliveryTime{
+    flex: 1;              /* 👈 50% y 50% */
   }
 }
+
 
 .delivery-hint{
   font-size:12px;
@@ -461,9 +466,16 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 input[type="date"]::-moz-focus-inner{
   border:0;
 }
-/* separa visualmente el bloque fecha/horario de Localidad */
-#zone{
-  margin-top:12px;
+
+.zone-row{
+  display:flex;
+  gap:10px;
+}
+
+@media (max-width:480px){
+  .zone-row > div{
+    flex:1;   /* 50% / 50% */
+  }
 }
 
 </style>
@@ -535,8 +547,10 @@ input[type="date"]::-moz-focus-inner{
 
 <div class="error-msg" id="error-orderDate"></div>
 
-<label>Localidad</label>
-<select id="zone" class="control" onchange="handleZoneChange()">
+<div class="zone-row">
+  <div>
+    <label>Localidad</label>
+    <select id="zone" class="control" onchange="handleZoneChange()">
   <option value="">Seleccionar localidad</option>
   <option value="manual">Ingresar manualmente</option>
 
@@ -567,10 +581,23 @@ input[type="date"]::-moz-focus-inner{
   </option>
 
 </select>
-<input type="text" id="manualZone" class="control" placeholder="Ingresá tu localidad" style="display:none;" oninput="setZoneManual()">
-<div class="error-msg" id="error-manualZone"></div>
-<label>Dirección y altura</label>
-<input id="addr" class="control" placeholder="Ingrese la dirección del envío" oninput="update()">
+
+    <input
+  type="text"
+  id="manualZone"
+  class="control"
+  placeholder="Ingresá tu localidad"
+  style="display:none;"
+  oninput="setZoneManual()"
+/>
+
+  </div>
+  
+ <div>
+    <label>Dirección y altura</label>
+    <input id="addr" class="control" placeholder="Ingrese la dirección del envío" oninput="update()">
+  </div>
+</div>
 <div class="error-msg" id="error-addr"></div>
 <label>WhatsApp</label>
 <input
@@ -1315,8 +1342,11 @@ const campos = [
   { id: 'clientName' },
   { id: 'clientWhatsapp' },
   { id: 'orderDate' },
-  { id: 'zone' }
+  { id: 'deliveryTime' },
+  { id: 'zone' },
+  { id: 'addr' }
 ];
+
 
 let primeroInvalido = null;
 
@@ -1343,6 +1373,12 @@ campos.forEach(c => {
 });
 
 if (primeroInvalido) {
+
+  // 📳 Vibración sutil en móviles compatibles
+  if (navigator.vibrate) {
+    navigator.vibrate(80);
+  }
+
   setTimeout(() => {
     primeroInvalido.scrollIntoView({
       behavior: 'smooth',
@@ -1356,6 +1392,7 @@ if (primeroInvalido) {
   payBtn.textContent = "Pagar";
   return;
 }
+
 
   // Validar que todas las picadas tengan modelo y tamaño
   const incompletePicada = picadas.find(p => !p.model || !p.size);
@@ -1661,7 +1698,17 @@ if (document.readyState === "complete") {
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
+document.querySelectorAll('.control').forEach(el=>{
+  el.addEventListener('input', ()=>{
+    el.classList.remove('error');
+  });
 
+  el.addEventListener('change', ()=>{
+    el.classList.remove('error');
+  });
+});
+
+  
 </script>
 <script>
 (function () {
