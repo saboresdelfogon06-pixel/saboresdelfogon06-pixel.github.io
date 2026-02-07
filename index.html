@@ -1247,7 +1247,7 @@ txt += `<br>Envío a ${zoneName || "Sin localidad"}: ${envio}<br><br>`;
 
 // Total siempre visible, aunque sea cero
 const totalVisible = total || 0;
-txt += `<b>Total hasta ahora: $${totalVisible.toLocaleString()}</b>`;
+txt += `<b>Total: $${totalVisible.toLocaleString()}</b>`;
 
 if (!picadas.every(p => p.model && p.size)) {
   txt += `<br><span style="color:#ff4d4f;font-size:13px;">
