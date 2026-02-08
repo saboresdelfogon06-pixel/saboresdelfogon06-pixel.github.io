@@ -581,11 +581,11 @@ input[type="date"]::-moz-focus-inner{
   }
 }
 
-  .picada-content{
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
+.picada-content{
+  position:relative;
+  display:block; /* dejamos que el contenido fluya natural */
 }
+
 
 .picada-left{
   flex:1;
@@ -594,12 +594,26 @@ input[type="date"]::-moz-focus-inner{
 }
 
 .picada-right{
-  flex:0 0 120px;
-  font-size:12px;
+  position:absolute;
+  top:0;
+  right:0;
+
+  width:140px;
+  font-size:13px;
   color:var(--muted);
-  text-align:right;
-  border-left:1px dashed #333;
-  padding-left:10px;
+
+  background:#111;
+  border-radius:8px;
+  padding:10px;
+
+  text-align:left;
+}
+
+.picada-right b{
+  display:block;
+  font-size:14px;
+  color:var(--text);
+  margin-bottom:4px;
 }
 
 .picada-left ul{
@@ -1316,20 +1330,6 @@ ${
       </div>
     `
 }
-
-
-
-    ${
-      p.size && SIZE_INFO[p.size]
-        ? `
-          <div style="margin-top:12px;padding-top:10px;border-top:1px dashed #333;">
-            <b>Tamaño ${p.size} personas</b><br>
-            Pican ${SIZE_INFO[p.size].pican}<br>
-            Medidas: ${SIZE_INFO[p.size].medidas}
-          </div>
-        `
-        : ""
-    }
 
       </div>
     </div>
