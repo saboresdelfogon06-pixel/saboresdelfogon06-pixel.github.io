@@ -80,6 +80,22 @@ label{
   margin-bottom:10px;
   box-sizing:border-box;
 }
+select.control{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: #111;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='white'>\
+<path d='M7 10l5 5 5-5z'/>\
+</svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+
+  padding-right: 40px; /* espacio para la flecha */
+}
 
 button.control{cursor:pointer;text-align:left}
 button.selected{
@@ -940,6 +956,7 @@ const SIZE_INFO = {
   8: { pican: 12, medidas: "28 × 48 cm" }
 };
 
+const MANUAL_ZONE_SHIPPING = 10000;
 
 
 function getOrderFingerprint() {
@@ -1404,15 +1421,14 @@ function handleZoneChange() {
     return;
   }
 
-  // 👉 Opción manual
   if (zoneSelect.value === 'manual') {
-    manualInput.style.display = 'block';
-    zoneName = "";
-    ship = 0;
-    saveState();
-    update();
-    return;
-  }
+  manualInput.style.display = 'block';
+  zoneName = "Zona fuera de rango";
+  ship = MANUAL_ZONE_SHIPPING;
+  saveState();
+  update();
+  return;
+}
 
   // 👉 Localidad normal
   manualInput.style.display = 'none';
@@ -1429,12 +1445,12 @@ function setZoneManual() {
 }
 
   
-function setZone(){
- if(!zone.value)return;
- zoneName = zone.value.split('|')[0];
- ship = +zone.value.split('|')[1];
- saveState(); // MÓDULO 3.2
- update();
+function setZoneManual() {
+  const manualInput = document.getElementById('manualZone');
+  zoneName = manualInput.value || "Zona fuera de rango";
+  ship = MANUAL_ZONE_SHIPPING;
+  saveState();
+  update();
 }
 
 function handleWhatsappInput() {
