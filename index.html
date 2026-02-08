@@ -771,23 +771,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // ===== FIN MÓDULO 1 =====
-
-  function highlightPicada(index){
-  // activar la picada problemática
+function highlightPicada(index){
   active = index;
   saveState();
   renderConfig();
 
   setTimeout(() => {
-    const picadaTop = document.querySelector('.picada-top');
-    if(!picadaTop) return;
+    const box = document.querySelector('.model-size-grid');
+    if(!box) return;
 
-    picadaTop.scrollIntoView({
+    box.scrollIntoView({
       behavior: 'smooth',
       block: 'center'
     });
 
-    const modelBtns = picadaTop.querySelectorAll('button.control');
+    const modelBtns = box.querySelectorAll('.model-col button.control');
     modelBtns.forEach(btn => {
       btn.classList.remove('model-hint');
       setTimeout(() => btn.classList.add('model-hint'), 50);
@@ -1242,43 +1240,6 @@ if(hint){
         `
         : ""
     }
-
-  </div>
-</div>
-      `
-  }
-</div>
-
-       <label>Seleccioná la cantidad de personas:</label>
-
-<button
-  class="control size-btn ${p.size===1?'selected':''}"
-  data-size="1"
-  onclick="handleSizeClick(1, PRICES[1])">
-  TEST | Ejemplo ($300) – Tamaño demo
-</button>
-
-<button
-  class="control size-btn ${p.size===4?'selected':''}"
-  data-size="4"
-  onclick="handleSizeClick(4, PRICES[4])">
-  4 | Pican 6 ($50.000) – Tabla 20×30 cm
-</button>
-
-<button
-  class="control size-btn ${p.size===6?'selected':''}"
-  data-size="6"
-  onclick="handleSizeClick(6, PRICES[6])">
-  6 | Pican 8 ($70.000) – Tabla 28×48 cm
-</button>
-
-<button
-  class="control size-btn ${p.size===8?'selected':''}"
-  data-size="8"
-  onclick="handleSizeClick(8, PRICES[8])">
-  8 | Pican 12 ($90.000) – Tabla 28×48 cm
-</button>
-
 
       </div>
     </div>
