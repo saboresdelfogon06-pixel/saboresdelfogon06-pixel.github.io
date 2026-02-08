@@ -793,20 +793,46 @@ function highlightPicada(index){
   }, 80);
 }
 
-const modelData={
- "Clásica y Elegante":{
-  img:"images/IMG_7762.webp",
-  fiambres:["Sopresatta italiana","Jamón crudo","Lomo ahumado","Panceta ahumada"],
-  quesos:["Brie","Queso azul","Pepato"],
-  dips:["Dip dulce","Dip salado"]
- },
- "Fresca y Colorida":{
-  img:"images/IMG_7761.webp",
-  fiambres:["Jamón cocido","Salamín chacarero","Longaniza","Panceta ahumada"],
-  quesos:["Brie","Pategrás","Sardo"],
-  dips:["Dip dulce","Dip salado"]
- }
+const modelData = {
+  "Clásica y Elegante": {
+    img: "images/IMG_7762.webp",
+    fiambres: [
+      "Sopresatta italiana",
+      "Jamón crudo",
+      "Lomo ahumado",
+      "Panceta ahumada"
+    ],
+    quesos: [
+      "Brie",
+      "Queso azul",
+      "Pepato"
+    ],
+    dips: [
+      "Dip dulce",
+      "Dip salado"
+    ]
+  },
+
+  "Fresca y Colorida": {
+    img: "images/IMG_7761.webp",
+    fiambres: [
+      "Jamón cocido",
+      "Salamín chacarero",
+      "Longaniza",
+      "Panceta ahumada"
+    ],
+    quesos: [
+      "Brie",
+      "Pategrás",
+      "Sardo"
+    ],
+    dips: [
+      "Dip dulce",
+      "Dip salado"
+    ]
+  }
 };
+
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
@@ -1224,9 +1250,12 @@ if(hint){
           <b>🧀 Quesos</b><br>
           ${modelData[p.model].quesos.join(" · ")}<br><br>
 
-          <b>🥣 Dips</b><br>
-          ${modelData[p.model].dips.join(" · ")}
-        `
+<b>🥣 Dips</b><br>
+${
+  [
+    ...modelData[p.model].dips,
+    ...(p.size >= 6 ? ["Tomatitos deshidratados"] : [])
+  ].join(" · ")
     }
 
     ${
