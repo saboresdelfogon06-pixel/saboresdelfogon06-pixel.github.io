@@ -581,7 +581,36 @@ input[type="date"]::-moz-focus-inner{
   }
 }
 
-  
+  .picada-content{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+.picada-left{
+  flex:1;
+  font-size:13px;
+  line-height:1.4;
+}
+
+.picada-right{
+  flex:0 0 120px;
+  font-size:12px;
+  color:var(--muted);
+  text-align:right;
+  border-left:1px dashed #333;
+  padding-left:10px;
+}
+
+.picada-left ul{
+  margin:4px 0 10px;
+  padding-left:14px;
+}
+
+.picada-left li{
+  margin-bottom:2px;
+}
+
 
 </style>
 </head>
@@ -1251,16 +1280,43 @@ ${
   !p.model
     ? `<div id="modelHint" style="text-align:center;">👉 Seleccioná un modelo para ver el contenido</div>`
     : `
-      <b>🥩 Fiambres</b><br>
-      ${modelData[p.model].fiambres.join(" · ")}<br><br>
+      <div class="picada-content">
 
-      <b>🧀 Quesos</b><br>
-      ${modelData[p.model].quesos.join(" · ")}<br><br>
-      
-      <b>🥣 Dips</b><br>
-      ${dipsText}
-      `
+        <!-- IZQUIERDA: CONTENIDO -->
+        <div class="picada-left">
+          <b>🥩 Fiambres</b>
+          <ul>
+            ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
+          </ul>
+
+          <b>🧀 Quesos</b>
+          <ul>
+            ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
+          </ul>
+
+          <b>🥣 Dips</b>
+          <ul>
+            ${dipsText.split(" · ").map(d => `<li>${d}</li>`).join("")}
+          </ul>
+        </div>
+
+        <!-- DERECHA: TAMAÑO -->
+        ${
+          p.size && SIZE_INFO[p.size]
+            ? `
+              <div class="picada-right">
+                <b>${p.size} personas</b><br>
+                Pican ${SIZE_INFO[p.size].pican}<br>
+                ${SIZE_INFO[p.size].medidas}
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+    `
 }
+
 
 
     ${
