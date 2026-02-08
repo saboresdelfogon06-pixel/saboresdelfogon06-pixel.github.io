@@ -1791,9 +1791,15 @@ window.addEventListener('pageshow', () => {
   loadState();
   update();
 
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
+  const fromMP = sessionStorage.getItem('mp_init_point');
+
+  if (fromMP) {
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Pagar";
+  }
 });
+
 
 // 🔁 Fallback para refresh duro (F5 / Ctrl+R)
 if (document.readyState === "complete") {
