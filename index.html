@@ -1369,15 +1369,7 @@ summaryDiv.innerHTML = `
       <span>Total</span>
       <span>$${total.toLocaleString()}</span>
     </div>
-
-    ${
-      !picadas.every(p => p.model && p.size)
-      ? `<div class="summary-warning">
-          ⚠️ Faltan completar picadas
-        </div>`
-      : ""
-    }
-
+    
   </div>
 `;
 
