@@ -382,10 +382,10 @@ button.selected{
   background-position: center;  /* Centra la imagen dentro del contenedor */
 }
 
- .control.error {
-  border-color: #ff4d4f;
-  background: rgba(255, 77, 79, 0.1);
-  animation: blink-red 0.8s ease-in-out 2;
+.control.error {
+  border-color: var(--accent);
+  background: rgba(211,174,9,0.12);
+  animation: blink-gold 0.8s ease-in-out 2;
 }
 
 @keyframes blink-red {
@@ -747,6 +747,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // ===== FIN MÓDULO 1 =====
+
+  function highlightPicada(index){
+  // activar la picada problemática
+  active = index;
+  saveState();
+  renderConfig();
+
+  setTimeout(() => {
+    const picadaTop = document.querySelector('.picada-top');
+    if(!picadaTop) return;
+
+    picadaTop.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+    const modelBtns = picadaTop.querySelectorAll('button.control');
+    modelBtns.forEach(btn => {
+      btn.classList.remove('model-hint');
+      setTimeout(() => btn.classList.add('model-hint'), 50);
+    });
+  }, 80);
+}
 
 const modelData={
  "Clásica y Elegante":{
@@ -1330,11 +1353,6 @@ txt += `<br>Envío a ${zoneName || "Sin localidad"}: ${envio}<br><br>`;
 const totalVisible = total || 0;
 txt += `<b>Total: $${totalVisible.toLocaleString()}</b>`;
 
-if (!picadas.every(p => p.model && p.size)) {
-  txt += `<br><span style="color:#ff4d4f;font-size:13px;">
-    ⚠️ Hay picadas sin modelo o tamaño seleccionado
-  </span>`;
-}
 
 
 summaryDiv.innerHTML = `
@@ -1498,16 +1516,17 @@ if (primeroInvalido) {
 }
 
 
-  // Validar que todas las picadas tengan modelo y tamaño
-  const incompletePicada = picadas.find(p => !p.model || !p.size);
-  if (incompletePicada) {
-    alert("Por favor seleccioná modelo y tamaño para todas las picadas");
-    document.querySelector('.picada-top').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Pagar";
-    return;
-  }
+// Validar que todas las picadas tengan modelo y tamaño
+const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+
+if (incompleteIndex !== -1) {
+  highlightPicada(incompleteIndex);
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  return;
+}
 
 // 🔹 Pixel Meta – StartPayment (protegido)
 if (typeof fbq === "function") {
