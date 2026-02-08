@@ -1179,6 +1179,14 @@ let tabs = `
 
  const p = picadas[active];
 
+  const dipsText = p.model
+  ? [
+      ...modelData[p.model].dips,
+      ...(p.size >= 6 ? ["Tomatitos deshidratados"] : [])
+    ].join(" · ")
+  : "";
+
+
 // 🔹 NUEVO: reset color del aviso a gris si hay modelo
 const hint = document.getElementById('modelHint');
 if(hint){
@@ -1249,14 +1257,11 @@ if(hint){
 
           <b>🧀 Quesos</b><br>
           ${modelData[p.model].quesos.join(" · ")}<br><br>
-
-<b>🥣 Dips</b><br>
-${
-  [
-    ...modelData[p.model].dips,
-    ...(p.size >= 6 ? ["Tomatitos deshidratados"] : [])
-  ].join(" · ")
-    }
+          
+          <b>🥣 Dips</b><br>
+          ${dipsText}
+          join(" · ")
+          }
 
     ${
       p.size && SIZE_INFO[p.size]
