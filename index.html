@@ -1249,13 +1249,6 @@ if(hint){
 }
 
 
-function setSize(s,p){
-  picadas[active].size = s;
-  picadas[active].price = p;
-  saveState(); // MÓDULO 3.2
-  renderConfig();
-}
-
 function handleSizeClick(s, p){
   const current = picadas[active];
 
