@@ -1247,20 +1247,20 @@ if(hint){
   </div>
 
   <!-- CONTENIDO DEL MODELO -->
-  <div class="model-info">
-    ${
-      !p.model
-        ? `<div id="modelHint" style="text-align:center;">👉 Seleccioná un modelo para ver el contenido</div>`
-        : `
-          <b>🥩 Fiambres</b><br>
-          ${modelData[p.model].fiambres.join(" · ")}<br><br>
+${
+  !p.model
+    ? `<div id="modelHint" style="text-align:center;">👉 Seleccioná un modelo para ver el contenido</div>`
+    : `
+      <b>🥩 Fiambres</b><br>
+      ${modelData[p.model].fiambres.join(" · ")}<br><br>
 
-          <b>🧀 Quesos</b><br>
-          ${modelData[p.model].quesos.join(" · ")}<br><br>
-          
-        <b>🥣 Dips</b><br>
-        ${dipsText}
-        `
+      <b>🧀 Quesos</b><br>
+      ${modelData[p.model].quesos.join(" · ")}<br><br>
+      
+      <b>🥣 Dips</b><br>
+      ${dipsText}
+      `
+}
 
 
     ${
