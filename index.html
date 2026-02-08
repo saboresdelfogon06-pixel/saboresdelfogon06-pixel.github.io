@@ -602,19 +602,26 @@ input[type="date"]::-moz-focus-inner{
   font-size:13px;
   color:var(--muted);
 
-  background:#111;
-  border-radius:8px;
-  padding:10px;
+  /* ❌ fuera fondo tipo botón */
+  background: transparent;
+  border-radius: 0;
+  padding: 0 0 0 12px;
+
+  /* ✅ divisor estilo resumen */
+  border-left: 1px dashed #333;
 
   text-align:left;
 }
 
+
 .picada-right b{
   display:block;
-  font-size:14px;
+  font-size:13px;
+  font-weight:600;
   color:var(--text);
-  margin-bottom:4px;
+  margin-bottom:2px;
 }
+
 .picada-left{
   padding-right:160px; /* ancho del bloque derecho + aire */
   font-size:13px;
