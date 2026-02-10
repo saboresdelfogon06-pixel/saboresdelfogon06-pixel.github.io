@@ -70,16 +70,22 @@ label{
   margin-bottom:6px;
 }
 
+/* 🔒 ALTURA UNIFICADA PARA TODOS LOS CAMPOS */
 .control{
   width:100%;
-  padding:14px;
+  min-height:48px;          /* ← ALTURA ESTÁNDAR */
+  padding:12px;
   background:#111;
   color:var(--text);
   border:1px solid #333;
   border-radius:8px;
   margin-bottom:10px;
   box-sizing:border-box;
+
+  display:flex;
+  align-items:center;       /* centra contenido vertical */
 }
+
 select.control{
   appearance: none;
   -webkit-appearance: none;
@@ -97,7 +103,11 @@ select.control{
   padding-right: 40px; /* espacio para la flecha */
 }
 
-button.control{cursor:pointer;text-align:left}
+button.control{
+  cursor:pointer;
+  text-align:left;
+  line-height:normal;
+}
 button.selected{
   border-color:var(--accent);
   background:rgba(211,174,9,.15);
@@ -661,6 +671,11 @@ input[type="date"]::-moz-focus-inner{
   font-size:14px;
   font-weight:600;
   color:var(--text);
+}
+  /* Botones de modelo y tamaño más sólidos */
+.model-col button.control,
+.size-col button.control{
+  font-weight:500;
 }
 
 </style>
@@ -1241,7 +1256,7 @@ let tabs = `
     <div style="display:flex;align-items:center;gap:8px;">
       <button
         class="control"
-        style="width:36px;padding:8px;text-align:center;"
+        style="width:36px;padding:0;justify-content:center;"
         onclick="removeLastPicada()"
         ${picadas.length <= 1 ? 'disabled' : ''}>
         −
@@ -1253,7 +1268,7 @@ let tabs = `
 
       <button
         class="control"
-        style="width:36px;padding:8px;text-align:center;"
+        style="width:36px;padding:0;justify-content:center;"
         onclick="addPicada()">
         +
       </button>
