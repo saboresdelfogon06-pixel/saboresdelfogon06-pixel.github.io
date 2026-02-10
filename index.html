@@ -1598,29 +1598,30 @@ function handleWhatsappInput() {
 function formatClientName(input) {
   let value = input.value
     .toLowerCase()
-    .replace(/\s+/g, ' ')        // evita dobles espacios
-    .trimStart();                // no fuerza espacio inicial
+    .replace(/\s+/g, ' ')
+    .trimStart();
 
-  value = value.replace(/\b\w/g, char => char.toUpperCase());
+  // Mayúscula solo después de espacio o inicio de string
+  value = value.replace(/(^|\s)([a-záéíóúñ])/g, (_, sep, char) => {
+    return sep + char.toUpperCase();
+  });
 
   input.value = value;
-
-  // mantener sincronizado el estado
   saveState();
 }
+
 
 function formatAddress(input) {
   let value = input.value
     .toLowerCase()
-    .replace(/\s+/g, ' ')   // evita dobles espacios
-    .trimStart();           // no fuerza espacio inicial
+    .replace(/\s+/g, ' ')
+    .trimStart();
 
-  // Mayúscula inicial de cada palabra (mantiene números)
-  value = value.replace(/\b[a-záéíóúñ]/g, char => char.toUpperCase());
+  value = value.replace(/(^|\s)([a-záéíóúñ])/g, (_, sep, char) => {
+    return sep + char.toUpperCase();
+  });
 
   input.value = value;
-
-  // sincronizar estado
   saveState();
 }
 
@@ -1630,13 +1631,13 @@ function formatManualZone(input) {
     .replace(/\s+/g, ' ')
     .trimStart();
 
-  value = value.replace(/\b[a-záéíóúñ]/g, char => char.toUpperCase());
+  value = value.replace(/(^|\s)([a-záéíóúñ])/g, (_, sep, char) => {
+    return sep + char.toUpperCase();
+  });
 
   input.value = value;
-
   saveState();
 }
-
 
 
 function update() {
