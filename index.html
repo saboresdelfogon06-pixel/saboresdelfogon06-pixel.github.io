@@ -893,41 +893,43 @@ function highlightPicada(index){
   saveState();
   renderConfig();
 
-  setTimeout(() => {
-    const box = document.querySelector('.model-size-grid');
-    if(!box) return;
+  // ⚡ esperar al próximo frame real del browser
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
 
-    box.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
+      const box = document.querySelector('.model-size-grid');
+      if(!box) return;
+
+      box.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+
+      const p = picadas[active];
+
+      // limpiar animaciones previas
+      box.querySelectorAll('button.control').forEach(b =>
+        b.classList.remove('model-hint')
+      );
+
+      let targets = [];
+
+      if(!p.model){
+        targets = box.querySelectorAll('.model-col button.control');
+      } else if(!p.size){
+        targets = box.querySelectorAll('.size-col button.control');
+      }
+
+      targets.forEach(btn => {
+        // 🔥 forzar repaint
+        btn.offsetHeight;
+        btn.classList.add('model-hint');
+      });
+
     });
-
-    const p = picadas[active];
-
-    // limpiar animaciones previas
-    box.querySelectorAll('button.control').forEach(b =>
-      b.classList.remove('model-hint')
-    );
-
-    // 👇 decidir qué titila
-    let targets = [];
-
-    if(!p.model){
-      // faltan modelos
-      targets = box.querySelectorAll('.model-col button.control');
-    } else if(!p.size){
-      // falta tamaño
-      targets = box.querySelectorAll('.size-col button.control');
-    }
-
-    // forzar reflow + animación
-    targets.forEach(btn => {
-      btn.offsetWidth;
-      btn.classList.add('model-hint');
-    });
-
-  }, 80);
+  });
 }
+
 
 const modelData = {
   "Clásica y Elegante": {
@@ -1707,6 +1709,19 @@ async function goWA() {
 // 🔴 Limpiar errores previos
 document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
+// Validar que todas las picadas tengan modelo y tamaño
+const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+
+if (incompleteIndex !== -1) {
+  highlightPicada(incompleteIndex);
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  return;
+}
+
+
 const campos = [
   { id: 'clientName' },
   { id: 'clientWhatsapp' },
@@ -1754,19 +1769,6 @@ if (primeroInvalido) {
       block: 'center'
     });
   }, 50);
-
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar";
-  return;
-}
-
-
-// Validar que todas las picadas tengan modelo y tamaño
-const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-
-if (incompleteIndex !== -1) {
-  highlightPicada(incompleteIndex);
 
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
