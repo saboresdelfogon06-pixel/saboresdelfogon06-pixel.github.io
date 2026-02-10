@@ -23,20 +23,21 @@ body {
   color: var(--text);
   touch-action: manipulation;
   overscroll-behavior: none;
-  height: 100%;      /* Ocupa toda la altura del viewport */
-  overflow-y: auto;  /* Permite el scroll en el eje vertical */
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
 }
- 
+
 .container {
   max-width: 720px;
   margin: auto;
   padding: 16px;
-  padding-top: 72px; /* altura del mini-banner + margen extra */
-  
-  height: 100%;       /* ocupa toda la pantalla */
-  overflow-y: auto;   /* scroll solo dentro del contenido */
-  -webkit-overflow-scrolling: touch; /* suaviza scroll en iOS */
+  padding-top: 72px;
+
+  height: auto;        /* 🔑 */
+  overflow: visible;   /* 🔑 */
 }
+
 /* HEADER */
 .header{
   display:flex;
@@ -708,6 +709,13 @@ select.control:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
+/* 🧠 Mejora de fluidez general */
+.container,
+.section,
+.banner,
+.picada-content {
+  will-change: transform;
+}
 
 </style>
 </head>
@@ -933,10 +941,11 @@ function highlightPicada(index){
       const box = document.querySelector('.model-size-grid');
       if(!box) return;
 
-      box.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
+box.scrollIntoView({
+  behavior: 'smooth',
+  block: 'nearest'
+});
+
 
       const p = picadas[active];
 
@@ -1818,10 +1827,10 @@ if (primeroInvalido) {
   }
 
   setTimeout(() => {
-    primeroInvalido.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
-    });
+primeroInvalido.scrollIntoView({
+  behavior: 'smooth',
+  block: 'nearest'
+});
   }, 50);
 
   payBtn.disabled = false;
