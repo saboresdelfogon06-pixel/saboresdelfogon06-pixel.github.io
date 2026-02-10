@@ -619,22 +619,19 @@ input[type="date"]::-moz-focus-inner{
 .picada-right{
   position:absolute;
   top:0;
-  right:0;
-
-  width:140px;
+  right:24px;            /* 👈 se corre hacia adentro */
+  width:130px;           /* 👈 un poco más compacto */
   font-size:13px;
   color:var(--muted);
 
-  /* ❌ fuera fondo tipo botón */
   background: transparent;
   border-radius: 0;
   padding: 0 0 0 12px;
 
-  /* ✅ divisor estilo resumen */
   border-left: 1px dashed #333;
-
   text-align:left;
 }
+
 
 
 .picada-right b{
@@ -646,20 +643,28 @@ input[type="date"]::-moz-focus-inner{
 }
 
 .picada-left{
-  padding-right:160px; /* ancho del bloque derecho + aire */
+  padding-right:160px;   /* ya lo tenés, lo dejamos */
+  padding-left:12px;     /* 👈 sangría general del bloque */
   font-size:13px;
-  line-height:1.4;
+  line-height:1.45;
 }
 
 .picada-left ul{
-  margin:4px 0 10px;
-  padding-left:14px;
+  margin:6px 0 14px;
+  padding-left:22px;     /* 👈 sangría real de lista */
 }
 
 .picada-left li{
-  margin-bottom:2px;
+  margin-bottom:4px;
 }
-
+.picada-left b{
+  display:block;
+  margin-top:6px;
+  margin-bottom:4px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+}
 .summary-header{
   display:flex;
   align-items:center;
