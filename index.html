@@ -490,6 +490,20 @@ input[type="date"].control{
   appearance:none;
 }
 
+/* 🔧 Fuerza tamaño real del texto en input date */
+input[type="date"].control{
+  font-size:14px;
+}
+
+input[type="date"].control::-webkit-datetime-edit,
+input[type="date"].control::-webkit-datetime-edit-text,
+input[type="date"].control::-webkit-datetime-edit-month-field,
+input[type="date"].control::-webkit-datetime-edit-day-field,
+input[type="date"].control::-webkit-datetime-edit-year-field{
+  font-size:14px;
+  line-height:1;
+}
+
   
 /* icono calendario (WebKit: Chrome, Safari, iOS) */
 input[type="date"]::-webkit-calendar-picker-indicator{
@@ -878,20 +892,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const dateInput = document.getElementById('orderDate');
   if (!dateInput) return;
 
-  // fecha mínima = hoy + 2
+  // 📅 fecha mínima = hoy + 1 (24 hs)
   const minDate = new Date();
-  minDate.setDate(minDate.getDate() + 2);
+  minDate.setDate(minDate.getDate() + 1);
   const minDateStr = minDate.toISOString().split('T')[0];
 
   dateInput.min = minDateStr;
 
-  // 👉 si no hay fecha guardada, usar la más cercana disponible
   const savedDate = localStorage.getItem('orderDate');
-  if (!savedDate) {
+
+  // 👉 usar fecha guardada SOLO si sigue siendo válida
+  if (savedDate && savedDate >= minDateStr) {
+    dateInput.value = savedDate;
+  } else {
     dateInput.value = minDateStr;
     localStorage.setItem('orderDate', minDateStr);
   }
 });
+
 
   function clearAllHighlights() {
   document.querySelectorAll('.model-hint, .error').forEach(el => {
