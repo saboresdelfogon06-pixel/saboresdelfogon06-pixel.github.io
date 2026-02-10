@@ -678,6 +678,19 @@ input[type="date"]::-moz-focus-inner{
   font-weight:500;
 }
 
+/* 🧠 FIX autofill navegador (Chrome / Safari / iOS) */
+input.control:-webkit-autofill,
+input.control:-webkit-autofill:hover,
+input.control:-webkit-autofill:focus,
+textarea.control:-webkit-autofill,
+select.control:-webkit-autofill {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0px 1000px #111 inset;
+  box-shadow: 0 0 0px 1000px #111 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+
 </style>
 </head>
 <body>
@@ -1492,15 +1505,6 @@ function setZone() {
   zoneName = name;
   ship = Number(cost) || 0;
 
-  saveState();
-  update();
-}
-
-
-function setZoneManual() {
-  const manualInput = document.getElementById('manualZone');
-  zoneName = manualInput.value;
-  ship = 0;
   saveState();
   update();
 }
