@@ -1217,6 +1217,40 @@ sessionStorage.removeItem('mp_init_point');
 }
 
 
+function handleReturnFromMP() {
+  const params = new URLSearchParams(window.location.search);
+
+  const status =
+    params.get('status') ||
+    params.get('collection_status');
+
+  // 👉 SOLO si el pago fue aprobado
+  if (status === 'approved') {
+
+    // 🔄 Reset total para nuevo pedido
+    resetForNextOrder();
+
+    // 🧹 limpiar estado de Mercado Pago
+    sessionStorage.removeItem('mp_init_point');
+    sessionStorage.removeItem('order_fingerprint');
+    sessionStorage.removeItem('order_id');
+
+    // 🆕 generar nuevo ID de pedido
+    sessionStorage.setItem('order_id', generateOrderId());
+
+    // 🧼 limpiar la URL (?status=approved)
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+    // ⬆️ volver arriba
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    console.log('✅ Pago aprobado → pedido reseteado');
+  }
+}
 
 function setActivePicada(i){
   active = i;
@@ -2068,16 +2102,18 @@ window.addEventListener('scroll', () => {
 });
   
 window.addEventListener('pageshow', () => {
+
+  // 🔑 detectar regreso desde Mercado Pago
+  handleReturnFromMP();
+
+  // 🔄 reconstruir UI
   loadState();
   update();
 
-  const fromMP = sessionStorage.getItem('mp_init_point');
-
-  if (fromMP) {
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Pagar";
-  }
+  // 🛟 fallback defensivo: nunca quedar en "Procesando"
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
 });
 
 
