@@ -433,20 +433,19 @@ button.selected{
 .date-time-row{
   display:flex;
   gap:10px;
-  align-items:flex-start; /* 👈 clave */
+  align-items:stretch; /* 🔑 fuerza misma altura */
 }
 
 
-/* Desktop */
+
 @media (min-width: 481px){
-  .date-time-row .date{
-    flex: 0 0 45%;   /* achica SOLO el campo visible */
-  }
-
+  .date-time-row .date,
   #deliveryTime{
-    flex: 1;
+    flex: 1;          /* 🔑 50 / 50 reales */
+    min-width: 0;     /* 🔑 evita overflow raro */
   }
 }
+
 
 @media (max-width: 480px){
   .date-time-row{
