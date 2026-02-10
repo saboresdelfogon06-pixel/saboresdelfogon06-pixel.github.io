@@ -717,7 +717,12 @@ input[type="date"]::-moz-focus-inner{
 <label style="font-size:12px;">Último paso para confirmar tu pedido:</label>
 <div class="section">
 <label>Nombre y apellido</label>
-<input id="clientName" class="control" placeholder="Ingrese su nombre completo" oninput="update()">
+<input
+  id="clientName"
+  class="control"
+  placeholder="Ingrese su nombre completo"
+  oninput="formatClientName(this); update()"
+/>
 <div class="error-msg" id="error-clientName"></div>
 
 <label>Fecha y horario de entrega</label>
@@ -782,20 +787,26 @@ input[type="date"]::-moz-focus-inner{
 
 </select>
 
-    <input
+<input
   type="text"
   id="manualZone"
   class="control"
   placeholder="Ingresá tu localidad"
   style="display:none;"
-  oninput="setZoneManual()"
+  oninput="formatManualZone(this); setZoneManual()"
 />
+
 
   </div>
   
  <div>
     <label>Dirección y altura</label>
-    <input id="addr" class="control" placeholder="Ingrese la dirección" oninput="update()">
+    <input
+  id="addr"
+  class="control"
+  placeholder="Ingrese la dirección"
+  oninput="formatAddress(this); update()"
+/>
   </div>
 </div>
 <div class="error-msg" id="error-addr"></div>
@@ -1497,6 +1508,50 @@ function handleWhatsappInput() {
   saveState();
 }
 
+function formatClientName(input) {
+  let value = input.value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')        // evita dobles espacios
+    .trimStart();                // no fuerza espacio inicial
+
+  value = value.replace(/\b\w/g, char => char.toUpperCase());
+
+  input.value = value;
+
+  // mantener sincronizado el estado
+  saveState();
+}
+
+function formatAddress(input) {
+  let value = input.value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')   // evita dobles espacios
+    .trimStart();           // no fuerza espacio inicial
+
+  // Mayúscula inicial de cada palabra (mantiene números)
+  value = value.replace(/\b[a-záéíóúñ]/g, char => char.toUpperCase());
+
+  input.value = value;
+
+  // sincronizar estado
+  saveState();
+}
+
+function formatManualZone(input) {
+  let value = input.value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trimStart();
+
+  value = value.replace(/\b[a-záéíóúñ]/g, char => char.toUpperCase());
+
+  input.value = value;
+
+  saveState();
+}
+
+
+
 function update() {
   const summaryDiv = document.querySelector('.section.summary');
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
@@ -1542,11 +1597,15 @@ summaryDiv.innerHTML = `
       `).join("")}
     </div>
 
-    <div class="summary-shipping">
-      <span>Envío</span>
-      <span>${zoneName || "Sin localidad"}</span>
-      <span>$${ship.toLocaleString()}</span>
-    </div>
+<div class="summary-shipping">
+  <span>Envío</span>
+  <span>
+    ${zoneName || "Sin localidad"}
+    ${addr.value ? ` – ${addr.value}` : ""}
+  </span>
+  <span>$${ship.toLocaleString()}</span>
+</div>
+
 
     <div class="summary-total">
       <span>Total</span>
