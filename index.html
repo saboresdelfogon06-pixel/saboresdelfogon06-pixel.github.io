@@ -1478,6 +1478,24 @@ function handleZoneChange() {
   setZone();
 }
 
+function setZone() {
+  const value = zone.value;
+
+  if (!value) {
+    zoneName = "";
+    ship = 0;
+    return;
+  }
+
+  const [name, cost] = value.split('|');
+
+  zoneName = name;
+  ship = Number(cost) || 0;
+
+  saveState();
+  update();
+}
+
 
 function setZoneManual() {
   const manualInput = document.getElementById('manualZone');
