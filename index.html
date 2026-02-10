@@ -70,11 +70,10 @@ label{
   margin-bottom:6px;
 }
 
-/* 🔒 ALTURA UNIFICADA PARA TODOS LOS CAMPOS */
 .control{
   width:100%;
-  min-height:48px;          /* ← ALTURA ESTÁNDAR */
-  padding:12px;
+  height:48px;                 /* 👈 altura fija, no min-height */
+  padding:0 12px;              /* 👈 padding horizontal uniforme */
   background:#111;
   color:var(--text);
   border:1px solid #333;
@@ -82,8 +81,24 @@ label{
   margin-bottom:10px;
   box-sizing:border-box;
 
+  /* 🔑 UNIFICACIÓN REAL */
+  font-family: inherit;
+  font-size:14px;
+  font-weight:400;
+  line-height:1;
+
   display:flex;
-  align-items:center;       /* centra contenido vertical */
+  align-items:center;
+}
+
+input.control,
+select.control,
+button.control{
+  font-family: inherit;
+  font-size:14px;
+  line-height:1;
+  background:#111;
+  color:var(--text);
 }
 
 select.control{
@@ -456,29 +471,22 @@ button.selected{
   margin-bottom:12px; /* 👈 separa de Localidad */
 }
 
-
-/* ===== NORMALIZAR INPUT DATE ===== */
+/* ===== INPUT DATE UNIFICADO (igual a .control) ===== */
 input[type="date"].control{
-  padding:12px;               /* igual que .control */
-  background:#111;
-  color:var(--text);
-  border:1px solid #333;
-  border-radius:8px;
+  height:48px;              /* 👈 IGUAL a .control */
+  padding:0 12px;           /* 👈 IGUAL a .control */
   font-size:14px;
-  line-height: normal;
+  line-height:1;
+  color:var(--text);
+  background:#111;
 
-  /* quita estilos nativos */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-input[type="date"].control{
-  min-height:48px;
   display:flex;
   align-items:center;
-  justify-content:flex-start; /* 👈 fuerza texto a la izquierda */
-  text-align:left;            /* 👈 consistente con otros campos */
+  text-align:left;
+
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
 }
 
   
