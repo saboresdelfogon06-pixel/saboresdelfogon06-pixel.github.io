@@ -849,8 +849,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-// ===== FIN MÓDULO 1 =====
 function highlightPicada(index){
   active = index;
   saveState();
@@ -865,11 +863,30 @@ function highlightPicada(index){
       block: 'center'
     });
 
-    const modelBtns = box.querySelectorAll('.model-col button.control');
-    modelBtns.forEach(btn => {
-      btn.classList.remove('model-hint');
-      setTimeout(() => btn.classList.add('model-hint'), 50);
+    const p = picadas[active];
+
+    // limpiar animaciones previas
+    box.querySelectorAll('button.control').forEach(b =>
+      b.classList.remove('model-hint')
+    );
+
+    // 👇 decidir qué titila
+    let targets = [];
+
+    if(!p.model){
+      // faltan modelos
+      targets = box.querySelectorAll('.model-col button.control');
+    } else if(!p.size){
+      // falta tamaño
+      targets = box.querySelectorAll('.size-col button.control');
+    }
+
+    // forzar reflow + animación
+    targets.forEach(btn => {
+      btn.offsetWidth;
+      btn.classList.add('model-hint');
     });
+
   }, 80);
 }
 
