@@ -886,6 +886,25 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+  function clearAllHighlights() {
+  document.querySelectorAll('.model-hint, .error').forEach(el => {
+    el.classList.remove('model-hint');
+    el.classList.remove('error');
+  });
+}
+
+function flashHighlight(elements, className = 'model-hint', duration = 1800) {
+  elements.forEach(el => {
+    el.classList.remove(className); // reset por si estaba
+    el.offsetHeight;                // forzar repaint
+    el.classList.add(className);
+
+    // ⏱ limpiar solo después del highlight
+    setTimeout(() => {
+      el.classList.remove(className);
+    }, duration);
+  });
+}
 
 
 function highlightPicada(index){
@@ -893,7 +912,6 @@ function highlightPicada(index){
   saveState();
   renderConfig();
 
-  // ⚡ esperar al próximo frame real del browser
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
 
@@ -907,11 +925,6 @@ function highlightPicada(index){
 
       const p = picadas[active];
 
-      // limpiar animaciones previas
-      box.querySelectorAll('button.control').forEach(b =>
-        b.classList.remove('model-hint')
-      );
-
       let targets = [];
 
       if(!p.model){
@@ -920,11 +933,7 @@ function highlightPicada(index){
         targets = box.querySelectorAll('.size-col button.control');
       }
 
-      targets.forEach(btn => {
-        // 🔥 forzar repaint
-        btn.offsetHeight;
-        btn.classList.add('model-hint');
-      });
+      flashHighlight([...targets], 'model-hint', 1800);
 
     });
   });
@@ -1438,22 +1447,18 @@ ${
 function handleSizeClick(s, p){
   const current = picadas[active];
 
-  // 🔹 si no hay modelo seleccionado
-  if(!current.model && s !== 1){
-    const modelBtns = document.querySelectorAll('.model-col button.control');
-    const hint = document.getElementById('modelHint');
-    if(hint) hint.style.color = '#ffffff';
+if(!current.model && s !== 1){
+  const modelBtns = document.querySelectorAll('.model-col button.control');
+  const hint = document.getElementById('modelHint');
+  if(hint) hint.style.color = '#ffffff';
 
-    document.querySelector('.model-size-grid')
-      .scrollIntoView({ behavior: 'smooth', block: 'center' });
+  document.querySelector('.model-size-grid')
+    .scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-    modelBtns.forEach(btn => {
-      btn.classList.remove('model-hint');
-      setTimeout(() => btn.classList.add('model-hint'), 50);
-    });
+  flashHighlight([...modelBtns], 'model-hint', 1800);
 
-    return;
-  }
+  return;
+}
 
   // seleccionar / deseleccionar tamaño
   current.size = current.size === s ? null : s;
@@ -1744,14 +1749,14 @@ campos.forEach(c => {
     valor = manual.value.trim();
 
     if (!valor) {
-      manual.classList.add('error');
+      flashHighlight([manual], 'error', 1800);
       if (!primeroInvalido) primeroInvalido = manual;
       return;
     }
   }
 
   if (!valor) {
-    elem.classList.add('error');
+    flashHighlight([elem], 'error', 1800);
     if (!primeroInvalido) primeroInvalido = elem;
   }
 });
@@ -2076,15 +2081,16 @@ if (document.readyState === "complete") {
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
-document.querySelectorAll('.control').forEach(el=>{
-  el.addEventListener('input', ()=>{
-    el.classList.remove('error');
+document.querySelectorAll('.control').forEach(el => {
+  el.addEventListener('input', () => {
+    clearAllHighlights();
   });
 
-  el.addEventListener('change', ()=>{
-    el.classList.remove('error');
+  el.addEventListener('change', () => {
+    clearAllHighlights();
   });
 });
+
 
   
 </script>
