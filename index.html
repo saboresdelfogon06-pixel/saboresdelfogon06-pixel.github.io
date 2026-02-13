@@ -866,7 +866,7 @@ select.control:-webkit-autofill {
 </div>
 
 <div class="pay">
-<button id="payBtn" onclick="goWA()">Pagar</button>
+<button type="button" id="payBtn" onclick="goWA()">Pagar</button>
 </div>
 
 <p class="small">Serás redirigido a Mercado Pago para completar el pago de forma segura. Aceptamos tarjeta de débito/crédito y dinero en cuenta.</p>
@@ -1762,6 +1762,7 @@ function resetPayButton() {
 
 
 async function goWA() {
+  if (payBtn.disabled) return;
   const orderId = window.currentOrderId; 
   // Bloquear botón y cambiar estilo
   payBtn.disabled = true;
