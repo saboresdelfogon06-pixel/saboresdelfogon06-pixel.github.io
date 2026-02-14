@@ -1141,7 +1141,7 @@ function loadState() {
   }
 
   // 🔥 CLAVE: sincronizar banner y UI
-  if (picadas[active]?.model) {
+ if (picadas[active] && picadas[active].model)
     syncBannerWithModel(picadas[active].model);
   }
 
@@ -1984,7 +1984,7 @@ function closeModal(){
  imgModal.style.display="none";
 }
 function bannerIsLocked(){
-  return !!picadas[active]?.model;
+  return !!(picadas[active] && picadas[active].model);
 }
 let bannerReady = false;
 const bannerSlides = [
