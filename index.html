@@ -1068,8 +1068,12 @@ function generateOrderId() {
 
 
 function generateToken() {
-  return crypto.randomUUID().replace(/-/g,'');
+  if (window.crypto && crypto.randomUUID) {
+    return crypto.randomUUID().replace(/-/g,'');
+  }
+  return Math.random().toString(36).substring(2) + Date.now();
 }
+
 
 if (!sessionStorage.getItem('order_id')) {
   const hasSavedOrder = !!localStorage.getItem('picadas');
