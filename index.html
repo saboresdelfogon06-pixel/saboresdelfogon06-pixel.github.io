@@ -1972,7 +1972,6 @@ sessionStorage.setItem('mp_init_point', mpData.init_point);
 sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
 
 
-// 🚀 REDIRECCIÓN ÚNICA, SEGURA (mobile + desktop)
 window.location.assign(mpData.init_point);
 
   } catch (err) {
@@ -1980,6 +1979,9 @@ window.location.assign(mpData.init_point);
     alert("Error técnico al enviar el pedido");
     resetPayButton();
   }
+
+} // 🔥 ← ESTA llave faltaba (cierra el if typeof fbq)
+
 }
 
   
