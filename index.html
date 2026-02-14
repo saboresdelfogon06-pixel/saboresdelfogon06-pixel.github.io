@@ -1012,7 +1012,9 @@ let picadas=[],active=0,ship=0,zoneName="", total=0;
 const TAB_KEY = 'sf_tab_initialized';
 
 (function tabGuard() {
-  const navType = performance.getEntriesByType("navigation")[0]?.type;
+  const navEntries = performance.getEntriesByType("navigation");
+const navType = navEntries.length ? navEntries[0].type : null;
+
 
   // SOLO nueva pestaña real
   if (navType === "navigate" && !sessionStorage.getItem(TAB_KEY)) {
