@@ -1140,12 +1140,12 @@ function loadState() {
     }
   }
 
-  // 🔥 CLAVE: sincronizar banner y UI
- if (picadas[active] && picadas[active].model)
-    syncBannerWithModel(picadas[active].model);
-  }
+// 🔥 CLAVE: sincronizar banner y UI
+if (picadas[active] && picadas[active].model) {
+  syncBannerWithModel(picadas[active].model);
+}
 
-  renderConfig();   // 👈 reconstruye TODA la UI
+renderConfig();   // 👈 reconstruye TODA la UI
 }
 
 
