@@ -156,9 +156,10 @@ select.control{
 /* Cuando hay valor → blanco */
 input.control:not(:placeholder-shown),
 input[type="date"].control:valid,
-select.control:valid{
+select.control:not([value=""]) {
   color: var(--text);
 }
+
 
 /* 🔥 Unificar placeholder */
 input.control::placeholder {
@@ -509,7 +510,6 @@ input[type="date"].control{
   font-family:inherit;
   font-size:14px;
   font-weight:400;
-  color:var(--text);
   background:#111;
 
   text-align:left;
@@ -943,6 +943,14 @@ const config     = document.getElementById('config');
 const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
+// 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
+deliveryTime.addEventListener("change", function(){
+  this.setAttribute("value", this.value);
+});
+
+zone.addEventListener("change", function(){
+  this.setAttribute("value", this.value);
+});
 
 
   function clearAllHighlights() {
