@@ -392,7 +392,7 @@ button.selected{
 .mini-banner .left a {
   display: flex;
   align-items: center;
-  gap: -12px;
+  gap: 0px;
   color: var(--muted);      /* 👈 gris elegante */
   text-decoration: none;
   font-weight: 600;
@@ -438,33 +438,7 @@ button.selected{
   50% { border-color: #ff4d4f; background: transparent; }
 }
 
-.date-time-row{
-  display:flex;
-  gap:10px;
-  align-items:stretch; /* 🔑 fuerza misma altura */
-}
 
-
-
-@media (min-width: 481px){
-  .date-time-row .date,
-  #deliveryTime{
-    flex: 1;          /* 🔑 50 / 50 reales */
-    min-width: 0;     /* 🔑 evita overflow raro */
-  }
-}
-
-
-@media (max-width: 480px){
-  .date-time-row{
-    flex-direction: row;   /* 👈 en fila */
-  }
-
-  .date-time-row .date,
-  #deliveryTime{
-    flex: 1;              /* 👈 50% y 50% */
-  }
-}
 
 
 .delivery-hint{
@@ -513,16 +487,18 @@ input[type="date"]::-webkit-calendar-picker-indicator{
 input[type="date"]::-moz-focus-inner{
   border:0;
 }
+/* ===== FILAS 50 / 50 PERFECTAS ===== */
 
+.date-time-row,
 .zone-row{
   display:flex;
   gap:10px;
 }
 
-@media (max-width:480px){
-  .zone-row > div{
-    flex:1;   /* 50% / 50% */
-  }
+.date-time-row > *,
+.zone-row > div{
+  flex:1;
+  min-width:0;
 }
 
 .section.summary{
