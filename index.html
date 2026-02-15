@@ -2032,7 +2032,7 @@ const banner = document.getElementById("heroBanner");
 const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
 
-(window.requestIdleCallback || function(cb){ setTimeout(cb, 1); })(() => {
+document.addEventListener('DOMContentLoaded', () => {
   bannerSlides.forEach((s, index) => {
     const slide = document.createElement("div");
     slide.className = "banner-slide";
