@@ -1229,11 +1229,14 @@ localStorage.removeItem('clientWhatsapp');
   total = 0;
   active = 0;
 
-  // 3. limpiar inputs
-  clientName.value = "";
-  orderDate.value = "";
-  addr.value = "";
-  zone.value = "";
+// 3. limpiar inputs
+clientName.value = "";
+addr.value = "";
+zone.value = "";
+
+// 🔹 Fecha vuelve a la más cercana disponible
+enforceTomorrowDate();
+
 
   // 4. volver al estado inicial real
   buildPicadas(1);
