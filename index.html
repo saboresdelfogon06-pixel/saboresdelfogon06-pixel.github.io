@@ -2137,7 +2137,15 @@ function syncBannerWithModel(model){
 window.addEventListener('scroll', () => {
   localStorage.setItem('scrollY', window.scrollY);
 });
-  
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth >= 769) {
+    loadState();
+    update();
+    document.body.classList.add("desktop-ready");
+  }
+});
+
 window.addEventListener('pageshow', () => {
   handleReturnFromMP();
   loadState();
