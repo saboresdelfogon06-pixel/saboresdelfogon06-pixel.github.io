@@ -89,6 +89,12 @@ label{
   line-height:normal;
 }
 
+input[type="date"].control,
+select.control{
+  color: var(--muted);
+}
+
+
 input.control,
 select.control{
   font-size:14px !important;
@@ -132,14 +138,26 @@ select.control{
   padding-right: 40px;
 }
 
-/* 🔥 Unificar texto real en todos los controles */
+/* Base tipografía */
 input.control,
 select.control,
 textarea.control {
   font-family: inherit;
   font-size:14px;
   font-weight:400;
-  color:var(--text);
+}
+
+/* Por defecto gris */
+input.control,
+select.control{
+  color: var(--muted);
+}
+
+/* Cuando hay valor → blanco */
+input.control:not(:placeholder-shown),
+input[type="date"].control:valid,
+select.control:valid{
+  color: var(--text);
 }
 
 /* 🔥 Unificar placeholder */
@@ -498,19 +516,11 @@ input[type="date"].control{
 }
 
 input[type="date"]::-webkit-datetime-edit{
-  text-align:left;
   padding:0;
+  margin:0;
+  text-align:left;
 }
 
-
-input[type="date"].control::-webkit-datetime-edit,
-input[type="date"].control::-webkit-datetime-edit-text,
-input[type="date"].control::-webkit-datetime-edit-month-field,
-input[type="date"].control::-webkit-datetime-edit-day-field,
-input[type="date"].control::-webkit-datetime-edit-year-field{
-  font-size:14px;
-  line-height:1;
-}
 
   
 /* icono calendario (WebKit: Chrome, Safari, iOS) */
