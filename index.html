@@ -99,6 +99,19 @@ button.control{
   color:var(--text);
 }
 
+/* Botones + y - */
+.qty-btn{
+  width:36px !important;
+  padding:0 !important;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
+  font-weight:600;
+}
+
 select.control{
   appearance: none;
   -webkit-appearance: none;
@@ -114,6 +127,23 @@ select.control{
   background-size: 14px;
 
   padding-right: 40px; /* espacio para la flecha */
+}
+/* 🔥 Unificar texto real en todos los controles */
+input.control,
+select.control,
+textarea.control {
+  font-family: inherit;
+  font-size:14px;
+  font-weight:400;
+  color:var(--text);
+}
+
+/* 🔥 Unificar placeholder */
+input.control::placeholder {
+  color: var(--muted);
+  opacity: 1;
+  font-size:14px;
+  font-weight:400;
 }
 
 button.control{
@@ -445,24 +475,13 @@ button.selected{
   margin-bottom:12px; /* 👈 separa de Localidad */
 }
 
-/* ===== INPUT DATE UNIFICADO (igual a .control) ===== */
 input[type="date"].control{
-  height:48px;              /* 👈 IGUAL a .control */
-  padding:0 12px;           /* 👈 IGUAL a .control */
+  font-family: inherit;
   font-size:14px;
-  line-height:1;
+  font-weight:400;
   color:var(--text);
   background:#111;
-
-  display:flex;
-  align-items:center;
-  text-align:left;
-
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  appearance:none;
 }
-
 
 input[type="date"].control::-webkit-datetime-edit,
 input[type="date"].control::-webkit-datetime-edit-text,
@@ -1348,10 +1367,9 @@ let tabs = `
     <label style="font-size:12px;">Elegí la cantidad:</label>
 
     <div style="display:flex;align-items:center;gap:8px;">
-      <button
-        class="control"
-        style="width:36px;padding:0;justify-content:center;"
-        onclick="removeLastPicada()"
+<button
+  class="control qty-btn"
+  onclick="removeLastPicada()"
         ${picadas.length <= 1 ? 'disabled' : ''}>
         −
       </button>
@@ -1360,10 +1378,9 @@ let tabs = `
         ${picadas.length}
       </div>
 
-      <button
-        class="control"
-        style="width:36px;padding:0;justify-content:center;"
-        onclick="addPicada()">
+<button
+  class="control qty-btn"
+  onclick="addPicada()">
         +
       </button>
     </div>
