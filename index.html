@@ -715,6 +715,17 @@ select.control:-webkit-autofill {
 .picada-content {
   will-change: transform;
 }
+  @media (min-width: 769px){
+  body {
+    opacity: 0;
+  }
+
+  body.desktop-ready {
+    opacity: 1;
+    transition: opacity .15s ease;
+  }
+}
+
 
 </style>
 </head>
@@ -2127,19 +2138,19 @@ window.addEventListener('scroll', () => {
 });
   
 window.addEventListener('pageshow', () => {
-
-  // 🔑 detectar regreso desde Mercado Pago
   handleReturnFromMP();
-
-  // 🔄 reconstruir UI
   loadState();
   update();
 
-  // 🛟 fallback defensivo: nunca quedar en "Procesando"
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
   payBtn.textContent = "Pagar";
+
+  if (window.innerWidth >= 769) {
+    document.body.classList.add("desktop-ready");
+  }
 });
+
 
 
 // 🔁 Fallback para refresh duro (F5 / Ctrl+R)
