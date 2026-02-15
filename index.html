@@ -73,8 +73,8 @@ label{
 
 .control{
   width:100%;
-  height:48px;                 /* 👈 altura fija, no min-height */
-  padding:0 12px;              /* 👈 padding horizontal uniforme */
+  height:48px;
+  padding:0 12px;
   background:#111;
   color:var(--text);
   border:1px solid #333;
@@ -82,15 +82,12 @@ label{
   margin-bottom:10px;
   box-sizing:border-box;
 
-  /* 🔑 UNIFICACIÓN REAL */
   font-family: inherit;
   font-size:14px;
   font-weight:400;
-  line-height:1;
-
-  display:flex;
-  align-items:center;
+  line-height:48px;   /* 👈 CENTRADO REAL */
 }
+
 
 input.control,
 select.control,
@@ -891,27 +888,6 @@ const config     = document.getElementById('config');
 const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
-document.addEventListener('DOMContentLoaded', () => {
-  const dateInput = document.getElementById('orderDate');
-  if (!dateInput) return;
-
-  // 📅 fecha mínima = hoy + 1 (24 hs)
-  const minDate = new Date();
-  minDate.setDate(minDate.getDate() + 1);
-  const minDateStr = minDate.toISOString().split('T')[0];
-
-  dateInput.min = minDateStr;
-
-  const savedDate = localStorage.getItem('orderDate');
-
-  // 👉 usar fecha guardada SOLO si sigue siendo válida
-  if (savedDate && savedDate >= minDateStr) {
-    dateInput.value = savedDate;
-  } else {
-    dateInput.value = minDateStr;
-    localStorage.setItem('orderDate', minDateStr);
-  }
-});
 
 
   function clearAllHighlights() {
@@ -1159,6 +1135,7 @@ if (picadas[active] && picadas[active].model) {
 }
 
 renderConfig();   // 👈 reconstruye TODA la UI
+enforceTomorrowDate();
 }
 
 
@@ -1657,6 +1634,31 @@ function formatManualZone(input) {
   saveState();
 }
 
+function enforceTomorrowDate() {
+  const dateInput = document.getElementById('orderDate');
+  if (!dateInput) return;
+
+  const now = new Date();
+  now.setHours(0,0,0,0);
+
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+  // 🚫 Bloquear hoy y anteriores
+  dateInput.min = tomorrowStr;
+
+  const savedDate = localStorage.getItem('orderDate');
+
+  // Si la guardada es válida, usarla
+  if (savedDate && savedDate >= tomorrowStr) {
+    dateInput.value = savedDate;
+  } else {
+    dateInput.value = tomorrowStr;
+    localStorage.setItem('orderDate', tomorrowStr);
+  }
+}
 
 function update() {
   const summaryDiv = document.querySelector('.section.summary');
@@ -2143,6 +2145,7 @@ document.addEventListener('DOMContentLoaded', () => {
 window.addEventListener('pageshow', () => {
   handleReturnFromMP();
   loadState();
+  enforceTomorrowDate();   // 👈 PEGAR AQUÍ
   update();
 
   payBtn.disabled = false;
