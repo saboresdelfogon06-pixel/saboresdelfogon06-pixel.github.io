@@ -1058,13 +1058,13 @@ const PRICES = {
   1: 300,      // 👈 TEST
   4: 70000,
   6: 85000,
-  8: 110000
+  10: 110000
 };
 
 const SIZE_INFO = {
   4: { pican: 6, medidas: "20 × 30 cm" },
   6: { pican: 8, medidas: "28 × 48 cm" },
-  8: { pican: 12, medidas: "28 × 48 cm" }
+  10: { pican: 12, medidas: "28 × 48 cm" }
 };
 
 const MANUAL_ZONE_SHIPPING = 10000;
@@ -1467,8 +1467,8 @@ if(hint){
       </button>
 
       <button
-        class="control ${p.size===8?'selected':''}"
-        onclick="handleSizeClick(8, PRICES[8])">
+        class="control ${p.size===10?'selected':''}"
+        onclick="handleSizeClick(10, PRICES[10])">
         10 personas $110.000
       </button>
 
