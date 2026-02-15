@@ -774,29 +774,34 @@ select.control:-webkit-autofill {
 />
 <div class="error-msg" id="error-clientName"></div>
 
-<label>Fecha y horario de entrega</label>
+<div class="form-grid">
 
-<div class="date-time-row">
-  <!-- FECHA -->
-  <input
-    id="orderDate"
-    type="date"
-    class="control date"
-    oninput="update()"
-  >
+  <div class="form-col">
+    <label>Fecha</label>
+    <input
+      id="orderDate"
+      type="date"
+      class="control"
+      oninput="update()">
+  </div>
 
-  <!-- HORARIO -->
-  <select id="deliveryTime" class="control" onchange="update()">
-    <option value="">Horarios de entrega</option>
-    <option value="11-14">11:00 a.m – 14:00 p.m</option>
-    <option value="15-19">15:00 p.m – 19:00 p.m</option>
-  </select>
+  <div class="form-col">
+    <label>Horario</label>
+    <select id="deliveryTime" class="control" onchange="update()">
+      <option value="">Horarios de entrega</option>
+      <option value="11-14">11:00 a.m – 14:00 p.m</option>
+      <option value="15-19">15:00 p.m – 19:00 p.m</option>
+    </select>
+  </div>
+
 </div>
+
 
 <div class="error-msg" id="error-orderDate"></div>
 
-<div class="zone-row">
-  <div>
+<div class="form-grid">
+
+  <div class="form-col">
     <label>Localidad</label>
     <select id="zone" class="control" onchange="handleZoneChange()">
   <option value="">Seleccionar localidad</option>
@@ -830,27 +835,26 @@ select.control:-webkit-autofill {
 
 </select>
 
-<input
-  type="text"
-  id="manualZone"
-  class="control"
-  placeholder="Ingresá tu localidad"
-  style="display:none;"
-  oninput="formatManualZone(this); setZoneManual()"
-/>
-
-
+  <input
+      type="text"
+      id="manualZone"
+      class="control"
+      placeholder="Ingresá tu localidad"
+      style="display:none;"
+      oninput="formatManualZone(this); setZoneManual()"
+    />
   </div>
-  
- <div>
+
+  <div class="form-col">
     <label>Dirección y altura</label>
     <input
-  id="addr"
-  class="control"
-  placeholder="Ingrese la dirección"
-  oninput="formatAddress(this); update()"
-/>
+      id="addr"
+      class="control"
+      placeholder="Ingrese la dirección"
+      oninput="formatAddress(this); update()"
+    />
   </div>
+
 </div>
 <div class="error-msg" id="error-addr"></div>
 <label>WhatsApp</label>
