@@ -715,16 +715,17 @@ select.control:-webkit-autofill {
 .picada-content {
   will-change: transform;
 }
-  @media (min-width: 769px){
-  body {
+@media (min-width: 769px){
+  .container {
     opacity: 0;
   }
 
-  body.desktop-ready {
+  body.desktop-ready .container {
     opacity: 1;
     transition: opacity .15s ease;
   }
 }
+
 
 
 </style>
