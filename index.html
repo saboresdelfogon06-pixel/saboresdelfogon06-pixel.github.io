@@ -1715,13 +1715,20 @@ function enforceTomorrowDate() {
 
   const savedDate = localStorage.getItem('orderDate');
 
-  // Si la guardada es válida, usarla
   if (savedDate && savedDate >= tomorrowStr) {
     dateInput.value = savedDate;
   } else {
     dateInput.value = tomorrowStr;
     localStorage.setItem('orderDate', tomorrowStr);
   }
+
+  // 🔥 CLAVE para iOS
+  dateInput.addEventListener('change', function () {
+    if (this.value < tomorrowStr) {
+      this.value = tomorrowStr;
+      localStorage.setItem('orderDate', tomorrowStr);
+    }
+  });
 }
 
 function update() {
