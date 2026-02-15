@@ -1255,7 +1255,6 @@ sessionStorage.removeItem('order_fingerprint');
 function resetForNextOrder() {
   // 🔹 Reset de inputs y variables locales
   clientName.value = "";
-  orderDate.value = "";
   addr.value = "";
   zone.value = "";
   zoneName = "";
@@ -1263,6 +1262,7 @@ function resetForNextOrder() {
   total = 0;
   active = 0;
 
+  enforceTomorrowDate();
   // 🔹 Limpiar picadas y generar un nuevo array vacío con 1 picada
   buildPicadas(1);
 
