@@ -1088,7 +1088,6 @@ const TAB_KEY = 'sf_tab_initialized';
 
 
 const PRICES = {
-  1: 300,      // 👈 TEST
   4: 70000,
   6: 85000,
   10: 110000
@@ -1560,29 +1559,31 @@ ${
   update();
 }
 
-
 function handleSizeClick(s, p){
+
+  // 🔒 Solo tamaños permitidos
+  const allowedSizes = [4, 6, 10];
+  if (!allowedSizes.includes(s)) return;
+
   const current = picadas[active];
 
-if(!current.model && s !== 1){
-  const modelBtns = document.querySelectorAll('.model-col button.control');
-  const hint = document.getElementById('modelHint');
-  if(hint) hint.style.color = '#ffffff';
+  if(!current.model){
+    const modelBtns = document.querySelectorAll('.model-col button.control');
+    const hint = document.getElementById('modelHint');
+    if(hint) hint.style.color = '#ffffff';
 
-  document.querySelector('.model-size-grid')
-    .scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.querySelector('.model-size-grid')
+      .scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-  flashHighlight([...modelBtns], 'model-hint', 1800);
+    flashHighlight([...modelBtns], 'model-hint', 1800);
+    return;
+  }
 
-  return;
-}
-
-  // seleccionar / deseleccionar tamaño
   current.size = current.size === s ? null : s;
-  current.price = current.size ? p : 0;
+  current.price = current.size ? PRICES[s] : 0;
 
   saveState();
-  renderConfig(); // ✅ CLAVE
+  renderConfig();
 }
 
 
@@ -1867,6 +1868,17 @@ document.querySelectorAll('.control').forEach(el => el.classList.remove('error')
 
 // Validar que todas las picadas tengan modelo y tamaño
 const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+
+// 🔒 Validar tamaños permitidos antes de pagar
+const allowedSizes = [4, 6, 10];
+const invalidSize = picadas.find(p => !allowedSizes.includes(p.size));
+
+if (invalidSize) {
+  alert("Tamaño inválido detectado.");
+  resetPayButton();
+  return;
+}
+
 
 if (incompleteIndex !== -1) {
   highlightPicada(incompleteIndex);
