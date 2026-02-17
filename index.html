@@ -770,9 +770,10 @@ select.control:-webkit-autofill {
 /* ===== INTRO SUPERIOR ===== */
 
 .landing-intro-top{
-  margin-top: 0; /* respeta mini-banner */
+  margin-top: 0;
   margin-bottom: 12px;
-  text-align: center;
+  text-align: left;
+  padding-left: 2px; /* micro ajuste óptico para alinear con inputs */
 }
 
 .landing-intro-top h1{
@@ -1087,17 +1088,29 @@ function highlightPicada(index){
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
 
+      const banner = document.getElementById('heroBanner');
+      const intro = document.querySelector('.landing-intro-top');
       const box = document.querySelector('.model-size-grid');
-      if(!box) return;
 
-box.scrollIntoView({
-  behavior: 'smooth',
-  block: 'nearest'
-});
+      if (!banner || !intro || !box) return;
 
+      // 🔹 Altura del mini banner fijo
+      const miniBanner = document.querySelector('.mini-banner');
+      const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
+
+      // 🔹 Posición inferior del bloque intro
+      const introBottom = intro.getBoundingClientRect().bottom + window.pageYOffset;
+
+      // 🔹 Ajuste fino visual
+      const offset = 6;
+
+      // 🔹 Scroll exacto
+      window.scrollTo({
+        top: introBottom - miniHeight - offset,
+        behavior: 'smooth'
+      });
 
       const p = picadas[active];
-
       let targets = [];
 
       if(!p.model){
@@ -1111,6 +1124,7 @@ box.scrollIntoView({
     });
   });
 }
+
 
 
 const modelData = {
