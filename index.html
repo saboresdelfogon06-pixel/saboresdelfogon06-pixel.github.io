@@ -22,7 +22,7 @@ body {
   background: var(--bg);
   color: var(--text);
   touch-action: manipulation;
-  overscroll-behavior: none;
+  overscroll-behavior: auto;
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
@@ -740,13 +740,6 @@ select.control:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* 🧠 Mejora de fluidez general */
-.container,
-.section,
-.banner,
-.picada-content {
-  will-change: transform;
-}
 @media (min-width: 769px){
   .container {
     opacity: 0;
@@ -755,15 +748,6 @@ select.control:-webkit-autofill {
   body.desktop-ready .container {
     opacity: 1;
     transition: opacity .15s ease;
-  }
-}
-
-  @media (max-width: 768px){
-  .container,
-  .section,
-  .banner,
-  .picada-content {
-    will-change: auto !important;
   }
 }
 
@@ -2238,6 +2222,7 @@ const bannerSlides = [
 let bannerIndex = 0;
 let bannerFrozenModel = null;
 let bannerTimer = null;
+let bannerVisible = true;
 let startX = 0;
 let currentX = 0;
 
@@ -2275,6 +2260,27 @@ document.addEventListener('DOMContentLoaded', () => {
   showSlide(bannerIndex, false); // 🔥 fuerza render inicial
 });
 
+// 👁️ Observer para pausar autoplay cuando el banner no está visible
+const bannerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    bannerVisible = entry.isIntersecting;
+
+    if (bannerVisible) {
+      if (!bannerIsLocked()) {
+        clearTimeout(bannerTimer);
+        bannerTimer = setTimeout(nextSlide, 5000);
+      }
+    } else {
+      clearTimeout(bannerTimer);
+    }
+  });
+}, {
+  threshold: 0.5
+});
+
+bannerObserver.observe(banner);
+
+
 function showSlide(i, animate = true){
   bannerIndex = i;
   track.style.transition = animate ? "transform .6s ease" : "none";
@@ -2293,14 +2299,16 @@ function showSlide(i, animate = true){
 
   clearTimeout(bannerTimer);
 
-  if(!bannerIsLocked()){
-    bannerTimer = setTimeout(nextSlide, 5000);
-  }
+if(!bannerIsLocked() && bannerVisible){
+  bannerTimer = setTimeout(nextSlide, 5000);
+}
 }
 
 
 function nextSlide(){
   if(bannerIsLocked()) return;
+  if(!bannerVisible) return;
+
   showSlide((bannerIndex + 1) % bannerSlides.length);
 }
 
@@ -2347,9 +2355,15 @@ function syncBannerWithModel(model){
 }
 
 
+let scrollTimeout;
+
 window.addEventListener('scroll', () => {
-  localStorage.setItem('scrollY', window.scrollY);
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    localStorage.setItem('scrollY', window.scrollY);
+  }, 200);
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.innerWidth >= 769) {
