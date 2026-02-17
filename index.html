@@ -2282,6 +2282,16 @@ if (banner) {
   bannerObserver.observe(banner);
 }
 
+// 👁️ Pausar autoplay si el usuario cambia de pestaña
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    clearTimeout(bannerTimer);
+  } else if (!bannerIsLocked() && bannerVisible) {
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(nextSlide, 5000);
+  }
+});
+
 
 
 function showSlide(i, animate = true){
