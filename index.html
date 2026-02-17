@@ -767,6 +767,65 @@ select.control:-webkit-autofill {
   }
 }
 
+/* ===== INTRO LANDING ===== */
+
+.landing-intro{
+  margin-top: 72px; /* respeta el mini-banner fixed */
+  margin-bottom: 18px;
+  padding: 18px 16px;
+  background: linear-gradient(180deg, rgba(211,174,9,0.08), transparent);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.landing-intro h1{
+  margin: 0 0 8px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: .5px;
+}
+
+.landing-intro p{
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.landing-intro .steps{
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: #b5b0a8;
+}
+
+.landing-intro .steps span{
+  opacity: .9;
+}
+
+/* Desktop un poco más protagonista */
+@media (min-width:769px){
+  .landing-intro{
+    padding: 28px;
+  }
+
+  .landing-intro h1{
+    font-size: 32px;
+  }
+
+  .landing-intro p{
+    font-size: 15px;
+  }
+
+  .landing-intro .steps{
+    font-size: 14px;
+  }
+}
+
+
 </style>
 </head>
 <body>
@@ -791,6 +850,22 @@ select.control:-webkit-autofill {
       $0
     </div>
   </div>
+</div>
+<!-- ===== INTRO GUIA USUARIO ===== -->
+<div class="landing-intro">
+
+  <h1>Armá tu pedido</h1>
+
+  <p>
+    Completá cantidad, modelo, tamaño y datos de envío para continuar.
+  </p>
+
+  <div class="steps">
+    <span>• Envíos a CABA, Zona Oeste y alrededores</span>
+    <span>• Pedidos con 24hs de anticipación</span>
+    <span>• La imagen del banner corresponde al modelo seleccionado</span>
+  </div>
+
 </div>
 
 <!-- ===== HERO BANNER ===== -->
