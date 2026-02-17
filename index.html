@@ -878,19 +878,29 @@ select.control:-webkit-autofill {
   100% { transform: translateY(-50%) scale(1); opacity: 1; }
 }
 
-#urgencyText::before{
-  content:"";
-  position:absolute;
-  left:2px;              /* 👈 lo corre un poco hacia adentro */
-  top:50%;
+#urgencyWrapper{
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+#urgencyText{
+  font-size:13px;
+  font-weight:600;
+  color: var(--muted);
+  letter-spacing:.2px;
+  transition: opacity .4s ease;
+}
+
+.urgency-dot{
   width:6px;
   height:6px;
   background: var(--accent);
   border-radius:50%;
-  transform: translateY(-50%);
+  flex-shrink:0;
   animation: pulse-dot 2.8s ease-in-out infinite;
 }
-
   
 </style>
 </head>
@@ -925,7 +935,11 @@ select.control:-webkit-autofill {
 CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   </div>
 
-  <p id="urgencyText">Reservá hoy y asegurá tu fecha</p>
+ <div id="urgencyWrapper">
+  <span class="urgency-dot"></span>
+  <span id="urgencyText">Reservá hoy y asegurá tu fecha</span>
+</div>
+
 </div>
 
 
