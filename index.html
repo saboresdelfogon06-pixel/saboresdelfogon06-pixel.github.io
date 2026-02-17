@@ -2091,12 +2091,23 @@ if (primeroInvalido) {
     navigator.vibrate(80);
   }
 
-  setTimeout(() => {
-primeroInvalido.scrollIntoView({
-  behavior: 'smooth',
-  block: 'nearest'
-});
-  }, 50);
+setTimeout(() => {
+
+  const miniBanner = document.querySelector('.mini-banner');
+  const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
+
+  const rect = primeroInvalido.getBoundingClientRect();
+  const absoluteTop = rect.top + window.pageYOffset;
+
+  const offset = 12; // pequeño margen visual
+
+  window.scrollTo({
+    top: absoluteTop - miniHeight - offset,
+    behavior: 'smooth'
+  });
+
+}, 50);
+
 
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
