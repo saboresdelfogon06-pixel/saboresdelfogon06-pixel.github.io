@@ -2278,7 +2278,10 @@ const bannerObserver = new IntersectionObserver((entries) => {
   threshold: 0.5
 });
 
-bannerObserver.observe(banner);
+if (banner) {
+  bannerObserver.observe(banner);
+}
+
 
 
 function showSlide(i, animate = true){
