@@ -767,62 +767,58 @@ select.control:-webkit-autofill {
   }
 }
 
-/* ===== INTRO LANDING ===== */
+/* ===== INTRO SUPERIOR ===== */
 
-.landing-intro{
-  margin-top: 72px; /* respeta el mini-banner fixed */
-  margin-bottom: 18px;
-  padding: 18px 16px;
-  background: linear-gradient(180deg, rgba(211,174,9,0.08), transparent);
-  border-radius: 16px;
+.landing-intro-top{
+  margin-top: 60px; /* respeta mini-banner */
+  margin-bottom: 12px;
   text-align: center;
 }
 
-.landing-intro h1{
-  margin: 0 0 8px 0;
-  font-size: 28px;
+.landing-intro-top h1{
+  margin: 0;
+  font-size: 22px;
   font-weight: 700;
   color: var(--accent);
-  letter-spacing: .5px;
 }
 
-.landing-intro p{
-  margin: 0;
+.landing-intro-top p{
+  margin: 4px 0 0 0;
   font-size: 14px;
   color: var(--muted);
-  line-height: 1.6;
 }
 
-.landing-intro .steps{
-  margin-top: 12px;
+  /* ===== INFO OPERATIVA INFERIOR ===== */
+
+.landing-info-bottom{
+  font-size: 13px;
+  color: var(--muted);
+  margin: 10px 0 18px 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+  /* ===== BLOQUE MERCADO PAGO ===== */
+
+.payment-block{
+  margin-top: 14px;
+}
+
+.payment-sub{
+  text-align: center;
   font-size: 13px;
-  color: #b5b0a8;
+  color: var(--muted);
 }
 
-.landing-intro .steps span{
-  opacity: .9;
-}
-
-/* Desktop un poco más protagonista */
-@media (min-width:769px){
-  .landing-intro{
-    padding: 28px;
-  }
-
-  .landing-intro h1{
-    font-size: 32px;
-  }
-
-  .landing-intro p{
-    font-size: 15px;
-  }
-
-  .landing-intro .steps{
-    font-size: 14px;
-  }
+.payment-methods{
+  margin-top: 12px; /* separación de un renglón */
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left; /* 👈 alineado a la izquierda como pediste */
 }
 
 
@@ -851,22 +847,12 @@ select.control:-webkit-autofill {
     </div>
   </div>
 </div>
-<!-- ===== INTRO GUIA USUARIO ===== -->
-<div class="landing-intro">
-
+  
+<div class="landing-intro-top">
   <h1>Armá tu pedido</h1>
-
-  <p>
-    Completá cantidad, modelo, tamaño y datos de envío para continuar.
-  </p>
-
-  <div class="steps">
-    <span>• Envíos a CABA, Zona Oeste y alrededores</span>
-    <span>• Pedidos con 24hs de anticipación</span>
-    <span>• La imagen del banner corresponde al modelo seleccionado</span>
-  </div>
-
+  <p>Completá cantidad, modelo, tamaño y datos de envío para continuar</p>
 </div>
+
 
 <!-- ===== HERO BANNER ===== -->
 <div class="banner" id="heroBanner">
@@ -1002,7 +988,20 @@ select.control:-webkit-autofill {
 <button type="button" id="payBtn" onclick="goWA()">Pagar</button>
 </div>
 
-<p class="small">Serás redirigido a Mercado Pago para completar el pago de forma segura. Aceptamos tarjeta de débito/crédito y dinero en cuenta.</p>
+<div class="payment-block">
+
+  <div class="payment-sub">
+    Serás redirigido a Mercado Pago para completar el pago de forma segura.
+  </div>
+
+  <div class="payment-methods">
+    <div>• Tarjeta de crédito</div>
+    <div>• Tarjeta de débito</div>
+    <div>• Dinero en cuenta</div>
+  </div>
+
+</div>
+
 
 </div>
 <script>
@@ -1908,6 +1907,13 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
 }
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 }
+
+<div class="landing-info-bottom">
+  <div>• Envíos a CABA, Zona Oeste y alrededores</div>
+  <div>• Pedidos con 24hs de anticipación</div>
+  <div>• La imagen del banner corresponde al modelo seleccionado</div>
+</div>
+
 function getFacebookIdentifiers() {
   function getCookie(name) {
     const value = `; ${document.cookie}`;
