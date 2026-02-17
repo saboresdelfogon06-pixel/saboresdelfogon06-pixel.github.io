@@ -2124,16 +2124,6 @@ setTimeout(() => {
   return;
 }
 
-if (typeof fbq === "function") {
-fbq('track', 'InitiateCheckout', {
-  content_name: 'Picada',
-  content_category: 'Food',
-  value: total,
-  currency: 'ARS',
-  num_items: picadas.length
-});
-
-
 
   const fbIds = getFacebookIdentifiers();
   const clientUserAgent = navigator.userAgent;
