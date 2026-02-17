@@ -752,16 +752,7 @@ select.control:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-@media (min-width: 769px){
-  .container {
-    opacity: 0;
-  }
 
-  body.desktop-ready .container {
-    opacity: 1;
-    transition: opacity .15s ease;
-  }
-}
 
 /* ===== INTRO SUPERIOR ===== */
 
@@ -2506,7 +2497,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.innerWidth >= 769) {
     loadState();
     update();
-    document.body.classList.add("desktop-ready");
   }
 });
 
@@ -2573,7 +2563,6 @@ window.addEventListener('pageshow', () => {
   payBtn.textContent = "Pagar";
 
   if (window.innerWidth >= 769) {
-    document.body.classList.add("desktop-ready");
   }
 });
 
