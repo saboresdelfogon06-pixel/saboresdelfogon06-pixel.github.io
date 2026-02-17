@@ -864,11 +864,12 @@ select.control:-webkit-autofill {
 #urgencyText{
   margin-top:6px;
   font-size:13px;
-  font-weight:600;        /* más firme */
-  color: var(--muted);    /* gris elegante */
+  font-weight:600;
+  color: var(--muted);
   position:relative;
   padding-left:14px;
-  letter-spacing:.2px;    /* micro refinamiento */
+  letter-spacing:.2px;
+  transition: opacity .4s ease;
 }
 
 @keyframes pulse-dot {
@@ -2488,26 +2489,56 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// 🔥 URGENCIA DINÁMICA SEGÚN DÍA
-function setDynamicUrgency() {
+// 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
+
+const urgencyMessages = [
+  "Reservá hoy y asegurá tu fecha",
+  "Pedidos con 24hs de anticipación",
+  "Coordinamos entregas todos los días"
+];
+
+let urgencyIndex = 0;
+let urgencyTimer = null;
+let urgencyVisible = true;
+
+function rotateUrgency(){
   const el = document.getElementById("urgencyText");
-  if (!el) return;
+  if(!el || !urgencyVisible) return;
 
-  const today = new Date().getDay(); 
-  // 0 = domingo, 5 = viernes, 6 = sábado
+  el.style.opacity = 0;
 
-  if (today === 4 || today === 5) {
-    // jueves o viernes
-    el.textContent = "Asegurá tu picada para este fin de semana";
-  } else if (today === 6) {
-    // sábado
-    el.textContent = "Reservá hoy para mañana";
-  } else {
-    el.textContent = "Reservá hoy y asegurá tu fecha";
-  }
+  setTimeout(() => {
+    urgencyIndex = (urgencyIndex + 1) % urgencyMessages.length;
+    el.textContent = urgencyMessages[urgencyIndex];
+    el.style.opacity = 1;
+  }, 400);
 }
 
-setDynamicUrgency();
+// 👁️ Observer para detectar visibilidad real
+const urgencyObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    urgencyVisible = entry.isIntersecting;
+
+    if(urgencyVisible){
+      clearInterval(urgencyTimer);
+      urgencyTimer = setInterval(rotateUrgency, 6000);
+    } else {
+      clearInterval(urgencyTimer);
+    }
+  });
+},{
+  threshold: 0.6
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const el = document.getElementById("urgencyText");
+  if(!el) return;
+
+  urgencyObserver.observe(el);
+
+  // iniciar rotación si ya está visible
+  urgencyTimer = setInterval(rotateUrgency, 6000);
+});
 
 
 window.addEventListener('pageshow', () => {
