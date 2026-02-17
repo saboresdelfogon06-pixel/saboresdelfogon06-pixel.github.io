@@ -881,14 +881,16 @@ select.control:-webkit-autofill {
 #urgencyText::before{
   content:"";
   position:absolute;
-  left:0;
+  left:2px;              /* 👈 lo corre un poco hacia adentro */
   top:50%;
   width:6px;
   height:6px;
   background: var(--accent);
   border-radius:50%;
+  transform: translateY(-50%);
   animation: pulse-dot 2.8s ease-in-out infinite;
 }
+
   
 </style>
 </head>
