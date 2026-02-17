@@ -770,7 +770,7 @@ select.control:-webkit-autofill {
 /* ===== INTRO SUPERIOR ===== */
 
 .landing-intro-top{
-  margin-top: 60px; /* respeta mini-banner */
+  margin-top: 0; /* respeta mini-banner */
   margin-bottom: 12px;
   text-align: center;
 }
@@ -786,6 +786,9 @@ select.control:-webkit-autofill {
   margin: 4px 0 0 0;
   font-size: 14px;
   color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
   /* ===== INFO OPERATIVA INFERIOR ===== */
@@ -821,6 +824,25 @@ select.control:-webkit-autofill {
   text-align: left; /* 👈 alineado a la izquierda como pediste */
 }
 
+  .info-card{
+  background:#1b1b1b;
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.info-title{
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:6px;
+}
+
+.info-item{
+  margin-bottom:4px;
+}
+
 
 </style>
 </head>
@@ -850,7 +872,7 @@ select.control:-webkit-autofill {
   
 <div class="landing-intro-top">
   <h1>Armá tu pedido</h1>
-  <p>Completá cantidad, modelo, tamaño y datos de envío para continuar</p>
+  <p>Completá cantidad, modelo, tamaño y datos de envío:</p>
 </div>
 
 
@@ -988,24 +1010,28 @@ select.control:-webkit-autofill {
 <button type="button" id="payBtn" onclick="goWA()">Pagar</button>
 </div>
   
-<div class="landing-info-bottom">
-  <div>• Envíos a CABA, Zona Oeste y alrededores</div>
-  <div>• Pedidos con 24hs de anticipación</div>
-  <div>• La imagen del banner corresponde al modelo seleccionado</div>
-</div>
 <div class="payment-block">
 
   <div class="payment-sub">
     Serás redirigido a Mercado Pago para completar el pago de forma segura.
   </div>
 
-  <div class="payment-methods">
-    <div>• Tarjeta de crédito</div>
-    <div>• Tarjeta de débito</div>
-    <div>• Dinero en cuenta</div>
+  <div class="info-card">
+    <div class="info-title">Información operativa</div>
+    <div class="info-item">• Envíos a CABA, Zona Oeste y alrededores</div>
+    <div class="info-item">• Pedidos con 24hs de anticipación</div>
+    <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
+  </div>
+
+  <div class="info-card">
+    <div class="info-title">Métodos de pago</div>
+    <div class="info-item">• Tarjeta de crédito</div>
+    <div class="info-item">• Tarjeta de débito</div>
+    <div class="info-item">• Dinero en cuenta</div>
   </div>
 
 </div>
+
 
 
 </div>
@@ -1948,16 +1974,6 @@ document.querySelectorAll('.control').forEach(el => el.classList.remove('error')
 
 // Validar que todas las picadas tengan modelo y tamaño
 const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-
-// 🔒 Validar tamaños permitidos antes de pagar
-const allowedSizes = [4, 6, 10];
-const invalidSize = picadas.find(p => !allowedSizes.includes(p.size));
-
-if (invalidSize) {
-  alert("Tamaño inválido detectado.");
-  resetPayButton();
-  return;
-}
 
 
 if (incompleteIndex !== -1) {
