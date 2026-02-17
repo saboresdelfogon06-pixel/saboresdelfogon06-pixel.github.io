@@ -903,7 +903,8 @@ select.control:-webkit-autofill {
   id="clientName"
   class="control"
   placeholder="Ingrese su nombre completo"
-  oninput="formatClientName(this); update()"
+  oninput="formatClientName(this); lightUpdate()"
+  onblur="update()"
 />
 <div class="error-msg" id="error-clientName"></div>
 
@@ -974,7 +975,7 @@ select.control:-webkit-autofill {
       class="control"
       placeholder="Ingresá tu localidad"
       style="display:none;"
-      oninput="formatManualZone(this); setZoneManual()"
+      oninput="formatManualZone(this); setZoneManual(); lightUpdate()"
     />
   </div>
 
@@ -984,7 +985,8 @@ select.control:-webkit-autofill {
       id="addr"
       class="control"
       placeholder="Ingrese la dirección"
-      oninput="formatAddress(this); update()"
+      oninput="formatAddress(this); lightUpdate()"
+      onblur="update()"
     />
   </div>
 
@@ -997,7 +999,7 @@ select.control:-webkit-autofill {
   placeholder="Ej: 1123456789"
   inputmode="numeric"
   maxlength="10"
-  oninput="handleWhatsappInput()"
+  oninput="handleWhatsappInput(); lightUpdate()"
 />
 <div class="error-msg" id="error-clientWhatsapp"></div>
 
@@ -1858,6 +1860,14 @@ function enforceTomorrowDate() {
     }
   });
 }
+let lightUpdateTimeout;
+
+function lightUpdate(){
+  clearTimeout(lightUpdateTimeout);
+  lightUpdateTimeout = setTimeout(() => {
+    updateTotalsOnly();
+  }, 120);
+}
 
 function update() {
   const summaryDiv = document.querySelector('.section.summary');
@@ -1959,6 +1969,17 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   sessionStorage.removeItem('order_fingerprint');
 }
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
+}
+  
+function updateTotalsOnly(){
+  total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
+
+  document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
+
+  const totalSpan = document.querySelector('.summary-total span:last-child');
+  if(totalSpan){
+    totalSpan.textContent = `$${total.toLocaleString()}`;
+  }
 }
 
 function getFacebookIdentifiers() {
