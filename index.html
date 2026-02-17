@@ -1898,21 +1898,32 @@ summaryDiv.innerHTML = `
   <div class="summary-content">
 
 
-    <div class="summary-items">
-      ${picadas.map((p,i)=>`
-        <div class="summary-item">
-          <div class="item-title">
-            Picada ${i+1}
-          </div>
-          <div class="item-desc">
-            ${p.model || "Modelo sin seleccionar"} · ${p.size || "-"} personas
-          </div>
-          <div class="item-price">
-            $${(p.price || 0).toLocaleString()}
-          </div>
-        </div>
-      `).join("")}
+${picadas.map((p,i)=>{
+
+  let desc;
+
+  if(!p.model && !p.size){
+    desc = "Seleccione modelo y tamaño para comenzar";
+  } else if(p.model && !p.size){
+    desc = `${p.model} · Seleccione tamaño`;
+  } else {
+    desc = `${p.model} · ${p.size} personas`;
+  }
+
+  return `
+    <div class="summary-item">
+      <div class="item-title">
+        Picada ${i+1}
+      </div>
+      <div class="item-desc">
+        ${desc}
+      </div>
+      <div class="item-price">
+        $${(p.price || 0).toLocaleString()}
+      </div>
     </div>
+  `;
+}).join("")}
 
 <div class="summary-shipping">
   <span>Envío</span>
