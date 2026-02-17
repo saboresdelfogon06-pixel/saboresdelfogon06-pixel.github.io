@@ -357,8 +357,7 @@ button.selected{
   );
   pointer-events:none;
   z-index:5;
-  will-change: transform;
-  transform: translateZ(0);
+
 }
 
 #config .picada-top{
@@ -2433,12 +2432,6 @@ function syncBannerWithModel(model){
 
 let scrollTimeout;
 
-window.addEventListener('scroll', () => {
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    localStorage.setItem('scrollY', window.scrollY);
-  }, 200);
-});
 
 
 document.addEventListener('DOMContentLoaded', () => {
