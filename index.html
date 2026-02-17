@@ -1974,13 +1974,23 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
 function updateTotalsOnly(){
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
+  // 🔹 Actualizar total mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 
+  // 🔹 Actualizar total en resumen (si ya está renderizado)
   const totalSpan = document.querySelector('.summary-total span:last-child');
   if(totalSpan){
     totalSpan.textContent = `$${total.toLocaleString()}`;
   }
+
+  // 🔹 Actualizar línea de envío (zona + dirección) sin reconstruir todo
+  const shippingLine = document.querySelector('.summary-shipping span:nth-child(2)');
+  if (shippingLine) {
+    shippingLine.innerHTML =
+      `${zoneName || "Sin localidad"}${addr.value ? " – " + addr.value : ""}`;
+  }
 }
+
 
 function getFacebookIdentifiers() {
   function getCookie(name) {
