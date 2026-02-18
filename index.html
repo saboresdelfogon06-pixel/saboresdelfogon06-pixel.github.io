@@ -2621,8 +2621,12 @@ document.querySelectorAll('.control').forEach(el => {
 
     fbq('init','3350400148462231');
     fbq('track','PageView');
+    fbq('track','ViewContent', {
+  content_name: 'Landing Picadas',
+  content_category: 'Picadas'
+});
   }
-
+  
 loadPixelOnce();
 
 
