@@ -1822,6 +1822,7 @@ function sendViewContentOnce(model, size, price) {
       event_id: eventId,
       content_name: model,
       value: price || 0,
+      order_id: window.currentOrderId, 
       fbp: fbIds.fbp,
       fbc: fbIds.fbc,
       user_agent: navigator.userAgent
