@@ -1302,8 +1302,6 @@ function handleSummaryReset(){
 }
 
 function goBackToStep1(){
-
-  initiateCheckoutSent = false;
   currentStep = 1;
   saveState();
   document.getElementById("config").style.display = "block";
@@ -1469,9 +1467,12 @@ function handleMiniBannerClick(){
 
 
 function goToStep2(){
-  // 🔒 Evitar múltiples InitiateCheckout
-if (initiateCheckoutSent) return;
-initiateCheckoutSent = true;
+
+  const orderId = window.currentOrderId;
+  const key = "ic_sent_" + orderId;
+
+  // 🔒 Si ya se envió InitiateCheckout para este pedido → salir
+  if (sessionStorage.getItem(key)) return;
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
@@ -1481,9 +1482,8 @@ initiateCheckoutSent = true;
     return;
   }
 
-  // =========================
-  // INITIATE CHECKOUT (CAPI)
-  // =========================
+  // Marcar como enviado
+  sessionStorage.setItem(key, "1");
 
 const eventId = "ic_" + window.currentOrderId;
 fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
@@ -1532,7 +1532,6 @@ fbq('track', 'InitiateCheckout', {
 
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
-let initiateCheckoutSent = false;
 
 // =========================
 // TAB GUARD (PEDIDO POR PESTAÑA)
@@ -1831,7 +1830,6 @@ function sendViewContentOnce(model, size, price) {
 }
 
 function resetForNextOrder() {
-  initiateCheckoutSent = false;
   // 🔹 Reset de inputs y variables locales
   clientName.value = "";
   addr.value = "";
