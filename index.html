@@ -2852,7 +2852,7 @@ function syncBannerWithModel(model){
 let scrollTimeout;
 
 
-
+history.replaceState({ step: 1 }, "", location.pathname);
 document.addEventListener("DOMContentLoaded", () => {
   loadState();
   update();
