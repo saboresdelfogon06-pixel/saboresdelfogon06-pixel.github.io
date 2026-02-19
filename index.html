@@ -1970,11 +1970,12 @@ function centerOnConfig(){
       behavior: 'smooth'
     });
 
-    // 🔥 Esperar que termine el scroll antes del highlight
-    setTimeout(() => {
-      flashHighlight([...sizeButtons], 'model-hint', 1800);
-    }, 450);
-
+setTimeout(() => {
+  const current = picadas[active];
+  if(!current.size){
+    flashHighlight([...sizeButtons], 'model-hint', 1800);
+  }
+}, 450);
   });
 }
 
