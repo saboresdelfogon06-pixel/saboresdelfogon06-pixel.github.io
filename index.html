@@ -1506,6 +1506,7 @@ fbq('track', 'InitiateCheckout', {
 }
 
   currentStep = 2;
+  history.pushState({ step: 2 }, "", "#step2");
   saveState();
   updateStepTitle();
 
@@ -2950,6 +2951,27 @@ document.querySelectorAll('.control').forEach(el => {
   el.addEventListener('change', () => {
     clearAllHighlights();
   });
+});
+
+document.querySelectorAll('.control').forEach(el => {
+  el.addEventListener('input', () => {
+    clearAllHighlights();
+  });
+
+  el.addEventListener('change', () => {
+    clearAllHighlights();
+  });
+});
+
+
+// 🔥 PEGAR ESTO ACÁ
+window.addEventListener("popstate", function () {
+
+  if (currentStep === 2) {
+    goBackToStep1();
+    return;
+  }
+
 });
 
 
