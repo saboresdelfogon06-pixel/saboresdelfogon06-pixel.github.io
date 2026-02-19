@@ -1096,7 +1096,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   <button id="backBtnInline" onclick="goBackToStep1()">← Volver</button>
 </div>
 <div id="config"></div>
-<div class="section summary" style="position:relative">
+<div class="section summary" id="summaryWrapper" style="position:relative">
   <div id="summary"></div>
 </div>
 <div class="info-card" id="infoOperativa">
@@ -1573,6 +1573,12 @@ if (!alreadySent) {
   document.getElementById("config").style.display = "none";
 
   document.getElementById("step2").style.display = "block";
+const summaryWrapper = document.getElementById("summaryWrapper");
+const metodosPago = document.getElementById("metodosPago");
+
+if (summaryWrapper && metodosPago) {
+  metodosPago.parentNode.insertBefore(summaryWrapper, metodosPago);
+}
 
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
@@ -1770,6 +1776,16 @@ function loadState() {
 
 
     document.getElementById("config").style.display = "block";
+    const summaryWrapper = document.getElementById("summaryWrapper");
+const config = document.getElementById("config");
+
+if (summaryWrapper && config) {
+  config.parentNode.insertBefore(
+    summaryWrapper,
+    document.getElementById("infoOperativa")
+  );
+}
+
     document.getElementById("step2").style.display = "none";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
