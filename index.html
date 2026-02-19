@@ -1341,6 +1341,40 @@ function handleSummaryReset(){
   }
 }
 
+function snapToClosestStep() {
+
+  const step2 = document.getElementById("step2");
+  if (!step2) return;
+
+  const step2Top = step2.getBoundingClientRect().top + window.pageYOffset;
+  const currentScroll = window.scrollY;
+  const middlePoint = step2Top / 2;
+
+  if (currentStep === 1) {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+    return;
+  }
+
+  if (currentStep === 2) {
+    window.scrollTo({
+      top: step2Top,
+      behavior: "smooth"
+    });
+    return;
+  }
+
+  // fallback (por seguridad)
+  if (currentScroll > middlePoint) {
+    window.scrollTo({ top: step2Top, behavior: "smooth" });
+  } else {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
+
 function goBackToStep1(){
 
   const orderId = window.currentOrderId;
@@ -1361,6 +1395,9 @@ function goBackToStep1(){
   banner.style.pointerEvents = "auto";
 
   update();
+  setTimeout(() => {
+  snapToClosestStep();
+}, 50);
 }
 
 
@@ -1585,7 +1622,9 @@ if (summaryWrapper && metodosPago) {
   document.getElementById("backWrapper").style.display = "block";
 
   update();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  setTimeout(() => {
+  snapToClosestStep();
+}, 50);
   banner.style.pointerEvents = "none";
 }
 
