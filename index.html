@@ -1295,11 +1295,7 @@ function handleSummaryReset(){
 
 } else if(currentStep === 2){
 
-  // 🔓 permitir volver a disparar InitiateCheckout
-  const orderId = window.currentOrderId;
-  const key = "ic_sent_" + orderId;
-
-  // 🔹 Vaciar datos de envío
+  // 🔹 Limpiar solo datos de envío
   clientName.value = "";
   clientWhatsapp.value = "";
   addr.value = "";
@@ -1316,7 +1312,6 @@ function handleSummaryReset(){
   zoneName = "";
   ship = 0;
 
-  // 🔹 Limpiar también localStorage de datos de envío
   localStorage.removeItem('clientName');
   localStorage.removeItem('clientWhatsapp');
   localStorage.removeItem('addr');
@@ -1324,21 +1319,28 @@ function handleSummaryReset(){
   localStorage.removeItem('deliveryTime');
   localStorage.removeItem('orderDate');
 
+  // 🔥 CLAVE: NO tocar picadas
+  // 🔥 CLAVE: NO tocar summaryWrapper
+  // 🔥 CLAVE: NO tocar currentStep todavía
+
   saveState();
 
-    // 🔹 Volver a Step 1 SIN perder selección
-    currentStep = 1;
-    localStorage.removeItem('currentStep');
-    updateStepTitle();
+  // 🔁 Ahora sí volver a Step 1
+  currentStep = 1;
+  localStorage.setItem('currentStep', 1);
+  updateStepTitle();
 
-    document.getElementById("config").style.display = "block";
-    document.getElementById("step2").style.display = "none";
-    document.getElementById("infoOperativa").style.display = "block";
-    document.getElementById("metodosPago").style.display = "none";
-    document.getElementById("backWrapper").style.display = "none";
-    
-    update();
-  }
+  document.getElementById("config").style.display = "block";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("infoOperativa").style.display = "block";
+  document.getElementById("metodosPago").style.display = "none";
+  document.getElementById("backWrapper").style.display = "none";
+  document.getElementById("backBtnInline").style.display = "none";
+
+  banner.style.pointerEvents = "auto";
+
+  update(); // 🔥 esto vuelve a renderizar el resumen correctamente
+}
 }
 
 function snapToClosestStep() {
