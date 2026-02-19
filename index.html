@@ -70,6 +70,15 @@ body {
     0 1px 0 rgba(255,255,255,.02) inset;
 }
 
+.section.summary{
+  background:#1f1f1f;
+
+  border:1px solid rgba(255,255,255,.03);
+
+  box-shadow:
+    0 8px 24px rgba(0,0,0,.5),
+    0 1px 0 rgba(255,255,255,.02) inset;
+}
 
   .qty-section{
   padding:14px;
@@ -954,10 +963,17 @@ body {
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
 }
 
-.model-col button.control:not(.selected):hover,
-.size-col button.control:not(.selected):hover{
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(0,0,0,.45);
+/* ==============================
+   HOVER SOLO EN DISPOSITIVOS CON CURSOR
+   ============================== */
+@media (hover: hover) and (pointer: fine){
+
+  .model-col button.control:not(.selected):hover,
+  .size-col button.control:not(.selected):hover{
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,.45);
+  }
+
 }
 
 button.selected{
@@ -965,10 +981,16 @@ button.selected{
   border-color: var(--accent);
   box-shadow:
     0 0 0 1px var(--accent),
-    0 6px 14px rgba(0,0,0,.5);
-  transform: none;
+    0 6px 16px rgba(0,0,0,.55);
+  transform: translateY(-1px);
 }
 
+@media (hover: none){
+  .model-col button.control:active,
+  .size-col button.control:active{
+    transform: scale(0.98);
+  }
+}
 
 </style>
 </head>
