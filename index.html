@@ -1258,6 +1258,11 @@ function handleSummaryReset(){
 
 } else if(currentStep === 2){
 
+  // 🔓 permitir volver a disparar InitiateCheckout
+  const orderId = window.currentOrderId;
+  const key = "ic_sent_" + orderId;
+  sessionStorage.removeItem(key);
+
   // 🔹 Vaciar datos de envío
   clientName.value = "";
   clientWhatsapp.value = "";
@@ -1483,8 +1488,7 @@ function goToStep2(){
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
 
-  // 🔒 Si ya se envió InitiateCheckout para este pedido → salir
-  if (sessionStorage.getItem(key)) return;
+  const alreadySent = sessionStorage.getItem(key);
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
@@ -1494,33 +1498,36 @@ function goToStep2(){
     return;
   }
 
-  // Marcar como enviado
+if (!alreadySent) {
+
   sessionStorage.setItem(key, "1");
 
-const eventId = "ic_" + window.currentOrderId;
-fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-    event_id: eventId,
-    order_id: window.currentOrderId,
-    total: total,
-    items: picadas,
-    fbp: getFacebookIdentifiers().fbp,
-    fbc: getFacebookIdentifiers().fbc,
-    user_agent: navigator.userAgent
-  })
-}).catch(() => {});
+  const eventId = "ic_" + window.currentOrderId;
 
-// 👇 PIXEL BROWSER (AQUÍ)
-if (typeof fbq === "function") {
-fbq('track', 'InitiateCheckout', {
-  value: total,
-  currency: 'ARS'
-}, {
-  eventID: eventId
-});
+  fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      event_id: eventId,
+      order_id: window.currentOrderId,
+      total: total,
+      items: picadas,
+      fbp: getFacebookIdentifiers().fbp,
+      fbc: getFacebookIdentifiers().fbc,
+      user_agent: navigator.userAgent
+    })
+  }).catch(() => {});
+
+  if (typeof fbq === "function") {
+    fbq('track', 'InitiateCheckout', {
+      value: total,
+      currency: 'ARS'
+    }, {
+      eventID: eventId
+    });
+  }
 }
+
 
   currentStep = 2;
   history.pushState({ step: 2 }, "", "#step2");
