@@ -1239,6 +1239,12 @@ const modelData = {
 
 let currentStep = 1;
 
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("step2").style.display = "none";
+  document.querySelectorAll(".info-card")[1].style.display = "none";
+});
+
+
 function goToStep2(){
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
@@ -1251,12 +1257,22 @@ function goToStep2(){
 
   currentStep = 2;
 
-  document.getElementById("step2").style.display = "block";
+  // 🔹 Ocultar configuración
+  document.getElementById("config").style.display = "none";
   document.getElementById("step1BtnWrapper").style.display = "none";
 
+  // 🔹 Mostrar formulario envío
+  document.getElementById("step2").style.display = "block";
+
+  // 🔹 Ocultar info operativa
+  document.querySelectorAll(".info-card")[0].style.display = "none";
+
+  // 🔹 Mostrar métodos de pago
+  document.querySelectorAll(".info-card")[1].style.display = "block";
+
+  update();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
@@ -1985,7 +2001,7 @@ txt += `<b>Total: $${totalVisible.toLocaleString()}</b>`;
 
 
 
-summaryDiv.innerHTML = `
+summary.innerHTML = `
   <div class="summary-header">
     <div class="summary-title">Resumen</div>
     <button onclick="resetAll()" class="summary-close">✕</button>
