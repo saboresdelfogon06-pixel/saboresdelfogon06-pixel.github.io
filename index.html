@@ -26,7 +26,7 @@ body {
   color: var(--text);
   touch-action: manipulation;
   overscroll-behavior: auto;
-
+  visibility: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
 }
@@ -788,7 +788,9 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
   margin-top: 0;
   margin-bottom: 12px;
   text-align: left;
-  padding-left: 2px; /* micro ajuste óptico para alinear con inputs */
+  padding-left: 2px; 
+  position: relative;
+  z-index: 5;/* micro ajuste óptico para alinear con inputs */
 }
 
 .landing-intro-top h1{
@@ -928,10 +930,6 @@ html {
   scroll-behavior: auto;
 }
 
-body {
-  visibility: hidden;
-}
-
 @media (prefers-color-scheme: light) {
   :root{
     --bg:#202020;
@@ -985,11 +983,6 @@ button.selected{
   .size-col button.control:active{
     transform: scale(0.98);
   }
-}
-
-.landing-intro-top{
-  position: relative;
-  z-index: 5;
 }
 
 .landing-intro-top::before{
@@ -1526,6 +1519,7 @@ fbq('track', 'InitiateCheckout', {
 
   update();
   window.scrollTo({ top: 0, behavior: "smooth" });
+  banner.style.pointerEvents = "none";
 }
 
 
@@ -1700,6 +1694,7 @@ function loadState() {
   if (savedStep === 2) {
 
     currentStep = 2;
+    banner.style.pointerEvents = "none";
 
     document.getElementById("config").style.display = "none";
     document.getElementById("step1BtnWrapper").style.display = "none";
@@ -1711,6 +1706,8 @@ function loadState() {
   } else {
 
     currentStep = 1;
+    banner.style.pointerEvents = "auto";
+
 
     document.getElementById("config").style.display = "block";
     document.getElementById("step1BtnWrapper").style.display = "block";
@@ -2687,6 +2684,13 @@ const bannerSlides = [
   }
   // acá después podés agregar videos
 ];
+  
+function bannerInteractionDisabled(){
+  return currentStep === 2;
+}
+
+
+  
 
 let bannerIndex = 0;
 let bannerFrozenModel = null;
@@ -2694,6 +2698,11 @@ let bannerTimer = null;
 let bannerVisible = true;
 let startX = 0;
 let currentX = 0;
+
+banner.addEventListener("touchstart", e => {
+  if (bannerInteractionDisabled()) return;
+  startX = e.touches[0].clientX;
+});
 
 const banner = document.getElementById("heroBanner");
 const track = document.getElementById("bannerTrack");
@@ -2795,14 +2804,19 @@ function nextSlide(){
 }
 
 banner.onclick = () => {
+
+  if (bannerInteractionDisabled()) return;
+
   const model = bannerSlides[bannerIndex].model;
   picadas[active].model = model;
   saveState();
   renderConfig();
 };
 
-
 banner.addEventListener("touchend", e => {
+
+  if (bannerInteractionDisabled()) return;
+
   const endX = e.changedTouches[0].clientX;
   const diff = endX - startX;
 
@@ -2811,10 +2825,8 @@ banner.addEventListener("touchend", e => {
   let newIndex;
 
   if (diff < 0) {
-    // swipe izquierda → siguiente
     newIndex = (bannerIndex + 1) % bannerSlides.length;
   } else {
-    // swipe derecha → anterior
     newIndex = (bannerIndex - 1 + bannerSlides.length) % bannerSlides.length;
   }
 
@@ -2822,7 +2834,6 @@ banner.addEventListener("touchend", e => {
 
   const newModel = bannerSlides[newIndex].model;
 
-  // 👉 SIN importar bloqueo: swipe selecciona modelo
   picadas[active].model = newModel;
   saveState();
   renderConfig();
