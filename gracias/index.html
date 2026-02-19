@@ -177,6 +177,21 @@ async function loadOrder() {
     document.getElementById("details").style.display = "block";
   }
 
+  // ===== META PURCHASE (Browser) =====
+if (data.status === "confirmed" && !window._purchaseTracked) {
+
+  if (typeof fbq === "function") {
+    fbq('track', 'Purchase', {
+      value: data.total,
+      currency: 'ARS'
+    }, {
+      eventID: orderId
+    });
+  }
+
+  window._purchaseTracked = true;
+}
+
   // ===== SEGUIR CONFIRMANDO =====
   if (data.status !== "confirmed") {
     setTimeout(loadOrder, 2000);
