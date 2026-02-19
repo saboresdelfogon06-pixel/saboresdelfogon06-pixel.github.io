@@ -1106,12 +1106,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
     <div class="info-item">• Pedidos con 24hs de anticipación</div>
     
   </div>
-<div id="backWrapper" style="display:none; margin-bottom:12px;">
-  <button onclick="goBackToStep1()" 
-          style="background:none;border:none;color:var(--accent);font-size:14px;cursor:pointer;">
-    ← Volver
-  </button>
-</div>
 <div id="step2" style="display:none;">
 <div class="section">
 <label>Nombre y apellido</label>
@@ -1334,11 +1328,16 @@ function handleSummaryReset(){
   document.getElementById("step2").style.display = "none";
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("backWrapper").style.display = "none";
   document.getElementById("backBtnInline").style.display = "none";
 
   banner.style.pointerEvents = "auto";
 
+    const summaryWrapper = document.getElementById("summaryWrapper");
+  const infoOperativa = document.getElementById("infoOperativa");
+
+  if (summaryWrapper && infoOperativa) {
+    infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
+  }
   update(); // 🔥 esto vuelve a renderizar el resumen correctamente
 }
 }
@@ -1390,11 +1389,18 @@ function goBackToStep1(){
   document.getElementById("step2").style.display = "none";
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("backWrapper").style.display = "none";
   document.getElementById("backBtnInline").style.display = "none";
 
 
   banner.style.pointerEvents = "auto";
+
+    // 🔁 Mover summary de vuelta arriba (Step 1)
+  const summaryWrapper = document.getElementById("summaryWrapper");
+  const infoOperativa = document.getElementById("infoOperativa");
+
+  if (summaryWrapper && infoOperativa) {
+    infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
+  }
 
   update();
   setTimeout(() => {
@@ -1621,7 +1627,6 @@ if (summaryWrapper && metodosPago) {
 
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
-  document.getElementById("backWrapper").style.display = "block";
 
   update();
   setTimeout(() => {
@@ -1808,7 +1813,6 @@ function loadState() {
     document.getElementById("step2").style.display = "block";
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("metodosPago").style.display = "block";
-    document.getElementById("backWrapper").style.display = "block";
       const summaryWrapper = document.getElementById("summaryWrapper");
   const metodosPago = document.getElementById("metodosPago");
 
@@ -1840,7 +1844,6 @@ if (summaryWrapper && config) {
     document.getElementById("step2").style.display = "none";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
-    document.getElementById("backWrapper").style.display = "none";
   }
 
   updateStepTitle();
@@ -1910,7 +1913,6 @@ updateStepTitle();
 
 document.getElementById("config").style.display = "block";
 document.getElementById("step2").style.display = "none";
-document.getElementById("backWrapper").style.display = "none";
 }
 
 function sendViewContentOnce(model, size, price) {
