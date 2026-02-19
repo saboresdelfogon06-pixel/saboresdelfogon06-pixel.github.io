@@ -1332,12 +1332,13 @@ function handleSummaryReset(){
 
   banner.style.pointerEvents = "auto";
 
-    const summaryWrapper = document.getElementById("summaryWrapper");
-  const infoOperativa = document.getElementById("infoOperativa");
+const summaryWrapper = document.getElementById("summaryWrapper");
+const paymentBlock = document.querySelector(".payment-block");
 
-  if (summaryWrapper && infoOperativa) {
-    infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
-  }
+if (summaryWrapper && paymentBlock) {
+  paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
+}
+
   update(); // 🔥 esto vuelve a renderizar el resumen correctamente
 }
 }
@@ -1383,7 +1384,7 @@ function goBackToStep1(){
 
 
   currentStep = 1;
-  saveState();
+  localStorage.setItem('currentStep', 1);
 
   document.getElementById("config").style.display = "block";
   document.getElementById("step2").style.display = "none";
