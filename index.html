@@ -949,8 +949,14 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 <p style="font-size:14px;color:var(--muted);margin:0 0 12px 2px;">
   Completá cantidad, modelo, tamaño y datos de envío:
 </p>
+<div class="pay" id="step1BtnWrapper">
+  <button type="button" id="reserveBtn" onclick="goToStep2()">
+    Reservar picada
+  </button>
+</div>
 
 <div id="config"></div>
+<div id="step2" style="display:none;">
 <div class="section">
 <label>Nombre y apellido</label>
 <input
@@ -1098,6 +1104,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 </div>
 
 
+</div>
 
 </div>
 <script>
@@ -1230,6 +1237,26 @@ const modelData = {
     ]
   }
 };
+
+let currentStep = 1;
+
+function goToStep2(){
+
+  const allPicadasValid = picadas.every(p => p.model && p.size);
+
+  if(!allPicadasValid){
+    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+    highlightPicada(incompleteIndex);
+    return;
+  }
+
+  currentStep = 2;
+
+  document.getElementById("step2").style.display = "block";
+  document.getElementById("step1BtnWrapper").style.display = "none";
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
@@ -1995,6 +2022,7 @@ ${picadas.map((p,i)=>{
   `;
 }).join("")}
 
+${ currentStep === 2 ? `
 <div class="summary-shipping">
   <span>Envío refrigerado</span>
   <span>
@@ -2003,11 +2031,12 @@ ${picadas.map((p,i)=>{
   </span>
   <span>$${ship.toLocaleString()}</span>
 </div>
+` : "" }
 
 
     <div class="summary-total">
       <span>Total</span>
-      <span>$${total.toLocaleString()}</span>
+      <span>$${(currentStep === 2 ? total : picadas.reduce((sum, p) => sum + (p.price || 0), 0)).toLocaleString()}</span>
     </div>
     
   </div>
