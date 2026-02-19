@@ -113,7 +113,7 @@ button.control{
   font-family: inherit;
   font-size:14px;
   line-height:1;
-  background:#111;
+  background:var(--input-bg);
   color:var(--text);
 }
 
@@ -918,6 +918,23 @@ body {
   outline:none;
   background:#313131;
 }
+
+.model-col button.control,
+.size-col button.control{
+  color: var(--text);
+  background: var(--input-bg);
+}
+
+.model-col button.control:hover,
+.size-col button.control:hover{
+  background:#313131;
+}
+
+button.selected{
+  background: rgba(211,174,9,.18);
+  border-color: var(--accent);
+}
+
 
 </style>
 </head>
@@ -1872,8 +1889,8 @@ let tabs = `
   text-align:center;
   font-size:18px;
   font-weight:600;
-  background:#111;
-  border:1px solid #2a2a2a;
+  background:var(--input-bg);
+  border:1px solid var(--input-border);
   border-radius:8px;
   height:48px;
   display:flex;
