@@ -983,6 +983,60 @@ button.selected{
   margin-bottom:3px;
 }
 
+.step-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:0 0 12px 2px;
+}
+
+#stepTitle{
+  font-size:14px;
+  color:var(--muted);
+  margin:0;
+}
+
+#backBtnInline{
+  display:none;
+  background:none;
+  border:none;
+  color:var(--accent);
+  font-size:14px;
+  cursor:pointer;
+}
+
+  .summary-total{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:10px;
+  margin-top:6px;
+  border-top:1px solid #444;
+}
+
+.total-left{
+  display:flex;
+  flex-direction:column;
+  font-size:18px;
+  font-weight:700;
+  color:var(--accent);
+}
+
+.summary-cta{
+  background:var(--accent);
+  color:#2a2a2a;
+  border:none;
+  border-radius:8px;
+  padding:10px 18px;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.summary-cta:hover{
+  transform:translateY(-1px);
+}
 
 </style>
 </head>
@@ -1037,16 +1091,11 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 
-<p id="stepTitle" style="font-size:14px;color:var(--muted);margin:0 0 12px 2px;"></p>
-<div id="config"></div>
-<div class="section summary" style="position:relative">
-  <div id="summary"></div>
-</div> 
-<div class="pay" id="step1BtnWrapper">
-  <button type="button" id="reserveBtn" onclick="goToStep2()">
-    Reservar picada
-  </button>
+<div class="step-header">
+  <p id="stepTitle"></p>
+  <button id="backBtnInline" onclick="goBackToStep1()">← Volver</button>
 </div>
+<div id="config"></div>
 <div class="info-card" id="infoOperativa">
     <div class="info-title">Información operativa</div>
     <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
@@ -1170,7 +1219,11 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 <div class="error-msg" id="error-zone"></div>
 
 </div>
-
+  
+  <div class="section summary" style="position:relative">
+    <div id="summary"></div>
+  </div>
+  
 <div class="pay">
 <button type="button" id="payBtn" onclick="goWA()">Pagar</button>
 </div>
@@ -1310,6 +1363,8 @@ function goBackToStep1(){
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
   document.getElementById("backWrapper").style.display = "none";
+  document.getElementById("backBtnInline").style.display = "none";
+
 
   banner.style.pointerEvents = "auto";
 
@@ -1479,6 +1534,7 @@ function goToStep2(){
   const alreadySent = sessionStorage.getItem(key);
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
+  document.getElementById("backBtnInline").style.display = "block";
 
   if(!allPicadasValid){
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
@@ -2486,10 +2542,19 @@ ${ currentStep === 2 ? `
 ` : "" }
 
 
-    <div class="summary-total">
-      <span>Total</span>
-      <span>$${(currentStep === 2 ? total : picadas.reduce((sum, p) => sum + (p.price || 0), 0)).toLocaleString()}</span>
-    </div>
+<div class="summary-total">
+  <div class="total-left">
+    <div>Total</div>
+    <div>$${(currentStep === 2 ? total : picadas.reduce((sum, p) => sum + (p.price || 0), 0)).toLocaleString()}</div>
+  </div>
+
+  ${
+    currentStep === 1
+    ? `<button class="summary-cta" onclick="goToStep2()">Continuar</button>`
+    : `<button class="summary-cta" id="payBtn" onclick="goWA()">Pagar</button>`
+  }
+</div>
+
     
   </div>
 `;
