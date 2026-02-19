@@ -1085,7 +1085,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
     Serás redirigido a Mercado Pago para completar el pago de forma segura.
   </div>
 
-  <div class="info-card">
+<div class="info-card" id="infoOperativa">
     <div class="info-title">Información operativa</div>
     <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
     <div class="info-item">• Envío refrigerado a CABA, Zona Oeste y alrededores</div>
@@ -1093,7 +1093,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
     
   </div>
 
-  <div class="info-card">
+  <div class="info-card" id="metodosPago">
     <div class="info-title">Métodos de pago</div>
     <div class="info-item">• Tarjeta de crédito</div>
     <div class="info-item">• Tarjeta de débito</div>
@@ -1241,8 +1241,10 @@ let currentStep = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("step2").style.display = "none";
-  document.querySelectorAll(".info-card")[1].style.display = "none";
+  document.getElementById("metodosPago").style.display = "none";
+  document.getElementById("infoOperativa").style.display = "block";
 });
+
 
 
 function goToStep2(){
@@ -1257,22 +1259,21 @@ function goToStep2(){
 
   currentStep = 2;
 
-  // 🔹 Ocultar configuración
+  // Ocultar Step 1
   document.getElementById("config").style.display = "none";
   document.getElementById("step1BtnWrapper").style.display = "none";
 
-  // 🔹 Mostrar formulario envío
+  // Mostrar Step 2
   document.getElementById("step2").style.display = "block";
 
-  // 🔹 Ocultar info operativa
-  document.querySelectorAll(".info-card")[0].style.display = "none";
-
-  // 🔹 Mostrar métodos de pago
-  document.querySelectorAll(".info-card")[1].style.display = "block";
+  // Cambiar bloques informativos
+  document.getElementById("infoOperativa").style.display = "none";
+  document.getElementById("metodosPago").style.display = "block";
 
   update();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
