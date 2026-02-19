@@ -1950,15 +1950,15 @@ function setModel(model){
   centerOnConfig();
 }
 
-  function centerOnConfig(){
+function centerOnConfig(){
 
   requestAnimationFrame(() => {
 
     const miniBanner = document.querySelector('.mini-banner');
     const intro = document.querySelector('.landing-intro-top');
-    const configSection = document.querySelector('.model-size-grid');
+    const sizeButtons = document.querySelectorAll('.size-col button.control');
 
-    if(!intro || !configSection) return;
+    if(!intro) return;
 
     const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
     const introBottom = intro.getBoundingClientRect().bottom + window.pageYOffset;
@@ -1970,8 +1970,14 @@ function setModel(model){
       behavior: 'smooth'
     });
 
+    // 🔥 Esperar que termine el scroll antes del highlight
+    setTimeout(() => {
+      flashHighlight([...sizeButtons], 'model-hint', 1800);
+    }, 450);
+
   });
 }
+
 
 
 function addPicada(){
