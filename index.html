@@ -1966,7 +1966,7 @@ function lightUpdate(){
 }
 
 function update() {
-  const summaryDiv = document.querySelector('.section.summary');
+  const summaryContainer = document.querySelector('.section.summary');
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
  let txt = picadas.map((p,i) => {
@@ -2052,7 +2052,7 @@ const valid =
   zoneName;
 
 
-  summaryDiv.style.display = 'block'; // siempre visible
+  summaryContainer.style.display = 'block';
   payBtn.classList.toggle("enabled", valid);
 
  if(valid && !window._checkoutTracked){
