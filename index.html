@@ -1372,6 +1372,7 @@ function highlightPicada(index){
       });
 
       const p = picadas[active];
+      
       let targets = [];
 
       if(!p.model){
@@ -2032,65 +2033,68 @@ function removeLastPicada(){
 
 function renderConfig(){
 
-let tabs = `
+
+
+ const p = picadas[active];
+
+  let tabs = `
 <div class="section qty-section">
   <div style="display:flex;gap:12px;">
 
-  <!-- CANTIDAD -->
-  <div style="flex:1;">
-    <label style="font-size:12px;">Elegí la cantidad:</label>
+    <!-- CANTIDAD -->
+    <div style="flex:1;">
+      <label style="font-size:12px;">Elegí la cantidad:</label>
 
-    <div style="display:flex;align-items:center;gap:8px;">
-<button
-  class="control qty-btn"
-  onclick="removeLastPicada()"
-        ${picadas.length <= 1 ? 'disabled' : ''}>
-        −
-      </button>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button
+          class="control qty-btn"
+          onclick="removeLastPicada()"
+          ${picadas.length <= 1 ? 'disabled' : ''}>
+          −
+        </button>
 
-<div style="
-  flex:1;
-  text-align:center;
-  font-size:18px;
-  font-weight:600;
-  background:var(--input-bg);
-  border:1px solid var(--input-border);
-  border-radius:8px;
-  height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-">
-  ${picadas.length}
-</div>
+        <div style="
+          flex:1;
+          text-align:center;
+          font-size:18px;
+          font-weight:600;
+          background:var(--input-bg);
+          border:1px solid var(--input-border);
+          border-radius:8px;
+          height:48px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+        ">
+          ${picadas.length}
+        </div>
 
-
-<button
-  class="control qty-btn"
-  onclick="addPicada()">
-        +
-      </button>
+        <button
+          class="control qty-btn"
+          onclick="addPicada()">
+          +
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- EDITAR -->
-  <div style="flex:1;">
-    <label>Editar</label>
-    <select class="control" onchange="setActivePicada(Number(this.value))">
-      ${picadas.map((_,i)=>`
-        <option value="${i}" ${i===active?'selected':''}>
-          Picada ${i+1}
-        </option>
-      `).join("")}
-    </select>
-  </div>
+    <!-- EDITAR -->
+    <div style="flex:1;">
+      <label>Editar</label>
+      <select
+        class="control"
+        onchange="setActivePicada(Number(this.value))">
+        ${picadas.map((_,i)=>`
+          <option value="${i}" ${i===active?'selected':''}>
+            Picada ${i+1}
+          </option>
+        `).join("")}
+      </select>
+    </div>
 
   </div>
 </div>
 `;
 
-
- const p = picadas[active];
 
   const dipsText = p.model
   ? [
@@ -2108,7 +2112,6 @@ if(hint){
 
 
   config.innerHTML = `
-    ${tabs}
 
 <div class="section">
   <div class="model-size-grid">
@@ -2207,7 +2210,8 @@ ${
 }
 
       </div>
-    </div>
+    </div>  
+${tabs}
   `;
 
   update();
