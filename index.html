@@ -1333,11 +1333,12 @@ function handleSummaryReset(){
   banner.style.pointerEvents = "auto";
 
 const summaryWrapper = document.getElementById("summaryWrapper");
-const paymentBlock = document.querySelector(".payment-block");
+const infoOperativa = document.getElementById("infoOperativa");
 
-if (summaryWrapper && paymentBlock) {
-  paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
+if (summaryWrapper && infoOperativa) {
+  infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
 }
+
 
   update(); // 🔥 esto vuelve a renderizar el resumen correctamente
 }
