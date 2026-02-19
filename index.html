@@ -1316,25 +1316,48 @@ function goToStep2(){
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
     highlightPicada(incompleteIndex);
     return;
-  document.getElementById("backWrapper").style.display = "block";
   }
+
+  // =========================
+  // DISPARAR INITIATE CHECKOUT
+  // =========================
+
+  if (!window.currentOrderId) {
+    window.currentOrderId = "IC_" + Date.now();
+  }
+
+  fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      order_id: window.currentOrderId,
+      total: total,
+      items: picadas,
+      fbp: getCookie("_fbp"),
+      fbc: getCookie("_fbc"),
+      user_agent: navigator.userAgent
+    })
+  }).catch(() => {});
+
+  // =========================
+  // CAMBIO DE STEP
+  // =========================
 
   currentStep = 2;
 
-  // Ocultar Step 1
   document.getElementById("config").style.display = "none";
   document.getElementById("step1BtnWrapper").style.display = "none";
 
-  // Mostrar Step 2
   document.getElementById("step2").style.display = "block";
 
-  // Cambiar bloques informativos
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
+  document.getElementById("backWrapper").style.display = "block";
 
   update();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
 
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
