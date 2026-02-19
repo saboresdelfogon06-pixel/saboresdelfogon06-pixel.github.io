@@ -2150,12 +2150,13 @@ function handleSizeClick(s, p){
 current.size = current.size === s ? null : s;
 current.price = current.size ? PRICES[s] : 0;
 
-// 🔥 DISPARAR VIEWCONTENT COMPLETO (modelo + tamaño)
+// 🔥 DISPARAR VIEWCONTENT COMPLETO
 if(current.model && current.size){
   trackViewContent(current.model, current.size, current.price);
-  
-  saveState();
-  renderConfig();
+}
+
+saveState();
+renderConfig();
 }
 
 
