@@ -946,7 +946,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 
-<p style="font-size:14px;color:var(--muted);margin:0 0 12px 2px;">
+<p id="stepTitle" style="font-size:14px;color:var(--muted);margin:0 0 12px 2px;"></p>
   Completá cantidad, modelo, tamaño y datos de envío:
 </p>
 <div id="config"></div>
@@ -1301,10 +1301,29 @@ const modelData = {
 
 let currentStep = 1;
 
-document.addEventListener("DOMContentLoaded", () => {
+function updateStepTitle() {
+  const el = document.getElementById("stepTitle");
+  if (!el) return;
+
+  if (currentStep === 1) {
+    el.innerHTML = `
+      <span style="font-weight:600;">Paso 1 de 2</span> - 
+      Elegí cantidad, modelo y tamaño:
+    `;
+  } else {
+    el.innerHTML = `
+      <span style="font-weight:600;">Paso 2 de 2</span> - 
+      Completá datos de envío:
+    `;
+  }
+}
+
+
+  document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("step2").style.display = "none";
   document.getElementById("metodosPago").style.display = "none";
   document.getElementById("infoOperativa").style.display = "block";
+  updateStepTitle();
 });
 
 
@@ -1353,6 +1372,7 @@ fbq('track', 'InitiateCheckout', {
   // =========================
 
   currentStep = 2;
+  updateStepTitle();
 
   document.getElementById("config").style.display = "none";
   document.getElementById("step1BtnWrapper").style.display = "none";
@@ -1572,6 +1592,7 @@ sessionStorage.removeItem('order_fingerprint');
 document.getElementById("infoOperativa").style.display = "block";
 // Volver a Step 1 visualmente
 currentStep = 1;
+updateStepTitle();
 
 document.getElementById("config").style.display = "block";
 document.getElementById("step1BtnWrapper").style.display = "block";
