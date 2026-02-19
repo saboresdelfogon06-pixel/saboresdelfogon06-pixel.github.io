@@ -470,15 +470,19 @@ button.selected{
 
 
 
+
 .mini-banner .right .cart-total {
-  background: #333;
+  background: #333;      /* gris más oscuro, uniforme con la estética */
   padding: 4px 8px;
   border-radius: 8px;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 12px;
-  color: #fff;
-  display: inline-block;
-}
+  cursor: pointer;
+  transition: transform .15s ease;
+  }
+.mini-banner .right .cart-total:active{
+  transform: scale(0.96);
+  }
 
 
 .favicon {
