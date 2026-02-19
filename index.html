@@ -10,12 +10,13 @@
 
 <style>
 :root{
-  --bg:#0f0f0f;
-  --card:#1b1b1b;
-  --text:#cfcac2;
-  --muted:#9a958d;
+  --bg:#181818;          /* antes #0f0f0f */
+  --card:#232323;        /* antes #1b1b1b */
+  --text:#f2efe9;        /* antes #cfcac2 */
+  --muted:#b5b0a8;       /* antes #9a958d */
   --accent:#D3AE09;
 }
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -83,7 +84,7 @@ label{
   width:100%;
   height:48px;                 /* 👈 altura fija, no min-height */
   padding:0 12px;              /* 👈 padding horizontal uniforme */
-  background:#111;
+  background:#1c1c1c;
   color:var(--text);
   border:1px solid #333;
   border-radius:8px;
@@ -99,6 +100,7 @@ label{
 
 input[type="date"].control,
 select.control{
+  background-color:#1c1c1c;
   color: var(--muted);
 }
 
@@ -752,8 +754,8 @@ input.control:-webkit-autofill:focus,
 textarea.control:-webkit-autofill,
 select.control:-webkit-autofill {
   -webkit-text-fill-color: var(--text);
-  -webkit-box-shadow: 0 0 0px 1000px #111 inset;
-  box-shadow: 0 0 0px 1000px #111 inset;
+-webkit-box-shadow: 0 0 0px 1000px #1c1c1c inset;
+box-shadow: 0 0 0px 1000px #1c1c1c inset;
   transition: background-color 5000s ease-in-out 0s;
 }
 
@@ -904,6 +906,13 @@ html {
 
 body {
   visibility: hidden;
+}
+
+@media (prefers-color-scheme: light) {
+  :root{
+    --bg:#202020;
+    --card:#2a2a2a;
+  }
 }
 
 </style>
