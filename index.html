@@ -1302,14 +1302,24 @@ function handleSummaryReset(){
 }
 
 function goBackToStep1(){
+
+  const orderId = window.currentOrderId;
+  const key = "ic_sent_" + orderId;
+
+  // 🔓 permitir volver a disparar InitiateCheckout
+  sessionStorage.removeItem(key);
+
   currentStep = 1;
   saveState();
+
   document.getElementById("config").style.display = "block";
   document.getElementById("step1BtnWrapper").style.display = "block";
   document.getElementById("step2").style.display = "none";
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
   document.getElementById("backWrapper").style.display = "none";
+
+  banner.style.pointerEvents = "auto";
 
   update();
 }
