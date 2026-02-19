@@ -1322,11 +1322,12 @@ function goToStep2(){
   // INITIATE CHECKOUT (CAPI)
   // =========================
 
-  
+const eventId = "ic_" + window.currentOrderId;
 fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
+body: JSON.stringify({
+    event_id: eventId,
     order_id: window.currentOrderId,
     total: total,
     items: picadas,
@@ -1338,10 +1339,12 @@ fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
 
 // 👇 PIXEL BROWSER (AQUÍ)
 if (typeof fbq === "function") {
-  fbq('track', 'InitiateCheckout', {
-    value: total,
-    currency: 'ARS'
-  });
+fbq('track', 'InitiateCheckout', {
+  value: total,
+  currency: 'ARS'
+}, {
+  eventID: eventId
+});
 }
 
   // =========================
