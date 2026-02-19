@@ -2166,28 +2166,43 @@ function handleSizeClick(s, p){
 
   const current = picadas[active];
 
-  // 🔒 BLOQUEO: no permitir tamaño sin modelo
-  if(!current.model){
-    const modelBtns = document.querySelectorAll('.model-col button.control');
-    const hint = document.getElementById('modelHint');
-    if(hint) hint.style.color = '#ffffff';
-    flashHighlight([...modelBtns], 'model-hint', 1800);
-    return;
+// 🔒 BLOQUEO: no permitir tamaño sin modelo
+if(!current.model){
+
+  const modelBtns = document.querySelectorAll('.model-col button.control');
+  const hint = document.getElementById('modelHint');
+
+  if(hint) hint.style.color = '#ffffff';
+
+  flashHighlight([...modelBtns], 'model-hint', 1800);
+
+  // 🔥 quitar foco del botón de tamaño (fix desktop)
+  if(document.activeElement){
+    document.activeElement.blur();
   }
 
-  // 🔒 NO permitir deseleccionar
-  if(current.size === s) return;
-
-  current.size = s;
-  current.price = PRICES[s];
-
-  if(current.model && current.size){
-    sendViewContentOnce(current.model, current.size, current.price);
-  }
-
-  saveState();
-  renderConfig();
+  return;
 }
+
+// 🔒 NO permitir deseleccionar
+if(current.size === s) {
+  if(document.activeElement){
+    document.activeElement.blur();
+  }
+  return;
+}
+
+current.size = s;
+current.price = PRICES[s];
+
+if(current.model && current.size){
+  sendViewContentOnce(current.model, current.size, current.price);
+}
+
+saveState();
+renderConfig();
+}
+
 
 
 
