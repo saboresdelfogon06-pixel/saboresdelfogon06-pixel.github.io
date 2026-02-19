@@ -1336,7 +1336,7 @@ function updateStepTitle() {
   document.getElementById("infoOperativa").style.display = "block";
   updateStepTitle();
 });
-
+  
 function handleMiniBannerClick(){
 
   // Si ya estamos en Step 2 → volver arriba suave
@@ -1349,23 +1349,15 @@ function handleMiniBannerClick(){
 
   // 🔴 Si falta modelo o tamaño
   if(!allPicadasValid){
-
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
     highlightPicada(incompleteIndex);
-
-    // pequeño efecto visual en el total
-    const totalEl = document.getElementById('cartTotal');
-    totalEl.style.transform = "scale(1.08)";
-    setTimeout(() => {
-      totalEl.style.transform = "scale(1)";
-    }, 180);
-
     return;
   }
 
   // 🟢 Si está completo → ir a Step 2
   goToStep2();
 }
+
 
 
 function goToStep2(){
