@@ -1235,6 +1235,27 @@ zone.addEventListener("change", function(){
   });
 }
 
+function trackViewContent(model, size, price){
+
+  if (typeof fbq !== "function") return;
+
+  // 🔥 Evitar duplicados por misma selección
+  const key = `${model}_${size || 'no_size'}`;
+
+  if (window._lastVC === key) return;
+  window._lastVC = key;
+
+  fbq('track', 'ViewContent', {
+    content_name: model,
+    content_category: 'Picadas',
+    content_ids: [model],
+    value: price || 0,
+    currency: 'ARS'
+  });
+
+}
+
+
 function handleSummaryReset(){
 
   if(currentStep === 1){
@@ -1869,19 +1890,17 @@ function setModel(model){
   const current = picadas[active];
 
   if(current.model === model){
-    // si el modelo ya está seleccionado, lo deselecciona
     current.model = null;
-
-    // 🔹 Resetear tamaño y precio también
     current.size = null;
     current.price = 0;
   } else {
     current.model = model;
+
+    // 🔥 DISPARAR VIEWCONTENT AL ELEGIR MODELO
+    trackViewContent(model, null, 0);
   }
 
-  // sincroniza banner
   syncBannerWithModel(current.model);
-
   saveState();
   renderConfig();
 }
@@ -2128,9 +2147,13 @@ function handleSizeClick(s, p){
     return;
   }
 
-  current.size = current.size === s ? null : s;
-  current.price = current.size ? PRICES[s] : 0;
+current.size = current.size === s ? null : s;
+current.price = current.size ? PRICES[s] : 0;
 
+// 🔥 DISPARAR VIEWCONTENT COMPLETO (modelo + tamaño)
+if(current.model && current.size){
+  trackViewContent(current.model, current.size, current.price);
+  
   saveState();
   renderConfig();
 }
@@ -3002,10 +3025,6 @@ s.parentNode.insertBefore(t,s)}
 
 fbq('init','3350400148462231');
 fbq('track','PageView');
-fbq('track','ViewContent', {
-  content_name: 'Landing Picadas',
-  content_category: 'Picadas'
-});
   }
   
 loadPixelOnce();
