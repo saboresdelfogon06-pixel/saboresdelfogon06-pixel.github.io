@@ -1989,18 +1989,31 @@ function centerOnConfig(){
 
 
 function addPicada(){
+
   if(picadas.length >= 6) return;
 
+  const current = picadas[active];
+
+  // 🔒 Si la picada actual no está completa, no duplicar
+  if(!current.model || !current.size){
+    highlightPicada(active);
+    return;
+  }
+
+  // 🔥 DUPLICAR la picada actual
   picadas.push({
-    model: null,
-    size: null,
-    price: 0
+    model: current.model,
+    size: current.size,
+    price: current.price
   });
 
+  // 🔹 Seleccionar automáticamente la nueva
   active = picadas.length - 1;
+
   saveState();
   renderConfig();
 }
+
 
 
 function removePicada(){
