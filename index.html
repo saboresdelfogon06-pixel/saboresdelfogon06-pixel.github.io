@@ -893,6 +893,14 @@ select.control:-webkit-autofill {
   animation: pulse-dot 2.8s ease-in-out infinite;
 }
 
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  visibility: hidden;
+}
+
 </style>
 </head>
 <body>
@@ -947,8 +955,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 </div>
 
 <p id="stepTitle" style="font-size:14px;color:var(--muted);margin:0 0 12px 2px;"></p>
-  Completá cantidad, modelo, tamaño y datos de envío:
-</p>
 <div id="config"></div>
 <div class="section summary" style="position:relative">
   <div id="summary"></div>
@@ -2656,12 +2662,11 @@ let scrollTimeout;
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (window.innerWidth >= 769) {
-    loadState();
-    update();
-  }
+document.addEventListener("DOMContentLoaded", () => {
+  loadState();
+  update();
 });
+
 
 // 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
 
@@ -2727,6 +2732,7 @@ window.addEventListener('pageshow', () => {
 
   if (window.innerWidth >= 769) {
   }
+  document.body.style.visibility = "visible";
 });
 
 
