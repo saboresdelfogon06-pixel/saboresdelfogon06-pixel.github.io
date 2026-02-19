@@ -2154,33 +2154,34 @@ ${
 
 function handleSizeClick(s, p){
 
-  // 🔒 Solo tamaños permitidos
   const allowedSizes = [4, 6, 10];
   if (!allowedSizes.includes(s)) return;
 
   const current = picadas[active];
 
+  // 🔒 BLOQUEO: no permitir tamaño sin modelo
   if(!current.model){
     const modelBtns = document.querySelectorAll('.model-col button.control');
     const hint = document.getElementById('modelHint');
     if(hint) hint.style.color = '#ffffff';
-
-
     flashHighlight([...modelBtns], 'model-hint', 1800);
     return;
   }
 
-current.size = current.size === s ? null : s;
-current.price = current.size ? PRICES[s] : 0;
+  // 🔒 NO permitir deseleccionar
+  if(current.size === s) return;
 
-// 🔥 DISPARAR VIEWCONTENT COMPLETO
-if(current.model && current.size){
-  sendViewContentOnce(current.model, current.size, current.price);
+  current.size = s;
+  current.price = PRICES[s];
+
+  if(current.model && current.size){
+    sendViewContentOnce(current.model, current.size, current.price);
+  }
+
+  saveState();
+  renderConfig();
 }
 
-saveState();
-renderConfig();
-}
 
 
 
@@ -2856,10 +2857,10 @@ banner.onclick = () => {
   if (bannerInteractionDisabled()) return;
 
   const model = bannerSlides[bannerIndex].model;
-  picadas[active].model = model;
-  saveState();
-  renderConfig();
+
+  setModel(model); // 🔥 usar la función oficial
 };
+
 
 banner.addEventListener("touchend", e => {
 
@@ -2882,7 +2883,7 @@ banner.addEventListener("touchend", e => {
 
   const newModel = bannerSlides[newIndex].model;
 
-  picadas[active].model = newModel;
+  setModel(newModel);
   saveState();
   renderConfig();
 });
