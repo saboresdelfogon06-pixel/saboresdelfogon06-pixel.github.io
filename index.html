@@ -1166,19 +1166,34 @@ function handleSummaryReset(){
 
     document.getElementById('cartTotal').textContent = '$0';
 
-  } else if(currentStep === 2){
+} else if(currentStep === 2){
 
-    // 🔹 Vaciar solo datos de envío
-    clientName.value = "";
-    clientWhatsapp.value = "";
-    addr.value = "";
-    zone.value = "";
-    deliveryTime.value = "";
+  // 🔹 Vaciar datos de envío
+  clientName.value = "";
+  clientWhatsapp.value = "";
+  addr.value = "";
+  zone.value = "";
+  deliveryTime.value = "";
+  orderDate.value = "";
 
-    zoneName = "";
-    ship = 0;
+  const manualInput = document.getElementById('manualZone');
+  if(manualInput){
+    manualInput.value = "";
+    manualInput.style.display = "none";
+  }
 
-    saveState();
+  zoneName = "";
+  ship = 0;
+
+  // 🔹 Limpiar también localStorage de datos de envío
+  localStorage.removeItem('clientName');
+  localStorage.removeItem('clientWhatsapp');
+  localStorage.removeItem('addr');
+  localStorage.removeItem('zone');
+  localStorage.removeItem('deliveryTime');
+  localStorage.removeItem('orderDate');
+
+  saveState();
 
     // 🔹 Volver a Step 1 SIN perder selección
     currentStep = 1;
