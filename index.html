@@ -72,9 +72,8 @@ body {
 
 .section.summary{
   background:#1f1f1f;
-
   border:1px solid rgba(255,255,255,.03);
-
+  padding:14px;
   box-shadow:
     0 8px 24px rgba(0,0,0,.5),
     0 1px 0 rgba(255,255,255,.02) inset;
@@ -454,20 +453,25 @@ box-shadow:
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #1b1b1b;  /* gris oscuro */
-  height: 48px;          /* altura fija */
+  background: var(--card);
+  height: 48px;
   padding: 0 12px;
   font-size: 13px;
-  color: #fff;
-  border-radius: 12px;  
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  color: var(--text);
+  border-radius: 12px;
+
+  box-shadow:
+    0 6px 18px rgba(0,0,0,.45),
+    0 1px 0 rgba(255,255,255,.02) inset;
+
   z-index: 999;
 
-  position: fixed;       /* ⚡ aquí está la clave */
-  top: 12px;             /* separación desde arriba */
-  left: 12px;            /* separación lateral */
-  right: 12px;           /* separación lateral */
-  transition: transform 0.3s ease; /* opcional, suaviza el movimiento al aparecer/desaparecer */
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+
+  transition: transform 0.3s ease;
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
@@ -501,7 +505,8 @@ box-shadow:
 
 
 .mini-banner .right .cart-total {
-  background: #333;      /* gris más oscuro, uniforme con la estética */
+  background: var(--input-bg);
+  color: var(--text);    /* gris más oscuro, uniforme con la estética */
   padding: 4px 8px;
   border-radius: 8px;
   font-weight: bold;
@@ -580,12 +585,6 @@ input[type="date"]::-moz-focus-inner{
   border:0;
 }
 /* ===== FILAS 50 / 50 PERFECTAS ===== */
-
-
-
-.section.summary{
-  padding:14px;
-}
 
 .summary-close{
   background:none;
@@ -767,11 +766,6 @@ input[type="date"]::-moz-focus-inner{
   font-size:14px;
   font-weight:600;
   color:var(--text);
-}
-  /* Botones de modelo y tamaño más sólidos */
-.model-col button.control,
-.size-col button.control{
-  font-weight:500;
 }
 
 /* 🧠 FIX autofill navegador (Chrome / Safari / iOS) */
@@ -959,6 +953,7 @@ body {
 .size-col button.control{
   background: var(--input-bg);
   color: var(--text);
+  font-weight:500;
   box-shadow: 0 1px 2px rgba(0,0,0,.35);
   transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
 }
