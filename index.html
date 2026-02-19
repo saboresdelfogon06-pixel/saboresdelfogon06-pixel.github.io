@@ -2699,12 +2699,13 @@ let bannerVisible = true;
 let startX = 0;
 let currentX = 0;
 
+const banner = document.getElementById("heroBanner");
+
 banner.addEventListener("touchstart", e => {
   if (bannerInteractionDisabled()) return;
   startX = e.touches[0].clientX;
 });
-
-const banner = document.getElementById("heroBanner");
+  
 const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
 
