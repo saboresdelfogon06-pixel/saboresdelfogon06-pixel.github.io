@@ -950,11 +950,21 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   Completá cantidad, modelo, tamaño y datos de envío:
 </p>
 <div id="config"></div>
+<div class="section summary" style="position:relative">
+  <div id="summary"></div>
+</div> 
 <div class="pay" id="step1BtnWrapper">
   <button type="button" id="reserveBtn" onclick="goToStep2()">
     Reservar picada
   </button>
 </div>
+<div class="info-card" id="infoOperativa">
+    <div class="info-title">Información operativa</div>
+    <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
+    <div class="info-item">• Envío refrigerado a CABA, Zona Oeste y alrededores</div>
+    <div class="info-item">• Pedidos con 24hs de anticipación</div>
+    
+  </div>
 <div id="step2" style="display:none;">
 <div class="section">
 <label>Nombre y apellido</label>
@@ -1066,15 +1076,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 
-<div class="section summary" style="position:relative">
-
-
-  <div id="summary">
-    Completá todos los pasos para ver el total.
-  </div>
-
-</div>
-
 <div class="pay">
 <button type="button" id="payBtn" onclick="goWA()">Pagar</button>
 </div>
@@ -1083,14 +1084,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
   <div class="payment-sub">
     Serás redirigido a Mercado Pago para completar el pago de forma segura.
-  </div>
-
-<div class="info-card" id="infoOperativa">
-    <div class="info-title">Información operativa</div>
-    <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
-    <div class="info-item">• Envío refrigerado a CABA, Zona Oeste y alrededores</div>
-    <div class="info-item">• Pedidos con 24hs de anticipación</div>
-    
   </div>
 
   <div class="info-card" id="metodosPago">
@@ -1475,6 +1468,7 @@ enforceTomorrowDate();
 
  sessionStorage.removeItem('mp_init_point');
 sessionStorage.removeItem('order_fingerprint');
+document.getElementById("infoOperativa").style.display = "block";
 }
 
 function resetForNextOrder() {
