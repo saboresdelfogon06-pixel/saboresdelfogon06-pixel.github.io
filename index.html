@@ -1235,45 +1235,6 @@ zone.addEventListener("change", function(){
   });
 }
 
-function trackViewContent(model, size, price){
-
-  if (typeof fbq !== "function") return;
-
-  const key = `${model}_${size || 'no_size'}`;
-
-  if (window._lastVC === key) return;
-  window._lastVC = key;
-
-  // 🔑 Generar event_id único
-  const eventId = 'vc_' + crypto.randomUUID();
-
-  // ===== PIXEL (BROWSER) =====
-  fbq('track', 'ViewContent', {
-    content_name: model,
-    content_category: 'Picadas',
-    content_ids: [model],
-    value: price || 0,
-    currency: 'ARS'
-  }, {
-    eventID: eventId
-  });
-
-  // ===== CAPI =====
-  fetch("https://saboresdelfogon.com/api/meta/view-content", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      event_id: eventId,
-      content_name: model,
-      value: price || 0,
-      fbp: getFacebookIdentifiers().fbp,
-      fbc: getFacebookIdentifiers().fbc,
-      user_agent: navigator.userAgent
-    })
-  }).catch(()=>{});
-}
-
-
 
 function handleSummaryReset(){
 
@@ -1342,6 +1303,7 @@ function handleSummaryReset(){
 
 function goBackToStep1(){
 
+  initiateCheckoutSent = false;
   currentStep = 1;
   saveState();
   document.getElementById("config").style.display = "block";
@@ -1507,6 +1469,9 @@ function handleMiniBannerClick(){
 
 
 function goToStep2(){
+  // 🔒 Evitar múltiples InitiateCheckout
+if (initiateCheckoutSent) return;
+initiateCheckoutSent = true;
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
@@ -1567,6 +1532,7 @@ fbq('track', 'InitiateCheckout', {
 
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
+let initiateCheckoutSent = false;
 
 // =========================
 // TAB GUARD (PEDIDO POR PESTAÑA)
@@ -1824,7 +1790,48 @@ document.getElementById("step2").style.display = "none";
 document.getElementById("backWrapper").style.display = "none";
 }
 
+function sendViewContentOnce(model, size, price) {
+
+  const orderId = window.currentOrderId;
+  const key = "vc_sent_" + orderId;
+
+  if (sessionStorage.getItem(key)) return;
+
+  sessionStorage.setItem(key, "1");
+
+  const eventId = "vc_" + orderId;
+
+  const fbIds = getFacebookIdentifiers();
+
+  // ===== PIXEL =====
+  if (typeof fbq === "function") {
+    fbq('track', 'ViewContent', {
+      content_name: model,
+      content_category: 'Picadas',
+      value: price || 0,
+      currency: 'ARS'
+    }, {
+      eventID: eventId
+    });
+  }
+
+  // ===== CAPI =====
+  fetch("https://saboresdelfogon.com/api/meta/view-content", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      event_id: eventId,
+      content_name: model,
+      value: price || 0,
+      fbp: fbIds.fbp,
+      fbc: fbIds.fbc,
+      user_agent: navigator.userAgent
+    })
+  }).catch(()=>{});
+}
+
 function resetForNextOrder() {
+  initiateCheckoutSent = false;
   // 🔹 Reset de inputs y variables locales
   clientName.value = "";
   addr.value = "";
@@ -1916,7 +1923,7 @@ function setModel(model){
     current.model = model;
 
     // 🔥 DISPARAR VIEWCONTENT AL ELEGIR MODELO
-    trackViewContent(model, null, 0);
+    trackViewContent(model, null, 0);sendViewContentOnce(model, null, 0);
   }
 
   syncBannerWithModel(current.model);
@@ -2171,7 +2178,7 @@ current.price = current.size ? PRICES[s] : 0;
 
 // 🔥 DISPARAR VIEWCONTENT COMPLETO
 if(current.model && current.size){
-  trackViewContent(current.model, current.size, current.price);
+  sendViewContentOnce(current.model, current.size, current.price);
 }
 
 saveState();
