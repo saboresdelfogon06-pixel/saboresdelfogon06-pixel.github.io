@@ -1768,6 +1768,13 @@ function loadState() {
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("metodosPago").style.display = "block";
     document.getElementById("backWrapper").style.display = "block";
+      const summaryWrapper = document.getElementById("summaryWrapper");
+  const metodosPago = document.getElementById("metodosPago");
+
+  if (summaryWrapper && metodosPago) {
+    metodosPago.parentNode.insertBefore(summaryWrapper, metodosPago);
+  }
+
 
   } else {
 
