@@ -1261,7 +1261,6 @@ function handleSummaryReset(){
   // 🔓 permitir volver a disparar InitiateCheckout
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
-  sessionStorage.removeItem(key);
 
   // 🔹 Vaciar datos de envío
   clientName.value = "";
@@ -1311,8 +1310,6 @@ function goBackToStep1(){
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
 
-  // 🔓 permitir volver a disparar InitiateCheckout
-  sessionStorage.removeItem(key);
 
   currentStep = 1;
   saveState();
