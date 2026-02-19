@@ -477,7 +477,12 @@ button.selected{
   border-radius: 8px;
   font-weight: bold;
   font-size: 12px;
-}
+  cursor: pointer;
+  transition: transform .15s ease;
+  }
+.mini-banner .right .cart-total:active{
+  transform: scale(0.96);
+  }
 
 
 .favicon {
@@ -921,9 +926,9 @@ body {
 </div>
 
   <div class="right">
-    <div class="cart-total" id="cartTotal">
-      $0
-    </div>
+<div class="cart-total" id="cartTotal" onclick="handleMiniBannerClick()">
+  $0
+</div>
   </div>
 </div>
   
@@ -1332,6 +1337,35 @@ function updateStepTitle() {
   updateStepTitle();
 });
 
+function handleMiniBannerClick(){
+
+  // Si ya estamos en Step 2 → volver arriba suave
+  if(currentStep === 2){
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  const allPicadasValid = picadas.every(p => p.model && p.size);
+
+  // 🔴 Si falta modelo o tamaño
+  if(!allPicadasValid){
+
+    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+    highlightPicada(incompleteIndex);
+
+    // pequeño efecto visual en el total
+    const totalEl = document.getElementById('cartTotal');
+    totalEl.style.transform = "scale(1.08)";
+    setTimeout(() => {
+      totalEl.style.transform = "scale(1)";
+    }, 180);
+
+    return;
+  }
+
+  // 🟢 Si está completo → ir a Step 2
+  goToStep2();
+}
 
 
 function goToStep2(){
