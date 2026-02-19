@@ -2756,21 +2756,2792 @@ document.querySelectorAll('.control').forEach(el => {
       }
     }
 
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}
-    (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sabores del Fogón</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="preload" as="image" href="images/IMG_7762.webp" type="image/webp" fetchpriority="high">
+<link rel="icon" href="images/LOGO96.webp" type="image/webp" sizes="96x96">
+<link rel="preconnect" href="https://connect.facebook.net">
 
-    fbq('init','3350400148462231');
-    fbq('track','PageView');
-    fbq('track','ViewContent', {
+<style>
+:root{
+  --bg:#0f0f0f;
+  --card:#1b1b1b;
+  --text:#cfcac2;
+  --muted:#9a958d;
+  --accent:#D3AE09;
+}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  touch-action: manipulation;
+  overscroll-behavior: auto;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
+}
+
+.container {
+  max-width: 720px;
+  margin: auto;
+  padding: 16px;
+  padding-top: 72px;
+
+  height: auto;        /* 🔑 */
+  overflow: visible;   /* 🔑 */
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:14px;
+}
+.logo{width:54px}
+.brand{
+  font-size:15px;
+  color:var(--muted);
+}
+.brand a{
+  color:var(--muted);
+  text-decoration:none;
+}
+.brand span{margin:0 6px;opacity:.6}
+
+/* SECTIONS */
+.section{
+  background:var(--card);
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:16px;
+}
+
+  .qty-section{
+  padding:14px;
+}
+
+.qty-section label{
+  font-size:13px;
+}
+
+label{
+  display:block;
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.control{
+  width:100%;
+  height:48px;                 /* 👈 altura fija, no min-height */
+  padding:0 12px;              /* 👈 padding horizontal uniforme */
+  background:#111;
+  color:var(--text);
+  border:1px solid #333;
+  border-radius:8px;
+  margin-bottom:10px;
+  box-sizing:border-box;
+
+  /* 🔑 UNIFICACIÓN REAL */
+  font-family: inherit;
+  font-size:14px;
+  font-weight:400;
+  line-height:normal;
+}
+
+input[type="date"].control,
+select.control{
+  color: var(--muted);
+}
+
+
+input.control,
+select.control{
+  font-size:14px !important;
+  line-height:normal !important;
+}
+button.control{
+  font-family: inherit;
+  font-size:14px;
+  line-height:1;
+  background:#111;
+  color:var(--text);
+}
+
+/* Botones + y - */
+.qty-btn{
+  width:36px !important;
+  padding:0 !important;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
+  font-weight:600;
+}
+
+select.control{
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: #111;
+  background-image: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='%239a958d'>\
+<path d='M7 10l5 5 5-5'/>\
+</svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+
+  padding-right: 40px;
+}
+
+/* Base tipografía */
+input.control,
+select.control,
+textarea.control {
+  font-family: inherit;
+  font-size:14px;
+  font-weight:400;
+}
+
+/* Por defecto gris */
+input.control,
+select.control{
+  color: var(--muted);
+}
+
+/* Cuando hay valor → blanco */
+input.control:not(:placeholder-shown),
+input[type="date"].control:valid,
+select.control:not([value=""]) {
+  color: var(--text);
+}
+
+
+/* 🔥 Unificar placeholder */
+input.control::placeholder {
+  color: var(--muted);
+  opacity: 1;
+  font-size:14px;
+  font-weight:400;
+}
+
+button.control{
+  cursor:pointer;
+  text-align:left;
+  line-height:1;
+}
+
+button.selected{
+  border-color:var(--accent);
+  background:rgba(211,174,9,.15);
+}
+
+/* TABS */
+.tabs{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  margin-bottom:12px;
+}
+.tab{
+  min-width:90px;
+  padding:10px;
+  text-align:center;
+  background:#111;
+  border-radius:8px;
+  cursor:pointer;
+}
+.tab.active{
+  background:var(--accent);
+  color:#1b1b1b;
+}
+
+/* TOP */
+.picada-top{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+
+/* IMAGE */
+.image-box{
+  width:160px;
+  height:160px;
+  background:#000;
+  border-radius:12px;
+  overflow:hidden;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--muted);
+  font-size:12px;
+  text-align:center;
+  cursor:pointer;
+}
+.image-box img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* MODEL */
+.model-column{flex:1}
+.model-info{
+  font-size:14px;
+  line-height:1.5;
+  color:var(--muted);
+  margin:8px 0 14px;
+}
+.model-info b{color:var(--text)}
+
+.summary{font-size:15px;line-height:1.5}
+
+
+.pay button{
+  width:100%;
+  padding:18px;
+  font-size:20px;
+  background:var(--accent);
+  border:none;
+  border-radius:10px;
+  color:#2a2a2a;
+  cursor:pointer;
+  opacity:1;
+  transition: all .3s ease; /* <- transición más suave */
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* sombra base */
+}
+
+.pay button.enabled{
+  background: #e0b800;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.4); /* sombra más grande al habilitar */
+}
+
+.pay button.enabled:hover{
+  transform: translateY(-2px);   /* efecto de “levantarse” al hover */
+  box-shadow: 0 8px 16px rgba(0,0,0,0.5); /* sombra más intensa */
+}
+
+
+.small{text-align:center;font-size:13px;color:var(--muted)}
+
+/* MODAL */
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.modal img{
+  max-width:90%;
+  max-height:80%;
+  border-radius:12px;
+}
+.modal button{
+  position:absolute;
+  top:20px;
+  right:20px;
+  background:var(--accent);
+  border:none;
+  padding:10px 14px;
+  border-radius:8px;
+}
+.banner{
+  width:100%;
+  margin-top: 8px;
+  height:220px;
+  border-radius:14px;
+  overflow:hidden;
+  position:relative;
+  margin-bottom:16px;
+  background:#000;
+  touch-action:pan-y;
+}
+
+@media (max-width:480px){
+  .banner{
+    height:180px;
+  }
+}
+
+.banner-track{
+  display:flex;
+  height:100%;
+  transition: transform .4s ease;
+}
+
+.banner-slide{
+  min-width:100%;
+  height:100%;
+}
+
+.banner-slide img,
+.banner-slide video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.banner-model{
+  position:absolute;
+  top:12px;
+  right:12px;
+  padding:6px 12px;
+  background:rgba(0,0,0,.35);
+  backdrop-filter: blur(6px);
+  color:#fff;
+  font-size:13px;
+  letter-spacing:.3px;
+  border-radius:999px;
+  font-weight:500;
+  z-index:10;
+}
+.banner::after{
+  content:"";
+  position:absolute;
+  inset:auto 0 0 0;
+  height:60%;
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,.45),
+    rgba(0,0,0,.15),
+    transparent
+  );
+  pointer-events:none;
+  z-index:5;
+
+}
+
+#config .picada-top{
+  margin-top:4px;
+}
+@media (max-width:480px){
+  #config{
+    margin-bottom:8px;
+  }
+}
+
+/* ===============================
+   MEJOR LEGIBILIDAD EN MÓVIL
+   estilo Instagram / Twitter
+   =============================== */
+@media (max-width:480px){
+
+  body{
+    font-size:14px;
+  }
+
+  .control,
+  select.control,
+  button.control{
+    font-size:12px;
+  }
+
+  label{
+    font-size:13px;
+  }
+
+  .summary{
+    font-size:14px;
+  }
+
+  .pay button{
+    font-size:18px;
+  }
+}
+
+@keyframes blink-gold {
+  0%, 100% { border-color: var(--accent); background: rgba(211,174,9,0.15); }
+  50% { border-color: var(--accent); background: transparent; }
+}
+
+.model-hint {
+  animation: blink-gold 0.8s ease-in-out 2; /* parpadea dos veces */
+}
+
+.error-msg {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: -6px;
+  margin-bottom: 6px;
+}
+.mini-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1b1b1b;  /* gris oscuro */
+  height: 48px;          /* altura fija */
+  padding: 0 12px;
+  font-size: 13px;
+  color: #fff;
+  border-radius: 12px;  
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 999;
+
+  position: fixed;       /* ⚡ aquí está la clave */
+  top: 12px;             /* separación desde arriba */
+  left: 12px;            /* separación lateral */
+  right: 12px;           /* separación lateral */
+  transition: transform 0.3s ease; /* opcional, suaviza el movimiento al aparecer/desaparecer */
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+
+.mini-banner .left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-banner .left a {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  color: var(--muted);      /* 👈 gris elegante */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mini-banner .left .logo {
+  width: 48px;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  transform: translateY(6px); /* 👈 lo baja */
+}
+
+
+
+
+.mini-banner .right .cart-total {
+  background: #333;      /* gris más oscuro, uniforme con la estética */
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+
+.favicon {
+  width: 96px;           /* Tamaño del favicon (cuadrado) */
+  height: 96px;          /* Tamaño del favicon (cuadrado) */
+  background-image: url('images/LOGO.webp');  /* Ruta de tu imagen */
+  background-size: 100% 100%;  /* Asegura que la imagen no se deforme */
+  background-repeat: no-repeat;  /* No repetir la imagen */
+  background-position: center;  /* Centra la imagen dentro del contenedor */
+}
+
+.control.error {
+  border-color: var(--accent);
+  background: rgba(211,174,9,0.12);
+  animation: blink-gold 0.8s ease-in-out 2;
+}
+
+@keyframes blink-red {
+  0%, 100% { border-color: #ff4d4f; background: rgba(255,77,79,0.1); }
+  50% { border-color: #ff4d4f; background: transparent; }
+}
+
+
+
+
+.delivery-hint{
+  font-size:12px;
+  color: var(--muted);
+  margin-top:-4px;   /* 👈 lo acerca al horario */
+  margin-bottom:12px; /* 👈 separa de Localidad */
+}
+
+input[type="date"].control{
+  height:48px;
+  padding:0 12px;
+  box-sizing:border-box;
+
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+
+  font-family:inherit;
+  font-size:14px;
+  font-weight:400;
+  background:#111;
+
+  text-align:left;
+}
+
+input[type="date"]::-webkit-datetime-edit{
+  padding:0;
+  margin:0;
+  text-align:left;
+}
+
+
+  
+/* icono calendario (WebKit: Chrome, Safari, iOS) */
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter: invert(1) opacity(0.6);
+  cursor:pointer;
+}
+
+/* Firefox */
+input[type="date"]::-moz-focus-inner{
+  border:0;
+}
+/* ===== FILAS 50 / 50 PERFECTAS ===== */
+
+
+
+.section.summary{
+  padding:14px;
+}
+
+.summary-close{
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-size:18px;
+  cursor:pointer;
+}
+
+
+.summary-content{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+
+.summary-items{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.summary-item{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap:6px 12px;
+  padding-bottom:8px;
+  border-bottom:1px dashed #333;
+}
+
+.item-title{
+  font-size:14px;
+  font-weight:600;
+}
+
+.item-desc{
+  grid-column:1 / 2;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.item-price{
+  grid-row:1 / 3;
+  align-self:center;
+  font-weight:600;
+}
+
+.summary-shipping{
+  display:grid;
+  grid-template-columns:1fr auto;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.summary-total{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:10px;
+  margin-top:6px;
+  border-top:1px solid #444;
+  font-size:18px;
+  font-weight:700;
+  color:var(--accent);
+}
+
+.summary-warning{
+  font-size:13px;
+  color:#ff4d4f;
+  text-align:center;
+  margin-top:4px;
+}
+.model-size-grid{
+  display:flex;
+  gap:12px;
+}
+
+/* ===== FORM GRID (igual lógica que modelo/tamaño) ===== */
+
+.form-grid{
+  display:flex;
+  gap:12px;   /* mismo gap que modelo-size */
+}
+
+.form-col{
+  flex:1;
+}
+
+
+/* Columnas */
+.model-col,
+.size-col{
+  flex:1;
+}
+
+/* Mobile */
+@media (max-width:480px){
+  .model-size-grid{
+    flex-direction:row;
+  }
+
+  .model-col button,
+  .size-col button{
+    padding:10px;
+    font-size:12px;
+  }
+}
+
+.picada-content{
+  position:relative;
+  display:block; /* dejamos que el contenido fluya natural */
+}
+
+
+.picada-left{
+  flex:1;
+  font-size:13px;
+  line-height:1.4;
+}
+
+.picada-right{
+  position:absolute;
+  top:0;
+  right:24px;            /* 👈 se corre hacia adentro */
+  width:130px;           /* 👈 un poco más compacto */
+  font-size:13px;
+  color:var(--muted);
+
+  background: transparent;
+  border-radius: 0;
+  padding: 0 0 0 12px;
+
+  border-left: 1px dashed #333;
+  text-align:left;
+}
+
+
+
+.picada-right b{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:2px;
+}
+
+.picada-left{
+  padding-right:160px;   /* ya lo tenés, lo dejamos */
+  padding-left:12px;     /* 👈 sangría general del bloque */
+  font-size:13px;
+  line-height:1.45;
+}
+
+.picada-left ul{
+  margin:6px 0 14px;
+  padding-left:22px;     /* 👈 sangría real de lista */
+}
+
+.picada-left li{
+  margin-bottom:4px;
+}
+.picada-left b{
+  display:block;
+  margin-top:6px;
+  margin-bottom:4px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text);
+}
+.summary-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+
+.summary-title{
+  font-size:14px;
+  font-weight:600;
+  color:var(--text);
+}
+  /* Botones de modelo y tamaño más sólidos */
+.model-col button.control,
+.size-col button.control{
+  font-weight:500;
+}
+
+/* 🧠 FIX autofill navegador (Chrome / Safari / iOS) */
+input.control:-webkit-autofill,
+input.control:-webkit-autofill:hover,
+input.control:-webkit-autofill:focus,
+textarea.control:-webkit-autofill,
+select.control:-webkit-autofill {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0px 1000px #111 inset;
+  box-shadow: 0 0 0px 1000px #111 inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+
+
+/* ===== INTRO SUPERIOR ===== */
+
+.landing-intro-top{
+  margin-top: 0;
+  margin-bottom: 12px;
+  text-align: left;
+  padding-left: 2px; /* micro ajuste óptico para alinear con inputs */
+}
+
+.landing-intro-top h1{
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.landing-intro-top p{
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.landing-subtitle{
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.landing-subtitle .dot{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  background: var(--accent);
+  border-radius:50%;
+  margin: 0 8px;
+  transform: translateY(-1px);
+}
+
+
+  /* ===== INFO OPERATIVA INFERIOR ===== */
+
+.landing-info-bottom{
+  font-size: 13px;
+  color: var(--muted);
+  margin: 10px 0 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+  /* ===== BLOQUE MERCADO PAGO ===== */
+
+.payment-block{
+  margin-top: 14px;
+}
+
+.payment-sub{
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.payment-methods{
+  margin-top: 12px; /* separación de un renglón */
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left; /* 👈 alineado a la izquierda como pediste */
+}
+
+  .info-card{
+  background:#1b1b1b;
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+  font-size:13px;
+  color:var(--muted);
+}
+
+.info-title{
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:6px;
+}
+
+.info-item{
+  margin-bottom:4px;
+}
+
+@keyframes pulse-dot {
+  0%   { transform: scale(1); opacity: 1; }
+  50%  { transform: scale(1.2); opacity: .75; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-text {
+  0%   { opacity: 1; }
+  50%  { opacity: .75; }
+  100% { opacity: 1; }
+}
+
+
+
+#urgencyWrapper{
+  margin-top:6px;
+  display:flex;
+  align-items:center;
+}
+
+
+#urgencyText{
+  font-size:13px;
+  font-weight:600;
+  color: var(--muted);
+  letter-spacing:.2px;
+  transition: opacity .4s ease;
+  animation: pulse-text 2.8s ease-in-out infinite; /* 🔥 sincronizado */
+}
+
+
+.urgency-dot{
+  width:6px;
+  height:6px;
+  background: var(--accent);
+  border-radius:50%;
+  flex-shrink:0;
+  margin: 0 8px 0 0;   /* 👈 mismo espaciado visual que subtitle */
+  animation: pulse-dot 2.8s ease-in-out infinite;
+}
+
+</style>
+</head>
+<body>
+
+<div class="modal" id="imgModal" onclick="closeModal()">
+  <button>Cerrar</button>
+  <img id="modalImg">
+</div>
+
+<div class="container">
+
+<div class="mini-banner">
+<div class="left">
+  <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank">
+    <img src="images/LOGO.webp" class="logo">
+    @saboresfogon.ar
+  </a>
+</div>
+
+  <div class="right">
+    <div class="cart-total" id="cartTotal">
+      $0
+    </div>
+  </div>
+</div>
+  
+<div class="landing-intro-top">
+  <h1>Armá tu pedido</h1>
+
+  <div class="landing-subtitle">
+CABA y Zona Oeste <span class="dot"></span> Producción artesanal
+  </div>
+
+ <div id="urgencyWrapper">
+  <span class="urgency-dot"></span>
+  <span id="urgencyText">Reservá hoy y asegurá tu fecha</span>
+</div>
+
+</div>
+
+
+
+<!-- ===== HERO BANNER ===== -->
+<div class="banner" id="heroBanner">
+
+  <div class="banner-track" id="bannerTrack"></div>
+
+  <div class="banner-model" id="bannerModel">
+    Clásica y Elegante
+  </div>
+
+</div>
+
+<p style="font-size:14px;color:var(--muted);margin:0 0 12px 2px;">
+  Completá cantidad, modelo, tamaño y datos de envío:
+</p>
+<div id="config"></div>
+<div class="section summary" style="position:relative">
+  <div id="summary"></div>
+</div> 
+<div class="pay" id="step1BtnWrapper">
+  <button type="button" id="reserveBtn" onclick="goToStep2()">
+    Reservar picada
+  </button>
+</div>
+<div class="info-card" id="infoOperativa">
+    <div class="info-title">Información operativa</div>
+    <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
+    <div class="info-item">• Envío refrigerado a CABA, Zona Oeste y alrededores</div>
+    <div class="info-item">• Pedidos con 24hs de anticipación</div>
+    
+  </div>
+<div id="backWrapper" style="display:none; margin-bottom:12px;">
+  <button onclick="goBackToStep1()" 
+          style="background:none;border:none;color:var(--accent);font-size:14px;cursor:pointer;">
+    ← Volver
+  </button>
+</div>
+<div id="step2" style="display:none;">
+<div class="section">
+<label>Nombre y apellido</label>
+<input
+  id="clientName"
+  class="control"
+  placeholder="Ingrese su nombre completo"
+  oninput="formatClientName(this); lightUpdate()"
+  onblur="update()"
+/>
+<div class="error-msg" id="error-clientName"></div>
+
+<div class="form-grid">
+
+  <div class="form-col">
+    <label>Fecha</label>
+    <input
+      id="orderDate"
+      type="date"
+      class="control"
+      oninput="update()">
+  </div>
+
+  <div class="form-col">
+    <label>Horario</label>
+    <select id="deliveryTime" class="control" onchange="update()">
+      <option value="">Horarios de entrega</option>
+      <option value="11-14">11:00 a.m – 14:00 p.m</option>
+      <option value="15-19">15:00 p.m – 19:00 p.m</option>
+    </select>
+  </div>
+
+</div>
+
+
+<div class="error-msg" id="error-orderDate"></div>
+
+<div class="form-grid">
+
+  <div class="form-col">
+    <label>Localidad</label>
+    <select id="zone" class="control" onchange="handleZoneChange()">
+  <option value="">Seleccionar</option>
+  <option value="manual">Ingresar manualmente</option>
+
+  <option value="Francisco Álvarez|0">Francisco Álvarez</option>
+  <option value="La reja|0">La reja</option>
+  <option value="Moreno|0">Moreno</option>
+
+  <option value="Paso del Rey|5000">Paso del Rey</option>  
+  <option value="General Rodríguez|8000">General Rodríguez</option>
+  <option value="Merlo|8000">Merlo</option>
+  <option value="Ituzaingó|8000">Ituzaingó</option>
+  <option value="San Antonio de Padua|8000">San Antonio de Padua</option>
+  <option value="Morón|8000">Morón</option>
+  <option value="Castelar|8000">Castelar</option>
+  <option value="Hurlingham|8000">Hurlingham</option>
+  <option value="La Matanza|8000">La Matanza</option>
+  <option value="Ramos Mejía|8000">Ramos Mejía</option>
+  <option value="San Justo|8000">San Justo</option>
+
+  <option value="San Miguel|8000">San Miguel</option>
+  <option value="Vicente López|8000">Vicente López</option>
+  <option value="Olivos|8000">Olivos</option>
+  <option value="San Isidro|8000">San Isidro</option>
+  <option value="Pilar|8000">Pilar</option>
+
+  <option value="Ciudad Autónoma de Buenos Aires (CABA)|8000">
+    Ciudad Autónoma de Buenos Aires (CABA)
+  </option>
+
+</select>
+
+  <input
+      type="text"
+      id="manualZone"
+      class="control"
+      placeholder="Ingresá tu localidad"
+      style="display:none;"
+      oninput="formatManualZone(this); setZoneManual(); lightUpdate()"
+    />
+  </div>
+
+  <div class="form-col">
+    <label>Dirección y altura</label>
+    <input
+      id="addr"
+      class="control"
+      placeholder="Ingrese la dirección"
+      oninput="formatAddress(this); lightUpdate()"
+      onblur="update()"
+    />
+  </div>
+
+</div>
+<div class="error-msg" id="error-addr"></div>
+<label>WhatsApp</label>
+<input
+  id="clientWhatsapp"
+  class="control"
+  placeholder="Ej: 1123456789"
+  inputmode="numeric"
+  maxlength="10"
+  oninput="handleWhatsappInput(); lightUpdate()"
+/>
+<div class="error-msg" id="error-clientWhatsapp"></div>
+
+<div class="error-msg" id="error-zone"></div>
+
+</div>
+
+<div class="pay">
+<button type="button" id="payBtn" onclick="goWA()">Pagar</button>
+</div>
+  
+<div class="payment-block">
+
+  <div class="payment-sub">
+    Serás redirigido a Mercado Pago para completar el pago de forma segura.
+  </div>
+
+  <div class="info-card" id="metodosPago">
+    <div class="info-title">Métodos de pago</div>
+    <div class="info-item">• Tarjeta de crédito</div>
+    <div class="info-item">• Tarjeta de débito</div>
+    <div class="info-item">• Dinero en cuenta</div>
+  </div>
+
+</div>
+
+
+</div>
+
+</div>
+<script>
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
+const clientName = document.getElementById('clientName');
+const deliveryTime = document.getElementById('deliveryTime');
+const orderDate  = document.getElementById('orderDate');
+const addr       = document.getElementById('addr');
+const zone       = document.getElementById('zone');
+const summary    = document.getElementById('summary');
+const payBtn     = document.getElementById('payBtn');
+const config     = document.getElementById('config');
+const imgModal = document.getElementById('imgModal');
+const modalImg = document.getElementById('modalImg');
+const clientWhatsapp = document.getElementById('clientWhatsapp');
+// 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
+deliveryTime.addEventListener("change", function(){
+  this.setAttribute("value", this.value);
+});
+
+zone.addEventListener("change", function(){
+  this.setAttribute("value", this.value);
+});
+
+
+  function clearAllHighlights() {
+  document.querySelectorAll('.model-hint, .error').forEach(el => {
+    el.classList.remove('model-hint');
+    el.classList.remove('error');
+  });
+}
+
+function handleSummaryReset(){
+
+  if(currentStep === 1){
+
+    // 🔹 Resetear solo pedido (modelos y tamaños)
+    picadas = picadas.map(() => ({
+      model: null,
+      size: null,
+      price: 0
+    }));
+
+    ship = 0;
+    zoneName = "";
+
+    saveState();
+    renderConfig();
+    update();
+
+    document.getElementById('cartTotal').textContent = '$0';
+
+  } else if(currentStep === 2){
+
+    // 🔹 Vaciar solo datos de envío
+    clientName.value = "";
+    clientWhatsapp.value = "";
+    addr.value = "";
+    zone.value = "";
+    deliveryTime.value = "";
+
+    zoneName = "";
+    ship = 0;
+
+    saveState();
+
+    // 🔹 Volver a Step 1 SIN perder selección
+    currentStep = 1;
+
+    document.getElementById("config").style.display = "block";
+    document.getElementById("step1BtnWrapper").style.display = "block";
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("infoOperativa").style.display = "block";
+    document.getElementById("metodosPago").style.display = "none";
+
+    update();
+  }
+}
+
+function goBackToStep1(){
+
+  currentStep = 1;
+
+  document.getElementById("config").style.display = "block";
+  document.getElementById("step1BtnWrapper").style.display = "block";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("infoOperativa").style.display = "block";
+  document.getElementById("metodosPago").style.display = "none";
+  document.getElementById("backWrapper").style.display = "none";
+
+  update();
+}
+
+
+function flashHighlight(elements, className = 'model-hint', duration = 1800) {
+  elements.forEach(el => {
+    el.classList.remove(className); // reset por si estaba
+    el.offsetHeight;                // forzar repaint
+    el.classList.add(className);
+
+    // ⏱ limpiar solo después del highlight
+    setTimeout(() => {
+      el.classList.remove(className);
+    }, duration);
+  });
+}
+
+
+function highlightPicada(index){
+  active = index;
+  saveState();
+  renderConfig();
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+
+      const banner = document.getElementById('heroBanner');
+      const intro = document.querySelector('.landing-intro-top');
+      const box = document.querySelector('.model-size-grid');
+
+      if (!banner || !intro || !box) return;
+
+      // 🔹 Altura del mini banner fijo
+      const miniBanner = document.querySelector('.mini-banner');
+      const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
+
+      // 🔹 Posición inferior del bloque intro
+      const introBottom = intro.getBoundingClientRect().bottom + window.pageYOffset;
+
+      // 🔹 Ajuste fino visual
+      const offset = 6;
+
+      // 🔹 Scroll exacto
+      window.scrollTo({
+        top: introBottom - miniHeight - offset,
+        behavior: 'smooth'
+      });
+
+      const p = picadas[active];
+      let targets = [];
+
+      if(!p.model){
+        targets = box.querySelectorAll('.model-col button.control');
+      } else if(!p.size){
+        targets = box.querySelectorAll('.size-col button.control');
+      }
+
+      flashHighlight([...targets], 'model-hint', 1800);
+
+    });
+  });
+}
+
+
+
+const modelData = {
+  "Clásica y Elegante": {
+    img: "images/IMG_7762.webp",
+    fiambres: [
+      "Sopresatta italiana",
+      "Jamón crudo",
+      "Lomo ahumado",
+      "Panceta ahumada"
+    ],
+    quesos: [
+      "Brie",
+      "Queso azul",
+      "Pepato"
+    ],
+    dips: [
+      "Dip dulce",
+      "Dip salado"
+    ]
+  },
+
+  "Fresca y Colorida": {
+    img: "images/IMG_7761.webp",
+    fiambres: [
+      "Jamón cocido",
+      "Salamín chacarero",
+      "Longaniza",
+      "Panceta ahumada"
+    ],
+    quesos: [
+      "Brie",
+      "Pategrás",
+      "Sardo"
+    ],
+    dips: [
+      "Dip dulce",
+      "Dip salado"
+    ]
+  }
+};
+
+let currentStep = 1;
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("metodosPago").style.display = "none";
+  document.getElementById("infoOperativa").style.display = "block";
+});
+
+
+
+function goToStep2(){
+
+  const allPicadasValid = picadas.every(p => p.model && p.size);
+
+  if(!allPicadasValid){
+    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+    highlightPicada(incompleteIndex);
+    return;
+  }
+
+  // =========================
+  // INITIATE CHECKOUT (CAPI)
+  // =========================
+
+const eventId = "ic_" + window.currentOrderId;
+fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+    event_id: eventId,
+    order_id: window.currentOrderId,
+    total: total,
+    items: picadas,
+    fbp: getFacebookIdentifiers().fbp,
+    fbc: getFacebookIdentifiers().fbc,
+    user_agent: navigator.userAgent
+  })
+}).catch(() => {});
+
+// 👇 PIXEL BROWSER (AQUÍ)
+if (typeof fbq === "function") {
+fbq('track', 'InitiateCheckout', {
+  value: total,
+  currency: 'ARS'
+}, {
+  eventID: eventId
+});
+}
+
+  // =========================
+  // CAMBIO DE STEP
+  // =========================
+
+  currentStep = 2;
+
+  document.getElementById("config").style.display = "none";
+  document.getElementById("step1BtnWrapper").style.display = "none";
+
+  document.getElementById("step2").style.display = "block";
+
+  document.getElementById("infoOperativa").style.display = "none";
+  document.getElementById("metodosPago").style.display = "block";
+  document.getElementById("backWrapper").style.display = "block";
+
+  update();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+
+
+let picadas=[],active=0,ship=0,zoneName="", total=0;
+
+// =========================
+// TAB GUARD (PEDIDO POR PESTAÑA)
+// =========================
+const TAB_KEY = 'sf_tab_initialized';
+
+(function tabGuard() {
+  let navType = null;
+
+  try {
+    if (window.performance && performance.getEntriesByType) {
+      const navEntries = performance.getEntriesByType("navigation");
+      navType = navEntries.length ? navEntries[0].type : null;
+    }
+  } catch (e) {
+    navType = null;
+  }
+
+  if (navType === "navigate" && !sessionStorage.getItem(TAB_KEY)) {
+    sessionStorage.setItem(TAB_KEY, '1');
+
+    localStorage.removeItem('picadas');
+    localStorage.removeItem('clientName');
+    localStorage.removeItem('orderDate');
+    localStorage.removeItem('addr');
+    localStorage.removeItem('zone');
+    localStorage.removeItem('scrollY');
+    localStorage.removeItem('activePicada');
+    localStorage.removeItem('clientWhatsapp');
+
+    sessionStorage.removeItem('mp_init_point');
+    sessionStorage.removeItem('order_fingerprint');
+  }
+})();
+
+
+
+const PRICES = {
+  4: 70000,
+  6: 85000,
+  10: 110000
+};
+
+const SIZE_INFO = {
+  4: { pican: 6, medidas: "20 × 30 cm" },
+  6: { pican: 8, medidas: "28 × 48 cm" },
+  10: { pican: 12, medidas: "28 × 48 cm" }
+};
+
+const MANUAL_ZONE_SHIPPING = 10000;
+
+
+function getOrderFingerprint() {
+  return JSON.stringify({
+    picadas,
+    envio: ship,
+    zoneName
+  });
+}
+
+function generateOrderId() {
+  // Genera un ID temporal para mostrar mientras se hace el pedido
+  const randomNum = Math.floor(Math.random() * 999999) + 1;
+  return `SF-${String(randomNum).padStart(6, "0")}`;
+}
+
+
+
+function generateToken() {
+  if (window.crypto && crypto.randomUUID) {
+    return crypto.randomUUID().replace(/-/g,'');
+  }
+  return Math.random().toString(36).substring(2) + Date.now();
+}
+
+
+if (!sessionStorage.getItem('order_id')) {
+  const hasSavedOrder = !!localStorage.getItem('picadas');
+  sessionStorage.setItem(
+    'order_id',
+    hasSavedOrder ? generateOrderId() : generateOrderId()
+  );
+}
+
+if (!sessionStorage.getItem('token')) {
+  sessionStorage.setItem('token', generateToken());
+}
+
+window.currentOrderId = sessionStorage.getItem('order_id');
+window.currentToken   = sessionStorage.getItem('token');
+
+function saveState(){
+  localStorage.setItem('picadas', JSON.stringify(picadas));
+  localStorage.setItem('activePicada', active); // 👈 NUEVO
+  localStorage.setItem('clientName', clientName.value);
+  localStorage.setItem('orderDate', orderDate.value);
+  localStorage.setItem('addr', addr.value);
+  localStorage.setItem('zone', zone.value);
+  localStorage.setItem('clientWhatsapp', clientWhatsapp.value);
+  localStorage.setItem('deliveryTime', deliveryTime.value);
+}
+
+
+function loadState() {
+  clientWhatsapp.value = localStorage.getItem('clientWhatsapp') || "";
+  const savedPicadas = localStorage.getItem('picadas');
+  deliveryTime.value = localStorage.getItem('deliveryTime') || "";
+
+  if (!savedPicadas) {
+    buildPicadas(1);
+    return;
+  }
+
+  try {
+    picadas = JSON.parse(savedPicadas);
+  } catch {
+    buildPicadas(1);
+    return;
+  }
+
+  // 👇 restaurar picada activa
+  const savedActive = Number(localStorage.getItem('activePicada'));
+  active = Number.isInteger(savedActive) && savedActive < picadas.length
+    ? savedActive
+    : 0;
+
+  clientName.value = localStorage.getItem('clientName') || "";
+  orderDate.value = localStorage.getItem('orderDate') || "";
+  addr.value = localStorage.getItem('addr') || "";
+
+  const savedZone = localStorage.getItem('zone');
+  if (savedZone !== null) {
+    zone.value = savedZone;
+    if (savedZone) {
+      setZone();
+    } else {
+      zoneName = "";
+      ship = 0;
+    }
+  }
+
+// 🔥 CLAVE: sincronizar banner y UI
+if (picadas[active] && picadas[active].model) {
+  syncBannerWithModel(picadas[active].model);
+}
+
+renderConfig();   // 👈 reconstruye TODA la UI
+enforceTomorrowDate();
+}
+
+
+function buildPicadas(n){
+  picadas = Array.from({ length: n }, () => ({
+    model: null,
+    size: null,
+    price: 0
+  }));
+  active = 0;
+  renderConfig();
+}
+
+function resetAll(){
+  // 1. borrar estado guardado
+  localStorage.removeItem('picadas');
+  localStorage.removeItem('clientName');
+  localStorage.removeItem('orderDate');
+  localStorage.removeItem('addr');
+  localStorage.removeItem('zone');
+  localStorage.removeItem('scrollY');
+  clientWhatsapp.value = "";
+localStorage.removeItem('clientWhatsapp');
+
+  // 2. resetear variables
+  ship = 0;
+  zoneName = "";
+  total = 0;
+  active = 0;
+
+// 3. limpiar inputs
+clientName.value = "";
+addr.value = "";
+zone.value = "";
+
+// 🔹 Fecha vuelve a la más cercana disponible
+enforceTomorrowDate();
+
+
+  // 4. volver al estado inicial real
+  buildPicadas(1);
+
+  // 5. reset visual
+  showSlide(0, false);
+  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  payBtn.classList.remove("enabled");
+
+    document.getElementById('cartTotal').textContent = '$0';
+
+ sessionStorage.removeItem('mp_init_point');
+sessionStorage.removeItem('order_fingerprint');
+document.getElementById("infoOperativa").style.display = "block";
+// Volver a Step 1 visualmente
+currentStep = 1;
+
+document.getElementById("config").style.display = "block";
+document.getElementById("step1BtnWrapper").style.display = "block";
+document.getElementById("step2").style.display = "none";
+document.getElementById("backWrapper").style.display = "none";
+}
+
+function resetForNextOrder() {
+  // 🔹 Reset de inputs y variables locales
+  clientName.value = "";
+  addr.value = "";
+  zone.value = "";
+  zoneName = "";
+  ship = 0;
+  total = 0;
+  active = 0;
+
+  enforceTomorrowDate();
+  // 🔹 Limpiar picadas y generar un nuevo array vacío con 1 picada
+  buildPicadas(1);
+
+  // 🔹 Reset visual y botones
+  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  payBtn.classList.remove("enabled");
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  document.getElementById('cartTotal').textContent = '$0';
+
+  // 🔹 Limpiar errores visuales
+  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+
+  // 🔹 Guardar estado vacío en localStorage para la nueva sesión de pedido
+  saveState();
+
+
+// 🔐 Limpiar preferencia de Mercado Pago
+sessionStorage.removeItem('mp_init_point');
+
+}
+
+
+function handleReturnFromMP() {
+  const params = new URLSearchParams(window.location.search);
+
+  const status =
+    params.get('status') ||
+    params.get('collection_status');
+
+  // 👉 SOLO si el pago fue aprobado
+  if (status === 'approved') {
+
+    // 🔄 Reset total para nuevo pedido
+    resetForNextOrder();
+
+    // 🧹 limpiar estado de Mercado Pago
+    sessionStorage.removeItem('mp_init_point');
+    sessionStorage.removeItem('order_fingerprint');
+    sessionStorage.removeItem('order_id');
+
+    // 🆕 generar nuevo ID de pedido
+    sessionStorage.setItem('order_id', generateOrderId());
+
+    // 🧼 limpiar la URL (?status=approved)
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    );
+
+    // ⬆️ volver arriba
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    console.log('✅ Pago aprobado → pedido reseteado');
+  }
+}
+
+function setActivePicada(i){
+  active = i;
+
+  const m = picadas[active].model;
+  if(m){
+    syncBannerWithModel(m);
+  }
+
+  saveState();
+  renderConfig();
+}
+function setModel(model){
+  const current = picadas[active];
+
+  if(current.model === model){
+    // si el modelo ya está seleccionado, lo deselecciona
+    current.model = null;
+
+    // 🔹 Resetear tamaño y precio también
+    current.size = null;
+    current.price = 0;
+  } else {
+    current.model = model;
+  }
+
+  // sincroniza banner
+  syncBannerWithModel(current.model);
+
+  saveState();
+  renderConfig();
+}
+
+
+function addPicada(){
+  if(picadas.length >= 6) return;
+
+  picadas.push({
+    model: null,
+    size: null,
+    price: 0
+  });
+
+  active = picadas.length - 1;
+  saveState();
+  renderConfig();
+}
+
+
+function removePicada(){
+  if(picadas.length <= 1) return;
+
+  picadas.splice(active,1);
+
+  if(active >= picadas.length){
+    active = picadas.length - 1;
+  }
+
+  saveState();
+  renderConfig();
+}
+
+function removeLastPicada(){
+  if(picadas.length <= 1) return;
+
+  picadas.pop();
+
+  if(active >= picadas.length){
+    active = picadas.length - 1;
+  }
+
+  syncBannerWithModel(picadas[active].model);
+  saveState();
+  renderConfig();
+}
+
+
+function renderConfig(){
+
+let tabs = `
+<div class="section qty-section">
+  <div style="display:flex;gap:12px;">
+
+  <!-- CANTIDAD -->
+  <div style="flex:1;">
+    <label style="font-size:12px;">Elegí la cantidad:</label>
+
+    <div style="display:flex;align-items:center;gap:8px;">
+<button
+  class="control qty-btn"
+  onclick="removeLastPicada()"
+        ${picadas.length <= 1 ? 'disabled' : ''}>
+        −
+      </button>
+
+<div style="
+  flex:1;
+  text-align:center;
+  font-size:18px;
+  font-weight:600;
+  background:#111;
+  border:1px solid #2a2a2a;
+  border-radius:8px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+">
+  ${picadas.length}
+</div>
+
+
+<button
+  class="control qty-btn"
+  onclick="addPicada()">
+        +
+      </button>
+    </div>
+  </div>
+
+  <!-- EDITAR -->
+  <div style="flex:1;">
+    <label>Editar</label>
+    <select class="control" onchange="setActivePicada(Number(this.value))">
+      ${picadas.map((_,i)=>`
+        <option value="${i}" ${i===active?'selected':''}>
+          Picada ${i+1}
+        </option>
+      `).join("")}
+    </select>
+  </div>
+
+  </div>
+</div>
+`;
+
+
+ const p = picadas[active];
+
+  const dipsText = p.model
+  ? [
+      ...modelData[p.model].dips,
+      ...(p.size >= 6 ? ["Tomatitos deshidratados"] : [])
+    ].join(" · ")
+  : "";
+
+
+// 🔹 NUEVO: reset color del aviso a gris si hay modelo
+const hint = document.getElementById('modelHint');
+if(hint){
+  hint.style.color = p.model ? '#9a958d' : '#9a958d';
+}
+
+
+  config.innerHTML = `
+    ${tabs}
+
+<div class="section">
+  <div class="model-size-grid">
+
+    <!-- COLUMNA MODELO -->
+    <div class="model-col">
+
+      <label>Modelo</label>
+
+      <button
+        class="control ${p.model==='Clásica y Elegante'?'selected':''}"
+        onclick="setModel('Clásica y Elegante')">
+        Clásica y Elegante
+      </button>
+
+      <button
+        class="control ${p.model==='Fresca y Colorida'?'selected':''}"
+        onclick="setModel('Fresca y Colorida')">
+        Fresca y Colorida
+      </button>
+
+    </div>
+
+    <!-- COLUMNA TAMAÑO -->
+    <div class="size-col">
+
+      <label>Tamaño</label>
+
+      <button
+        class="control ${p.size===4?'selected':''}"
+        onclick="handleSizeClick(4, PRICES[4])">
+        4 personas $70.000
+      </button>
+
+      <button
+        class="control ${p.size===6?'selected':''}"
+        onclick="handleSizeClick(6, PRICES[6])">
+        6 personas $85.000
+      </button>
+
+      <button
+        class="control ${p.size===10?'selected':''}"
+        onclick="handleSizeClick(10, PRICES[10])">
+        10 personas $110.000
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- CONTENIDO DEL MODELO -->
+${
+  !p.model
+    ? `<div id="modelHint" style="text-align:center;">🧀 Seleccioná un modelo para ver el contenido</div>`
+    : `
+      <div class="picada-content">
+
+        <!-- IZQUIERDA: CONTENIDO -->
+        <div class="picada-left">
+          <b>🥩 Fiambres</b>
+          <ul>
+            ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
+          </ul>
+
+          <b>🧀 Quesos</b>
+          <ul>
+            ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
+          </ul>
+
+          <b>🥣 Dips</b>
+          <ul>
+            ${dipsText.split(" · ").map(d => `<li>${d}</li>`).join("")}
+          </ul>
+        </div>
+
+        <!-- DERECHA: TAMAÑO -->
+        ${
+          p.size && SIZE_INFO[p.size]
+            ? `
+              <div class="picada-right">
+                <b>${p.size} personas</b><br>
+                Pican ${SIZE_INFO[p.size].pican}<br>
+                ${SIZE_INFO[p.size].medidas}
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+    `
+}
+
+      </div>
+    </div>
+  `;
+
+  update();
+}
+
+function handleSizeClick(s, p){
+
+  // 🔒 Solo tamaños permitidos
+  const allowedSizes = [4, 6, 10];
+  if (!allowedSizes.includes(s)) return;
+
+  const current = picadas[active];
+
+  if(!current.model){
+    const modelBtns = document.querySelectorAll('.model-col button.control');
+    const hint = document.getElementById('modelHint');
+    if(hint) hint.style.color = '#ffffff';
+
+    document.querySelector('.model-size-grid')
+      .scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    flashHighlight([...modelBtns], 'model-hint', 1800);
+    return;
+  }
+
+  current.size = current.size === s ? null : s;
+  current.price = current.size ? PRICES[s] : 0;
+
+  saveState();
+  renderConfig();
+}
+
+
+
+function handleZoneChange() {
+  const zoneSelect = document.getElementById('zone');
+  const manualInput = document.getElementById('manualZone');
+
+  // 👉 Opción "Seleccionar localidad"
+  if (zoneSelect.value === "") {
+    manualInput.style.display = 'none';
+    zoneName = "";
+    ship = 0;
+    saveState();
+    update();
+    return;
+  }
+
+  if (zoneSelect.value === 'manual') {
+  manualInput.style.display = 'block';
+  zoneName = "Zona fuera de rango";
+  ship = MANUAL_ZONE_SHIPPING;
+  saveState();
+  update();
+  return;
+}
+
+  // 👉 Localidad normal
+  manualInput.style.display = 'none';
+  setZone();
+}
+
+function setZone() {
+  const value = zone.value;
+
+  if (!value) {
+    zoneName = "";
+    ship = 0;
+    return;
+  }
+
+  const [name, cost] = value.split('|');
+
+  zoneName = name;
+  ship = Number(cost) || 0;
+
+  saveState();
+  update();
+}
+
+  
+function setZoneManual() {
+  const manualInput = document.getElementById('manualZone');
+  zoneName = manualInput.value || "Zona fuera de rango";
+  ship = MANUAL_ZONE_SHIPPING;
+  saveState();
+  update();
+}
+
+function handleWhatsappInput() {
+  let v = clientWhatsapp.value.replace(/\D/g, '');
+
+  // máximo 10 números
+  if (v.length > 10) {
+    v = v.slice(0, 10);
+  }
+
+  clientWhatsapp.value = v;
+  saveState();
+}
+
+function formatClientName(input) {
+  let value = input.value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trimStart();
+
+  // Mayúscula solo después de espacio o inicio de string
+  value = value.replace(/(^|\s)([a-záéíóúñ])/g, (_, sep, char) => {
+    return sep + char.toUpperCase();
+  });
+
+  input.value = value;
+  saveState();
+}
+
+
+function formatAddress(input) {
+  let value = input.value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trimStart();
+
+  value = value.replace(/(^|\s)([a-záéíóúñ])/g, (_, sep, char) => {
+    return sep + char.toUpperCase();
+  });
+
+  input.value = value;
+  saveState();
+}
+
+function formatManualZone(input) {
+  let value = input.value
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trimStart();
+
+  value = value.replace(/(^|\s)([a-záéíóúñ])/g, (_, sep, char) => {
+    return sep + char.toUpperCase();
+  });
+
+  input.value = value;
+  saveState();
+}
+
+function enforceTomorrowDate() {
+  const dateInput = document.getElementById('orderDate');
+  if (!dateInput) return;
+
+  const now = new Date();
+  now.setHours(0,0,0,0);
+
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const tomorrowStr = tomorrow.toISOString().split('T')[0];
+
+  // 🚫 Bloquear hoy y anteriores
+  dateInput.min = tomorrowStr;
+
+  const savedDate = localStorage.getItem('orderDate');
+
+  if (savedDate && savedDate >= tomorrowStr) {
+    dateInput.value = savedDate;
+  } else {
+    dateInput.value = tomorrowStr;
+    localStorage.setItem('orderDate', tomorrowStr);
+  }
+
+  // 🔥 CLAVE para iOS
+  dateInput.addEventListener('change', function () {
+    if (this.value < tomorrowStr) {
+      this.value = tomorrowStr;
+      localStorage.setItem('orderDate', tomorrowStr);
+    }
+  });
+}
+let lightUpdateTimeout;
+
+function lightUpdate(){
+  clearTimeout(lightUpdateTimeout);
+  lightUpdateTimeout = setTimeout(() => {
+    updateTotalsOnly();
+  }, 120);
+}
+
+function update() {
+  const summaryContainer = document.querySelector('.section.summary');
+  total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
+
+ let txt = picadas.map((p,i) => {
+    const modelName = p.model || "Seleccione un modelo";
+    const size = p.size || 0;
+    const price = p.price || 0;
+    return `Picada ${i+1}: ${modelName} (${size} personas) — $${price.toLocaleString()}`;
+}).join("<br>") + "<br>";
+
+const envio = zoneName ? `$${ship.toLocaleString()}` : "$0";
+txt += `<br>Envío a ${zoneName || "Sin localidad"}: ${envio}<br><br>`;
+
+// Total siempre visible, aunque sea cero
+const totalVisible = total || 0;
+txt += `<b>Total: $${totalVisible.toLocaleString()}</b>`;
+
+
+
+summary.innerHTML = `
+  <div class="summary-header">
+    <div class="summary-title">Resumen</div>
+    <button onclick="handleSummaryReset()" class="summary-close">✕</button>
+  </div>
+
+  <div class="summary-content">
+
+
+${picadas.map((p,i)=>{
+
+  let desc;
+
+  if(!p.model && !p.size){
+    desc = "Seleccione modelo y tamaño para comenzar";
+  } else if(p.model && !p.size){
+    desc = `${p.model} · Seleccione tamaño`;
+  } else {
+    desc = `${p.model} · ${p.size} personas`;
+  }
+
+  return `
+    <div class="summary-item">
+      <div class="item-title">
+        Picada ${i+1}
+      </div>
+      <div class="item-desc">
+        ${desc}
+      </div>
+      <div class="item-price">
+        $${(p.price || 0).toLocaleString()}
+      </div>
+    </div>
+  `;
+}).join("")}
+
+${ currentStep === 2 ? `
+<div class="summary-shipping">
+  <span>Envío refrigerado</span>
+  <span>
+    ${zoneName || "Sin localidad"}
+    ${addr.value ? ` – ${addr.value}` : ""}
+  </span>
+  <span>$${ship.toLocaleString()}</span>
+</div>
+` : "" }
+
+
+    <div class="summary-total">
+      <span>Total</span>
+      <span>$${(currentStep === 2 ? total : picadas.reduce((sum, p) => sum + (p.price || 0), 0)).toLocaleString()}</span>
+    </div>
+    
+  </div>
+`;
+
+const allPicadasValid = picadas.every(p => p.model && p.size);
+
+const valid =
+  allPicadasValid &&
+  clientName.value.trim() &&
+  clientWhatsapp.value.trim() &&
+  orderDate.value &&
+  deliveryTime.value &&
+  zoneName;
+
+
+  summaryContainer.style.display = 'block';
+  payBtn.classList.toggle("enabled", valid);
+
+ if(valid && !window._checkoutTracked){
+  if (typeof fbq === "function") {
+    fbq('trackCustom', 'FormCompleted', {
+      content_name: 'Formulario Picada Completo',
+      content_category: 'Picadas',
+      value: total,
+      currency: 'ARS',
+      num_items: picadas.length
+    });
+  }
+  window._checkoutTracked = true;
+}
+  if(!valid) window._checkoutTracked = false;
+// 🔄 Si el pedido cambió, invalidar checkout previo
+const savedFingerprint = sessionStorage.getItem('order_fingerprint');
+const currentFingerprint = getOrderFingerprint();
+
+if (savedFingerprint && savedFingerprint !== currentFingerprint) {
+  // 🔐 limpiar checkout previo
+  sessionStorage.removeItem('mp_init_point');
+  sessionStorage.removeItem('order_fingerprint');
+}
+  document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
+}
+  
+function updateTotalsOnly(){
+  total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
+
+  // 🔹 Actualizar total mini banner
+  document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
+
+  // 🔹 Actualizar total en resumen (si ya está renderizado)
+  const totalSpan = document.querySelector('.summary-total span:last-child');
+  if(totalSpan){
+    totalSpan.textContent = `$${total.toLocaleString()}`;
+  }
+
+  // 🔹 Actualizar línea de envío (zona + dirección) sin reconstruir todo
+  const shippingLine = document.querySelector('.summary-shipping span:nth-child(2)');
+  if (shippingLine) {
+    shippingLine.innerHTML =
+      `${zoneName || "Sin localidad"}${addr.value ? " – " + addr.value : ""}`;
+  }
+}
+
+
+function getFacebookIdentifiers() {
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+  // FBC = Facebook Click ID, FBP = Browser ID
+  const fbc = getCookie('_fbc') || null;
+  const fbp = getCookie('_fbp') || null;
+
+  return { fbc, fbp };
+}
+
+function resetPayButton() {
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+}
+
+
+async function goWA() {
+  if (payBtn.disabled) return;
+  const orderId = window.currentOrderId; 
+  // Bloquear botón y cambiar estilo
+  payBtn.disabled = true;
+  payBtn.style.opacity = 0.6;
+  payBtn.textContent = "Procesando...";
+
+
+// 🔴 Limpiar errores previos
+document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+
+// Validar que todas las picadas tengan modelo y tamaño
+const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+
+
+if (incompleteIndex !== -1) {
+  highlightPicada(incompleteIndex);
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  return;
+}
+
+
+const campos = [
+  { id: 'clientName' },
+  { id: 'clientWhatsapp' },
+  { id: 'orderDate' },
+  { id: 'deliveryTime' },
+  { id: 'zone' },
+  { id: 'addr' }
+];
+
+
+let primeroInvalido = null;
+
+campos.forEach(c => {
+  const elem = document.getElementById(c.id);
+  let valor = elem.value.trim();
+
+  // Localidad manual
+  if (c.id === 'zone' && valor === 'manual') {
+    const manual = document.getElementById('manualZone');
+    valor = manual.value.trim();
+
+    if (!valor) {
+      flashHighlight([manual], 'error', 1800);
+      if (!primeroInvalido) primeroInvalido = manual;
+      return;
+    }
+  }
+
+  if (!valor) {
+    flashHighlight([elem], 'error', 1800);
+    if (!primeroInvalido) primeroInvalido = elem;
+  }
+});
+
+if (primeroInvalido) {
+
+  // 📳 Vibración sutil en móviles compatibles
+  if (navigator.vibrate) {
+    navigator.vibrate(80);
+  }
+
+setTimeout(() => {
+
+  const miniBanner = document.querySelector('.mini-banner');
+  const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
+
+  // 🔹 Buscar el bloque completo del formulario
+  const formSection = primeroInvalido.closest('.section');
+
+  if (!formSection) return;
+
+  const rect = formSection.getBoundingClientRect();
+  const absoluteTop = rect.top + window.pageYOffset;
+
+  const offset = 12;
+
+  window.scrollTo({
+    top: absoluteTop - miniHeight - offset,
+    behavior: 'smooth'
+  });
+
+}, 50);
+
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+  return;
+}
+
+
+  const fbIds = getFacebookIdentifiers();
+  const clientUserAgent = navigator.userAgent;
+  const whatsappFinal = "549" + clientWhatsapp.value;
+
+
+const payload = {
+  order_id: window.currentOrderId,
+  token: window.currentToken,
+  nombre: clientName.value,
+  whatsapp: whatsappFinal,
+  envio: ship,
+  horario: deliveryTime.value,
+  picadas: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  }))
+};
+
+
+  try {
+    // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
+    fetch(ORDERS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: new URLSearchParams({
+        data: JSON.stringify(payload)
+      })
+    });
+
+
+saveState();
+    
+let mpRes;
+try {
+
+
+// limpiar preferencia previa
+sessionStorage.removeItem('mp_init_point');
+sessionStorage.removeItem('order_fingerprint');
+
+  mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+  order_id: window.currentOrderId,
+  clientName: clientName.value,
+  clientWhatsapp: whatsappFinal,
+  total,
+  fingerprint: getOrderFingerprint(),
+  currency: "ARS",
+  items: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price
+  })),
+  envio: ship,
+  orderDate: orderDate.value,
+  deliveryTime: deliveryTime.value,
+  zone: zoneName,
+  address: addr.value,
+
+// 🔑 META IDENTIFIERS
+fbp: fbIds.fbp || null,
+fbc: fbIds.fbc || null,
+user_agent: clientUserAgent,
+screen_width: window.screen.width,
+screen_height: window.screen.height
+})
+  });
+} catch (err) {
+  console.error("Network error MP:", err);
+  alert("No se pudo iniciar el pago. Intentá nuevamente.");
+  resetPayButton();
+  return;
+}
+
+if (!mpRes.ok) {
+  console.error("MP HTTP error:", mpRes.status);
+  alert("No se pudo iniciar el pago. Intentá nuevamente.");
+  resetPayButton();
+  return;
+}
+
+let mpData;
+try {
+  mpData = await mpRes.json();
+} catch (err) {
+  console.error("MP invalid JSON");
+  alert("No se pudo iniciar el pago. Intentá nuevamente.");
+  resetPayButton();
+  return;
+}
+
+if (!mpData.init_point) {
+  console.error("MP missing init_point:", mpData);
+  alert("No se pudo iniciar el pago. Intentá nuevamente.");
+  resetPayButton();
+  return;
+}
+
+// 💾 Guardar init_point y fingerprint del pedido
+sessionStorage.setItem('mp_init_point', mpData.init_point);
+sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
+
+
+window.location.assign(mpData.init_point);
+
+  } catch (err) {
+    console.error("ERROR goWA:", err);
+    alert("Error técnico al enviar el pedido");
+    resetPayButton();
+  }
+
+}
+
+  
+function openModal(src){
+ modalImg.src=src;
+ imgModal.style.display="flex";
+}
+function closeModal(){
+ imgModal.style.display="none";
+}
+function bannerIsLocked(){
+  return !!(picadas[active] && picadas[active].model);
+}
+let bannerReady = false;
+const bannerSlides = [
+  {
+    model: "Clásica y Elegante",
+    type: "image",
+    src: "images/IMG_7762.webp"
+  },
+  {
+    model: "Fresca y Colorida",
+    type: "image",
+    src: "images/IMG_7761.webp"
+  }
+  // acá después podés agregar videos
+];
+
+let bannerIndex = 0;
+let bannerFrozenModel = null;
+let bannerTimer = null;
+let bannerVisible = true;
+let startX = 0;
+let currentX = 0;
+
+const banner = document.getElementById("heroBanner");
+const track = document.getElementById("bannerTrack");
+const bannerModel = document.getElementById("bannerModel");
+
+document.addEventListener('DOMContentLoaded', () => {
+  bannerSlides.forEach((s, index) => {
+    const slide = document.createElement("div");
+    slide.className = "banner-slide";
+
+    if (s.type === "video") {
+      slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
+    } else {
+      const img = document.createElement("img");
+      img.width = 720;
+      img.height = 220;
+      img.decoding = "async";
+
+      if (index === 0) {
+        img.src = s.src;
+      } else {
+        img.dataset.src = s.src;
+        img.loading = "lazy";
+      }
+
+      slide.appendChild(img);
+    }
+
+    track.appendChild(slide);
+  });
+
+  bannerReady = true;          // 🔥 CLAVE
+  showSlide(bannerIndex, false); // 🔥 fuerza render inicial
+});
+
+// 👁️ Observer para pausar autoplay cuando el banner no está visible
+const bannerObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    bannerVisible = entry.isIntersecting;
+
+    if (bannerVisible) {
+      if (!bannerIsLocked()) {
+        clearTimeout(bannerTimer);
+        bannerTimer = setTimeout(nextSlide, 5000);
+      }
+    } else {
+      clearTimeout(bannerTimer);
+    }
+  });
+}, {
+  threshold: 0.5
+});
+
+if (banner) {
+  bannerObserver.observe(banner);
+}
+
+// 👁️ Pausar autoplay si el usuario cambia de pestaña
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    clearTimeout(bannerTimer);
+  } else if (!bannerIsLocked() && bannerVisible) {
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(nextSlide, 5000);
+  }
+});
+
+
+
+function showSlide(i, animate = true){
+  bannerIndex = i;
+  track.style.transition = animate ? "transform .6s ease" : "none";
+  track.style.transform = `translateX(-${i * 100}%)`;
+
+  const slide = bannerSlides[i];
+  bannerModel.textContent = slide.model;
+
+  // ⚡ Lazy-load de imagen si es slide > 0
+  const slideEl = track.children[i];
+  const img = slideEl.querySelector('img[data-src]');
+  if(img){
+    img.src = img.dataset.src;
+    img.removeAttribute('data-src');
+  }
+
+  clearTimeout(bannerTimer);
+
+if(!bannerIsLocked() && bannerVisible){
+  bannerTimer = setTimeout(nextSlide, 5000);
+}
+}
+
+
+function nextSlide(){
+  if(bannerIsLocked()) return;
+  if(!bannerVisible) return;
+
+  showSlide((bannerIndex + 1) % bannerSlides.length);
+}
+
+banner.onclick = () => {
+  const model = bannerSlides[bannerIndex].model;
+  picadas[active].model = model;
+  saveState();
+  renderConfig();
+};
+
+
+banner.addEventListener("touchend", e => {
+  const endX = e.changedTouches[0].clientX;
+  const diff = endX - startX;
+
+  if (Math.abs(diff) < 40) return;
+
+  let newIndex;
+
+  if (diff < 0) {
+    // swipe izquierda → siguiente
+    newIndex = (bannerIndex + 1) % bannerSlides.length;
+  } else {
+    // swipe derecha → anterior
+    newIndex = (bannerIndex - 1 + bannerSlides.length) % bannerSlides.length;
+  }
+
+  showSlide(newIndex);
+
+  const newModel = bannerSlides[newIndex].model;
+
+  // 👉 SIN importar bloqueo: swipe selecciona modelo
+  picadas[active].model = newModel;
+  saveState();
+  renderConfig();
+});
+
+
+function syncBannerWithModel(model){
+  if (!model || !bannerReady) return;
+
+  const i = bannerSlides.findIndex(s => s.model === model);
+  if (i >= 0) showSlide(i, false);
+}
+
+
+let scrollTimeout;
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.innerWidth >= 769) {
+    loadState();
+    update();
+  }
+});
+
+// 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
+
+const urgencyMessages = [
+  "Reservá hoy y asegurá tu fecha",
+  "Pedidos con 24hs de anticipación",
+  "Coordinamos entregas todos los días"
+];
+
+let urgencyIndex = 0;
+let urgencyTimer = null;
+let urgencyVisible = true;
+
+function rotateUrgency(){
+  const el = document.getElementById("urgencyText");
+  if(!el || !urgencyVisible) return;
+
+  el.style.opacity = 0;
+
+  setTimeout(() => {
+    urgencyIndex = (urgencyIndex + 1) % urgencyMessages.length;
+    el.textContent = urgencyMessages[urgencyIndex];
+    el.style.opacity = 1;
+  }, 400);
+}
+
+// 👁️ Observer para detectar visibilidad real
+const urgencyObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    urgencyVisible = entry.isIntersecting;
+
+    if(urgencyVisible){
+      clearInterval(urgencyTimer);
+      urgencyTimer = setInterval(rotateUrgency, 6000);
+    } else {
+      clearInterval(urgencyTimer);
+    }
+  });
+},{
+  threshold: 0.6
+});
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  const el = document.getElementById("urgencyText");
+  if(!el) return;
+
+  urgencyObserver.observe(el);
+
+  // iniciar rotación si ya está visible
+  urgencyTimer = setInterval(rotateUrgency, 6000);
+});
+
+
+window.addEventListener('pageshow', () => {
+  handleReturnFromMP();
+  loadState();
+  enforceTomorrowDate();   // 👈 PEGAR AQUÍ
+  update();
+
+  payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+
+  if (window.innerWidth >= 769) {
+  }
+});
+
+
+
+// 🔁 Fallback para refresh duro (F5 / Ctrl+R)
+if (document.readyState === "complete") {
+  setTimeout(() => {
+    if (!config.innerHTML.trim()) {
+      loadState();
+      update();
+    }
+  }, 0);
+}
+
+
+// 🔒 bloquear zoom por gesto (iOS / Safari)
+document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener('gesturechange', e => e.preventDefault());
+document.addEventListener('gestureend', e => e.preventDefault());
+document.querySelectorAll('.control').forEach(el => {
+  el.addEventListener('input', () => {
+    clearAllHighlights();
+  });
+
+  el.addEventListener('change', () => {
+    clearAllHighlights();
+  });
+});
+
+
+  
+</script>
+<script>
+(function () {
+  let pixelLoaded = false;
+
+  function loadPixelOnce() {
+    if (pixelLoaded) return;
+    pixelLoaded = true;
+
+    // 🛟 Cola de eventos por si fbq se llama antes
+    window.fbq = window.fbq || function(){
+      (window.fbq.queue = window.fbq.queue || []).push(arguments);
+    };
+
+    if (!navigator.userAgent.includes('Instagram')) {
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+    }
+
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}
+(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init','3350400148462231');
+fbq('track','PageView');
+
+fbq('track','ViewContent', {
   content_name: 'Landing Picadas',
   content_category: 'Picadas'
 });
+
+  }
+  
+loadPixelOnce();
+
+
+})();
+</script>
+
+</body>
+</html>
+
   }
   
 loadPixelOnce();
