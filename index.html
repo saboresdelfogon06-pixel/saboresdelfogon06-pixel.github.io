@@ -1946,27 +1946,26 @@ function centerOnConfig(){
   requestAnimationFrame(() => {
 
     const miniBanner = document.querySelector('.mini-banner');
-    const configSection = document.getElementById('config');
-    const sizeButtons = document.querySelectorAll('.size-col button.control');
+    const banner = document.getElementById('heroBanner');
 
-    if(!configSection) return;
+    if(!banner) return;
 
     const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
 
-    // 🔥 Posición REAL donde empieza la card
-    const configTop = configSection.getBoundingClientRect().top + window.pageYOffset;
+    const bannerTop = banner.getBoundingClientRect().top + window.pageYOffset;
 
-    // 👇 pequeño ajuste visual para que no quede pegado
     const offset = 8;
 
     window.scrollTo({
-      top: configTop - miniHeight - offset,
+      top: bannerTop - miniHeight - offset,
       behavior: 'smooth'
     });
 
-    // Highlight solo si falta tamaño
+    // Highlight tamaño si falta
     setTimeout(() => {
       const current = picadas[active];
+      const sizeButtons = document.querySelectorAll('.size-col button.control');
+
       if(!current.size){
         flashHighlight([...sizeButtons], 'model-hint', 1800);
       }
@@ -2099,12 +2098,10 @@ function renderConfig(){
 `;
 
 
-  const dipsText = p.model
-  ? [
-      ...modelData[p.model].dips,
-      ...(p.size >= 6 ? ["Tomatitos deshidratados"] : [])
-    ].join(" · ")
+const dipsText = p.model
+  ? modelData[p.model].dips.join(" · ")
   : "";
+
 
 
 // 🔹 NUEVO: reset color del aviso a gris si hay modelo
@@ -2197,11 +2194,12 @@ ${
         ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
       </ul>
 
-      <b>🍇 Extras</b>
-      <ul>
-        <li>Uvas</li>
-        <li>Mix frutos secos</li>
-      </ul>
+<b>🍇 Extras</b>
+<ul>
+  <li>Uvas</li>
+  <li>Mix frutos secos</li>
+  ${p.size === 6 || p.size === 10 ? `<li>Tomatitos deshidratados</li>` : ""}
+</ul>
     </div>
 
   </div>
