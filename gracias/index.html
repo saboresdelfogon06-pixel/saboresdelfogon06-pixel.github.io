@@ -8,10 +8,10 @@
 
 <style>
 :root{
-  --bg:#0f0f0f;
-  --card:#1b1b1b;
-  --text:#cfcac2;
-  --muted:#9a958d;
+  --bg:#181818;        /* antes #0f0f0f */
+  --card:#232323;      /* antes #1b1b1b */
+  --text:#f2efe9;      /* antes #cfcac2 */
+  --muted:#b5b0a8;      /* antes #9a958d */
   --accent:#D3AE09;
 }
 body{
@@ -32,7 +32,9 @@ body{
   left:12px;
   right:12px;
   height:48px;
-  background:#1b1b1b;
+  .mini-banner{
+  background:#232323;
+}
   border-radius:12px;
   display:flex;
   align-items:center;
@@ -42,7 +44,7 @@ body{
 }
 .mini-banner img{width:36px}
 .mini-banner a{
-  color:#fff;
+  color:var(--text); 
   text-decoration:none;
   font-size:13px;
 }
