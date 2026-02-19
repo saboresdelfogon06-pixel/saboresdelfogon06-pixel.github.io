@@ -1949,35 +1949,41 @@ function setModel(model){
   // 🔥 NUEVO: centrar automáticamente el módulo
   centerOnConfig();
 }
-
+  
 function centerOnConfig(){
 
   requestAnimationFrame(() => {
 
     const miniBanner = document.querySelector('.mini-banner');
-    const intro = document.querySelector('.landing-intro-top');
+    const configSection = document.getElementById('config');
     const sizeButtons = document.querySelectorAll('.size-col button.control');
 
-    if(!intro) return;
+    if(!configSection) return;
 
     const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
-    const introBottom = intro.getBoundingClientRect().bottom + window.pageYOffset;
 
-    const offset = 6;
+    // 🔥 Posición REAL donde empieza la card
+    const configTop = configSection.getBoundingClientRect().top + window.pageYOffset;
+
+    // 👇 pequeño ajuste visual para que no quede pegado
+    const offset = 8;
 
     window.scrollTo({
-      top: introBottom - miniHeight - offset,
+      top: configTop - miniHeight - offset,
       behavior: 'smooth'
     });
 
-setTimeout(() => {
-  const current = picadas[active];
-  if(!current.size){
-    flashHighlight([...sizeButtons], 'model-hint', 1800);
-  }
-}, 450);
+    // Highlight solo si falta tamaño
+    setTimeout(() => {
+      const current = picadas[active];
+      if(!current.size){
+        flashHighlight([...sizeButtons], 'model-hint', 1800);
+      }
+    }, 400);
+
   });
 }
+
 
 
 
