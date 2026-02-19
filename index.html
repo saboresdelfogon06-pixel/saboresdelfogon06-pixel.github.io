@@ -1469,6 +1469,12 @@ enforceTomorrowDate();
  sessionStorage.removeItem('mp_init_point');
 sessionStorage.removeItem('order_fingerprint');
 document.getElementById("infoOperativa").style.display = "block";
+// Volver a Step 1 visualmente
+currentStep = 1;
+
+document.getElementById("config").style.display = "block";
+document.getElementById("step1BtnWrapper").style.display = "block";
+document.getElementById("step2").style.display = "none";
 }
 
 function resetForNextOrder() {
