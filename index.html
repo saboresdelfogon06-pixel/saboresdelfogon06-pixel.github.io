@@ -987,6 +987,20 @@ button.selected{
   }
 }
 
+.landing-intro-top{
+  position: relative;
+  z-index: 5;
+}
+
+.landing-intro-top::before{
+  content:"";
+  position:absolute;
+  inset:-12px -16px 0 -16px; 
+  background: var(--bg);
+  z-index:-1;
+}
+
+
 </style>
 </head>
 <body>
