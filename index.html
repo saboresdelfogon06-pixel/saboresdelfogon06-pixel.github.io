@@ -1251,7 +1251,6 @@ const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
 const zone       = document.getElementById('zone');
 const summary    = document.getElementById('summary');
-const payBtn     = document.getElementById('payBtn');
 const config     = document.getElementById('config');
 const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
@@ -1334,7 +1333,6 @@ function handleSummaryReset(){
     updateStepTitle();
 
     document.getElementById("config").style.display = "block";
-    document.getElementById("step1BtnWrapper").style.display = "block";
     document.getElementById("step2").style.display = "none";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
@@ -1354,7 +1352,6 @@ function goBackToStep1(){
   saveState();
 
   document.getElementById("config").style.display = "block";
-  document.getElementById("step1BtnWrapper").style.display = "block";
   document.getElementById("step2").style.display = "none";
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
@@ -1575,7 +1572,6 @@ if (!alreadySent) {
   updateStepTitle();
 
   document.getElementById("config").style.display = "none";
-  document.getElementById("step1BtnWrapper").style.display = "none";
 
   document.getElementById("step2").style.display = "block";
 
@@ -1763,7 +1759,6 @@ function loadState() {
     banner.style.pointerEvents = "none";
 
     document.getElementById("config").style.display = "none";
-    document.getElementById("step1BtnWrapper").style.display = "none";
     document.getElementById("step2").style.display = "block";
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("metodosPago").style.display = "block";
@@ -1776,7 +1771,6 @@ function loadState() {
 
 
     document.getElementById("config").style.display = "block";
-    document.getElementById("step1BtnWrapper").style.display = "block";
     document.getElementById("step2").style.display = "none";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
@@ -1831,7 +1825,7 @@ enforceTomorrowDate();
   // 5. reset visual
   showSlide(0, false);
   summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
-  payBtn.classList.remove("enabled");
+  payBtn.disabled = false;
 
     document.getElementById('cartTotal').textContent = '$0';
 
@@ -1843,7 +1837,6 @@ currentStep = 1;
 updateStepTitle();
 
 document.getElementById("config").style.display = "block";
-document.getElementById("step1BtnWrapper").style.display = "block";
 document.getElementById("step2").style.display = "none";
 document.getElementById("backWrapper").style.display = "none";
 }
@@ -1905,7 +1898,7 @@ function resetForNextOrder() {
 
   // 🔹 Reset visual y botones
   summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
-  payBtn.classList.remove("enabled");
+  payBtn.disabled = false;
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
   payBtn.textContent = "Pagar";
@@ -2567,7 +2560,11 @@ const valid =
 
 
   summaryContainer.style.display = 'block';
+const payBtn = document.getElementById("payBtn");
+if (payBtn) {
   payBtn.classList.toggle("enabled", valid);
+}
+
 
  if(valid && !window._checkoutTracked){
   if (typeof fbq === "function") {
@@ -2601,7 +2598,11 @@ function updateTotalsOnly(){
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 
   // 🔹 Actualizar total en resumen (si ya está renderizado)
-  const totalSpan = document.querySelector('.summary-total span:last-child');
+const totalValue = document.querySelector('.total-left div:last-child');
+if (totalValue) {
+  totalValue.textContent = `$${total.toLocaleString()}`;
+}
+
   if(totalSpan){
     totalSpan.textContent = `$${total.toLocaleString()}`;
   }
@@ -2630,15 +2631,25 @@ function getFacebookIdentifiers() {
 }
 
 function resetPayButton() {
-  payBtn.disabled = false;
+  const payBtn = document.getElementById("payBtn");
+if (!payBtn) return;
+
+payBtn.disabled = false;
+payBtn.style.opacity = 1;
+payBtn.textContent = "Pagar";
+
   payBtn.style.opacity = 1;
   payBtn.textContent = "Pagar";
 }
 
 
 async function goWA() {
-  if (payBtn.disabled) return;
-  const orderId = window.currentOrderId; 
+
+  const payBtn = document.getElementById("payBtn");
+  if (!payBtn || payBtn.disabled) return;
+
+  const orderId = window.currentOrderId;
+
   // Bloquear botón y cambiar estilo
   payBtn.disabled = true;
   payBtn.style.opacity = 0.6;
