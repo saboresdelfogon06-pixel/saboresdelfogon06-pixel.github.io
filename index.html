@@ -1239,21 +1239,40 @@ function trackViewContent(model, size, price){
 
   if (typeof fbq !== "function") return;
 
-  // 🔥 Evitar duplicados por misma selección
   const key = `${model}_${size || 'no_size'}`;
 
   if (window._lastVC === key) return;
   window._lastVC = key;
 
+  // 🔑 Generar event_id único
+  const eventId = 'vc_' + crypto.randomUUID();
+
+  // ===== PIXEL (BROWSER) =====
   fbq('track', 'ViewContent', {
     content_name: model,
     content_category: 'Picadas',
     content_ids: [model],
     value: price || 0,
     currency: 'ARS'
+  }, {
+    eventID: eventId
   });
 
+  // ===== CAPI =====
+  fetch("https://saboresdelfogon.com/api/meta/view-content", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      event_id: eventId,
+      content_name: model,
+      value: price || 0,
+      fbp: getFacebookIdentifiers().fbp,
+      fbc: getFacebookIdentifiers().fbc,
+      user_agent: navigator.userAgent
+    })
+  }).catch(()=>{});
 }
+
 
 
 function handleSummaryReset(){
