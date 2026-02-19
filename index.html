@@ -1812,9 +1812,12 @@ function loadState() {
       const summaryWrapper = document.getElementById("summaryWrapper");
   const metodosPago = document.getElementById("metodosPago");
 
-  if (summaryWrapper && metodosPago) {
-    metodosPago.parentNode.insertBefore(summaryWrapper, metodosPago);
-  }
+const paymentBlock = document.querySelector(".payment-block");
+
+if (summaryWrapper && paymentBlock) {
+  paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
+}
+
 
 
   } else {
