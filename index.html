@@ -1825,7 +1825,13 @@ enforceTomorrowDate();
   // 5. reset visual
   showSlide(0, false);
   summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
+  const payBtn = document.getElementById("payBtn");
+  if (payBtn) {
   payBtn.disabled = false;
+  payBtn.style.opacity = 1;
+  payBtn.textContent = "Pagar";
+}
+
 
     document.getElementById('cartTotal').textContent = '$0';
 
@@ -1898,10 +1904,12 @@ function resetForNextOrder() {
 
   // 🔹 Reset visual y botones
   summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
-  payBtn.disabled = false;
+ const payBtn = document.getElementById("payBtn");
+if (payBtn) {
   payBtn.disabled = false;
   payBtn.style.opacity = 1;
   payBtn.textContent = "Pagar";
+}
   document.getElementById('cartTotal').textContent = '$0';
 
   // 🔹 Limpiar errores visuales
@@ -2600,12 +2608,13 @@ function updateTotalsOnly(){
   // 🔹 Actualizar total en resumen (si ya está renderizado)
 const totalValue = document.querySelector('.total-left div:last-child');
 if (totalValue) {
-  totalValue.textContent = `$${total.toLocaleString()}`;
+  const stepTotal = currentStep === 2
+  ? total
+  : picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+
+totalValue.textContent = `$${stepTotal.toLocaleString()}`;
 }
 
-  if(totalSpan){
-    totalSpan.textContent = `$${total.toLocaleString()}`;
-  }
 
   // 🔹 Actualizar línea de envío (zona + dirección) sin reconstruir todo
   const shippingLine = document.querySelector('.summary-shipping span:nth-child(2)');
@@ -3113,17 +3122,19 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 
 window.addEventListener('pageshow', () => {
+
   handleReturnFromMP();
   loadState();
-  enforceTomorrowDate();   // 👈 PEGAR AQUÍ
+  enforceTomorrowDate();
   update();
 
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar";
-
-  if (window.innerWidth >= 769) {
+  const payBtn = document.getElementById("payBtn");
+  if (payBtn) {
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Pagar";
   }
+
   document.body.style.visibility = "visible";
 });
 
