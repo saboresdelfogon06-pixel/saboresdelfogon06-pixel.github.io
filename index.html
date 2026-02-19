@@ -993,6 +993,21 @@ button.selected{
   z-index:-1;
 }
 
+  .picada-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:16px;
+}
+
+.picada-grid ul{
+  margin:6px 0 12px;
+  padding-left:18px;
+}
+
+.picada-grid li{
+  margin-bottom:3px;
+}
+
 
 </style>
 </head>
@@ -2183,42 +2198,41 @@ ${
       <div class="picada-content">
 
         <!-- IZQUIERDA: CONTENIDO -->
-        <div class="picada-left">
-          <b>🥩 Fiambres</b>
-          <ul>
-            ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
-          </ul>
+<div class="picada-left">
 
-          <b>🧀 Quesos</b>
-          <ul>
-            ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
-          </ul>
+  <div class="picada-grid">
 
-          <b>🥣 Dips</b>
-          <ul>
-            ${dipsText.split(" · ").map(d => `<li>${d}</li>`).join("")}
-          </ul>
-          <b>🍇 Extras</b>
-          <ul>
-          <li>Uvas</li>
-          <li>Mix frutos secos</li>
-          </ul>
-        </div>
+    <!-- COLUMNA 1 -->
+    <div>
+      <b>🥩 Fiambres</b>
+      <ul>
+        ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
+      </ul>
 
-        <!-- DERECHA: TAMAÑO -->
-        ${
-          p.size && SIZE_INFO[p.size]
-            ? `
-              <div class="picada-right">
-                <b>${p.size} personas</b><br>
-                Pican ${SIZE_INFO[p.size].pican}<br>
-                ${SIZE_INFO[p.size].medidas}
-              </div>
-            `
-            : ""
-        }
+      <b>🥣 Dips</b>
+      <ul>
+        ${dipsText.split(" · ").map(d => `<li>${d}</li>`).join("")}
+      </ul>
+    </div>
 
-      </div>
+    <!-- COLUMNA 2 -->
+    <div>
+      <b>🧀 Quesos</b>
+      <ul>
+        ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
+      </ul>
+
+      <b>🍇 Extras</b>
+      <ul>
+        <li>Uvas</li>
+        <li>Mix frutos secos</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
     `
 }
 
