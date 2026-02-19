@@ -1197,6 +1197,8 @@ function handleSummaryReset(){
 
     // 🔹 Volver a Step 1 SIN perder selección
     currentStep = 1;
+    localStorage.removeItem('currentStep');
+    updateStepTitle();
 
     document.getElementById("config").style.display = "block";
     document.getElementById("step1BtnWrapper").style.display = "block";
@@ -1212,7 +1214,7 @@ function handleSummaryReset(){
 function goBackToStep1(){
 
   currentStep = 1;
-
+  saveState();
   document.getElementById("config").style.display = "block";
   document.getElementById("step1BtnWrapper").style.display = "block";
   document.getElementById("step2").style.display = "none";
@@ -1414,11 +1416,8 @@ fbq('track', 'InitiateCheckout', {
 });
 }
 
-  // =========================
-  // CAMBIO DE STEP
-  // =========================
-
   currentStep = 2;
+  saveState();
   updateStepTitle();
 
   document.getElementById("config").style.display = "none";
@@ -1537,10 +1536,12 @@ function saveState(){
   localStorage.setItem('zone', zone.value);
   localStorage.setItem('clientWhatsapp', clientWhatsapp.value);
   localStorage.setItem('deliveryTime', deliveryTime.value);
+  localStorage.setItem('currentStep', currentStep);
 }
 
 
 function loadState() {
+
   clientWhatsapp.value = localStorage.getItem('clientWhatsapp') || "";
   const savedPicadas = localStorage.getItem('picadas');
   deliveryTime.value = localStorage.getItem('deliveryTime') || "";
@@ -1557,12 +1558,13 @@ function loadState() {
     return;
   }
 
-  // 👇 restaurar picada activa
+  // 🔹 Restaurar picada activa
   const savedActive = Number(localStorage.getItem('activePicada'));
   active = Number.isInteger(savedActive) && savedActive < picadas.length
     ? savedActive
     : 0;
 
+  // 🔹 Restaurar datos personales
   clientName.value = localStorage.getItem('clientName') || "";
   orderDate.value = localStorage.getItem('orderDate') || "";
   addr.value = localStorage.getItem('addr') || "";
@@ -1570,7 +1572,15 @@ function loadState() {
   const savedZone = localStorage.getItem('zone');
   if (savedZone !== null) {
     zone.value = savedZone;
-    if (savedZone) {
+
+    if (savedZone === "manual") {
+      const manualInput = document.getElementById('manualZone');
+      if (manualInput) {
+        manualInput.style.display = "block";
+      }
+      zoneName = "Zona fuera de rango";
+      ship = MANUAL_ZONE_SHIPPING;
+    } else if (savedZone) {
       setZone();
     } else {
       zoneName = "";
@@ -1578,14 +1588,47 @@ function loadState() {
     }
   }
 
-// 🔥 CLAVE: sincronizar banner y UI
-if (picadas[active] && picadas[active].model) {
-  syncBannerWithModel(picadas[active].model);
+  // 🔥 Sincronizar banner si hay modelo seleccionado
+  if (picadas[active] && picadas[active].model) {
+    syncBannerWithModel(picadas[active].model);
+  }
+
+  renderConfig();   // reconstruye toda la UI
+  enforceTomorrowDate();
+
+  // =====================================
+  // 🔥 RESTAURAR STEP (NUEVO)
+  // =====================================
+
+  const savedStep = Number(localStorage.getItem('currentStep'));
+
+  if (savedStep === 2) {
+
+    currentStep = 2;
+
+    document.getElementById("config").style.display = "none";
+    document.getElementById("step1BtnWrapper").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+    document.getElementById("infoOperativa").style.display = "none";
+    document.getElementById("metodosPago").style.display = "block";
+    document.getElementById("backWrapper").style.display = "block";
+
+  } else {
+
+    currentStep = 1;
+
+    document.getElementById("config").style.display = "block";
+    document.getElementById("step1BtnWrapper").style.display = "block";
+    document.getElementById("step2").style.display = "none";
+    document.getElementById("infoOperativa").style.display = "block";
+    document.getElementById("metodosPago").style.display = "none";
+    document.getElementById("backWrapper").style.display = "none";
+  }
+
+  updateStepTitle();
+  update();
 }
 
-renderConfig();   // 👈 reconstruye TODA la UI
-enforceTomorrowDate();
-}
 
 
 function buildPicadas(n){
