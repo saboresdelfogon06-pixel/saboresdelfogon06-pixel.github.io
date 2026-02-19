@@ -1928,6 +1928,7 @@ function setActivePicada(i){
   renderConfig();
 }
 function setModel(model){
+
   const current = picadas[active];
 
   // 🔒 No permitir deseleccionar modelo
@@ -1944,6 +1945,32 @@ function setModel(model){
   syncBannerWithModel(model);
   saveState();
   renderConfig();
+
+  // 🔥 NUEVO: centrar automáticamente el módulo
+  centerOnConfig();
+}
+
+  function centerOnConfig(){
+
+  requestAnimationFrame(() => {
+
+    const miniBanner = document.querySelector('.mini-banner');
+    const intro = document.querySelector('.landing-intro-top');
+    const configSection = document.querySelector('.model-size-grid');
+
+    if(!intro || !configSection) return;
+
+    const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
+    const introBottom = intro.getBoundingClientRect().bottom + window.pageYOffset;
+
+    const offset = 6;
+
+    window.scrollTo({
+      top: introBottom - miniHeight - offset,
+      behavior: 'smooth'
+    });
+
+  });
 }
 
 
