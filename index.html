@@ -1914,18 +1914,18 @@ function setActivePicada(i){
 function setModel(model){
   const current = picadas[active];
 
-  if(current.model === model){
-    current.model = null;
-    current.size = null;
-    current.price = 0;
-  } else {
-    current.model = model;
+  // 🔒 No permitir deseleccionar modelo
+  if(current.model === model) return;
 
-    // 🔥 DISPARAR VIEWCONTENT AL ELEGIR MODELO
-    trackViewContent(model, null, 0);sendViewContentOnce(model, null, 0);
-  }
+  current.model = model;
 
-  syncBannerWithModel(current.model);
+  // Resetear tamaño cuando cambia modelo
+  current.size = null;
+  current.price = 0;
+
+  sendViewContentOnce(model, null, 0);
+
+  syncBannerWithModel(model);
   saveState();
   renderConfig();
 }
@@ -2084,19 +2084,19 @@ if(hint){
       <button
         class="control ${p.size===4?'selected':''}"
         onclick="handleSizeClick(4, PRICES[4])">
-        4 personas $60.000
+        4 personas
       </button>
 
       <button
         class="control ${p.size===6?'selected':''}"
         onclick="handleSizeClick(6, PRICES[6])">
-        6 personas $85.000
+        6 personas
       </button>
 
       <button
         class="control ${p.size===10?'selected':''}"
         onclick="handleSizeClick(10, PRICES[10])">
-        10 personas $110.000
+        10 personas
       </button>
 
     </div>
@@ -2165,8 +2165,6 @@ function handleSizeClick(s, p){
     const hint = document.getElementById('modelHint');
     if(hint) hint.style.color = '#ffffff';
 
-    document.querySelector('.model-size-grid')
-      .scrollIntoView({ behavior: 'smooth', block: 'center' });
 
     flashHighlight([...modelBtns], 'model-hint', 1800);
     return;
