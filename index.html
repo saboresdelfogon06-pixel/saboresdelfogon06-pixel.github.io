@@ -1821,6 +1821,7 @@ function loadState() {
     document.getElementById("config").style.display = "none";
     document.getElementById("step2").style.display = "block";
     document.getElementById("infoOperativa").style.display = "none";
+    document.getElementById("backBtnInline").style.display = "block";
     document.getElementById("metodosPago").style.display = "block";
       const summaryWrapper = document.getElementById("summaryWrapper");
   const metodosPago = document.getElementById("metodosPago");
@@ -1853,6 +1854,7 @@ if (summaryWrapper && config) {
     document.getElementById("step2").style.display = "none";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
+    document.getElementById("backBtnInline").style.display = "none";
   }
 
   updateStepTitle();
@@ -2522,7 +2524,6 @@ function enforceTomorrowDate() {
 
   const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
-  // 🚫 Bloquear hoy y anteriores
   dateInput.min = tomorrowStr;
 
   const savedDate = localStorage.getItem('orderDate');
@@ -2534,15 +2535,18 @@ function enforceTomorrowDate() {
     localStorage.setItem('orderDate', tomorrowStr);
   }
 
-  // 🔥 CLAVE para iOS
-  dateInput.addEventListener('change', function () {
+  // 🔥 IMPORTANTE: limpiar listener anterior
+  dateInput.onchange = null;
+
+  dateInput.onchange = function () {
     if (this.value < tomorrowStr) {
       this.value = tomorrowStr;
       localStorage.setItem('orderDate', tomorrowStr);
+    } else {
+      localStorage.setItem('orderDate', this.value);
     }
-  });
+  };
 }
-let lightUpdateTimeout;
 
 function lightUpdate(){
   clearTimeout(lightUpdateTimeout);
