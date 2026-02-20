@@ -3248,17 +3248,6 @@ document.querySelectorAll('.control').forEach(el => {
   });
 });
 
-document.querySelectorAll('.control').forEach(el => {
-  el.addEventListener('input', () => {
-    clearAllHighlights();
-  });
-
-  el.addEventListener('change', () => {
-    clearAllHighlights();
-  });
-});
-
-
 // 🔥 PEGAR ESTO ACÁ
 window.addEventListener("popstate", function () {
 
