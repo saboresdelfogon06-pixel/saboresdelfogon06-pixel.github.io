@@ -1586,45 +1586,43 @@ if (!alreadySent) {
 
   sessionStorage.setItem(key, "1");
 
-  const eventId = "ic_" + window.currentOrderId;
+const eventId = crypto.randomUUID();
 
-  fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-  event_id: eventId,
-  order_id: window.currentOrderId,
-  total: total,
-  items: picadas,
-  fbp: getFacebookIdentifiers().fbp,
-  fbc: getFacebookIdentifiers().fbc,
-  user_agent: navigator.userAgent,
-
-  // 🔥 NUEVO TRACKING
-  session_id: localStorage.getItem("sdf_session_id"),
-  session_start: localStorage.getItem("sdf_session_start"),
-  page_views: localStorage.getItem("sdf_page_views"),
-  screen_width: window.screen.width,
-  screen_height: window.screen.height
-})
-  }).catch(() => {});
-
-  if (typeof fbq === "function") {
-fbq('track', 'InitiateCheckout', {
-  value: total,
-  currency: 'ARS',
-  contents: picadas.map(p => ({
-    id: p.model + "_" + p.size,
-    quantity: 1,
-    item_price: p.price
-  })),
-  content_type: 'product'
-}, {
-  eventID: eventId
-});
-  }
+// 1️⃣ PRIMERO PIXEL
+if (typeof fbq === "function") {
+  fbq('track', 'InitiateCheckout', {
+    value: total,
+    currency: 'ARS',
+    contents: picadas.map(p => ({
+      id: p.model + "_" + p.size,
+      quantity: 1,
+      item_price: p.price
+    })),
+    content_type: 'product'
+  }, {
+    eventID: eventId
+  });
 }
 
+// 2️⃣ DESPUÉS CAPI
+fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    event_id: eventId,
+    order_id: window.currentOrderId,
+    total,
+    items: picadas,
+    fbp: getFacebookIdentifiers().fbp,
+    fbc: getFacebookIdentifiers().fbc,
+    user_agent: navigator.userAgent,
+    session_id: localStorage.getItem("sdf_session_id"),
+    session_start: localStorage.getItem("sdf_session_start"),
+    page_views: localStorage.getItem("sdf_page_views"),
+    screen_width: window.screen.width,
+    screen_height: window.screen.height
+  })
+}).catch(()=>{});
 
   currentStep = 2;
   history.pushState({ step: 2 }, "", "#step2");
@@ -1943,7 +1941,7 @@ function sendViewContentOnce(model, size, price) {
 
   sessionStorage.setItem(key, "1");
 
-  const eventId = "vc_" + orderId;
+  const eventId = crypto.randomUUID();
 
   const fbIds = getFacebookIdentifiers();
 
