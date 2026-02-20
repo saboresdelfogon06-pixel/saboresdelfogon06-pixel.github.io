@@ -1590,15 +1590,22 @@ if (!alreadySent) {
   fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      event_id: eventId,
-      order_id: window.currentOrderId,
-      total: total,
-      items: picadas,
-      fbp: getFacebookIdentifiers().fbp,
-      fbc: getFacebookIdentifiers().fbc,
-      user_agent: navigator.userAgent
-    })
+body: JSON.stringify({
+  event_id: eventId,
+  order_id: window.currentOrderId,
+  total: total,
+  items: picadas,
+  fbp: getFacebookIdentifiers().fbp,
+  fbc: getFacebookIdentifiers().fbc,
+  user_agent: navigator.userAgent,
+
+  // 🔥 NUEVO TRACKING
+  session_id: localStorage.getItem("sdf_session_id"),
+  session_start: localStorage.getItem("sdf_session_start"),
+  page_views: localStorage.getItem("sdf_page_views"),
+  screen_width: window.screen.width,
+  screen_height: window.screen.height
+})
   }).catch(() => {});
 
   if (typeof fbq === "function") {
@@ -3206,6 +3213,26 @@ document.addEventListener("DOMContentLoaded", ()=>{
   urgencyTimer = setInterval(rotateUrgency, 6000);
 });
 
+  // ===============================
+// SESSION TRACKING
+// ===============================
+
+if (!localStorage.getItem("sdf_session_id")) {
+  localStorage.setItem("sdf_session_id", crypto.randomUUID());
+}
+
+if (!localStorage.getItem("sdf_session_start")) {
+  localStorage.setItem("sdf_session_start", Date.now());
+}
+
+if (!localStorage.getItem("sdf_page_views")) {
+  localStorage.setItem("sdf_page_views", 0);
+}
+
+localStorage.setItem(
+  "sdf_page_views",
+  Number(localStorage.getItem("sdf_page_views")) + 1
+);
 
 window.addEventListener('pageshow', () => {
 
