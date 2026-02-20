@@ -3142,7 +3142,11 @@ function syncBannerWithModel(model){
 let scrollTimeout;
 
 
-history.replaceState({ step: 1 }, "", location.pathname);
+history.replaceState(
+  { step: Number(localStorage.getItem('currentStep')) || 1 },
+  "",
+  location.pathname
+);
 document.addEventListener("DOMContentLoaded", () => {
   loadState();
   update();
