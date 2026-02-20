@@ -2059,19 +2059,20 @@ function setModel(model){
 
   current.model = model;
 
-  // Resetear tamaño cuando cambia modelo
-  current.size = null;
-  current.price = 0;
+  // ✅ Mantener tamaño si ya estaba elegido
+  if(current.size){
+    current.price = PRICES[current.size];
+  }
 
-  sendViewContentOnce(model, null, 0);
+  sendViewContentOnce(model, current.size || null, current.price || 0);
 
   syncBannerWithModel(model);
   saveState();
   renderConfig();
 
-  // 🔥 NUEVO: centrar automáticamente el módulo
   centerOnConfig();
 }
+
   
 function centerOnConfig(){
 
