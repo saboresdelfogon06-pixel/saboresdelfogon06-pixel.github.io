@@ -3149,8 +3149,9 @@ let scrollTimeout;
 history.replaceState(
   { step: Number(localStorage.getItem('currentStep')) || 1 },
   "",
-  location.pathname
+  location.pathname + location.hash
 );
+
 
 // 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
 
