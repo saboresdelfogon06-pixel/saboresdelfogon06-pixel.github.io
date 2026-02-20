@@ -1602,12 +1602,18 @@ if (!alreadySent) {
   }).catch(() => {});
 
   if (typeof fbq === "function") {
-    fbq('track', 'InitiateCheckout', {
-      value: total,
-      currency: 'ARS'
-    }, {
-      eventID: eventId
-    });
+fbq('track', 'InitiateCheckout', {
+  value: total,
+  currency: 'ARS',
+  contents: picadas.map(p => ({
+    id: p.model + "_" + p.size,
+    quantity: 1,
+    item_price: p.price
+  })),
+  content_type: 'product'
+}, {
+  eventID: eventId
+});
   }
 }
 
@@ -1933,14 +1939,16 @@ function sendViewContentOnce(model, size, price) {
 
   // ===== PIXEL =====
   if (typeof fbq === "function") {
-    fbq('track', 'ViewContent', {
-      content_name: model,
-      content_category: 'Picadas',
-      value: price || 0,
-      currency: 'ARS'
-    }, {
-      eventID: eventId
-    });
+fbq('track', 'ViewContent', {
+  content_name: model,
+  content_category: 'Picadas',
+  content_ids: [model + "_" + size],
+  content_type: 'product',
+  value: price || 0,
+  currency: 'ARS'
+}, {
+  eventID: eventId
+});
   }
 
   // ===== CAPI =====
