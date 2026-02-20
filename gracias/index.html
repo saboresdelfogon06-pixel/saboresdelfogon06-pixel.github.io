@@ -197,12 +197,18 @@ async function loadOrder() {
 if (data.status === "confirmed" && !window._purchaseTracked) {
 
   if (typeof fbq === "function") {
-    fbq('track', 'Purchase', {
-      value: data.total,
-      currency: 'ARS'
-    }, {
-      eventID: orderId
-    });
+fbq('track', 'Purchase', {
+  value: data.total,
+  currency: 'ARS',
+  content_type: 'product',
+  contents: data.items.map((p, i) => ({
+    id: `PICADA_${i+1}`,
+    quantity: 1,
+    item_price: p.price
+  }))
+}, {
+  eventID: orderId
+});
   }
 
   window._purchaseTracked = true;
