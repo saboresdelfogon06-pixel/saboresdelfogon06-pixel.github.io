@@ -2026,6 +2026,8 @@ function handleReturnFromMP() {
 
     // 🆕 generar nuevo ID de pedido
     sessionStorage.setItem('order_id', generateOrderId());
+    sessionStorage.setItem('token', generateToken());
+
 
     // 🧼 limpiar la URL (?status=approved)
     window.history.replaceState(
@@ -3221,18 +3223,6 @@ window.addEventListener('pageshow', () => {
 
   document.body.style.visibility = "visible";
 });
-
-
-
-// 🔁 Fallback para refresh duro (F5 / Ctrl+R)
-if (document.readyState === "complete") {
-  setTimeout(() => {
-    if (!config.innerHTML.trim()) {
-      loadState();
-      update();
-    }
-  }, 0);
-}
 
 
 // 🔒 bloquear zoom por gesto (iOS / Safari)
