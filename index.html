@@ -1959,7 +1959,7 @@ sessionStorage.removeItem('orderDate');
 sessionStorage.removeItem('addr');
 sessionStorage.removeItem('zone');
 sessionStorage.removeItem('clientWhatsapp');
-localStorage.removeItem('sf_backup_order');
+localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 
   // 2. resetear variables
   ship = 0;
@@ -2073,8 +2073,7 @@ if (payBtn) {
   // 🔹 Limpiar errores visuales
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
-  // 🔹 Guardar estado vacío en localStorage para la nueva sesión de pedido
-  saveState();
+localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 
 
 // 🔐 Limpiar preferencia de Mercado Pago
@@ -2093,7 +2092,7 @@ function handleReturnFromMP() {
   // 👉 SOLO si el pago fue aprobado
   if (status === 'approved') {
     // 🧹 eliminar backup persistente
-localStorage.removeItem('sf_backup_order');
+localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 
     // 🔄 Reset total para nuevo pedido
     resetForNextOrder();
