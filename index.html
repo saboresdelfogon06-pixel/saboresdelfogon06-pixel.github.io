@@ -3668,12 +3668,6 @@ if ("IntersectionObserver" in window) {
 
   mediaObserver = new IntersectionObserver((entries, observer) => {
 
-let mediaObserver = null;
-
-if ("IntersectionObserver" in window) {
-
-  mediaObserver = new IntersectionObserver((entries, observer) => {
-
     entries.forEach(entry => {
 
       if (!entry.isIntersecting) return;
@@ -3698,29 +3692,6 @@ if ("IntersectionObserver" in window) {
   });
 
 }
-  entries.forEach(entry => {
-
-    if (!entry.isIntersecting) return;
-
-    const video = entry.target;
-
-    const src = video.getAttribute("data-src");
-    if (!src) return;
-
-    video.src = src;
-    video.removeAttribute("data-src");
-
-    video.autoplay = true;
-    video.load();
-    video.play().catch(()=>{});
-
-    observer.unobserve(video);
-
-  });
-
-}, {
-  threshold: 0.4
-});
 
 function observeMediaVideos(){
   if(!mediaObserver) return;
