@@ -1086,15 +1086,10 @@ button.selected{
   transform: translateY(-50%) rotate(-135deg);
 }
 
-/* Bloques verticales */
-.model-block,
-.size-block{
-  display:flex;
-  flex-direction:column;
-  gap:6px; /* misma distancia que los otros labels */
+
+.model-size-grid{
+  gap:10px; /* antes 14px */
 }
-
-
 
 </style>
 </head>
@@ -2465,9 +2460,7 @@ ${tabs}
 <div class="section">
   <div class="model-size-grid">
 
-<div class="model-block">
-  <label>Modelo</label>
-  <div class="model-col">
+<div class="model-col">
 
       <button
         class="control ${p.model==='Clásica y Elegante'?'selected':''}"
@@ -2483,9 +2476,7 @@ ${tabs}
     </div>
     </div>
 
-<div class="size-block">
-  <label>Tamaño</label>
-  <div class="size-col">
+<div class="size-col">
       <button
         class="control ${p.size===4?'selected':''}"
         onclick="handleSizeClick(4, PRICES[4])">
