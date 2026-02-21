@@ -1457,7 +1457,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 <script>
-  document.body.style.visibility = "visible";
 // 🔐 Detectar cierre real del navegador
 const SESSION_FLAG_KEY = "sdf_browser_alive";
 
@@ -3756,6 +3755,8 @@ localStorage.setItem(
 
 window.addEventListener('pageshow', async () => {
 
+  document.body.style.visibility = "hidden"; // 🔒 bloquear pintura
+
   handleReturnFromMP();
 
   loadState();
@@ -3778,7 +3779,10 @@ window.addEventListener('pageshow', async () => {
     payBtn.textContent = "Pagar";
   }
 
-  document.body.style.visibility = "visible";
+  requestAnimationFrame(() => {
+    document.body.style.visibility = "visible"; // 🔓 mostrar estable
+  });
+
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
