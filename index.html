@@ -1399,29 +1399,21 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 <script>
+let clientName,
+    deliveryTime,
+    orderDate,
+    addr,
+    zone,
+    summary,
+    config,
+    imgModal,
+    modalImg,
+    clientWhatsapp,
+    banner;
 window.onerror = function(message, source, lineno, colno, error) {
   console.log("JS ERROR:", message, "at", lineno);
 };
 const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
-const clientName = document.getElementById('clientName');
-const deliveryTime = document.getElementById('deliveryTime');
-const orderDate  = document.getElementById('orderDate');
-const addr       = document.getElementById('addr');
-const zone       = document.getElementById('zone');
-const summary    = document.getElementById('summary');
-const config     = document.getElementById('config');
-const imgModal = document.getElementById('imgModal');
-const modalImg = document.getElementById('modalImg');
-const clientWhatsapp = document.getElementById('clientWhatsapp');
-const banner = document.getElementById("heroBanner");
-// 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
-deliveryTime.addEventListener("change", function(){
-  this.setAttribute("value", this.value);
-});
-
-zone.addEventListener("change", function(){
-  this.setAttribute("value", this.value);
-});
 
 
   function clearAllHighlights() {
@@ -3535,8 +3527,32 @@ localStorage.setItem(
  // ===============================
 // INIT ÚNICO (MÓVIL SAFE)
 // ===============================
-document.addEventListener("DOMContentLoaded", function(){
+  document.addEventListener("DOMContentLoaded", function(){
+// 🔥 Referencias DOM (mobile safe)
+clientName = document.getElementById('clientName');
+deliveryTime = document.getElementById('deliveryTime');
+orderDate = document.getElementById('orderDate');
+addr = document.getElementById('addr');
+zone = document.getElementById('zone');
+summary = document.getElementById('summary');
+config = document.getElementById('config');
+imgModal = document.getElementById('imgModal');
+modalImg = document.getElementById('modalImg');
+clientWhatsapp = document.getElementById('clientWhatsapp');
+banner = document.getElementById('heroBanner');
 
+// 🔥 Sincronizar selects (mobile safe)
+if (deliveryTime) {
+  deliveryTime.addEventListener("change", function(){
+    this.setAttribute("value", this.value);
+  });
+}
+
+if (zone) {
+  zone.addEventListener("change", function(){
+    this.setAttribute("value", this.value);
+  });
+}
   // ===== STEP INIT =====
   document.getElementById("step2").style.display = "none";
   document.getElementById("metodosPago").style.display = "none";
