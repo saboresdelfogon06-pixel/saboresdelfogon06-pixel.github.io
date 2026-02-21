@@ -1411,6 +1411,43 @@ function goBackToStep1(){
 }, 50);
 }
 
+function showResumeNoticeIfNeeded() {
+
+  const orderId = window.currentOrderId;
+  const initPoint = sessionStorage.getItem('mp_init_point');
+
+  if (!orderId || !initPoint) return;
+
+  const savedStep = Number(localStorage.getItem('currentStep'));
+  const savedDate = localStorage.getItem('orderDate');
+
+  if (savedStep === 2 && savedDate) {
+
+    const now = Date.now();
+    const sessionStart = Number(localStorage.getItem("sdf_session_start")) || 0;
+    const hoursPassed = (now - sessionStart) / (1000 * 60 * 60);
+
+    if (hoursPassed > 1) { // ⏳ si volvió después de 1h
+
+      const notice = document.createElement("div");
+      notice.style.cssText = `
+        background: rgba(211,174,9,0.15);
+        border: 1px solid var(--accent);
+        padding: 10px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        font-size: 13px;
+      `;
+      notice.innerHTML = `
+        🕒 Tu pedido sigue guardado. Podés continuar el pago cuando quieras.
+      `;
+
+      const step2 = document.getElementById("step2");
+      if (step2) step2.prepend(notice);
+    }
+  }
+}
+
 
 function flashHighlight(elements, className = 'model-hint', duration = 1800) {
   elements.forEach(el => {
@@ -3290,7 +3327,8 @@ window.addEventListener('pageshow', async () => {
   enforceTomorrowDate();
   update();
 
-  await rescueCheckoutIfNeeded(); // 🔥 RESCATE INTELIGENTE
+  await rescueCheckoutIfNeeded();
+  showResumeNoticeIfNeeded();// 🔥 RESCATE INTELIGENTE
 
   const payBtn = document.getElementById("payBtn");
   if (payBtn) {
