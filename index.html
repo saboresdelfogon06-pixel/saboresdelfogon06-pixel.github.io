@@ -1089,23 +1089,31 @@ button.selected{
   z-index:2;
 }
 
-.form-col::after{
-  content:"";
-  position:absolute;
-  right:14px;
-  top:50%;
-  width:12px;
-  height:12px;
-  border-right:2px solid var(--muted);
-  border-bottom:2px solid var(--muted);
-  transform: translateY(-50%) rotate(45deg);
-  transition: transform .2s ease;
-  pointer-events:none;
+/* =========================
+   Flecha minimalista select
+   ========================= */
+
+.form-col{
+  position:relative;
 }
 
-/* Rotación cuando está enfocado */
-.form-col:has(select:focus)::after{
-  transform: translateY(-50%) rotate(-135deg);
+select.control{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  padding-right:28px;
+}
+
+/* Flecha chica */
+.form-col select.control + .select-arrow{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:10px;
+  color:var(--muted);
+  pointer-events:none;
+  opacity:.7;
 }
 
 
@@ -1299,6 +1307,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
       <option value="11-14">11:00 a.m – 14:00 p.m</option>
       <option value="15-19">15:00 p.m – 19:00 p.m</option>
     </select>
+    <span class="select-arrow">▾</span>
   </div>
 
 </div>
@@ -1341,6 +1350,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   </option>
 
 </select>
+<span class="select-arrow">▾</span>
 
   <input
       type="text"
@@ -1378,6 +1388,20 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 <div class="error-msg" id="error-zone"></div>
 
+</div>
+
+<div class="info-card">
+  <div class="info-title">Detalles del envío</div>
+
+  <div style="font-size:13px; line-height:1.6; color:var(--muted);">
+
+    Una vez confirmado el pago, nos comunicamos por WhatsApp 
+    para coordinar fecha y horario de entrega.<br><br>
+
+    Nos aseguramos de que recibas tu picada puntual 
+    y lista para servir.
+
+  </div>
 </div>
 
 <div class="payment-block">
