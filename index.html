@@ -1805,8 +1805,14 @@ if (!sessionStorage.getItem('picadas')) {
   const backupKeys = Object.keys(localStorage)
     .filter(k => k.startsWith('sf_backup_order_'));
 
-  if (backupKeys.length === 1) {
+if (backupKeys.length > 0) {
 
+  // ordenar por fecha más reciente
+  backupKeys.sort((a,b) => {
+    const aData = JSON.parse(localStorage.getItem(a));
+    const bData = JSON.parse(localStorage.getItem(b));
+    return new Date(bData.orderDate || 0) - new Date(aData.orderDate || 0);
+  });
     const backup = localStorage.getItem(backupKeys[0]);
 
     try {
