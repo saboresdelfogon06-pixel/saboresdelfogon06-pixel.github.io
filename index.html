@@ -1613,8 +1613,6 @@ function handleMiniBannerClick(){
   goToStep2();
 }
 
-
-
 function goToStep2(){
 
   const orderId = window.currentOrderId;
@@ -1628,6 +1626,18 @@ function goToStep2(){
     highlightPicada(incompleteIndex);
     return;
   }
+
+  function enforceStep2LayoutOrder() {
+
+  const step2 = document.getElementById("step2");
+  const summaryWrapper = document.getElementById("summaryWrapper");
+  const paymentBlock = document.querySelector(".payment-block");
+
+  if (!step2 || !summaryWrapper || !paymentBlock) return;
+
+  // 🔥 Insertar resumen justo antes del bloque de pago
+  step2.insertBefore(summaryWrapper, paymentBlock);
+}
 
   // 🔹 SOLO el tracking va protegido
   if (!alreadySent) {
@@ -1681,14 +1691,7 @@ function goToStep2(){
 
   document.getElementById("config").style.display = "none";
   document.getElementById("step2").style.display = "block";
-
-  const summaryWrapper = document.getElementById("summaryWrapper");
-  const paymentBlock = document.querySelector(".payment-block");
-
-  if (summaryWrapper && paymentBlock) {
-    paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
-  }
-
+  enforceStep2LayoutOrder();
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
@@ -1878,16 +1881,7 @@ function loadState() {
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("backBtnInline").style.display = "block";
     document.getElementById("metodosPago").style.display = "block";
-      const summaryWrapper = document.getElementById("summaryWrapper");
-  const metodosPago = document.getElementById("metodosPago");
-
-const paymentBlock = document.querySelector(".payment-block");
-
-if (summaryWrapper && paymentBlock) {
-  paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
-}
-
-
+    enforceStep2LayoutOrder();
 
   } else {
 
