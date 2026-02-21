@@ -3435,15 +3435,37 @@ const bannerSlides = [
   { model: "Fresca y Colorida", type: "image", src: "images/IMG_7761.webp" }
 ];
 
+let bannerTrack;
+let bannerModelEl;
+
+// 🔥 MOVER showSlide AFUERA
+function showSlide(i, animate = true) {
+  if (!bannerTrack) return;
+
+  bannerIndex = i;
+  bannerTrack.style.transition = animate ? "transform .5s ease" : "none";
+  bannerTrack.style.transform = `translateX(-${i * 100}%)`;
+
+  if (bannerModelEl) {
+    bannerModelEl.textContent = bannerSlides[i].model;
+  }
+
+  clearTimeout(bannerTimer);
+  bannerTimer = setTimeout(nextSlide, 5000);
+}
+
+function nextSlide() {
+  showSlide((bannerIndex + 1) % bannerSlides.length);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const banner = document.getElementById("heroBanner");
-  const track = document.getElementById("bannerTrack");
-  const bannerModel = document.getElementById("bannerModel");
+  bannerTrack = document.getElementById("bannerTrack");
+  bannerModelEl = document.getElementById("bannerModel");
 
-  if (!banner || !track) return;
+  if (!banner || !bannerTrack) return;
 
-  // Crear slides
   bannerSlides.forEach(slideData => {
     const slide = document.createElement("div");
     slide.className = "banner-slide";
@@ -3452,27 +3474,12 @@ document.addEventListener("DOMContentLoaded", () => {
     img.src = slideData.src;
     slide.appendChild(img);
 
-    track.appendChild(slide);
+    bannerTrack.appendChild(slide);
   });
 
   bannerReady = true;
   showSlide(0, false);
 
-  function showSlide(i, animate = true) {
-    bannerIndex = i;
-    track.style.transition = animate ? "transform .5s ease" : "none";
-    track.style.transform = `translateX(-${i * 100}%)`;
-    bannerModel.textContent = bannerSlides[i].model;
-
-    clearTimeout(bannerTimer);
-    bannerTimer = setTimeout(nextSlide, 5000);
-  }
-
-  function nextSlide() {
-    showSlide((bannerIndex + 1) % bannerSlides.length);
-  }
-
-  // Swipe
   banner.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
   });
@@ -3488,7 +3495,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Click selecciona modelo
   banner.addEventListener("click", () => {
     const model = bannerSlides[bannerIndex].model;
     if (typeof setModel === "function") {
