@@ -2080,7 +2080,9 @@ addr.value = sessionStorage.getItem('addr') || "";
   if (savedStep === 2) {
 
     currentStep = 2;
-    banner.style.pointerEvents = "none";
+    if (banner) {
+  banner.style.pointerEvents = "none";
+}
 
     document.getElementById("config").style.display = "none";
     document.getElementById("step2").style.display = "block";
@@ -2092,7 +2094,9 @@ addr.value = sessionStorage.getItem('addr') || "";
   } else {
 
     currentStep = 1;
-    banner.style.pointerEvents = "auto";
+    if (banner) {
+  banner.style.pointerEvents = "auto";
+}
 
 
     document.getElementById("config").style.display = "block";
