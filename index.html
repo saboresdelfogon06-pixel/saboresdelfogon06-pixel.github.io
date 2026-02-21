@@ -27,9 +27,8 @@ body {
   color: var(--text);
   touch-action: manipulation;
   overscroll-behavior: auto;
-  visibility: hidden;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
+  -webkit-overflow-scrolling: touch;
 }
 
 .container {
@@ -1259,6 +1258,10 @@ select.control{
 #step2{
   position:relative;
   z-index:2;
+}
+
+body.preload {
+  opacity: 0;
 }
 </style>
 </head>
@@ -3754,23 +3757,17 @@ localStorage.setItem(
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
 
-window.addEventListener('pageshow', async () => {
+window.addEventListener('pageshow', () => {
 
-  document.body.style.visibility = "hidden"; // 🔒 bloquear pintura
+  // 🔓 SIEMPRE mostrar body primero (evita pantalla blanca)
+  document.body.classList.remove("preload");
 
   handleReturnFromMP();
-
   loadState();
-
-  // 🔥 PRIMERO rescate local
   forceStep2RescueIfPending();
-
   enforceTomorrowDate();
   update();
-
-  // 🔵 Después validación backend
-  await rescueCheckoutIfNeeded();
-
+  rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
   const payBtn = document.getElementById("payBtn");
@@ -3780,15 +3777,9 @@ window.addEventListener('pageshow', async () => {
     payBtn.textContent = "Pagar";
   }
 
-  requestAnimationFrame(() => {
-    document.body.style.visibility = "visible"; // 🔓 mostrar estable
-  });
+});
 
 });
-// 🔒 bloquear zoom por gesto (iOS / Safari)
-document.addEventListener('gesturestart', e => e.preventDefault());
-document.addEventListener('gesturechange', e => e.preventDefault());
-document.addEventListener('gestureend', e => e.preventDefault());
 
 // 🔥 PEGAR ESTO ACÁ
 window.addEventListener("popstate", function () {
