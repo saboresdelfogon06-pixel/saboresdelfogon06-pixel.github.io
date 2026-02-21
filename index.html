@@ -2413,7 +2413,6 @@ ${tabs}
 <div class="section">
   <div class="model-size-grid">
 
-    <!-- COLUMNA MODELO -->
     <div class="model-col">
       <label>Modelo</label>
 
@@ -2430,7 +2429,6 @@ ${tabs}
       </button>
     </div>
 
-    <!-- COLUMNA TAMAÑO -->
     <div class="size-col">
       <label>Tamaño</label>
 
@@ -2507,13 +2505,53 @@ ${
       </div>
     `
 }
-`;
-      </div>
-    </div>  
-${tabs}
-  `;
 
-  update();
+${
+  (p.model && p.size)
+    ? `
+      <div class="section">
+        <label>Detalles</label>
+
+        <div style="font-size:13px; line-height:1.6; color:var(--muted); padding:4px 6px 2px 6px;">
+
+          <div style="margin-bottom:8px;">
+            <b style="color:var(--text);">
+              ${
+                p.model === "Clásica y Elegante"
+                  ? "🥩 Presentación clásica y sofisticada"
+                  : "🌿 Presentación fresca y vibrante"
+              }
+            </b>
+          </div>
+
+          <div style="margin-bottom:6px;">
+            ✔ Ideal para aproximadamente 
+            <b style="color:var(--text);">
+              ${SIZE_INFO[p.size].pican} personas
+            </b> picando cómodo.
+          </div>
+
+          <div style="margin-bottom:6px;">
+            ✔ Tabla de 
+            <b style="color:var(--text);">
+              ${SIZE_INFO[p.size].medidas}
+            </b>
+            lista para servir.
+          </div>
+
+          <div style="margin-bottom:6px;">
+            ✔ Producción artesanal con ingredientes seleccionados.
+          </div>
+
+        </div>
+      </div>
+    `
+    : ""
+}
+
+`;
+
+update();
 }
 
 function handleSizeClick(s, p){
