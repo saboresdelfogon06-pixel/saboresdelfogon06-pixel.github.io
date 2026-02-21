@@ -1113,6 +1113,26 @@ button.selected{
   gap:6px; /* antes 14px */
 }
 
+  .media-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+
+.media-item{
+  background:#000;
+  border-radius:10px;
+  overflow:hidden;
+  aspect-ratio: 1 / 1;
+  position:relative;
+}
+
+.media-item video,
+.media-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
 </style>
 </head>
 <body>
@@ -1661,6 +1681,18 @@ const modelData = {
       "Dip queso crema",
       "Dip aceitunas"
     ]
+  }
+};
+
+const mediaData = {
+  "Clásica y Elegante": {
+    10: [
+      { type: "video", src: "images/Clásica y elegante 10 personas .mp4" },
+      { type: "video", src: "images/Clásica y elegante 10 personas  (2).mp4" }
+    ]
+  },
+  "Fresca y Colorida": {
+    // vacío por ahora
   }
 };
 
@@ -2653,6 +2685,48 @@ ${
       `
 }
 
+${
+  p.model && p.size &&
+  mediaData[p.model] &&
+  mediaData[p.model][p.size]
+  ? `
+    <div class="section">
+      <label>Imágenes</label>
+
+      <div class="media-grid">
+        ${
+          mediaData[p.model][p.size].map(media => {
+
+            if(media.type === "video"){
+              return `
+                <div class="media-item">
+                  <video
+                    src="${media.src}"
+                    muted
+                    playsinline
+                    loop
+                    preload="metadata"
+                    onclick="this.paused ? this.play() : this.pause()">
+                  </video>
+                </div>
+              `;
+            }
+
+            if(media.type === "image"){
+              return `
+                <div class="media-item">
+                  <img src="${media.src}" onclick="openModal('${media.src}')">
+                </div>
+              `;
+            }
+
+          }).join("")
+        }
+      </div>
+    </div>
+  `
+  : ``
+}
 
 
 `;
