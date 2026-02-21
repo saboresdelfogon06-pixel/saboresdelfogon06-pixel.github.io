@@ -3491,9 +3491,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clearTimeout(bannerTimer);
     }
   });
-}, {
-  threshold: 0.5
-});
+
 
 if (banner) {
   bannerObserver.observe(banner);
@@ -3632,9 +3630,6 @@ function rotateUrgency(){
       clearInterval(urgencyTimer);
     }
   });
-},{
-  threshold: 0.6
-});
 
 document.addEventListener("DOMContentLoaded", ()=>{
   const el = document.getElementById("urgencyText");
