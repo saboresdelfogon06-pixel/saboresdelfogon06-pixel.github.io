@@ -1835,7 +1835,7 @@ function goToStep2(){
 
     sessionStorage.setItem(key, "1");
 
-    const eventId = crypto.randomUUID();
+    const eventId = safeUUID();
 
     // 1️⃣ Pixel
     if (typeof fbq === "function") {
@@ -2195,7 +2195,7 @@ function sendViewContentOnce(model, size, price) {
 
   sessionStorage.setItem(key, "1");
 
-  const eventId = crypto.randomUUID();
+  const eventId = safeUUID();
 
   const fbIds = getFacebookIdentifiers();
 
