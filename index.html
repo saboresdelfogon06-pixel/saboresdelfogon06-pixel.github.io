@@ -2592,59 +2592,64 @@ ${
         </div>
 
         <div class="section">
-          <label>Detalles</label>
-          <div style="font-size:13px; line-height:1.7; color:var(--muted); padding:4px 6px 2px 6px;">
+  <label>Más info</label>
 
-            ${
-              p.model === "Clásica y Elegante"
-              ? `
-                <div style="margin-bottom:10px; color:var(--text); font-weight:600;">
-                  🥩 Clásica, equilibrada y lista para quedar bien.
-                </div>
+  <div style="font-size:13px; line-height:1.7; color:var(--muted); padding:4px 6px 2px 6px;">
 
-                <div>
-                  Una combinación armónica de sabores intensos y delicados,
-                  pensada para compartir sin apuros.
-                </div>
-
-                <div style="margin-top:8px;">
-                  En esta versión 
-                  <b style="color:var(--text);">pican ${SIZE_INFO[p.size].pican} personas</b>.
-                </div>
-
-                <div style="margin-top:6px;">
-                  Tabla de 
-                  <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
-                </div>
-              `
-              : `
-                <div style="margin-bottom:10px; color:var(--text); font-weight:600;">
-                  🌿 Fresca, vibrante y llena de contrastes.
-                </div>
-
-                <div>
-                  Una propuesta colorida con equilibrio entre dulce y salado,
-                  ideal para encuentros relajados.
-                </div>
-
-                <div style="margin-top:8px;">
-                  En esta versión 
-                  <b style="color:var(--text);">pican ${SIZE_INFO[p.size].pican} personas</b>.
-                </div>
-
-                <div style="margin-top:6px;">
-                  Tabla de 
-                  <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
-                </div>
-              `
-            }
-
-            <div style="margin-top:10px;">
-              Elaboración artesanal con ingredientes seleccionados.
-            </div>
-
-          </div>
+    ${
+      p.model === "Clásica y Elegante"
+      ? `
+        <div style="margin-bottom:12px; color:var(--text); font-weight:600;">
+          La que nunca falla.
         </div>
+
+        <div style="margin-bottom:10px;">
+          Imaginá una mesa lista, una copa servida y esa charla que empieza tranquila 
+          y termina en risas. Pensada para encuentros donde querés quedar bien 
+          sin complicarte.
+        </div>
+
+        <div style="margin-bottom:10px;">
+          Sabores intensos, cortes seleccionados y quesos que equilibran cada bocado.
+        </div>
+
+        <div style="margin-top:8px;">
+          Ideal para 
+          <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
+          presentada en una tabla de 
+          <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
+        </div>
+      `
+      : `
+        <div style="margin-bottom:12px; color:var(--text); font-weight:600;">
+          Liviana, vibrante y distinta.
+        </div>
+
+        <div style="margin-bottom:10px;">
+          Perfecta para tardes relajadas o noches donde la charla se estira 
+          sin mirar el reloj.
+        </div>
+
+        <div style="margin-bottom:10px;">
+          Contrastes dulces y salados, colores que invitan y combinaciones 
+          que sorprenden en cada bocado.
+        </div>
+
+        <div style="margin-top:8px;">
+          Ideal para 
+          <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
+          presentada en una tabla de 
+          <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
+        </div>
+      `
+    }
+
+    <div style="margin-top:12px; font-weight:500; color:var(--text);">
+      Preparada artesanalmente el mismo día del envío.
+    </div>
+
+  </div>
+</div>
       `
 }
 
