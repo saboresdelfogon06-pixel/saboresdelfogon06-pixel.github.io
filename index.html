@@ -1457,6 +1457,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 <script>
+  document.body.style.visibility = "visible";
 // 🔐 Detectar cierre real del navegador
 const SESSION_FLAG_KEY = "sdf_browser_alive";
 
@@ -1469,26 +1470,25 @@ if (!sessionStorage.getItem(SESSION_FLAG_KEY)) {
   browserWasAlive = true;
 }
 document.addEventListener("DOMContentLoaded", function() {
-  
-const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
-const clientName = document.getElementById('clientName');
-const deliveryTime = document.getElementById('deliveryTime');
-const orderDate  = document.getElementById('orderDate');
-const addr       = document.getElementById('addr');
-const zone       = document.getElementById('zone');
-const summary    = document.getElementById('summary');
-const config     = document.getElementById('config');
-const imgModal = document.getElementById('imgModal');
-const modalImg = document.getElementById('modalImg');
-const clientWhatsapp = document.getElementById('clientWhatsapp');
 
-deliveryTime.addEventListener("change", function(){
-  this.setAttribute("value", this.value);
-});
+  window.clientName = document.getElementById('clientName');
+  window.deliveryTime = document.getElementById('deliveryTime');
+  window.orderDate  = document.getElementById('orderDate');
+  window.addr       = document.getElementById('addr');
+  window.zone       = document.getElementById('zone');
+  window.summary    = document.getElementById('summary');
+  window.config     = document.getElementById('config');
+  window.imgModal   = document.getElementById('imgModal');
+  window.modalImg   = document.getElementById('modalImg');
+  window.clientWhatsapp = document.getElementById('clientWhatsapp');
 
-zone.addEventListener("change", function(){
-  this.setAttribute("value", this.value);
-});
+  deliveryTime.addEventListener("change", function(){
+    this.setAttribute("value", this.value);
+  });
+
+  zone.addEventListener("change", function(){
+    this.setAttribute("value", this.value);
+  });
 
 });
 
