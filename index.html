@@ -1086,6 +1086,21 @@ button.selected{
   transform: translateY(-50%) rotate(-135deg);
 }
 
+/* Bloques verticales */
+.model-block,
+.size-block{
+  display:flex;
+  flex-direction:column;
+  gap:6px; /* misma distancia que los otros labels */
+}
+
+/* Las filas de botones */
+.model-col,
+.size-col{
+  display:flex;
+  gap:10px;
+}
+
 </style>
 </head>
 <body>
@@ -2460,8 +2475,9 @@ ${tabs}
 <div class="section">
   <div class="model-size-grid">
 
-    <div class="model-col">
-      <label>Modelo</label>
+<div class="model-block">
+  <label>Modelo</label>
+  <div class="model-col">
 
       <button
         class="control ${p.model==='Clásica y Elegante'?'selected':''}"
@@ -2475,10 +2491,11 @@ ${tabs}
         Fresca y Colorida
       </button>
     </div>
+    </div>
 
-    <div class="size-col">
-      <label>Tamaño</label>
-
+<div class="size-block">
+  <label>Tamaño</label>
+  <div class="size-col">
       <button
         class="control ${p.size===4?'selected':''}"
         onclick="handleSizeClick(4, PRICES[4])">
@@ -2497,7 +2514,7 @@ ${tabs}
         10 personas
       </button>
     </div>
-
+</div>
   </div>
 </div>
 
