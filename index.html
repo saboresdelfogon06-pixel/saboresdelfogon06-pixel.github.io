@@ -3554,9 +3554,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const el = document.getElementById("urgencyText");
   if(!el) return;
 
-  urgencyObserver.observe(el);
-
-  // iniciar rotación si ya está visible
   urgencyTimer = setInterval(rotateUrgency, 6000);
 });
 
