@@ -3829,7 +3829,10 @@ function observeMediaVideos(){
   });
 }
 function updateStickyCTA(){
-  if(!sticky) return;
+
+  if (typeof sticky === "undefined") return;
+  if (!sticky) return;
+  if (!stickyTotal || !stickyBtn) return;
 
   stickyTotal.textContent = `$${total.toLocaleString()}`;
 
