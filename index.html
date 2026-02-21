@@ -2622,8 +2622,52 @@ ${
             </div>
           </div>
         </div>
+</div>
+      `
+}
 
-        <div class="section">
+${
+  p.model && p.size &&
+  mediaData[p.model] &&
+  mediaData[p.model][p.size]
+  ? `
+    <div class="section">
+      <div class="media-grid">
+        ${
+          mediaData[p.model][p.size].map(media => {
+
+            if(media.type === "video"){
+              return `
+                <div class="media-item">
+                  <video
+                    src="${media.src}"
+                    muted
+                    playsinline
+                    loop
+                    autoplay
+                    preload="metadata">
+                  </video>
+                </div>
+              `;
+            }
+
+            if(media.type === "image"){
+              return `
+                <div class="media-item">
+                  <img src="${media.src}" onclick="openModal('${media.src}')">
+                </div>
+              `;
+            }
+
+          }).join("")
+        }
+      </div>
+    </div>
+  `
+  : ``
+}
+
+    <div class="section">
   <label>Información</label>
 
   <div style="font-size:13px; line-height:1.7; color:var(--muted); padding:4px 6px 2px 6px;">
@@ -2681,51 +2725,6 @@ ${
     </div>
 
   </div>
-</div>
-      `
-}
-
-${
-  p.model && p.size &&
-  mediaData[p.model] &&
-  mediaData[p.model][p.size]
-  ? `
-    <div class="section">
-      <div class="media-grid">
-        ${
-          mediaData[p.model][p.size].map(media => {
-
-            if(media.type === "video"){
-              return `
-                <div class="media-item">
-                  <video
-                    src="${media.src}"
-                    muted
-                    playsinline
-                    loop
-                    autoplay
-                    preload="metadata">
-                  </video>
-                </div>
-              `;
-            }
-
-            if(media.type === "image"){
-              return `
-                <div class="media-item">
-                  <img src="${media.src}" onclick="openModal('${media.src}')">
-                </div>
-              `;
-            }
-
-          }).join("")
-        }
-      </div>
-    </div>
-  `
-  : ``
-}
-
 
 `;
 
