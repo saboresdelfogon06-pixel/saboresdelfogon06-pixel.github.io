@@ -1876,7 +1876,6 @@ function goToStep2(){
 
   // 🔥 ESTO SIEMPRE SE EJECUTA (clave)
   currentStep = 2;
-  history.pushState({ step: 2 }, "", "#step2");
   saveState();
   updateStepTitle();
 
@@ -3462,13 +3461,6 @@ function syncBannerWithModel(model){
 
 
 let scrollTimeout;
-
-
-history.replaceState(
-  { step: Number(sessionStorage.getItem('currentStep')) || 1 },
-  "",
-  location.pathname + location.hash
-);
 
 
 // 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
