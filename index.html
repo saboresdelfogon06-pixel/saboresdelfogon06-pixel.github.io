@@ -1427,7 +1427,13 @@ function showResumeNoticeIfNeeded() {
     const sessionStart = Number(localStorage.getItem("sdf_session_start")) || 0;
     const hoursPassed = (now - sessionStart) / (1000 * 60 * 60);
 
-    if (hoursPassed > 1) { // ⏳ si volvió después de 1h
+if (hoursPassed > 1) {
+
+  // 🛑 Evitar duplicado
+  if (document.getElementById("resumeNotice")) return;
+
+  const notice = document.createElement("div");
+  notice.id = "resumeNotice";
 
       const notice = document.createElement("div");
       notice.style.cssText = `
@@ -1442,8 +1448,14 @@ function showResumeNoticeIfNeeded() {
         🕒 Tu pedido sigue guardado. Podés continuar el pago cuando quieras.
       `;
 
-      const step2 = document.getElementById("step2");
-      if (step2) step2.prepend(notice);
+const paymentBlock = document.querySelector(".payment-block");
+
+if (paymentBlock) {
+  paymentBlock.insertBefore(
+    notice,
+    paymentBlock.firstElementChild
+  );
+}
     }
   }
 }
