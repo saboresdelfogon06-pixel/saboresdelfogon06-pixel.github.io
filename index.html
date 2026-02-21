@@ -2086,12 +2086,39 @@ function handleReturnFromMP() {
   }
 }
 
+function forceStep2RescueIfPending() {
+
+  const hasInitPoint = sessionStorage.getItem('mp_init_point');
+  const savedStep = Number(localStorage.getItem('currentStep'));
+  const savedPicadas = localStorage.getItem('picadas');
+
+  // Si intentó pagar y hay pedido guardado
+if (hasInitPoint && savedPicadas && currentStep !== 2) {
+
+    // Forzar Step 2 SIEMPRE
+    currentStep = 2;
+    localStorage.setItem('currentStep', 2);
+
+    document.getElementById("config").style.display = "none";
+    document.getElementById("step2").style.display = "block";
+    document.getElementById("infoOperativa").style.display = "none";
+    document.getElementById("metodosPago").style.display = "block";
+    document.getElementById("backBtnInline").style.display = "block";
+
+    banner.style.pointerEvents = "none";
+
+    updateStepTitle();
+    update();
+
+    console.log("🟡 Rescate local forzado a Step 2");
+  }
+}
+
 async function rescueCheckoutIfNeeded() {
 
   const orderId = window.currentOrderId;
   const initPoint = sessionStorage.getItem('mp_init_point');
 
-  // 🔹 Si nunca intentó pagar, no hacer nada
   if (!orderId || !initPoint) return;
 
   try {
@@ -2103,38 +2130,19 @@ async function rescueCheckoutIfNeeded() {
 
     const data = await res.json();
 
-    // ✅ Si ya está confirmado → ir a gracias
+    // Si está confirmado → ir a gracias
     if (data.status === "confirmed") {
       window.location.href = "/gracias";
       return;
     }
 
-    // ❗ Si NO está confirmado y estamos en blanco o fuera de Step2
-    if (data.status !== "confirmed") {
-
-      // Forzar Step 2 visualmente
-      currentStep = 2;
-      localStorage.setItem('currentStep', 2);
-
-      document.getElementById("config").style.display = "none";
-      document.getElementById("step2").style.display = "block";
-      document.getElementById("infoOperativa").style.display = "none";
-      document.getElementById("metodosPago").style.display = "block";
-      document.getElementById("backBtnInline").style.display = "block";
-
-      banner.style.pointerEvents = "none";
-
-      updateStepTitle();
-      update();
-
-      console.log("🔁 Checkout rescatado automáticamente");
-
-    }
+    console.log("🔁 Pago pendiente, usuario sigue en Step 2");
 
   } catch (e) {
-    console.log("Rescue check failed");
+    console.log("Rescue backend check failed");
   }
 }
+
 
 function setActivePicada(i){
   active = i;
@@ -3323,11 +3331,18 @@ localStorage.setItem(
 window.addEventListener('pageshow', async () => {
 
   handleReturnFromMP();
+
   loadState();
+
+  // 🔥 PRIMERO rescate local
+  forceStep2RescueIfPending();
+
   enforceTomorrowDate();
   update();
 
+  // 🔵 Después validación backend
   await rescueCheckoutIfNeeded();
+
   showResumeNoticeIfNeeded();
 
   const payBtn = document.getElementById("payBtn");
