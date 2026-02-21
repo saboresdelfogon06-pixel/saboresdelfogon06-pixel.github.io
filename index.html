@@ -1713,12 +1713,11 @@ const TAB_KEY = 'sf_tab_initialized';
   const isNewTab = !sessionStorage.getItem(TAB_KEY);
   const comingFromMP = sessionStorage.getItem('mp_init_point');
 
-if (isNewTab && !comingFromMP) {
+if (isNewTab) {
   sessionStorage.clear();
 }
 
-  sessionStorage.setItem(TAB_KEY, '1');
-
+sessionStorage.setItem(TAB_KEY, '1');
 })();
 
 
@@ -1760,13 +1759,8 @@ function generateToken() {
   return Math.random().toString(36).substring(2) + Date.now();
 }
 
-
 if (!sessionStorage.getItem('order_id')) {
- const hasSavedOrder = !!sessionStorage.getItem('picadas');
-  sessionStorage.setItem(
-    'order_id',
-    hasSavedOrder ? generateOrderId() : generateOrderId()
-  );
+  sessionStorage.setItem('order_id', generateOrderId());
 }
 
 if (!sessionStorage.getItem('token')) {
