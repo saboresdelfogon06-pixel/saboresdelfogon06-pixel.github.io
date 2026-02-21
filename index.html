@@ -1791,7 +1791,10 @@ const mediaData = {
 };
 
 let currentStep = 1;
-
+// 🔥 Forzar step según hash en URL
+if (location.hash === "#step2") {
+  sessionStorage.setItem('currentStep', 2);
+}
 function updateStepTitle() {
   const el = document.getElementById("stepTitle");
   if (!el) return;
@@ -3627,13 +3630,17 @@ function syncBannerWithModel(model){
 
 let scrollTimeout;
 
+const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
 
-history.replaceState(
-  { step: Number(sessionStorage.getItem('currentStep')) || 1 },
-  "",
-  location.pathname + location.hash
-);
-
+if (location.hash === "#step2" || savedStep === 2) {
+  currentStep = 2;
+  sessionStorage.setItem('currentStep', 2);
+  history.replaceState({ step: 2 }, "", "#step2");
+} else {
+  currentStep = 1;
+  sessionStorage.setItem('currentStep', 1);
+  history.replaceState({ step: 1 }, "", location.pathname);
+}
 
 // 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
 
