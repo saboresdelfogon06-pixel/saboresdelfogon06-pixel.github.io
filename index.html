@@ -1209,6 +1209,32 @@ select.control{
 .shipping-details{
   margin-bottom:16px;
 }
+
+/* ==============================
+   FIX SIMETRÍA STEP 2
+   ============================== */
+
+#step2 .form-grid{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+}
+
+#step2 .form-col{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+/* 🔥 quitar doble margen dentro de filas 50/50 */
+#step2 .form-col .control{
+  margin-bottom:0;
+}
+
+/* 🔥 mismo espacio vertical que Step 1 */
+#step2 .section > .control{
+  margin-bottom:12px;
+}
 </style>
 </head>
 <body>
