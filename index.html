@@ -1613,6 +1613,18 @@ function handleMiniBannerClick(){
   goToStep2();
 }
 
+  function enforceStep2LayoutOrder() {
+
+  const step2 = document.getElementById("step2");
+  const summaryWrapper = document.getElementById("summaryWrapper");
+  const paymentBlock = document.querySelector(".payment-block");
+
+  if (!step2 || !summaryWrapper || !paymentBlock) return;
+
+  // 🔥 Insertar resumen justo antes del bloque de pago
+  step2.insertBefore(summaryWrapper, paymentBlock);
+}
+
 function goToStep2(){
 
   const orderId = window.currentOrderId;
@@ -1626,18 +1638,6 @@ function goToStep2(){
     highlightPicada(incompleteIndex);
     return;
   }
-
-  function enforceStep2LayoutOrder() {
-
-  const step2 = document.getElementById("step2");
-  const summaryWrapper = document.getElementById("summaryWrapper");
-  const paymentBlock = document.querySelector(".payment-block");
-
-  if (!step2 || !summaryWrapper || !paymentBlock) return;
-
-  // 🔥 Insertar resumen justo antes del bloque de pago
-  step2.insertBefore(summaryWrapper, paymentBlock);
-}
 
   // 🔹 SOLO el tracking va protegido
   if (!alreadySent) {
