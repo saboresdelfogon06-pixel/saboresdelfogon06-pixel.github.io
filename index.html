@@ -153,20 +153,11 @@ button.control{
 }
 
 select.control{
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
   background-color:var(--input-bg);
-  background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='%239a958d'>\
-<path d='M7 10l5 5 5-5'/>\
-</svg>");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 14px;
-
-  padding-right: 40px;
+  padding-right:40px;
 }
 
 /* Base tipografía */
@@ -659,10 +650,6 @@ input[type="date"]::-moz-focus-inner{
   text-align:center;
   margin-top:4px;
 }
-.model-size-grid{
-  display:flex;
-  gap:12px;
-}
 
 /* ===== FORM GRID (igual lógica que modelo/tamaño) ===== */
 
@@ -676,23 +663,53 @@ input[type="date"]::-moz-focus-inner{
 }
 
 
-/* Columnas */
-.model-col,
-.size-col{
-  flex:1;
+/* ===== NUEVO LAYOUT MODELO / TAMAÑO ===== */
+
+.model-size-grid{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
-/* Mobile */
+.model-col,
+.size-col{
+  display:flex;
+  flex-direction:row;
+  gap:10px;
+}
+
+.model-col button.control,
+.size-col button.control{
+  flex:1;
+  text-align:center;
+}
+
+/* 🔽 SOLO BOTONES DE TAMAÑO */
+.size-col button.control{
+  padding:8px 6px;
+  height:42px;
+  font-size:13px;
+  line-height:1;
+}
 @media (max-width:480px){
   .model-size-grid{
-    flex-direction:row;
+    flex-direction:column; /* 🔥 mantener vertical */
+  }
+}
+
+@media (max-width:480px){
+
+  .model-col button{
+    padding:12px;
+    font-size:13px;
   }
 
-  .model-col button,
   .size-col button{
-    padding:10px;
+    padding:8px 6px;
+    height:42px;
     font-size:12px;
   }
+
 }
 
 .picada-content{
@@ -1037,6 +1054,36 @@ button.selected{
 
 .summary-cta:hover{
   transform:translateY(-1px);
+}
+
+/* Wrapper necesario */
+.form-col{
+  position:relative;
+}
+
+/* Flecha */
+.form-col select.control{
+  position:relative;
+  z-index:2;
+}
+
+.form-col::after{
+  content:"";
+  position:absolute;
+  right:14px;
+  top:50%;
+  width:12px;
+  height:12px;
+  border-right:2px solid var(--muted);
+  border-bottom:2px solid var(--muted);
+  transform: translateY(-50%) rotate(45deg);
+  transition: transform .2s ease;
+  pointer-events:none;
+}
+
+/* Rotación cuando está enfocado */
+.form-col:has(select:focus)::after{
+  transform: translateY(-50%) rotate(-135deg);
 }
 
 </style>
