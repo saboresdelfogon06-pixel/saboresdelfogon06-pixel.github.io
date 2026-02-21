@@ -1399,6 +1399,9 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 <script>
+window.onerror = function(message, source, lineno, colno, error) {
+  console.log("JS ERROR:", message, "at", lineno);
+};
 const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
 const clientName = document.getElementById('clientName');
 const deliveryTime = document.getElementById('deliveryTime');
@@ -2253,7 +2256,21 @@ if (payBtn) {
   document.getElementById('cartTotal').textContent = '$0';
 
   // 🔹 Limpiar errores visuales
-  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+document.addEventListener("DOMContentLoaded", function(){
+
+  document.body.addEventListener('input', function(e){
+    if(e.target.classList.contains('control')){
+      clearAllHighlights();
+    }
+  });
+
+  document.body.addEventListener('change', function(e){
+    if(e.target.classList.contains('control')){
+      clearAllHighlights();
+    }
+  });
+
+});
 
 localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 
@@ -3626,18 +3643,10 @@ window.addEventListener('pageshow', async () => {
   document.body.style.visibility = "visible";
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
-document.addEventListener('gesturestart', e => e.preventDefault());
-document.addEventListener('gesturechange', e => e.preventDefault());
-document.addEventListener('gestureend', e => e.preventDefault());
-document.querySelectorAll('.control').forEach(el => {
-  el.addEventListener('input', () => {
-    clearAllHighlights();
-  });
+//document.addEventListener('gesturestart', e => e.preventDefault());//
+//document.addEventListener('gesturechange', e => e.preventDefault());//
+//document.addEventListener('gestureend', e => e.preventDefault());//
 
-  el.addEventListener('change', () => {
-    clearAllHighlights();
-  });
-});
 
 // 🔥 PEGAR ESTO ACÁ
 window.addEventListener("popstate", function () {
