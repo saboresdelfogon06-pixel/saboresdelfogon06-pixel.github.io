@@ -1706,33 +1706,16 @@ function goToStep2(){
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
-// =========================
-// TAB GUARD (PEDIDO POR PESTAÑA)
-// =========================
 const TAB_KEY = 'sf_tab_initialized';
 
 (function tabGuard() {
-  let navType = null;
 
-  try {
-    if (window.performance && performance.getEntriesByType) {
-      const navEntries = performance.getEntriesByType("navigation");
-      navType = navEntries.length ? navEntries[0].type : null;
-    }
-  } catch (e) {
-    navType = null;
-  }
-
+  const isNewTab = !sessionStorage.getItem(TAB_KEY);
   const comingFromMP = sessionStorage.getItem('mp_init_point');
 
- if (
-  navType === "navigate" &&
-  !sessionStorage.getItem(TAB_KEY) &&
-  !sessionStorage.getItem('mp_init_point') &&
-  !localStorage.getItem('currentStep')
-)
-    sessionStorage.setItem(TAB_KEY, '1');
+  if (isNewTab && !comingFromMP) {
 
+    // 🔥 NUEVA PESTAÑA → BORRAR PEDIDO COMPLETO
     localStorage.removeItem('picadas');
     localStorage.removeItem('clientName');
     localStorage.removeItem('orderDate');
@@ -1741,9 +1724,16 @@ const TAB_KEY = 'sf_tab_initialized';
     localStorage.removeItem('scrollY');
     localStorage.removeItem('activePicada');
     localStorage.removeItem('clientWhatsapp');
+    localStorage.removeItem('deliveryTime');
+    localStorage.removeItem('currentStep');
 
     sessionStorage.removeItem('order_fingerprint');
+    sessionStorage.removeItem('order_id');
+    sessionStorage.removeItem('token');
   }
+
+  sessionStorage.setItem(TAB_KEY, '1');
+
 })();
 
 
