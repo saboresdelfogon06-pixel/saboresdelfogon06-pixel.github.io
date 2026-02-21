@@ -3441,7 +3441,8 @@ let bannerVisible = true;
 let startX = 0;
 let currentX = 0;
   
-banner.addEventListener("touchstart", e => {
+if (banner) {
+  banner.addEventListener("touchstart", e => {
   if (bannerInteractionDisabled()) return;
   startX = e.touches[0].clientX;
 });
@@ -3479,10 +3480,7 @@ document.addEventListener('DOMContentLoaded', () => {
   showSlide(bannerIndex, false); // 🔥 fuerza render inicial
 });
 
-// 👁️ Observer para pausar autoplay cuando el banner no está visible
-const bannerObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    bannerVisible = entry.isIntersecting;
+
 
     if (bannerVisible) {
       if (!bannerIsLocked()) {
@@ -3554,7 +3552,8 @@ banner.onclick = () => {
 };
 
 
-banner.addEventListener("touchend", e => {
+if (banner) {
+  banner.addEventListener("touchend", e => {
 
   if (bannerInteractionDisabled()) return;
 
@@ -3624,10 +3623,7 @@ function rotateUrgency(){
   }, 400);
 }
 
-// 👁️ Observer para detectar visibilidad real
-const urgencyObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    urgencyVisible = entry.isIntersecting;
+
 
     if(urgencyVisible){
       clearInterval(urgencyTimer);
