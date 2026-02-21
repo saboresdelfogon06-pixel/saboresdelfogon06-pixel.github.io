@@ -1570,11 +1570,9 @@ function goToStep2(){
 
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
-
   const alreadySent = sessionStorage.getItem(key);
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
-  document.getElementById("backBtnInline").style.display = "block";
 
   if(!allPicadasValid){
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
@@ -1582,72 +1580,76 @@ function goToStep2(){
     return;
   }
 
-if (!alreadySent) {
+  // 🔹 SOLO el tracking va protegido
+  if (!alreadySent) {
 
-  sessionStorage.setItem(key, "1");
+    sessionStorage.setItem(key, "1");
 
-const eventId = crypto.randomUUID();
+    const eventId = crypto.randomUUID();
 
-// 1️⃣ PRIMERO PIXEL
-if (typeof fbq === "function") {
-  fbq('track', 'InitiateCheckout', {
-    value: total,
-    currency: 'ARS',
-    contents: picadas.map(p => ({
-      id: p.model + "_" + p.size,
-      quantity: 1,
-      item_price: p.price
-    })),
-    content_type: 'product'
-  }, {
-    eventID: eventId
-  });
-}
+    // 1️⃣ Pixel
+    if (typeof fbq === "function") {
+      fbq('track', 'InitiateCheckout', {
+        value: total,
+        currency: 'ARS',
+        contents: picadas.map(p => ({
+          id: p.model + "_" + p.size,
+          quantity: 1,
+          item_price: p.price
+        })),
+        content_type: 'product'
+      }, {
+        eventID: eventId
+      });
+    }
 
-// 2️⃣ DESPUÉS CAPI
-fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    event_id: eventId,
-    order_id: window.currentOrderId,
-    total,
-    items: picadas,
-    fbp: getFacebookIdentifiers().fbp,
-    fbc: getFacebookIdentifiers().fbc,
-    user_agent: navigator.userAgent,
-    session_id: localStorage.getItem("sdf_session_id"),
-    session_start: localStorage.getItem("sdf_session_start"),
-    page_views: localStorage.getItem("sdf_page_views"),
-    screen_width: window.screen.width,
-    screen_height: window.screen.height
-  })
-}).catch(()=>{});
+    // 2️⃣ CAPI
+    fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event_id: eventId,
+        order_id: window.currentOrderId,
+        total,
+        items: picadas,
+        fbp: getFacebookIdentifiers().fbp,
+        fbc: getFacebookIdentifiers().fbc,
+        user_agent: navigator.userAgent,
+        session_id: localStorage.getItem("sdf_session_id"),
+        session_start: localStorage.getItem("sdf_session_start"),
+        page_views: localStorage.getItem("sdf_page_views"),
+        screen_width: window.screen.width,
+        screen_height: window.screen.height
+      })
+    }).catch(()=>{});
+  }
 
+  // 🔥 ESTO SIEMPRE SE EJECUTA (clave)
   currentStep = 2;
   history.pushState({ step: 2 }, "", "#step2");
   saveState();
   updateStepTitle();
 
   document.getElementById("config").style.display = "none";
-
   document.getElementById("step2").style.display = "block";
-const summaryWrapper = document.getElementById("summaryWrapper");
-const paymentBlock = document.querySelector(".payment-block");
 
-if (summaryWrapper && paymentBlock) {
-  paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
-}
+  const summaryWrapper = document.getElementById("summaryWrapper");
+  const paymentBlock = document.querySelector(".payment-block");
 
+  if (summaryWrapper && paymentBlock) {
+    paymentBlock.parentNode.insertBefore(summaryWrapper, paymentBlock);
+  }
 
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
+  document.getElementById("backBtnInline").style.display = "block";
+
+  banner.style.pointerEvents = "none";
 
   update();
   setTimeout(() => {
-  snapToClosestStep();
-}, 50);
-  banner.style.pointerEvents = "none";
+    snapToClosestStep();
+  }, 50);
 }
 
 }
