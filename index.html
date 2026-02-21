@@ -3761,9 +3761,13 @@ function observeMediaVideos(){
   });
 }
 
-const sticky = document.getElementById("stickyCTA");
-const stickyBtn = document.getElementById("stickyBtn");
-const stickyTotal = document.getElementById("stickyTotal");
+let sticky, stickyBtn, stickyTotal;
+
+document.addEventListener("DOMContentLoaded", () => {
+  sticky = document.getElementById("stickyCTA");
+  stickyBtn = document.getElementById("stickyBtn");
+  stickyTotal = document.getElementById("stickyTotal");
+});
 
 function updateStickyCTA(){
   if(!sticky) return;
