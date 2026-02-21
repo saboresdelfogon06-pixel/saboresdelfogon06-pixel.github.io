@@ -3002,6 +3002,8 @@ function enforceTomorrowDate() {
   };
 }
 
+let lightUpdateTimeout;  
+
 function lightUpdate(){
   clearTimeout(lightUpdateTimeout);
   lightUpdateTimeout = setTimeout(() => {
@@ -3818,14 +3820,13 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!summaryWrapper) return;
 
   const summaryObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        sticky.classList.add("hidden");
-      } else {
-        updateStickyCTA();
-      }
-}
-    });
+entries.forEach(entry => {
+  if (entry.isIntersecting) {
+    sticky.classList.add("hidden");
+  } else {
+    updateStickyCTA();
+  }
+});
   }, {
     threshold: 0.2
   });
