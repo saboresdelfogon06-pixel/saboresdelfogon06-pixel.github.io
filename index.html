@@ -1264,7 +1264,7 @@ select.control{
 
   <div class="right">
 <div class="cart-total" id="cartTotal" onclick="handleMiniBannerClick()">
-  $0
+  <span style="opacity:0">0</span>
 </div>
   </div>
 </div>
@@ -1457,6 +1457,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 <script>
+  window.history.scrollRestoration = "manual";
 // 🔐 Detectar cierre real del navegador
 const SESSION_FLAG_KEY = "sdf_browser_alive";
 
