@@ -558,18 +558,19 @@ input[type="date"].control{
   font-family:inherit;
   font-size:14px;
   font-weight:400;
+
   background:var(--input-bg);
+  background-clip: padding-box;   /* 🔥 clave */
+  
+  border-radius:8px;
+  position:relative;
+  z-index:1;
+
+  box-shadow:none;                /* 🔥 elimina capa fantasma */
+  overflow:hidden;                /* 🔥 evita desborde interno */
 
   text-align:left;
 }
-
-input[type="date"]::-webkit-datetime-edit{
-  padding:0;
-  margin:0;
-  text-align:left;
-}
-
-
   
 /* icono calendario (WebKit: Chrome, Safari, iOS) */
 input[type="date"]::-webkit-calendar-picker-indicator{
