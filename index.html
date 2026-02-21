@@ -1782,13 +1782,6 @@ function updateStepTitle() {
   }
 }
 
-
-  document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("infoOperativa").style.display = "block";
-  updateStepTitle();
-});
   
 function handleMiniBannerClick(){
 
@@ -3458,51 +3451,7 @@ function nextSlide() {
   showSlide((bannerIndex + 1) % bannerSlides.length);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
 
-  const banner = document.getElementById("heroBanner");
-  bannerTrack = document.getElementById("bannerTrack");
-  bannerModelEl = document.getElementById("bannerModel");
-
-  if (!banner || !bannerTrack) return;
-
-  bannerSlides.forEach(slideData => {
-    const slide = document.createElement("div");
-    slide.className = "banner-slide";
-
-    const img = document.createElement("img");
-    img.src = slideData.src;
-    slide.appendChild(img);
-
-    bannerTrack.appendChild(slide);
-  });
-
-  bannerReady = true;
-  showSlide(0, false);
-
-  banner.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
-  });
-
-  banner.addEventListener("touchend", e => {
-    const diff = e.changedTouches[0].clientX - startX;
-    if (Math.abs(diff) < 40) return;
-
-    if (diff < 0) {
-      showSlide((bannerIndex + 1) % bannerSlides.length);
-    } else {
-      showSlide((bannerIndex - 1 + bannerSlides.length) % bannerSlides.length);
-    }
-  });
-
-  banner.addEventListener("click", () => {
-    const model = bannerSlides[bannerIndex].model;
-    if (typeof setModel === "function") {
-      setModel(model);
-    }
-  });
-
-});
 
 function syncBannerWithModel(model){
   if (!model || !bannerReady) return;
@@ -3547,14 +3496,6 @@ function rotateUrgency(){
   }, 400);
 }
 
-
-document.addEventListener("DOMContentLoaded", ()=>{
-  const el = document.getElementById("urgencyText");
-  if(!el) return;
-
-  urgencyTimer = setInterval(rotateUrgency, 6000);
-});
-
   // ===============================
 // SESSION TRACKING
 // ===============================
@@ -3582,6 +3523,91 @@ localStorage.setItem(
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
 
+ // ===============================
+// INIT ÚNICO (MÓVIL SAFE)
+// ===============================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ===== STEP INIT =====
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("metodosPago").style.display = "none";
+  document.getElementById("infoOperativa").style.display = "block";
+  updateStepTitle();
+
+  // ===== BANNER INIT =====
+  const banner = document.getElementById("heroBanner");
+  bannerTrack = document.getElementById("bannerTrack");
+  bannerModelEl = document.getElementById("bannerModel");
+
+  if (banner && bannerTrack) {
+
+    bannerSlides.forEach(slideData => {
+      const slide = document.createElement("div");
+      slide.className = "banner-slide";
+
+      const img = document.createElement("img");
+      img.src = slideData.src;
+      slide.appendChild(img);
+
+      bannerTrack.appendChild(slide);
+    });
+
+    bannerReady = true;
+    showSlide(0, false);
+
+    banner.addEventListener("touchstart", e => {
+      startX = e.touches[0].clientX;
+    });
+
+    banner.addEventListener("touchend", e => {
+      const diff = e.changedTouches[0].clientX - startX;
+      if (Math.abs(diff) < 40) return;
+
+      if (diff < 0) {
+        showSlide((bannerIndex + 1) % bannerSlides.length);
+      } else {
+        showSlide((bannerIndex - 1 + bannerSlides.length) % bannerSlides.length);
+      }
+    });
+
+    banner.addEventListener("click", () => {
+      const model = bannerSlides[bannerIndex].model;
+      if (typeof setModel === "function") {
+        setModel(model);
+      }
+    });
+  }
+
+  // ===== URGENCIA =====
+  const urgencyEl = document.getElementById("urgencyText");
+  if (urgencyEl) {
+    urgencyTimer = setInterval(rotateUrgency, 6000);
+  }
+
+  // ===== STICKY =====
+  sticky = document.getElementById("stickyCTA");
+  stickyBtn = document.getElementById("stickyBtn");
+  stickyTotal = document.getElementById("stickyTotal");
+
+  const summaryWrapper = document.getElementById("summaryWrapper");
+
+  if (sticky && summaryWrapper && "IntersectionObserver" in window) {
+
+    const summaryObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          sticky.classList.add("hidden");
+        } else {
+          updateStickyCTA();
+        }
+      });
+    }, { threshold: 0.2 });
+
+    summaryObserver.observe(summaryWrapper);
+  }
+
+}); 
 window.addEventListener('pageshow', async () => {
 
   handleReturnFromMP();
@@ -3693,30 +3719,6 @@ function updateStickyCTA(){
 }
 
 let sticky, stickyBtn, stickyTotal;
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  sticky = document.getElementById("stickyCTA");
-  stickyBtn = document.getElementById("stickyBtn");
-  stickyTotal = document.getElementById("stickyTotal");
-
-  const summaryWrapper = document.getElementById("summaryWrapper");
-  if (!summaryWrapper) return;
-
-  const summaryObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        sticky.classList.add("hidden");
-      } else {
-        updateStickyCTA();
-      }
-    });
-  }, {
-    threshold: 0.2
-  });
-
-  summaryObserver.observe(summaryWrapper);
-});
 </script>
 <script>
 (function () {
