@@ -3790,6 +3790,30 @@ function updateStickyCTA(){
     stickyBtn.onclick = goWA;
   }
 }
+  let sticky, stickyBtn, stickyTotal;
+
+document.addEventListener("DOMContentLoaded", () => {
+  sticky = document.getElementById("stickyCTA");
+  stickyBtn = document.getElementById("stickyBtn");
+  stickyTotal = document.getElementById("stickyTotal");
+
+  const summaryWrapper = document.getElementById("summaryWrapper");
+  if (!summaryWrapper) return;
+
+  const summaryObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        sticky.classList.add("hidden");
+      } else {
+        updateStickyCTA();
+      }
+    });
+  }, {
+    threshold: 0.2
+  });
+
+  summaryObserver.observe(summaryWrapper);
+});
 </script>
 <script>
 (function () {
