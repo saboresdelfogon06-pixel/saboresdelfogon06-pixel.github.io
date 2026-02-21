@@ -2110,7 +2110,8 @@ if (hasInitPoint && savedPicadas && currentStep !== 2) {
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("metodosPago").style.display = "block";
     document.getElementById("backBtnInline").style.display = "block";
-
+    enforceStep2LayoutOrder();
+      
     banner.style.pointerEvents = "none";
 
     updateStepTitle();
