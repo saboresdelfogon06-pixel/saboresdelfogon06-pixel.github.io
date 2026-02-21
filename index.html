@@ -1228,7 +1228,8 @@ select.control{
 
 #step2 .form-grid{
   display:flex;
-  gap:12px;
+  gap:12px;         /* horizontal */
+  margin-bottom:16px; /* 🔥 nuevo espacio vertical entre filas */
   align-items:flex-start;
 }
 
@@ -1243,11 +1244,9 @@ select.control{
   margin-bottom:0;
 }
 
-/* 🔥 mismo espacio vertical que Step 1 */
 #step2 .section > .control{
-  margin-bottom:12px;
+  margin-bottom:16px; /* antes 12px */
 }
-
 /* ==============================
    MÁS AIRE EN CARD FORMULARIO
    ============================== */
