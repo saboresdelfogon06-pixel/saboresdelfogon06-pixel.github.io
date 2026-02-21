@@ -1780,8 +1780,9 @@ function saveState(){
   sessionStorage.setItem('clientWhatsapp', clientWhatsapp.value);
   sessionStorage.setItem('deliveryTime', deliveryTime.value);
   sessionStorage.setItem('currentStep', currentStep);
-  // 🔐 Backup persistente por cierre inesperado
-localStorage.setItem('sf_backup_order', JSON.stringify({
+localStorage.setItem(
+  'sf_backup_order_' + window.currentOrderId,
+  JSON.stringify({
   picadas,
   active,
   clientName: clientName.value,
@@ -1798,12 +1799,16 @@ localStorage.setItem('sf_backup_order', JSON.stringify({
 }));
 }
 
-  // 🔄 Restaurar desde backup si se cerró navegador
-if (!sessionStorage.getItem('picadas') && localStorage.getItem('sf_backup_order')) {
+// 🔄 Restaurar desde backup si se cerró navegador
+if (!sessionStorage.getItem('picadas')) {
 
-  const backup = localStorage.getItem('sf_backup_order');
+  const backupKeys = Object.keys(localStorage)
+    .filter(k => k.startsWith('sf_backup_order_'));
 
-  if (backup) {
+  if (backupKeys.length === 1) {
+
+    const backup = localStorage.getItem(backupKeys[0]);
+
     try {
       const data = JSON.parse(backup);
 
@@ -1824,10 +1829,14 @@ if (!sessionStorage.getItem('picadas') && localStorage.getItem('sf_backup_order'
       sessionStorage.setItem('order_id', data.order_id);
       sessionStorage.setItem('token', data.token);
 
-      console.log("🔁 Pedido restaurado desde backup");
+      window.currentOrderId = data.order_id;
+      window.currentToken   = data.token;
+
+      console.log("🔁 Pedido restaurado desde backup aislado");
     } catch(e) {
       console.log("Backup inválido");
     }
+
   }
 }
 
