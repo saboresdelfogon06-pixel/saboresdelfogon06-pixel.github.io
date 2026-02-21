@@ -3510,7 +3510,7 @@ let bannerVisible = true;
 let startX = 0;
 let currentX = 0;
   
-banner.addEventListener("touchstart", e => {
+if (banner) banner.addEventListener("touchstart", e => {
   if (bannerInteractionDisabled()) return;
   startX = e.touches[0].clientX;
 });
@@ -3613,7 +3613,7 @@ function nextSlide(){
   showSlide((bannerIndex + 1) % bannerSlides.length);
 }
 
-banner.onclick = () => {
+if (banner) banner.onclick = () => {
 
   if (bannerInteractionDisabled()) return;
 
@@ -3622,9 +3622,8 @@ banner.onclick = () => {
   setModel(model); // 🔥 usar la función oficial
 };
 
-
-banner.addEventListener("touchend", e => {
-
+if (banner) banner.addEventListener("touchend", e => {
+  
   if (bannerInteractionDisabled()) return;
 
   const endX = e.changedTouches[0].clientX;
@@ -3779,15 +3778,6 @@ window.addEventListener('pageshow', async () => {
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
-document.querySelectorAll('.control').forEach(el => {
-  el.addEventListener('input', () => {
-    clearAllHighlights();
-  });
-
-  el.addEventListener('change', () => {
-    clearAllHighlights();
-  });
-});
 
 // 🔥 PEGAR ESTO ACÁ
 window.addEventListener("popstate", function () {
@@ -3882,7 +3872,11 @@ document.addEventListener("DOMContentLoaded", () => {
   sticky = document.getElementById("stickyCTA");
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
-
+  document.querySelectorAll('.control').forEach(el => {
+    el.addEventListener('input', clearAllHighlights);
+    el.addEventListener('change', clearAllHighlights);
+  });
+  
   const summaryWrapper = document.getElementById("summaryWrapper");
   if (!summaryWrapper) return;
 
