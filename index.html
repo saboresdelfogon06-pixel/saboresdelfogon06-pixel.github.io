@@ -1435,28 +1435,28 @@ if (hoursPassed > 1) {
   const notice = document.createElement("div");
   notice.id = "resumeNotice";
 
-      const notice = document.createElement("div");
-      notice.style.cssText = `
-        background: rgba(211,174,9,0.15);
-        border: 1px solid var(--accent);
-        padding: 10px;
-        border-radius: 8px;
-        margin-bottom: 12px;
-        font-size: 13px;
-      `;
-      notice.innerHTML = `
-        🕒 Tu pedido sigue guardado. Podés continuar el pago cuando quieras.
-      `;
+  notice.style.cssText = `
+    background: rgba(211,174,9,0.15);
+    border: 1px solid var(--accent);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 13px;
+  `;
 
-const paymentBlock = document.querySelector(".payment-block");
+  notice.innerHTML = `
+    🕒 Tu pedido sigue guardado. Podés continuar el pago cuando quieras.
+  `;
 
-if (paymentBlock) {
-  paymentBlock.insertBefore(
-    notice,
-    paymentBlock.firstElementChild
-  );
+  const paymentBlock = document.querySelector(".payment-block");
+
+  if (paymentBlock) {
+    paymentBlock.insertBefore(
+      notice,
+      paymentBlock.firstElementChild
+    );
+  }
 }
-    }
   }
 }
 
