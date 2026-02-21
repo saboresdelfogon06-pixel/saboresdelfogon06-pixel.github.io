@@ -2049,6 +2049,56 @@ function handleReturnFromMP() {
   }
 }
 
+async function rescueCheckoutIfNeeded() {
+
+  const orderId = window.currentOrderId;
+  const initPoint = sessionStorage.getItem('mp_init_point');
+
+  // 🔹 Si nunca intentó pagar, no hacer nada
+  if (!orderId || !initPoint) return;
+
+  try {
+    const res = await fetch(
+      "https://saboresdelfogon.com/api/order/details?order_id=" + orderId
+    );
+
+    if (!res.ok) return;
+
+    const data = await res.json();
+
+    // ✅ Si ya está confirmado → ir a gracias
+    if (data.status === "confirmed") {
+      window.location.href = "/gracias";
+      return;
+    }
+
+    // ❗ Si NO está confirmado y estamos en blanco o fuera de Step2
+    if (data.status !== "confirmed") {
+
+      // Forzar Step 2 visualmente
+      currentStep = 2;
+      localStorage.setItem('currentStep', 2);
+
+      document.getElementById("config").style.display = "none";
+      document.getElementById("step2").style.display = "block";
+      document.getElementById("infoOperativa").style.display = "none";
+      document.getElementById("metodosPago").style.display = "block";
+      document.getElementById("backBtnInline").style.display = "block";
+
+      banner.style.pointerEvents = "none";
+
+      updateStepTitle();
+      update();
+
+      console.log("🔁 Checkout rescatado automáticamente");
+
+    }
+
+  } catch (e) {
+    console.log("Rescue check failed");
+  }
+}
+
 function setActivePicada(i){
   active = i;
 
@@ -3233,13 +3283,24 @@ localStorage.setItem(
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
 
-window.addEventListener('pageshow', () => {
+window.addEventListener('pageshow', async () => {
 
   handleReturnFromMP();
   loadState();
   enforceTomorrowDate();
   update();
 
+  await rescueCheckoutIfNeeded(); // 🔥 RESCATE INTELIGENTE
+
+  const payBtn = document.getElementById("payBtn");
+  if (payBtn) {
+    payBtn.disabled = false;
+    payBtn.style.opacity = 1;
+    payBtn.textContent = "Pagar";
+  }
+
+  document.body.style.visibility = "visible";
+});
   const payBtn = document.getElementById("payBtn");
   if (payBtn) {
     payBtn.disabled = false;
