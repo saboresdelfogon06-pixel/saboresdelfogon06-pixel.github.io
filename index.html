@@ -3328,7 +3328,7 @@ window.addEventListener('pageshow', async () => {
   update();
 
   await rescueCheckoutIfNeeded();
-  showResumeNoticeIfNeeded();// 🔥 RESCATE INTELIGENTE
+  showResumeNoticeIfNeeded();
 
   const payBtn = document.getElementById("payBtn");
   if (payBtn) {
@@ -3339,17 +3339,6 @@ window.addEventListener('pageshow', async () => {
 
   document.body.style.visibility = "visible";
 });
-  const payBtn = document.getElementById("payBtn");
-  if (payBtn) {
-    payBtn.disabled = false;
-    payBtn.style.opacity = 1;
-    payBtn.textContent = "Pagar";
-  }
-
-  document.body.style.visibility = "visible";
-});
-
-
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
