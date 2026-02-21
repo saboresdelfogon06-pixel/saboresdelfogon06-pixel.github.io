@@ -1307,12 +1307,12 @@ function handleSummaryReset(){
   zoneName = "";
   ship = 0;
 
-  localStorage.removeItem('clientName');
-  localStorage.removeItem('clientWhatsapp');
-  localStorage.removeItem('addr');
-  localStorage.removeItem('zone');
-  localStorage.removeItem('deliveryTime');
-  localStorage.removeItem('orderDate');
+sessionStorage.removeItem('clientName');
+sessionStorage.removeItem('clientWhatsapp');
+sessionStorage.removeItem('addr');
+sessionStorage.removeItem('zone');
+sessionStorage.removeItem('deliveryTime');
+sessionStorage.removeItem('orderDate');
 
   // 🔥 CLAVE: NO tocar picadas
   // 🔥 CLAVE: NO tocar summaryWrapper
@@ -1322,7 +1322,7 @@ function handleSummaryReset(){
 
   // 🔁 Ahora sí volver a Step 1
   currentStep = 1;
-  localStorage.setItem('currentStep', 1);
+  sessionStorage.setItem('currentStep', 1);
   updateStepTitle();
 
   document.getElementById("config").style.display = "block";
@@ -1386,7 +1386,7 @@ function goBackToStep1(){
 
 
   currentStep = 1;
-  localStorage.setItem('currentStep', 1);
+  sessionStorage.setItem('currentStep', 1);
 
   document.getElementById("config").style.display = "block";
   document.getElementById("step2").style.display = "none";
@@ -1418,8 +1418,8 @@ function showResumeNoticeIfNeeded() {
 
   if (!orderId || !initPoint) return;
 
-  const savedStep = Number(localStorage.getItem('currentStep'));
-  const savedDate = localStorage.getItem('orderDate');
+const savedStep = Number(sessionStorage.getItem('currentStep'));
+const savedDate = sessionStorage.getItem('orderDate');
 
   if (savedStep === 2 && savedDate) {
 
@@ -1715,17 +1715,7 @@ const TAB_KEY = 'sf_tab_initialized';
 
   if (isNewTab && !comingFromMP) {
 
-    // 🔥 NUEVA PESTAÑA → BORRAR PEDIDO COMPLETO
-    localStorage.removeItem('picadas');
-    localStorage.removeItem('clientName');
-    localStorage.removeItem('orderDate');
-    localStorage.removeItem('addr');
-    localStorage.removeItem('zone');
-    localStorage.removeItem('scrollY');
-    localStorage.removeItem('activePicada');
-    localStorage.removeItem('clientWhatsapp');
-    localStorage.removeItem('deliveryTime');
-    localStorage.removeItem('currentStep');
+  sessionStorage.clear();
 
     sessionStorage.removeItem('order_fingerprint');
     sessionStorage.removeItem('order_id');
@@ -1777,7 +1767,7 @@ function generateToken() {
 
 
 if (!sessionStorage.getItem('order_id')) {
-  const hasSavedOrder = !!localStorage.getItem('picadas');
+ const hasSavedOrder = !!sessionStorage.getItem('picadas');
   sessionStorage.setItem(
     'order_id',
     hasSavedOrder ? generateOrderId() : generateOrderId()
@@ -1792,23 +1782,23 @@ window.currentOrderId = sessionStorage.getItem('order_id');
 window.currentToken   = sessionStorage.getItem('token');
 
 function saveState(){
-  localStorage.setItem('picadas', JSON.stringify(picadas));
-  localStorage.setItem('activePicada', active); // 👈 NUEVO
-  localStorage.setItem('clientName', clientName.value);
-  localStorage.setItem('orderDate', orderDate.value);
-  localStorage.setItem('addr', addr.value);
-  localStorage.setItem('zone', zone.value);
-  localStorage.setItem('clientWhatsapp', clientWhatsapp.value);
-  localStorage.setItem('deliveryTime', deliveryTime.value);
-  localStorage.setItem('currentStep', currentStep);
+  sessionStorage.setItem('picadas', JSON.stringify(picadas));
+  sessionStorage.setItem('activePicada', active);
+  sessionStorage.setItem('clientName', clientName.value);
+  sessionStorage.setItem('orderDate', orderDate.value);
+  sessionStorage.setItem('addr', addr.value);
+  sessionStorage.setItem('zone', zone.value);
+  sessionStorage.setItem('clientWhatsapp', clientWhatsapp.value);
+  sessionStorage.setItem('deliveryTime', deliveryTime.value);
+  sessionStorage.setItem('currentStep', currentStep);
 }
 
 
 function loadState() {
 
-  clientWhatsapp.value = localStorage.getItem('clientWhatsapp') || "";
-  const savedPicadas = localStorage.getItem('picadas');
-  deliveryTime.value = localStorage.getItem('deliveryTime') || "";
+clientWhatsapp.value = sessionStorage.getItem('clientWhatsapp') || "";
+const savedPicadas = sessionStorage.getItem('picadas');
+deliveryTime.value = sessionStorage.getItem('deliveryTime') || "";
 
   if (!savedPicadas) {
     buildPicadas(1);
@@ -1823,17 +1813,16 @@ function loadState() {
   }
 
   // 🔹 Restaurar picada activa
-  const savedActive = Number(localStorage.getItem('activePicada'));
+const savedActive = Number(sessionStorage.getItem('activePicada'));
   active = Number.isInteger(savedActive) && savedActive < picadas.length
     ? savedActive
     : 0;
 
-  // 🔹 Restaurar datos personales
-  clientName.value = localStorage.getItem('clientName') || "";
-  orderDate.value = localStorage.getItem('orderDate') || "";
-  addr.value = localStorage.getItem('addr') || "";
+clientName.value = sessionStorage.getItem('clientName') || "";
+orderDate.value = sessionStorage.getItem('orderDate') || "";
+addr.value = sessionStorage.getItem('addr') || "";
 
-  const savedZone = localStorage.getItem('zone');
+  const savedZone = sessionStorage.getItem('zone');
   if (savedZone !== null) {
     zone.value = savedZone;
 
@@ -1918,15 +1907,12 @@ function buildPicadas(n){
 }
 
 function resetAll(){
-  // 1. borrar estado guardado
-  localStorage.removeItem('picadas');
-  localStorage.removeItem('clientName');
-  localStorage.removeItem('orderDate');
-  localStorage.removeItem('addr');
-  localStorage.removeItem('zone');
-  localStorage.removeItem('scrollY');
-  clientWhatsapp.value = "";
-localStorage.removeItem('clientWhatsapp');
+  sessionStorage.removeItem('picadas');
+sessionStorage.removeItem('clientName');
+sessionStorage.removeItem('orderDate');
+sessionStorage.removeItem('addr');
+sessionStorage.removeItem('zone');
+sessionStorage.removeItem('clientWhatsapp');
 
   // 2. resetear variables
   ship = 0;
@@ -2090,15 +2076,15 @@ function handleReturnFromMP() {
 function forceStep2RescueIfPending() {
 
   const hasInitPoint = sessionStorage.getItem('mp_init_point');
-  const savedStep = Number(localStorage.getItem('currentStep'));
-  const savedPicadas = localStorage.getItem('picadas');
+const savedStep = Number(sessionStorage.getItem('currentStep'));
+const savedPicadas = sessionStorage.getItem('picadas');
 
   // Si intentó pagar y hay pedido guardado
 if (hasInitPoint && savedPicadas && currentStep !== 2) {
 
     // Forzar Step 2 SIEMPRE
     currentStep = 2;
-    localStorage.setItem('currentStep', 2);
+    sessionStorage.setItem('currentStep', 2);
 
     document.getElementById("config").style.display = "none";
     document.getElementById("step2").style.display = "block";
@@ -2631,13 +2617,13 @@ function enforceTomorrowDate() {
 
   dateInput.min = tomorrowStr;
 
-  const savedDate = localStorage.getItem('orderDate');
+  const savedDate = sessionStorage.getItem('orderDate');
 
   if (savedDate && savedDate >= tomorrowStr) {
     dateInput.value = savedDate;
   } else {
     dateInput.value = tomorrowStr;
-    localStorage.setItem('orderDate', tomorrowStr);
+    sessionStorage.setItem('orderDate', tomorrowStr);
   }
 
   // 🔥 IMPORTANTE: limpiar listener anterior
@@ -2648,7 +2634,7 @@ function enforceTomorrowDate() {
       this.value = tomorrowStr;
       localStorage.setItem('orderDate', tomorrowStr);
     } else {
-      localStorage.setItem('orderDate', this.value);
+      sessionStorage.setItem('orderDate', this.value);
     }
   };
 }
@@ -3251,7 +3237,7 @@ let scrollTimeout;
 
 
 history.replaceState(
-  { step: Number(localStorage.getItem('currentStep')) || 1 },
+  { step: Number(sessionStorage.getItem('currentStep')) || 1 },
   "",
   location.pathname + location.hash
 );
