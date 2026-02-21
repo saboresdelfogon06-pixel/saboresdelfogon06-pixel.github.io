@@ -2015,8 +2015,8 @@ localStorage.setItem(
 }));
 }
 
-// 🔄 Restaurar desde backup si se cerró navegador
-if (!sessionStorage.getItem('picadas')) {
+// 🔄 Restaurar solo si el navegador completo fue cerrado
+if (!sessionStorage.getItem('picadas') && !browserWasAlive) {
 
   const backupKeys = Object.keys(localStorage)
     .filter(k => k.startsWith('sf_backup_order_'));
@@ -3696,6 +3696,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
   // ===============================
 // SESSION TRACKING
 // ===============================
+// 🔐 Detectar si el navegador completo fue cerrado
+const SESSION_FLAG_KEY = "sdf_browser_alive";
+const browserWasAlive = localStorage.getItem(SESSION_FLAG_KEY);
+
+// Marcar navegador como activo
+localStorage.setItem(SESSION_FLAG_KEY, "1");
 
 if (!localStorage.getItem("sdf_session_id")) {
   localStorage.setItem("sdf_session_id", crypto.randomUUID());
