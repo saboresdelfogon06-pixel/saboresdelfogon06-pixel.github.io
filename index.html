@@ -2691,8 +2691,6 @@ ${
   mediaData[p.model][p.size]
   ? `
     <div class="section">
-      <label>Imágenes</label>
-
       <div class="media-grid">
         ${
           mediaData[p.model][p.size].map(media => {
@@ -2705,8 +2703,8 @@ ${
                     muted
                     playsinline
                     loop
-                    preload="metadata"
-                    onclick="this.paused ? this.play() : this.pause()">
+                    autoplay
+                    preload="metadata">
                   </video>
                 </div>
               `;
