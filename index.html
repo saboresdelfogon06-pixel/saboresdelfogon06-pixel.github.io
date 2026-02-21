@@ -1966,9 +1966,10 @@ if (summaryWrapper && config) {
 
   updateStepTitle();
   update();
+if (currentStep === 2) {
   setTimeout(() => {
-  scrollToStep2Card();
-}, 80);
+    scrollToStep2Card();
+  }, 80);
 }
 
 
