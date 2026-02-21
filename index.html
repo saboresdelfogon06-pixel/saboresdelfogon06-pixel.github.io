@@ -3717,13 +3717,14 @@ if ("IntersectionObserver" in window) {
 });
 
 function observeMediaVideos(){
+  if(!mediaObserver) return;
+
   document.querySelectorAll(".media-item video").forEach(video => {
     if(video.getAttribute("data-src")){
       mediaObserver.observe(video);
     }
   });
 }
-
 function updateStickyCTA(){
   if(!sticky) return;
 
