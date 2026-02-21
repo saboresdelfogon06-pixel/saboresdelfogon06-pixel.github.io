@@ -1470,8 +1470,7 @@ const config     = document.getElementById('config');
 const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
-const banner = document.getElementById("heroBanner");
-// 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
+
 deliveryTime.addEventListener("change", function(){
   this.setAttribute("value", this.value);
 });
@@ -2862,7 +2861,6 @@ ${
   </div>
 
 `;
-
 update();
 observeMediaVideos();
 }
@@ -3504,7 +3502,7 @@ function bannerInteractionDisabled(){
 
 
   
-
+const banner = document.getElementById("heroBanner");
 let bannerIndex = 0;
 let bannerFrozenModel = null;
 let bannerTimer = null;
