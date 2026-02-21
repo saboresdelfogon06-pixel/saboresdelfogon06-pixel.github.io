@@ -3548,14 +3548,6 @@ function rotateUrgency(){
 }
 
 
-
-    if(urgencyVisible){
-      clearInterval(urgencyTimer);
-      urgencyTimer = setInterval(rotateUrgency, 6000);
-    } else {
-      clearInterval(urgencyTimer);
-    }
-
 document.addEventListener("DOMContentLoaded", ()=>{
   const el = document.getElementById("urgencyText");
   if(!el) return;
