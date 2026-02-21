@@ -2542,9 +2542,12 @@ ${
           🧀 Seleccioná un modelo para ver el contenido
         </div>
       </div>
-    `
-    : `
-      <div class="section">
+  ${
+  !p.model
+    ? ""
+    : !p.size
+      ? ""
+      : `
         <label>Contenido</label>
 
         <div class="picada-content">
