@@ -1898,8 +1898,12 @@ function goToStep2(){
 
   banner.style.pointerEvents = "none";
 
-  update();
-  scrollToStep2Card();
+update();
+scrollToStep2Card();
+
+setTimeout(() => {
+  checkSummaryVisibility();
+}, 50);
 }
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
@@ -2130,6 +2134,9 @@ if (summaryWrapper && config) {
   update();
 if (currentStep === 2) {
 scrollToStep2Card();
+setTimeout(() => {
+  checkSummaryVisibility();
+}, 50);
 }
 }
 
@@ -3760,7 +3767,6 @@ function observeMediaVideos(){
     }
   });
 }
-
 function updateStickyCTA(){
   if(!sticky) return;
 
@@ -3782,6 +3788,25 @@ function updateStickyCTA(){
     stickyBtn.onclick = goWA;
   }
 }
+
+function checkSummaryVisibility() {
+
+  const summaryWrapper = document.getElementById("summaryWrapper");
+  if (!summaryWrapper || !sticky) return;
+
+  const rect = summaryWrapper.getBoundingClientRect();
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+
+  const visible =
+    rect.top < windowHeight * 0.8 &&
+    rect.bottom > 0;
+
+  if (visible) {
+    sticky.classList.add("hidden");
+  } else {
+    updateStickyCTA();
+  }
+}
   let sticky, stickyBtn, stickyTotal;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -3799,6 +3824,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         updateStickyCTA();
       }
+}
     });
   }, {
     threshold: 0.2
