@@ -671,6 +671,23 @@ input[type="date"]::-moz-focus-inner{
   gap:14px;
 }
 
+.model-label{
+  font-size:11px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:4px;
+  padding-left:2px;
+  opacity:.8;
+}
+
+.model-group,
+.size-group{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
 .model-col,
 .size-col{
   display:flex;
@@ -2464,10 +2481,12 @@ config.innerHTML = `
 ${tabs}
 
 <div class="section">
-  <div class="model-size-grid">
+<div class="model-size-grid">
 
-<div class="model-col">
+  <div class="model-group">
+    <div class="model-label">Modelo</div>
 
+    <div class="model-col">
       <button
         class="control ${p.model==='Clásica y Elegante'?'selected':''}"
         onclick="setModel('Clásica y Elegante')">
@@ -2480,9 +2499,12 @@ ${tabs}
         Fresca y Colorida
       </button>
     </div>
-    </div>
+  </div>
 
-<div class="size-col">
+  <div class="size-group">
+    <div class="model-label">Tamaño</div>
+
+    <div class="size-col">
       <button
         class="control ${p.size===4?'selected':''}"
         onclick="handleSizeClick(4, PRICES[4])">
@@ -2501,6 +2523,8 @@ ${tabs}
         10 personas
       </button>
     </div>
+  </div>
+
 </div>
   </div>
 </div>
