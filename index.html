@@ -2274,7 +2274,13 @@ function setModel(model){
   if(current.size){
     current.price = PRICES[current.size];
   }
-
+// 🔥 Hacer titilar tamaños si aún no hay tamaño elegido
+if(!current.size){
+  setTimeout(() => {
+    const sizeBtns = document.querySelectorAll('.size-col button.control');
+    flashHighlight([...sizeBtns], 'model-hint', 1200);
+  }, 120);
+}
   sendViewContentOnce(model, current.size || null, current.price || 0);
 
   syncBannerWithModel(model);
@@ -2552,46 +2558,56 @@ ${
 }
 
 ${
-  (p.model && p.size)
-    ? `
-      <div class="section">
-        <label>Detalles</label>
-
-        <div style="font-size:13px; line-height:1.6; color:var(--muted); padding:4px 6px 2px 6px;">
-
-          <div style="margin-bottom:8px;">
-            <b style="color:var(--text);">
-              ${
-                p.model === "Clásica y Elegante"
-                  ? "🥩 Presentación clásica y sofisticada"
-                  : "🌿 Presentación fresca y vibrante"
-              }
-            </b>
+${
+  !p.model
+    ? ""
+    : !p.size
+      ? `
+        <div class="section">
+          <label>Detalles</label>
+          <div style="text-align:center; color:var(--muted); padding:8px 0;">
+            📐 Seleccioná el tamaño para ver los detalles
           </div>
-
-          <div style="margin-bottom:6px;">
-            ✔ Ideal para aproximadamente 
-            <b style="color:var(--text);">
-              ${SIZE_INFO[p.size].pican} personas
-            </b> picando cómodo.
-          </div>
-
-          <div style="margin-bottom:6px;">
-            ✔ Tabla de 
-            <b style="color:var(--text);">
-              ${SIZE_INFO[p.size].medidas}
-            </b>
-            lista para servir.
-          </div>
-
-          <div style="margin-bottom:6px;">
-            ✔ Producción artesanal con ingredientes seleccionados.
-          </div>
-
         </div>
-      </div>
-    `
-    : ""
+      `
+      : `
+        <div class="section">
+          <label>Detalles</label>
+          <div style="font-size:13px; line-height:1.6; color:var(--muted); padding:4px 6px 2px 6px;">
+
+            <div style="margin-bottom:8px;">
+              <b style="color:var(--text);">
+                ${
+                  p.model === "Clásica y Elegante"
+                    ? "🥩 Presentación clásica y sofisticada"
+                    : "🌿 Presentación fresca y vibrante"
+                }
+              </b>
+            </div>
+
+            <div style="margin-bottom:6px;">
+              ✔ Ideal para aproximadamente 
+              <b style="color:var(--text);">
+                ${SIZE_INFO[p.size].pican} personas
+              </b> picando cómodo.
+            </div>
+
+            <div style="margin-bottom:6px;">
+              ✔ Tabla de 
+              <b style="color:var(--text);">
+                ${SIZE_INFO[p.size].medidas}
+              </b>
+              lista para servir.
+            </div>
+
+            <div style="margin-bottom:6px;">
+              ✔ Producción artesanal con ingredientes seleccionados.
+            </div>
+
+          </div>
+        </div>
+      `
+}
 }
 
 `;
