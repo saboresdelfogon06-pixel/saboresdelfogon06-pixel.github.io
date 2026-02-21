@@ -3668,6 +3668,12 @@ if ("IntersectionObserver" in window) {
 
   mediaObserver = new IntersectionObserver((entries, observer) => {
 
+let mediaObserver = null;
+
+if ("IntersectionObserver" in window) {
+
+  mediaObserver = new IntersectionObserver((entries, observer) => {
+
     entries.forEach(entry => {
 
       if (!entry.isIntersecting) return;
@@ -3690,6 +3696,8 @@ if ("IntersectionObserver" in window) {
   }, {
     threshold: 0.4
   });
+
+}
 
 }
   entries.forEach(entry => {
