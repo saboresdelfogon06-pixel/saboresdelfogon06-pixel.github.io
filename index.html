@@ -2639,14 +2639,13 @@ ${
             if(media.type === "video"){
               return `
                 <div class="media-item">
-                  <video
-                    src="${media.src}"
-                    muted
-                    playsinline
-                    loop
-                    autoplay
-                    preload="metadata">
-                  </video>
+ <video
+  data-src="${media.src}"
+  muted
+  playsinline
+  loop
+  preload="none">
+</video>
                 </div>
               `;
             }
@@ -2729,6 +2728,7 @@ ${
 `;
 
 update();
+observeMediaVideos();
 }
 
 function handleSizeClick(s, p){
@@ -3652,7 +3652,43 @@ window.addEventListener("popstate", function () {
 
 });
 
+// ===============================
+// LAZY LOAD VIDEOS (Media Grid)
+// ===============================
 
+const mediaObserver = new IntersectionObserver((entries, observer) => {
+
+  entries.forEach(entry => {
+
+    if (!entry.isIntersecting) return;
+
+    const video = entry.target;
+
+    const src = video.getAttribute("data-src");
+    if (!src) return;
+
+    video.src = src;
+    video.removeAttribute("data-src");
+
+    video.autoplay = true;
+    video.load();
+    video.play().catch(()=>{});
+
+    observer.unobserve(video);
+
+  });
+
+}, {
+  threshold: 0.4
+});
+
+function observeMediaVideos(){
+  document.querySelectorAll(".media-item video").forEach(video => {
+    if(video.getAttribute("data-src")){
+      mediaObserver.observe(video);
+    }
+  });
+}
   
 </script>
 <script>
