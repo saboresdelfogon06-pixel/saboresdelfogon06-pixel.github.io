@@ -2406,14 +2406,15 @@ if(hint){
 }
 
 
-  config.innerHTML = `
+config.innerHTML = `
+
+${tabs}
 
 <div class="section">
   <div class="model-size-grid">
 
     <!-- COLUMNA MODELO -->
     <div class="model-col">
-
       <label>Modelo</label>
 
       <button
@@ -2427,12 +2428,10 @@ if(hint){
         onclick="setModel('Fresca y Colorida')">
         Fresca y Colorida
       </button>
-
     </div>
 
     <!-- COLUMNA TAMAÑO -->
     <div class="size-col">
-
       <label>Tamaño</label>
 
       <button
@@ -2452,58 +2451,63 @@ if(hint){
         onclick="handleSizeClick(10, PRICES[10])">
         10 personas
       </button>
-
     </div>
 
   </div>
-
-  <!-- CONTENIDO DEL MODELO -->
-${
-  !p.model
-    ? `<div id="modelHint" style="text-align:center;">🧀 Seleccioná un modelo para ver el contenido</div>`
-    : `
-      <div class="picada-content">
-
-        <!-- IZQUIERDA: CONTENIDO -->
-<div class="picada-left">
-
-  <div class="picada-grid">
-
-    <!-- COLUMNA 1 -->
-    <div>
-      <b>🥩 Fiambres</b>
-      <ul>
-        ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
-      </ul>
-
-      <b>🥣 Dips</b>
-      <ul>
-        ${dipsText.split(" · ").map(d => `<li>${d}</li>`).join("")}
-      </ul>
-    </div>
-
-    <!-- COLUMNA 2 -->
-    <div>
-      <b>🧀 Quesos</b>
-      <ul>
-        ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
-      </ul>
-
-<b>🍇 Extras</b>
-<ul>
-  <li>Uvas</li>
-  <li>Mix frutos secos</li>
-  ${p.size === 6 || p.size === 10 ? `<li>Tomatitos deshidratados</li>` : ""}
-</ul>
-    </div>
-
-  </div>
-
 </div>
 
+${
+  !p.model
+    ? `
+      <div class="section">
+        <label>Contenido</label>
+        <div style="text-align:center; color:var(--muted); padding:8px 0;">
+          🧀 Seleccioná un modelo para ver el contenido
+        </div>
+      </div>
+    `
+    : `
+      <div class="section">
+        <label>Contenido</label>
+
+        <div class="picada-content">
+          <div class="picada-left">
+            <div class="picada-grid">
+
+              <div>
+                <b>🥩 Fiambres</b>
+                <ul>
+                  ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
+                </ul>
+
+                <b>🥣 Dips</b>
+                <ul>
+                  ${modelData[p.model].dips.map(d => `<li>${d}</li>`).join("")}
+                </ul>
+              </div>
+
+              <div>
+                <b>🧀 Quesos</b>
+                <ul>
+                  ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
+                </ul>
+
+                <b>🍇 Extras</b>
+                <ul>
+                  <li>Uvas</li>
+                  <li>Mix frutos secos</li>
+                  ${p.size === 6 || p.size === 10 ? `<li>Tomatitos deshidratados</li>` : ""}
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
     `
 }
-
+`;
       </div>
     </div>  
 ${tabs}
