@@ -1435,29 +1435,32 @@ function snapToClosestStep() {
   }
 }
 
-  function scrollToStep2Card() {
+function scrollToStep2Card() {
 
-  const step2 = document.getElementById("step2");
-  if (!step2) return;
+  requestAnimationFrame(() => {
 
-  const miniBanner = document.querySelector('.mini-banner');
-  const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
+    const step2 = document.getElementById("step2");
+    if (!step2) return;
 
-  // 🔹 El primer .section dentro de step2 es el card de datos
-  const card = step2.querySelector('.section');
-  if (!card) return;
+    const miniBanner = document.querySelector('.mini-banner');
+    const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
 
-  const rect = card.getBoundingClientRect();
-  const absoluteTop = rect.top + window.pageYOffset;
+    const card = step2.querySelector('.section');
+    if (!card) return;
 
-  const offset = 12; // pequeño ajuste visual
+    const rect = card.getBoundingClientRect();
+    const absoluteTop = rect.top + window.pageYOffset;
 
-  window.scrollTo({
-    top: absoluteTop - miniHeight - offset,
-    behavior: 'smooth'
+    const offset = 12;
+
+    window.scrollTo({
+      top: absoluteTop - miniHeight - offset,
+      behavior: "auto" // 🔥 clave: sin smooth
+    });
+
   });
-}
 
+}
 function goBackToStep1(){
 
   const orderId = window.currentOrderId;
@@ -1778,9 +1781,7 @@ function goToStep2(){
   banner.style.pointerEvents = "none";
 
   update();
-setTimeout(() => {
   scrollToStep2Card();
-}, 80);
 }
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
@@ -2010,9 +2011,7 @@ if (summaryWrapper && config) {
   updateStepTitle();
   update();
 if (currentStep === 2) {
-  setTimeout(() => {
-    scrollToStep2Card();
-  }, 80);
+scrollToStep2Card();
 }
 }
 
@@ -2220,9 +2219,7 @@ if (hasInitPoint && savedPicadas && currentStep !== 2) {
 
     updateStepTitle();
     update();
-  setTimeout(() => {
   scrollToStep2Card();
-}, 80);
 
     console.log("🟡 Rescate local forzado a Step 2");
   }
@@ -3544,9 +3541,6 @@ window.addEventListener("popstate", function () {
     pixelLoaded = true;
 
     if (!navigator.userAgent.includes('Instagram')) {
-      if ('scrollRestoration' in history) {
-        history.scrollRestoration = 'manual';
-      }
     }
 
 !function(f,b,e,v,n,t,s)
