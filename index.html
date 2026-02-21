@@ -1780,8 +1780,56 @@ function saveState(){
   sessionStorage.setItem('clientWhatsapp', clientWhatsapp.value);
   sessionStorage.setItem('deliveryTime', deliveryTime.value);
   sessionStorage.setItem('currentStep', currentStep);
+  // 🔐 Backup persistente por cierre inesperado
+localStorage.setItem('sf_backup_order', JSON.stringify({
+  picadas,
+  active,
+  clientName: clientName.value,
+  orderDate: orderDate.value,
+  addr: addr.value,
+  zone: zone.value,
+  clientWhatsapp: clientWhatsapp.value,
+  deliveryTime: deliveryTime.value,
+  currentStep,
+  ship,
+  zoneName,
+  order_id: window.currentOrderId,
+  token: window.currentToken
+}));
 }
 
+  // 🔄 Restaurar desde backup si se cerró navegador
+if (!sessionStorage.getItem('picadas') && localStorage.getItem('sf_backup_order')) {
+
+  const backup = localStorage.getItem('sf_backup_order');
+
+  if (backup) {
+    try {
+      const data = JSON.parse(backup);
+
+      picadas = data.picadas || [];
+      active = data.active || 0;
+      ship = data.ship || 0;
+      zoneName = data.zoneName || "";
+
+      sessionStorage.setItem('picadas', JSON.stringify(picadas));
+      sessionStorage.setItem('activePicada', active);
+      sessionStorage.setItem('clientName', data.clientName || "");
+      sessionStorage.setItem('orderDate', data.orderDate || "");
+      sessionStorage.setItem('addr', data.addr || "");
+      sessionStorage.setItem('zone', data.zone || "");
+      sessionStorage.setItem('clientWhatsapp', data.clientWhatsapp || "");
+      sessionStorage.setItem('deliveryTime', data.deliveryTime || "");
+      sessionStorage.setItem('currentStep', data.currentStep || 1);
+      sessionStorage.setItem('order_id', data.order_id);
+      sessionStorage.setItem('token', data.token);
+
+      console.log("🔁 Pedido restaurado desde backup");
+    } catch(e) {
+      console.log("Backup inválido");
+    }
+  }
+}
 
 function loadState() {
 
@@ -1902,6 +1950,7 @@ sessionStorage.removeItem('orderDate');
 sessionStorage.removeItem('addr');
 sessionStorage.removeItem('zone');
 sessionStorage.removeItem('clientWhatsapp');
+localStorage.removeItem('sf_backup_order');
 
   // 2. resetear variables
   ship = 0;
@@ -2034,6 +2083,8 @@ function handleReturnFromMP() {
 
   // 👉 SOLO si el pago fue aprobado
   if (status === 'approved') {
+    // 🧹 eliminar backup persistente
+localStorage.removeItem('sf_backup_order');
 
     // 🔄 Reset total para nuevo pedido
     resetForNextOrder();
