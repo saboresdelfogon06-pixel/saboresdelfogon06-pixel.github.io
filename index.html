@@ -3412,20 +3412,7 @@ function closeModal(){
 function bannerIsLocked(){
   return !!(picadas[active] && picadas[active].model);
 }
-let bannerReady = false;
-const bannerSlides = [
-  {
-    model: "Clásica y Elegante",
-    type: "image",
-    src: "images/IMG_7762.webp"
-  },
-  {
-    model: "Fresca y Colorida",
-    type: "image",
-    src: "images/IMG_7761.webp"
-  }
-  // acá después podés agregar videos
-];
+;
   
 function bannerInteractionDisabled(){
   return currentStep === 2;
@@ -3434,147 +3421,82 @@ function bannerInteractionDisabled(){
 
   
 
-let bannerIndex = 0;
-let bannerFrozenModel = null;
-let bannerTimer = null;
-let bannerVisible = true;
-let startX = 0;
-let currentX = 0;
-  
-if (banner) {
-  banner.addEventListener("touchstart", e => {
-  if (bannerInteractionDisabled()) return;
-  startX = e.touches[0].clientX;
-});
-  
-const track = document.getElementById("bannerTrack");
-const bannerModel = document.getElementById("bannerModel");
+// ===============================
+// HERO BANNER MODULE
+// ===============================
 
-document.addEventListener('DOMContentLoaded', () => {
-  bannerSlides.forEach((s, index) => {
+let bannerIndex = 0;
+let bannerTimer = null;
+let startX = 0;
+let bannerReady = false;
+
+const bannerSlides = [
+  { model: "Clásica y Elegante", type: "image", src: "images/IMG_7762.webp" },
+  { model: "Fresca y Colorida", type: "image", src: "images/IMG_7761.webp" }
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const banner = document.getElementById("heroBanner");
+  const track = document.getElementById("bannerTrack");
+  const bannerModel = document.getElementById("bannerModel");
+
+  if (!banner || !track) return;
+
+  // Crear slides
+  bannerSlides.forEach(slideData => {
     const slide = document.createElement("div");
     slide.className = "banner-slide";
 
-    if (s.type === "video") {
-      slide.innerHTML = `<video src="${s.src}" muted playsinline></video>`;
-    } else {
-      const img = document.createElement("img");
-      img.width = 720;
-      img.height = 220;
-      img.decoding = "async";
-
-      if (index === 0) {
-        img.src = s.src;
-      } else {
-        img.dataset.src = s.src;
-        img.loading = "lazy";
-      }
-
-      slide.appendChild(img);
-    }
+    const img = document.createElement("img");
+    img.src = slideData.src;
+    slide.appendChild(img);
 
     track.appendChild(slide);
   });
 
-  bannerReady = true;          // 🔥 CLAVE
-  showSlide(bannerIndex, false); // 🔥 fuerza render inicial
-});
+  bannerReady = true;
+  showSlide(0, false);
 
+  function showSlide(i, animate = true) {
+    bannerIndex = i;
+    track.style.transition = animate ? "transform .5s ease" : "none";
+    track.style.transform = `translateX(-${i * 100}%)`;
+    bannerModel.textContent = bannerSlides[i].model;
 
-
-    if (bannerVisible) {
-      if (!bannerIsLocked()) {
-        clearTimeout(bannerTimer);
-        bannerTimer = setTimeout(nextSlide, 5000);
-      }
-    } else {
-      clearTimeout(bannerTimer);
-    }
-
-if (banner) {
-  bannerObserver.observe(banner);
-}
-
-// 👁️ Pausar autoplay si el usuario cambia de pestaña
-document.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    clearTimeout(bannerTimer);
-  } else if (!bannerIsLocked() && bannerVisible) {
     clearTimeout(bannerTimer);
     bannerTimer = setTimeout(nextSlide, 5000);
   }
-});
 
-
-
-function showSlide(i, animate = true){
-  bannerIndex = i;
-  track.style.transition = animate ? "transform .6s ease" : "none";
-  track.style.transform = `translateX(-${i * 100}%)`;
-
-  const slide = bannerSlides[i];
-  bannerModel.textContent = slide.model;
-
-  // ⚡ Lazy-load de imagen si es slide > 0
-  const slideEl = track.children[i];
-  const img = slideEl.querySelector('img[data-src]');
-  if(img){
-    img.src = img.dataset.src;
-    img.removeAttribute('data-src');
+  function nextSlide() {
+    showSlide((bannerIndex + 1) % bannerSlides.length);
   }
 
-  clearTimeout(bannerTimer);
+  // Swipe
+  banner.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
 
-if(!bannerIsLocked() && bannerVisible){
-  bannerTimer = setTimeout(nextSlide, 5000);
-}
-}
-
-
-function nextSlide(){
-  if(bannerIsLocked()) return;
-  if(!bannerVisible) return;
-
-  showSlide((bannerIndex + 1) % bannerSlides.length);
-}
-
-banner.onclick = () => {
-
-  if (bannerInteractionDisabled()) return;
-
-  const model = bannerSlides[bannerIndex].model;
-
-  setModel(model); // 🔥 usar la función oficial
-};
-
-
-if (banner) {
   banner.addEventListener("touchend", e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (Math.abs(diff) < 40) return;
 
-  if (bannerInteractionDisabled()) return;
+    if (diff < 0) {
+      showSlide((bannerIndex + 1) % bannerSlides.length);
+    } else {
+      showSlide((bannerIndex - 1 + bannerSlides.length) % bannerSlides.length);
+    }
+  });
 
-  const endX = e.changedTouches[0].clientX;
-  const diff = endX - startX;
+  // Click selecciona modelo
+  banner.addEventListener("click", () => {
+    const model = bannerSlides[bannerIndex].model;
+    if (typeof setModel === "function") {
+      setModel(model);
+    }
+  });
 
-  if (Math.abs(diff) < 40) return;
-
-  let newIndex;
-
-  if (diff < 0) {
-    newIndex = (bannerIndex + 1) % bannerSlides.length;
-  } else {
-    newIndex = (bannerIndex - 1 + bannerSlides.length) % bannerSlides.length;
-  }
-
-  showSlide(newIndex);
-
-  const newModel = bannerSlides[newIndex].model;
-
-  setModel(newModel);
-  saveState();
-  renderConfig();
 });
-
 
 function syncBannerWithModel(model){
   if (!model || !bannerReady) return;
