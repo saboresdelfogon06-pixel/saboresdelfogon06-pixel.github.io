@@ -1713,14 +1713,9 @@ const TAB_KEY = 'sf_tab_initialized';
   const isNewTab = !sessionStorage.getItem(TAB_KEY);
   const comingFromMP = sessionStorage.getItem('mp_init_point');
 
-  if (isNewTab && !comingFromMP) {
-
+if (isNewTab && !comingFromMP) {
   sessionStorage.clear();
-
-    sessionStorage.removeItem('order_fingerprint');
-    sessionStorage.removeItem('order_id');
-    sessionStorage.removeItem('token');
-  }
+}
 
   sessionStorage.setItem(TAB_KEY, '1');
 
@@ -1853,7 +1848,7 @@ addr.value = sessionStorage.getItem('addr') || "";
   // 🔥 RESTAURAR STEP (NUEVO)
   // =====================================
 
-  const savedStep = Number(localStorage.getItem('currentStep'));
+  const savedStep = Number(sessionStorage.getItem('currentStep'));
 
   if (savedStep === 2) {
 
@@ -2632,7 +2627,7 @@ function enforceTomorrowDate() {
   dateInput.onchange = function () {
     if (this.value < tomorrowStr) {
       this.value = tomorrowStr;
-      localStorage.setItem('orderDate', tomorrowStr);
+      sessionStorage.setItem('orderDate', tomorrowStr);
     } else {
       sessionStorage.setItem('orderDate', this.value);
     }
