@@ -1133,6 +1133,75 @@ button.selected{
   height:100%;
   object-fit:cover;
 }
+
+/* ===============================
+   STICKY CTA INFERIOR
+   =============================== */
+
+.sticky-cta{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  background: rgba(24,24,24,0.95);
+  backdrop-filter: blur(10px);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  gap: 14px;
+
+  border-top: 1px solid rgba(255,255,255,.05);
+
+  z-index: 999;
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+.sticky-cta.hidden{
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events:none;
+}
+
+.sticky-total{
+  display:flex;
+  flex-direction:column;
+}
+
+.sticky-label{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.sticky-amount{
+  font-size:18px;
+  font-weight:700;
+  color:var(--accent);
+}
+
+.sticky-btn{
+  background:var(--accent);
+  color:#2a2a2a;
+  border:none;
+  border-radius:10px;
+  padding:14px 22px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.sticky-btn:active{
+  transform: scale(.97);
+}
+
+/* Espacio para que no tape contenido */
+body{
+  padding-bottom:120px;
+}
 </style>
 </head>
 <body>
@@ -3059,6 +3128,7 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   sessionStorage.removeItem('order_fingerprint');
 }
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
+  updateStickyCTA();
 }
   
 function updateTotalsOnly(){
@@ -3084,6 +3154,7 @@ totalValue.textContent = `$${stepTotal.toLocaleString()}`;
     shippingLine.innerHTML =
       `${zoneName || "Sin localidad"}${addr.value ? " – " + addr.value : ""}`;
   }
+  updateStickyCTA();
 }
 
 
@@ -3689,7 +3760,32 @@ function observeMediaVideos(){
     }
   });
 }
-  
+
+const sticky = document.getElementById("stickyCTA");
+const stickyBtn = document.getElementById("stickyBtn");
+const stickyTotal = document.getElementById("stickyTotal");
+
+function updateStickyCTA(){
+  if(!sticky) return;
+
+  stickyTotal.textContent = `$${total.toLocaleString()}`;
+
+  if(currentStep === 1){
+    if(total > 0){
+      sticky.classList.remove("hidden");
+      stickyBtn.textContent = "Continuar";
+      stickyBtn.onclick = goToStep2;
+    } else {
+      sticky.classList.add("hidden");
+    }
+  }
+
+  if(currentStep === 2){
+    sticky.classList.remove("hidden");
+    stickyBtn.textContent = "Pagar";
+    stickyBtn.onclick = goWA;
+  }
+}
 </script>
 <script>
 (function () {
@@ -3720,6 +3816,17 @@ loadPixelOnce();
 
 })();
 </script>
+
+<div id="stickyCTA" class="sticky-cta hidden">
+  <div class="sticky-total">
+    <div class="sticky-label">Total</div>
+    <div class="sticky-amount" id="stickyTotal">$0</div>
+  </div>
+
+  <button id="stickyBtn" class="sticky-btn">
+    Continuar
+  </button>
+</div>
 
 </body>
 </html>
