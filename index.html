@@ -1728,20 +1728,6 @@ setTimeout(() => {
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 
-const TAB_KEY = 'sf_tab_initialized';
-
-(function tabGuard() {
-
-  const isNewTab = !sessionStorage.getItem(TAB_KEY);
-  const comingFromMP = sessionStorage.getItem('mp_init_point');
-
-if (isNewTab) {
-  sessionStorage.clear();
-}
-
-sessionStorage.setItem(TAB_KEY, '1');
-})();
-
 
 const PRICES = {
   4: 60000,
