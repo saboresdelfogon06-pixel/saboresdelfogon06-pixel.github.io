@@ -762,13 +762,13 @@ input[type="date"]::-moz-focus-inner{
 .picada-left li{
   margin-bottom:4px;
 }
-.picada-left b{
-  display:block;
+
+.content-category{
   margin-top:6px;
   margin-bottom:4px;
   font-size:13px;
-  font-weight:600;
   color:var(--text);
+  font-weight:500;   /* 👈 no bold fuerte */
 }
 .summary-header{
   display:flex;
@@ -2552,24 +2552,24 @@ ${
             <div class="picada-grid">
 
               <div>
-                <b>🥩 Fiambres</b>
+                <div class="content-category">🥩 Fiambres:</div>
                 <ul>
                   ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
                 </ul>
 
-                <b>🥣 Dips</b>
+                <div class="content-category">🥣 Dips:</div>
                 <ul>
                   ${modelData[p.model].dips.map(d => `<li>${d}</li>`).join("")}
                 </ul>
               </div>
 
               <div>
-                <b>🧀 Quesos</b>
+                <div class="content-category">🧀 Quesos:</div>
                 <ul>
                   ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
                 </ul>
 
-                <b>🍇 Extras</b>
+                <div class="content-category">🍇 Extras:</div>
                 <ul>
                   <li>Uvas</li>
                   <li>Mix frutos secos</li>
