@@ -762,13 +762,13 @@ input[type="date"]::-moz-focus-inner{
 .picada-left li{
   margin-bottom:4px;
 }
-
-.content-category{
+.picada-left b{
+  display:block;
   margin-top:6px;
   margin-bottom:4px;
   font-size:13px;
+  font-weight:600;
   color:var(--text);
-  font-weight:600;   /* 👈 no bold fuerte */
 }
 .summary-header{
   display:flex;
@@ -1113,95 +1113,6 @@ button.selected{
   gap:6px; /* antes 14px */
 }
 
-  .media-grid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:10px;
-}
-
-.media-item{
-  background:#000;
-  border-radius:10px;
-  overflow:hidden;
-  aspect-ratio: 1 / 1;
-  position:relative;
-}
-
-.media-item video,
-.media-item img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-/* ===============================
-   STICKY CTA INFERIOR
-   =============================== */
-
-.sticky-cta{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  background: rgba(24,24,24,0.95);
-  backdrop-filter: blur(10px);
-
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-  gap: 14px;
-
-  border-top: 1px solid rgba(255,255,255,.05);
-
-  z-index: 999;
-  transition: transform .3s ease, opacity .3s ease;
-}
-
-.sticky-cta.hidden{
-  transform: translateY(100%);
-  opacity: 0;
-  pointer-events:none;
-}
-
-.sticky-total{
-  display:flex;
-  flex-direction:column;
-}
-
-.sticky-label{
-  font-size:12px;
-  color:var(--muted);
-}
-
-.sticky-amount{
-  font-size:18px;
-  font-weight:700;
-  color:var(--accent);
-}
-
-.sticky-btn{
-  background:var(--accent);
-  color:#2a2a2a;
-  border:none;
-  border-radius:10px;
-  padding:14px 22px;
-  font-size:15px;
-  font-weight:600;
-  cursor:pointer;
-  transition:.2s ease;
-}
-
-.sticky-btn:active{
-  transform: scale(.97);
-}
-
-/* Espacio para que no tape contenido */
-body{
-  padding-bottom:120px;
-}
 </style>
 </head>
 <body>
@@ -1750,18 +1661,6 @@ const modelData = {
       "Dip queso crema",
       "Dip aceitunas"
     ]
-  }
-};
-
-const mediaData = {
-  "Clásica y Elegante": {
-    10: [
-      { type: "video", src: "images/Clásica y elegante 10 personas .mp4" },
-      { type: "video", src: "images/Clásica y elegante 10 personas  (2).mp4" }
-    ]
-  },
-  "Fresca y Colorida": {
-    // vacío por ahora
   }
 };
 
@@ -2644,160 +2543,103 @@ ${
         </div>
       </div>
     `
-    : !p.size
-      ? `
-        <div class="section">
-          <label>Contenido</label>
-          <div style="text-align:center; color:var(--muted); padding:8px 0;">
-            Seleccioná un tamaño para ver el contenido
-          </div>
-        </div>
-      `
-      : `
-        <div class="section">
-          <label>Contenido</label>
+    : `
+      <div class="section">
+        <label>Contenido</label>
 
-          <div class="picada-content">
-            <div class="picada-left">
-              <div class="picada-grid">
+        <div class="picada-content">
+          <div class="picada-left">
+            <div class="picada-grid">
 
-                <div>
-                  <div class="content-category">🥩 Fiambres:</div>
-                  <ul>
-                    ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
-                  </ul>
+              <div>
+                <b>🥩 Fiambres</b>
+                <ul>
+                  ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
+                </ul>
 
-                  <div class="content-category">🥣 Dips:</div>
-                  <ul>
-                    ${modelData[p.model].dips.map(d => `<li>${d}</li>`).join("")}
-                  </ul>
-                </div>
-
-                <div>
-                  <div class="content-category">🧀 Quesos:</div>
-                  <ul>
-                    ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
-                  </ul>
-
-                  <div class="content-category">🍇 Extras:</div>
-                  <ul>
-                    <li>Uvas</li>
-                    <li>Mix frutos secos</li>
-                    ${p.size === 6 || p.size === 10 ? `<li>Tomatitos deshidratados</li>` : ""}
-                  </ul>
-                </div>
-
+                <b>🥣 Dips</b>
+                <ul>
+                  ${modelData[p.model].dips.map(d => `<li>${d}</li>`).join("")}
+                </ul>
               </div>
+
+              <div>
+                <b>🧀 Quesos</b>
+                <ul>
+                  ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
+                </ul>
+
+                <b>🍇 Extras</b>
+                <ul>
+                  <li>Uvas</li>
+                  <li>Mix frutos secos</li>
+                  ${p.size === 6 || p.size === 10 ? `<li>Tomatitos deshidratados</li>` : ""}
+                </ul>
+              </div>
+
             </div>
           </div>
         </div>
-</div>
-      `
+
+      </div>
+    `
 }
 
 ${
-  p.model && p.size &&
-  mediaData[p.model] &&
-  mediaData[p.model][p.size]
-  ? `
-    <div class="section">
-      <div class="media-grid">
-        ${
-          mediaData[p.model][p.size].map(media => {
-
-            if(media.type === "video"){
-              return `
-                <div class="media-item">
- <video
-  data-src="${media.src}"
-  muted
-  playsinline
-  loop
-  preload="none">
-</video>
-                </div>
-              `;
-            }
-
-            if(media.type === "image"){
-              return `
-                <div class="media-item">
-                  <img src="${media.src}" onclick="openModal('${media.src}')">
-                </div>
-              `;
-            }
-
-          }).join("")
-        }
-      </div>
-    </div>
-  `
-  : ``
-}
-
-    <div class="section">
-  <label>Información</label>
-
-  <div style="font-size:13px; line-height:1.7; color:var(--muted); padding:4px 6px 2px 6px;">
-
-    ${
-      p.model === "Clásica y Elegante"
+  !p.model
+    ? ""
+    : !p.size
       ? `
-        <div style="margin-bottom:12px; color:var(--text); font-weight:600;">
-          La que nunca falla.
-        </div>
-
-        <div style="margin-bottom:10px;">
-          Imaginá una mesa lista, una copa servida y esa charla que empieza tranquila 
-          y termina en risas. Pensada para encuentros donde querés quedar bien 
-          sin complicarte.
-        </div>
-
-        <div style="margin-bottom:10px;">
-          Sabores intensos, cortes seleccionados y quesos que equilibran cada bocado.
-        </div>
-
-        <div style="margin-top:8px;">
-          Ideal para 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
-          presentada en una tabla de 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
+        <div class="section">
+          <label>Detalles</label>
+          <div style="text-align:center; color:var(--muted); padding:8px 0;">
+            📋 Seleccioná el tamaño para ver los detalles
+          </div>
         </div>
       `
       : `
-        <div style="margin-bottom:12px; color:var(--text); font-weight:600;">
-          Liviana, vibrante y distinta.
-        </div>
+        <div class="section">
+          <label>Detalles</label>
+          <div style="font-size:13px; line-height:1.6; color:var(--muted); padding:4px 6px 2px 6px;">
 
-        <div style="margin-bottom:10px;">
-          Perfecta para tardes relajadas o noches donde la charla se estira 
-          sin mirar el reloj.
-        </div>
+            <div style="margin-bottom:8px;">
+              <b style="color:var(--text);">
+                ${
+                  p.model === "Clásica y Elegante"
+                    ? "🥩 Presentación clásica y sofisticada"
+                    : "🌿 Presentación fresca y vibrante"
+                }
+              </b>
+            </div>
 
-        <div style="margin-bottom:10px;">
-          Contrastes dulces y salados, colores que invitan y combinaciones 
-          que sorprenden en cada bocado.
-        </div>
+            <div style="margin-bottom:6px;">
+              ✔ Ideal para aproximadamente 
+              <b style="color:var(--text);">
+                ${SIZE_INFO[p.size].pican} personas
+              </b> picando cómodo.
+            </div>
 
-        <div style="margin-top:8px;">
-          Ideal para 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
-          presentada en una tabla de 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
+            <div style="margin-bottom:6px;">
+              ✔ Tabla de 
+              <b style="color:var(--text);">
+                ${SIZE_INFO[p.size].medidas}
+              </b>
+              lista para servir.
+            </div>
+
+            <div style="margin-bottom:6px;">
+              ✔ Producción artesanal con ingredientes seleccionados.
+            </div>
+
+          </div>
         </div>
       `
-    }
 
-    <div style="margin-top:12px; font-weight:500; color:var(--text);">
-      Preparada artesanalmente el mismo día del envío.
-    </div>
-
-  </div>
+}
 
 `;
 
 update();
-observeMediaVideos();
 }
 
 function handleSizeClick(s, p){
@@ -3128,7 +2970,6 @@ if (savedFingerprint && savedFingerprint !== currentFingerprint) {
   sessionStorage.removeItem('order_fingerprint');
 }
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
-  updateStickyCTA();
 }
   
 function updateTotalsOnly(){
@@ -3154,7 +2995,6 @@ totalValue.textContent = `$${stepTotal.toLocaleString()}`;
     shippingLine.innerHTML =
       `${zoneName || "Sin localidad"}${addr.value ? " – " + addr.value : ""}`;
   }
-  updateStickyCTA();
 }
 
 
@@ -3723,91 +3563,8 @@ window.addEventListener("popstate", function () {
 
 });
 
-// ===============================
-// LAZY LOAD VIDEOS (Media Grid)
-// ===============================
 
-const mediaObserver = new IntersectionObserver((entries, observer) => {
-
-  entries.forEach(entry => {
-
-    if (!entry.isIntersecting) return;
-
-    const video = entry.target;
-
-    const src = video.getAttribute("data-src");
-    if (!src) return;
-
-    video.src = src;
-    video.removeAttribute("data-src");
-
-    video.autoplay = true;
-    video.load();
-    video.play().catch(()=>{});
-
-    observer.unobserve(video);
-
-  });
-
-}, {
-  threshold: 0.4
-});
-
-function observeMediaVideos(){
-  document.querySelectorAll(".media-item video").forEach(video => {
-    if(video.getAttribute("data-src")){
-      mediaObserver.observe(video);
-    }
-  });
-}
-
-function updateStickyCTA(){
-  if(!sticky) return;
-
-  stickyTotal.textContent = `$${total.toLocaleString()}`;
-
-  if(currentStep === 1){
-    if(total > 0){
-      sticky.classList.remove("hidden");
-      stickyBtn.textContent = "Continuar";
-      stickyBtn.onclick = goToStep2;
-    } else {
-      sticky.classList.add("hidden");
-    }
-  }
-
-  if(currentStep === 2){
-    sticky.classList.remove("hidden");
-    stickyBtn.textContent = "Pagar";
-    stickyBtn.onclick = goWA;
-  }
-}
-
-let sticky, stickyBtn, stickyTotal;
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  sticky = document.getElementById("stickyCTA");
-  stickyBtn = document.getElementById("stickyBtn");
-  stickyTotal = document.getElementById("stickyTotal");
-
-  const summaryWrapper = document.getElementById("summaryWrapper");
-  if (!summaryWrapper) return;
-
-  const summaryObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        sticky.classList.add("hidden");
-      } else {
-        updateStickyCTA();
-      }
-    });
-  }, {
-    threshold: 0.2
-  });
-
-  summaryObserver.observe(summaryWrapper);
-});
+  
 </script>
 <script>
 (function () {
@@ -3838,17 +3595,6 @@ loadPixelOnce();
 
 })();
 </script>
-
-<div id="stickyCTA" class="sticky-cta hidden">
-  <div class="sticky-total">
-    <div class="sticky-label">Total</div>
-    <div class="sticky-amount" id="stickyTotal">$0</div>
-  </div>
-
-  <button id="stickyBtn" class="sticky-btn">
-    Continuar
-  </button>
-</div>
 
 </body>
 </html>
