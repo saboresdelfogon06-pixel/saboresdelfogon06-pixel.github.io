@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -27,8 +28,9 @@ body {
   color: var(--text);
   touch-action: manipulation;
   overscroll-behavior: auto;
+  visibility: hidden;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
 }
 
 .container {
@@ -500,16 +502,14 @@ box-shadow:
 
 .mini-banner .right .cart-total {
   background: var(--input-bg);
-  color: var(--text);
+  color: var(--text);    /* gris más oscuro, uniforme con la estética */
   padding: 4px 8px;
   border-radius: 8px;
   font-weight: bold;
   font-size: 12px;
   cursor: pointer;
   transition: transform .15s ease;
-  min-width: 70px;
-  text-align: right;
-}
+  }
 .mini-banner .right .cart-total:active{
   transform: scale(0.96);
   }
@@ -557,28 +557,19 @@ input[type="date"].control{
   font-family:inherit;
   font-size:14px;
   font-weight:400;
-
   background:var(--input-bg);
-  background-clip: padding-box;   /* 🔥 clave */
-  
-  border-radius:8px;
-  position:relative;
-  z-index:1;
-
-  box-shadow:none;                /* 🔥 elimina capa fantasma */
-  overflow:hidden;                /* 🔥 evita desborde interno */
 
   text-align:left;
 }
 
-/* 🔥 FIX interno WebKit */
 input[type="date"]::-webkit-datetime-edit{
-  background:transparent;
+  padding:0;
+  margin:0;
+  text-align:left;
 }
 
-input[type="date"]::-webkit-datetime-edit-fields-wrapper{
-  background:transparent;
-}
+
+  
 /* icono calendario (WebKit: Chrome, Safari, iOS) */
 input[type="date"]::-webkit-calendar-picker-indicator{
   filter: invert(1) opacity(0.6);
@@ -671,7 +662,9 @@ input[type="date"]::-moz-focus-inner{
   gap:12px;   /* mismo gap que modelo-size */
 }
 
-
+.form-col{
+  flex:1;
+}
 
 
 /* ===== NUEVO LAYOUT MODELO / TAMAÑO ===== */
@@ -813,8 +806,7 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
   text-align: left;
   padding-left: 2px; 
   position: relative;
-  z-index: 5;
-  overflow:hidden;
+  z-index: 5;/* micro ajuste óptico para alinear con inputs */
 }
 
 .landing-intro-top h1{
@@ -1126,6 +1118,9 @@ select.control{
 }
 
 
+.model-size-grid{
+  gap:6px; /* antes 14px */
+}
 
   .media-grid{
   display:grid;
@@ -1213,55 +1208,8 @@ select.control{
 }
 
 /* Espacio para que no tape contenido */
-.container{
-  padding-bottom:140px; /* espacio solo al contenido */
-}
-
-.shipping-details{
-  margin-bottom:16px;
-}
-
-/* ==============================
-   FIX SIMETRÍA STEP 2
-   ============================== */
-
-#step2 .form-grid{
-  display:flex;
-  gap:12px;         /* horizontal */
-  margin-bottom:16px; /* 🔥 nuevo espacio vertical entre filas */
-  align-items:flex-start;
-}
-
-#step2 .form-col{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-}
-
-/* 🔥 quitar doble margen dentro de filas 50/50 */
-#step2 .form-col .control{
-  margin-bottom:0;
-}
-
-#step2 .section > .control{
-  margin-bottom:16px; /* antes 12px */
-}
-/* ==============================
-   MÁS AIRE EN CARD FORMULARIO
-   ============================== */
-
-#step2 > .section{
-  padding:18px 16px;
-}
-
-/* 🔥 FIX repaint iOS Step 2 */
-#step2{
-  position:relative;
-  z-index:2;
-}
-
-body.preload {
-  opacity: 0;
+body{
+  padding-bottom:120px;
 }
 </style>
 </head>
@@ -1284,7 +1232,7 @@ body.preload {
 
   <div class="right">
 <div class="cart-total" id="cartTotal" onclick="handleMiniBannerClick()">
-  <span style="opacity:0">0</span>
+  $0
 </div>
   </div>
 </div>
@@ -1443,7 +1391,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 
-<div class="info-card shipping-details">
+<div class="info-card">
   <div class="info-title">Detalles del envío</div>
 
   <div style="font-size:13px; line-height:1.6; color:var(--muted);">
@@ -1477,40 +1425,27 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 </div>
 <script>
-  window.history.scrollRestoration = "manual";
-// 🔐 Detectar cierre real del navegador
-const SESSION_FLAG_KEY = "sdf_browser_alive";
-
-let browserWasAlive = false;
-
-if (!sessionStorage.getItem(SESSION_FLAG_KEY)) {
-  browserWasAlive = false;
-  sessionStorage.setItem(SESSION_FLAG_KEY, "1");
-} else {
-  browserWasAlive = true;
-}
-document.addEventListener("DOMContentLoaded", function() {
-
-  window.clientName = document.getElementById('clientName');
-  window.deliveryTime = document.getElementById('deliveryTime');
-  window.orderDate  = document.getElementById('orderDate');
-  window.addr       = document.getElementById('addr');
-  window.zone       = document.getElementById('zone');
-  window.summary    = document.getElementById('summary');
-  window.config     = document.getElementById('config');
-  window.imgModal   = document.getElementById('imgModal');
-  window.modalImg   = document.getElementById('modalImg');
-  window.clientWhatsapp = document.getElementById('clientWhatsapp');
-
-  deliveryTime.addEventListener("change", function(){
-    this.setAttribute("value", this.value);
-  });
-
-  zone.addEventListener("change", function(){
-    this.setAttribute("value", this.value);
-  });
-
+const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
+const clientName = document.getElementById('clientName');
+const deliveryTime = document.getElementById('deliveryTime');
+const orderDate  = document.getElementById('orderDate');
+const addr       = document.getElementById('addr');
+const zone       = document.getElementById('zone');
+const summary    = document.getElementById('summary');
+const config     = document.getElementById('config');
+const imgModal = document.getElementById('imgModal');
+const modalImg = document.getElementById('modalImg');
+const clientWhatsapp = document.getElementById('clientWhatsapp');
+const banner = document.getElementById("heroBanner");
+// 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
+deliveryTime.addEventListener("change", function(){
+  this.setAttribute("value", this.value);
 });
+
+zone.addEventListener("change", function(){
+  this.setAttribute("value", this.value);
+});
+
 
   function clearAllHighlights() {
   document.querySelectorAll('.model-hint, .error').forEach(el => {
@@ -2076,8 +2011,8 @@ localStorage.setItem(
 }));
 }
 
-// 🔄 Restaurar solo si el navegador completo fue cerrado
-if (!sessionStorage.getItem('picadas') && !browserWasAlive) {
+// 🔄 Restaurar desde backup si se cerró navegador
+if (!sessionStorage.getItem('picadas')) {
 
   const backupKeys = Object.keys(localStorage)
     .filter(k => k.startsWith('sf_backup_order_'));
@@ -2410,8 +2345,6 @@ localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 }
 
 function forceStep2RescueIfPending() {
-
-  if (currentStep === 1) return;
 
   const hasInitPoint = sessionStorage.getItem('mp_init_point');
 const savedStep = Number(sessionStorage.getItem('currentStep'));
@@ -2789,6 +2722,7 @@ ${
             </div>
           </div>
         </div>
+</div>
       `
 }
 
@@ -2888,10 +2822,11 @@ ${
     <div style="margin-top:12px; font-weight:500; color:var(--text);">
       Preparada artesanalmente el mismo día del envío.
     </div>
-</div>
+
   </div>
 
 `;
+
 update();
 observeMediaVideos();
 }
@@ -3404,6 +3339,17 @@ const payload = {
 };
 
 
+  try {
+    // ✅ ESCRIBE EN EL SHEET (fire & forget, NO await)
+    fetch(ORDERS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: new URLSearchParams({
+        data: JSON.stringify(payload)
+      })
+    });
 
 
 saveState();
@@ -3482,6 +3428,12 @@ sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
 
 window.location.replace(mpData.init_point);
 
+  } catch (err) {
+    console.error("ERROR goWA:", err);
+    alert("Error técnico al enviar el pedido");
+    resetPayButton();
+  }
+
 }
 
   
@@ -3516,7 +3468,7 @@ function bannerInteractionDisabled(){
 
 
   
-const banner = document.getElementById("heroBanner");
+
 let bannerIndex = 0;
 let bannerFrozenModel = null;
 let bannerTimer = null;
@@ -3524,7 +3476,7 @@ let bannerVisible = true;
 let startX = 0;
 let currentX = 0;
   
-if (banner) banner.addEventListener("touchstart", e => {
+banner.addEventListener("touchstart", e => {
   if (bannerInteractionDisabled()) return;
   startX = e.touches[0].clientX;
 });
@@ -3627,7 +3579,7 @@ function nextSlide(){
   showSlide((bannerIndex + 1) % bannerSlides.length);
 }
 
-if (banner) banner.onclick = () => {
+banner.onclick = () => {
 
   if (bannerInteractionDisabled()) return;
 
@@ -3636,8 +3588,9 @@ if (banner) banner.onclick = () => {
   setModel(model); // 🔥 usar la función oficial
 };
 
-if (banner) banner.addEventListener("touchend", e => {
-  
+
+banner.addEventListener("touchend", e => {
+
   if (bannerInteractionDisabled()) return;
 
   const endX = e.changedTouches[0].clientX;
@@ -3673,16 +3626,13 @@ function syncBannerWithModel(model){
 
 let scrollTimeout;
 
-const savedStep = Number(sessionStorage.getItem('currentStep'));
 
-if (savedStep === 2) {
-  currentStep = 2;
-  history.replaceState({ step: 2 }, "", "#step2");
-} else {
-  currentStep = 1;
-  sessionStorage.setItem('currentStep', 1);
-  history.replaceState({ step: 1 }, "", location.pathname);
-}
+history.replaceState(
+  { step: Number(sessionStorage.getItem('currentStep')) || 1 },
+  "",
+  location.pathname + location.hash
+);
+
 
 // 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
 
@@ -3739,7 +3689,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 // SESSION TRACKING
 // ===============================
 
-
 if (!localStorage.getItem("sdf_session_id")) {
   localStorage.setItem("sdf_session_id", crypto.randomUUID());
 }
@@ -3757,17 +3706,21 @@ localStorage.setItem(
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
 
-window.addEventListener('pageshow', () => {
-
-  // 🔓 SIEMPRE mostrar body primero (evita pantalla blanca)
-  document.body.classList.remove("preload");
+window.addEventListener('pageshow', async () => {
 
   handleReturnFromMP();
+
   loadState();
+
+  // 🔥 PRIMERO rescate local
   forceStep2RescueIfPending();
+
   enforceTomorrowDate();
   update();
-  rescueCheckoutIfNeeded();
+
+  // 🔵 Después validación backend
+  await rescueCheckoutIfNeeded();
+
   showResumeNoticeIfNeeded();
 
   const payBtn = document.getElementById("payBtn");
@@ -3777,6 +3730,20 @@ window.addEventListener('pageshow', () => {
     payBtn.textContent = "Pagar";
   }
 
+  document.body.style.visibility = "visible";
+});
+// 🔒 bloquear zoom por gesto (iOS / Safari)
+document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener('gesturechange', e => e.preventDefault());
+document.addEventListener('gestureend', e => e.preventDefault());
+document.querySelectorAll('.control').forEach(el => {
+  el.addEventListener('input', () => {
+    clearAllHighlights();
+  });
+
+  el.addEventListener('change', () => {
+    clearAllHighlights();
+  });
 });
 
 // 🔥 PEGAR ESTO ACÁ
@@ -3827,10 +3794,7 @@ function observeMediaVideos(){
   });
 }
 function updateStickyCTA(){
-
-  if (typeof sticky === "undefined") return;
-  if (!sticky) return;
-  if (!stickyTotal || !stickyBtn) return;
+  if(!sticky) return;
 
   stickyTotal.textContent = `$${total.toLocaleString()}`;
 
@@ -3875,11 +3839,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sticky = document.getElementById("stickyCTA");
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
-  document.querySelectorAll('.control').forEach(el => {
-    el.addEventListener('input', clearAllHighlights);
-    el.addEventListener('change', clearAllHighlights);
-  });
-  
+
   const summaryWrapper = document.getElementById("summaryWrapper");
   if (!summaryWrapper) return;
 
