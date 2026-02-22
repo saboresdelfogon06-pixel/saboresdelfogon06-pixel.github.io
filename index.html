@@ -1715,11 +1715,7 @@ function updateStepTitle() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadState();          // 🔥 restaurar estado acá
-  updateStepTitle();
-});
-  
+
 function handleMiniBannerClick(){
 
   // Si ya estamos en Step 2 → volver arriba suave
@@ -1961,6 +1957,7 @@ if (backupKeys.length > 0) {
 
 function loadState() {
 
+currentStep = Number(sessionStorage.getItem('currentStep')) || 1;
 clientWhatsapp.value = sessionStorage.getItem('clientWhatsapp') || "";
 const savedPicadas = sessionStorage.getItem('picadas');
 deliveryTime.value = sessionStorage.getItem('deliveryTime') || "";
@@ -3585,8 +3582,9 @@ window.addEventListener('pageshow', async () => {
 
   handleReturnFromMP();
 
-  loadState(); // 🔥 restauración única real
+  loadState(); // única restauración real
 
+  updateStepTitle();   // 🔥 mover acá
   enforceTomorrowDate();
   update();
 
