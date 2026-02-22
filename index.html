@@ -1192,6 +1192,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   <button id="backBtnInline" onclick="goBackToStep1()">← Volver</button>
 </div>
 <div id="config"></div>
+  <div id="mediaWrapper"></div>
 <div class="section summary" id="summaryWrapper" style="position:relative">
   <div id="summary"></div>
 </div>
@@ -2686,51 +2687,64 @@ ${
       `
 }
 
-${
-  p.model && p.size &&
-  mediaData[p.model] &&
-  mediaData[p.model][p.size]
-  ? `
-    <div class="section">
-      <div class="media-grid">
-        ${
-          mediaData[p.model][p.size].map(media => {
-
-            if(media.type === "video"){
-              return `
-                <div class="media-item">
-                  <video
-                    src="${media.src}"
-                    muted
-                    playsinline
-                    loop
-                    autoplay
-                    preload="metadata">
-                  </video>
-                </div>
-              `;
-            }
-
-            if(media.type === "image"){
-              return `
-                <div class="media-item">
-                  <img src="${media.src}" onclick="openModal('${media.src}')">
-                </div>
-              `;
-            }
-
-          }).join("")
-        }
-      </div>
-    </div>
-  `
-  : ``
-}
-
 
 `;
-
+renderMediaSection();
 update();
+}
+
+function renderMediaSection() {
+
+  const wrapper = document.getElementById("mediaWrapper");
+  if (!wrapper) return;
+
+  const p = picadas[active];
+
+  if (
+    p.model &&
+    p.size &&
+    mediaData[p.model] &&
+    mediaData[p.model][p.size]
+  ) {
+
+    wrapper.innerHTML = `
+      <div class="section">
+        <div class="media-grid">
+          ${
+            mediaData[p.model][p.size].map(media => {
+
+              if(media.type === "video"){
+                return `
+                  <div class="media-item">
+                    <video
+                      src="${media.src}"
+                      muted
+                      playsinline
+                      loop
+                      autoplay
+                      preload="metadata">
+                    </video>
+                  </div>
+                `;
+              }
+
+              if(media.type === "image"){
+                return `
+                  <div class="media-item">
+                    <img src="${media.src}" onclick="openModal('${media.src}')">
+                  </div>
+                `;
+              }
+
+            }).join("")
+          }
+        </div>
+      </div>
+    `;
+
+  } else {
+    wrapper.innerHTML = "";
+  }
 }
 
 function handleSizeClick(s, p){
