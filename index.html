@@ -1504,6 +1504,7 @@ function goBackToStep1(){
 
 
   currentStep = 1;
+  history.replaceState({ step: 1 }, "", location.pathname);
   sessionStorage.setItem('currentStep', 1);
 
   document.getElementById("config").style.display = "block";
@@ -3624,12 +3625,11 @@ document.querySelectorAll('.control').forEach(el => {
   });
 });
 
-// 🔥 PEGAR ESTO ACÁ
-window.addEventListener("popstate", function () {
+window.addEventListener("popstate", function (event) {
 
-  if (currentStep === 2) {
+  // 🔒 Solo reaccionar si el estado realmente indica step 1
+  if (event.state && event.state.step === 1) {
     goBackToStep1();
-    return;
   }
 
 });
