@@ -2026,6 +2026,7 @@ addr.value = sessionStorage.getItem('addr') || "";
   if (savedStep === 2) {
 
     currentStep = 2;
+    history.replaceState({ step: currentStep }, "", location.pathname);
     banner.style.pointerEvents = "none";
 
     document.getElementById("config").style.display = "none";
@@ -2038,6 +2039,7 @@ addr.value = sessionStorage.getItem('addr') || "";
   } else {
 
     currentStep = 1;
+    history.replaceState({ step: 1 }, "", location.pathname);
     banner.style.pointerEvents = "auto";
 
 
@@ -3508,11 +3510,7 @@ function syncBannerWithModel(model){
 let scrollTimeout;
 
 
-history.replaceState(
-  { step: Number(sessionStorage.getItem('currentStep')) || 1 },
-  "",
-  location.pathname + location.hash
-);
+
 
 
 // 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
