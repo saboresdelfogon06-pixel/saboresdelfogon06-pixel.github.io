@@ -3480,6 +3480,23 @@ banner.addEventListener("touchstart", e => {
   
 const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
+// ===============================
+// 🎥 VIDEO PERFORMANCE FIX (GLOBAL)
+// ===============================
+const videoObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    const video = entry.target;
+
+    if(entry.isIntersecting){
+      video.play().catch(()=>{});
+    } else {
+      video.pause();
+    }
+  });
+},{
+  threshold: 0.6
+});
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // ===== STICKY CTA INIT =====
@@ -3534,6 +3551,7 @@ if (summaryWrapper && sticky) {
 // 👁️ Observer para pausar autoplay cuando el banner no está visible
 const bannerObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
+
     bannerVisible = entry.isIntersecting;
 
     if (bannerVisible) {
@@ -3541,28 +3559,23 @@ const bannerObserver = new IntersectionObserver((entries) => {
         clearTimeout(bannerTimer);
         bannerTimer = setTimeout(nextSlide, 5000);
       }
-
-      // ===============================
-// 🎥 VIDEO PERFORMANCE FIX
-// ===============================
-const videoObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    const video = entry.target;
-
-    if(entry.isIntersecting){
-      video.play().catch(()=>{});
     } else {
-      video.pause();
+      clearTimeout(bannerTimer);
     }
+
   });
+}, {
+  threshold: 0.5
+});
+
+if (banner) {
+  bannerObserver.observe(banner);
+}
+      // ===============================
 },{
   threshold: 0.6
 });
 
-// Observar videos existentes
-document.querySelectorAll(".media-item video").forEach(v=>{
-  videoObserver.observe(v);
-});
     } else {
       clearTimeout(bannerTimer);
     }
