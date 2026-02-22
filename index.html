@@ -3725,18 +3725,12 @@ localStorage.setItem(
   "sdf_page_views",
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
-window.addEventListener('pageshow', function (event) {
-  if (event.persisted) {
-    loadState();
-  }
-});
-window.addEventListener('pageshow', async () => {
+window.addEventListener('pageshow', async (event) => {
 
   handleReturnFromMP();
 
-  loadState(); // única restauración real
+  loadState();
 
-  // 🔒 bloquear autoplay inmediatamente después de restaurar
   clearTimeout(bannerTimer);
 
   updateStepTitle();
