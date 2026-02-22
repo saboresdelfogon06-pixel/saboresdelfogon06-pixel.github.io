@@ -1143,8 +1143,8 @@ button.selected{
   left: 0;
   right: 0;
 
-  background: rgba(24,24,24,0.98);
-  backdrop-filter: blur(10px);
+  background: #181818;
+  /* backdrop-filter eliminado */
 
   display:flex;
   align-items:center;
@@ -1792,20 +1792,24 @@ const mediaData = {
 
 function getRandomMedia(model, size, picadaIndex){
 
-  if(!mediaData[model] || !mediaData[model][size]) return [];
+  if(!mediaData[model]) return [];
+  if(!mediaData[model][size]) return [];
 
-  const allMedia = mediaData[model][size];
+  const media = mediaData[model][size];
 
-  // seed basado en orden de picada
-  const seed = picadaIndex + 1;
+  // 🔒 Si hay 1 o 2 elementos, devolver directos
+  if(media.length <= 2){
+    return media;
+  }
 
-  const shuffled = [...allMedia].sort((a,b)=>{
-    return (Math.sin(seed + a.src.length) - Math.sin(seed + b.src.length));
-  });
+  // 🔹 Shuffle simple determinístico por índice
+  const start = picadaIndex % media.length;
 
-  return shuffled.slice(0, 2);
+  return [
+    media[start],
+    media[(start + 1) % media.length]
+  ];
 }
-
 let currentStep = 1;
 
 function updateStepTitle() {
@@ -2733,21 +2737,21 @@ ${
         ${
           getRandomMedia(p.model, p.size, active).map(media => {
 
-            if(media.type === "video"){
-              return `
-                <div class="media-item">
-                  <video
-                    src="${media.src}"
-                    muted
-                    playsinline
-                    loop
-                    autoplay
-                    preload="metadata">
-                  </video>
-                </div>
-              `;
-            }
-
+if(media.type === "video"){
+  return `
+    <div class="media-item">
+      <video
+        src="${media.src}"
+        muted
+        playsinline
+        loop
+        preload="metadata"
+        loading="lazy"
+        poster="images/placeholder.webp">
+      </video>
+    </div>
+  `;
+}
             if(media.type === "image"){
               return `
                 <div class="media-item">
@@ -2827,7 +2831,13 @@ ${
 
 
 `;
-update();
+requestAnimationFrame(()=>{
+  update();
+
+  document.querySelectorAll(".media-item video").forEach(v=>{
+    videoObserver.observe(v);
+  });
+});
 }
 
 function handleSizeClick(s, p){
@@ -3531,6 +3541,28 @@ const bannerObserver = new IntersectionObserver((entries) => {
         clearTimeout(bannerTimer);
         bannerTimer = setTimeout(nextSlide, 5000);
       }
+
+      // ===============================
+// 🎥 VIDEO PERFORMANCE FIX
+// ===============================
+const videoObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    const video = entry.target;
+
+    if(entry.isIntersecting){
+      video.play().catch(()=>{});
+    } else {
+      video.pause();
+    }
+  });
+},{
+  threshold: 0.6
+});
+
+// Observar videos existentes
+document.querySelectorAll(".media-item video").forEach(v=>{
+  videoObserver.observe(v);
+});
     } else {
       clearTimeout(bannerTimer);
     }
