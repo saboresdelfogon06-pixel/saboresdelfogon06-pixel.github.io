@@ -3118,32 +3118,31 @@ updateStickyCTA();
 }
   
 function updateTotalsOnly(){
+
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
-  // 🔹 Actualizar total mini banner
+  // 🔹 Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 
-  // 🔹 Actualizar total en resumen (si ya está renderizado)
-const totalValue = document.querySelector('.total-left div:last-child');
-if (totalValue) {
-  const stepTotal = currentStep === 2
-  ? total
-  : picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+  // 🔹 Total resumen
+  const totalValue = document.querySelector('.total-left div:last-child');
+  if (totalValue) {
+    const stepTotal = currentStep === 2
+      ? total
+      : picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 
-totalValue.textContent = `$${stepTotal.toLocaleString()}`;
-}
-  updateStickyCTA(); // 👈 ESTA LÍNEA
-}
+    totalValue.textContent = `$${stepTotal.toLocaleString()}`;
+  }
 
-
-  // 🔹 Actualizar línea de envío (zona + dirección) sin reconstruir todo
+  // 🔹 Línea envío
   const shippingLine = document.querySelector('.summary-shipping span:nth-child(2)');
   if (shippingLine) {
     shippingLine.innerHTML =
       `${zoneName || "Sin localidad"}${addr.value ? " – " + addr.value : ""}`;
   }
-}
 
+  updateStickyCTA();
+}
 
 function getFacebookIdentifiers() {
   function getCookie(name) {
