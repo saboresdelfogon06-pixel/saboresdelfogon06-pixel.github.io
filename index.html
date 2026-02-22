@@ -3388,7 +3388,7 @@ if (!mpData.init_point) {
 sessionStorage.setItem('mp_init_point', mpData.init_point);
 sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
 
-window.location.replace(mpData.init_point);
+window.location.href = mpData.init_point;
 
   } catch (err) {
     console.error("ERROR goWA:", err);
@@ -3725,6 +3725,11 @@ localStorage.setItem(
   "sdf_page_views",
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
+window.addEventListener('pageshow', function (event) {
+  if (event.persisted) {
+    loadState();
+  }
+});
 window.addEventListener('pageshow', async () => {
 
   handleReturnFromMP();
