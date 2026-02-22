@@ -1156,7 +1156,7 @@ button.selected{
   border-top: 1px solid rgba(255,255,255,.05);
 
   z-index: 999;
-  transition: transform .3s ease, opacity .3s ease;
+  transition: transform .25s ease;
 }
 
 .sticky-cta.hidden{
@@ -1209,7 +1209,19 @@ body{
   <button>Cerrar</button>
   <img id="modalImg">
 </div>
+<!-- ===============================
+     STICKY CTA INFERIOR
+================================ -->
+<div id="stickyCTA" class="sticky-cta">
+  <div class="sticky-total">
+    <div class="sticky-label">Total</div>
+    <div class="sticky-amount" id="stickyTotal">$0</div>
+  </div>
 
+  <button id="stickyBtn" class="sticky-btn">
+    Continuar
+  </button>
+</div>
 <div class="container">
 
 <div class="mini-banner">
@@ -3440,7 +3452,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sticky = document.getElementById("stickyCTA");
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
-
+  updateStickyCTA();
   const summaryWrapper = document.getElementById("summaryWrapper");
 
   if (summaryWrapper && sticky) {
@@ -3449,7 +3461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (entry.isIntersecting) {
           sticky.classList.add("hidden");
         } else {
-          updateStickyCTA();
+
         }
       });
     }, { threshold: 0.2 });
@@ -3783,18 +3795,6 @@ loadPixelOnce();
 
 })();
 </script>
-<!-- ===============================
-     STICKY CTA INFERIOR
-================================ -->
-<div id="stickyCTA" class="sticky-cta hidden">
-  <div class="sticky-total">
-    <div class="sticky-label">Total</div>
-    <div class="sticky-amount" id="stickyTotal">$0</div>
-  </div>
 
-  <button id="stickyBtn" class="sticky-btn">
-    Continuar
-  </button>
-</div>
 </body>
 </html>
