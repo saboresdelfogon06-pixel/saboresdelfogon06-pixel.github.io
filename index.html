@@ -3455,17 +3455,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const summaryWrapper = document.getElementById("summaryWrapper");
 
   if (summaryWrapper && sticky) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          sticky.classList.add("hidden");
-        } else {
-
-        }
-      });
-    }, { threshold: 0.2 });
-
-    observer.observe(summaryWrapper);
   }
   bannerSlides.forEach((s, index) => {
     const slide = document.createElement("div");
@@ -3539,25 +3528,23 @@ function updateStickyCTA(){
 
   stickyTotal.textContent = `$${stepTotal.toLocaleString()}`;
 
-  if(currentStep === 1){
+if(currentStep === 1){
 
-    const totalPicadas = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+  const totalPicadas = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 
-    if(totalPicadas > 0){
-      sticky.classList.remove("hidden");
-      stickyBtn.textContent = "Continuar";
-      stickyBtn.onclick = goToStep2;
-    } else {
-      sticky.classList.add("hidden");
-    }
-  }
+  stickyBtn.textContent = "Continuar";
+  stickyBtn.onclick = goToStep2;
 
-  if(currentStep === 2){
+  sticky.classList.toggle("hidden", totalPicadas === 0);
+}
 
-    sticky.classList.remove("hidden");
-    stickyBtn.textContent = "Pagar";
-    stickyBtn.onclick = goWA;
-  }
+if(currentStep === 2){
+
+  stickyBtn.textContent = "Pagar";
+  stickyBtn.onclick = goWA;
+
+  sticky.classList.remove("hidden");
+}
 }
 
 function showSlide(i, animate = true){
