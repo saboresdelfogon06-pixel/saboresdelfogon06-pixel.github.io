@@ -1765,15 +1765,46 @@ const modelData = {
 
 const mediaData = {
   "Clásica y Elegante": {
+
+    // 🔵 YA EXISTENTE (NO SE BORRA)
     10: [
       { type: "video", src: "images/Clásica y elegante 10 personas .mp4" },
       { type: "video", src: "images/Clásica y elegante 10 personas  (2).mp4" }
+    ],
+
+    // 🟡 NUEVO 6 PERSONAS
+    6: [
+      { type: "video", src: "images/cye 6 personas.mp4" },
+      { type: "video", src: "images/cye 6 personas 4.mp4" }
     ]
   },
+
   "Fresca y Colorida": {
-    // vacío por ahora
+
+    // 🟢 NUEVO 6 PERSONAS
+    6: [
+      { type: "video", src: "images/fyc 6 personas.mp4" },
+      { type: "video", src: "images/fyc 6 personas 2.mp4" },
+      { type: "video", src: "images/fyc 6 personas 3.mp4" }
+    ]
   }
 };
+
+function getRandomMedia(model, size, picadaIndex){
+
+  if(!mediaData[model] || !mediaData[model][size]) return [];
+
+  const allMedia = mediaData[model][size];
+
+  // seed basado en orden de picada
+  const seed = picadaIndex + 1;
+
+  const shuffled = [...allMedia].sort((a,b)=>{
+    return (Math.sin(seed + a.src.length) - Math.sin(seed + b.src.length));
+  });
+
+  return shuffled.slice(0, 2);
+}
 
 let currentStep = 1;
 
@@ -2700,7 +2731,7 @@ ${
     <div class="section">
       <div class="media-grid">
         ${
-          mediaData[p.model][p.size].map(media => {
+          getRandomMedia(p.model, p.size, active).map(media => {
 
             if(media.type === "video"){
               return `
