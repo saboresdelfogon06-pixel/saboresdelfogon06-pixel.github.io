@@ -2084,20 +2084,7 @@ addr.value = sessionStorage.getItem('addr') || "";
     }
   }
 
-// 🔥 FORZAR sincronización fuerte del banner
-if (picadas[active] && picadas[active].model) {
 
-  const savedModel = picadas[active].model;
-  const index = bannerSlides.findIndex(s => s.model === savedModel);
-
-  if (index >= 0) {
-    bannerIndex = index;
-
-    if (bannerReady) {
-      showSlide(index, false);
-    }
-  }
-}
   renderConfig();   // reconstruye toda la UI
   enforceTomorrowDate();
 
@@ -2145,6 +2132,13 @@ if (summaryWrapper && config) {
   }
 
   updateStepTitle();
+  // 🔥 Sincronizar banner después de render
+if (picadas[active] && picadas[active].model) {
+  const savedModel = picadas[active].model;
+  setTimeout(() => {
+    syncBannerWithModel(savedModel);
+  }, 0);
+}
   update();
 }
 
