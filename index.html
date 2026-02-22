@@ -1715,11 +1715,8 @@ function updateStepTitle() {
   }
 }
 
-
-  document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("infoOperativa").style.display = "block";
+document.addEventListener("DOMContentLoaded", () => {
+  loadState();          // 🔥 restaurar estado acá
   updateStepTitle();
 });
   
