@@ -2073,11 +2073,20 @@ addr.value = sessionStorage.getItem('addr') || "";
     }
   }
 
-  // 🔥 Sincronizar banner si hay modelo seleccionado
-  if (picadas[active] && picadas[active].model) {
-    syncBannerWithModel(picadas[active].model);
-  }
+// 🔥 FORZAR sincronización fuerte del banner
+if (picadas[active] && picadas[active].model) {
 
+  const savedModel = picadas[active].model;
+  const index = bannerSlides.findIndex(s => s.model === savedModel);
+
+  if (index >= 0) {
+    bannerIndex = index;
+
+    if (bannerReady) {
+      showSlide(index, false);
+    }
+  }
+}
   renderConfig();   // reconstruye toda la UI
   enforceTomorrowDate();
 
@@ -3706,6 +3715,19 @@ window.addEventListener('pageshow', async () => {
   handleReturnFromMP();
 
   loadState(); // única restauración real
+
+  // 🔒 bloquear autoplay inmediatamente después de restaurar
+  clearTimeout(bannerTimer);
+
+  updateStepTitle();
+  enforceTomorrowDate();
+  update();
+
+  await rescueCheckoutIfNeeded();
+  showResumeNoticeIfNeeded();
+
+  document.body.style.visibility = "visible";
+});
 
   updateStepTitle();   // 🔥 mover acá
   enforceTomorrowDate();
