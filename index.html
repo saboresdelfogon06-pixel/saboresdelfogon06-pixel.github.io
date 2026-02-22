@@ -2203,44 +2203,40 @@ sessionStorage.removeItem('mp_init_point');
 
 
 function handleReturnFromMP() {
+
   const params = new URLSearchParams(window.location.search);
 
   const status =
     params.get('status') ||
     params.get('collection_status');
 
-  // 👉 SOLO si el pago fue aprobado
-  if (status === 'approved') {
-    // 🧹 eliminar backup persistente
-localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
+  // 🔒 SOLO ejecutar si realmente venimos de Mercado Pago
+  const comingFromMP = document.referrer.includes("mercadopago");
 
-    // 🔄 Reset total para nuevo pedido
+  if (status === 'approved' && comingFromMP) {
+
+    localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
+
     resetForNextOrder();
 
-    // 🧹 limpiar estado de Mercado Pago
     sessionStorage.removeItem('mp_init_point');
     sessionStorage.removeItem('order_fingerprint');
     sessionStorage.removeItem('order_id');
 
-    // 🆕 generar nuevo ID de pedido
     sessionStorage.setItem('order_id', generateOrderId());
     sessionStorage.setItem('token', generateToken());
 
-
-    // 🧼 limpiar la URL (?status=approved)
     window.history.replaceState(
       {},
       document.title,
       window.location.pathname
     );
 
-    // ⬆️ volver arriba
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: 'auto' });
 
     console.log('✅ Pago aprobado → pedido reseteado');
   }
 }
-
 function forceStep2RescueIfPending() {
 
   const hasInitPoint = sessionStorage.getItem('mp_init_point');
