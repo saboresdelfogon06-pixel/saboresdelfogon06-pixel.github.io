@@ -3564,6 +3564,15 @@ const bannerObserver = new IntersectionObserver((entries) => {
     }
 
   });
+}, {
+  threshold: 0.5
+});
+
+if (banner) {
+  bannerObserver.observe(banner);
+}
+
+  });
 
 
 // 👁️ Pausar autoplay si el usuario cambia de pestaña
