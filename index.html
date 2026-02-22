@@ -550,30 +550,28 @@ input[type="date"].control{
   padding:0 12px;
   box-sizing:border-box;
 
-  appearance:none;
-  -webkit-appearance:none;
-  -moz-appearance:none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background: var(--input-bg);
+  color: var(--muted);
+
+  display:flex;
+  align-items:center;
 
   font-family:inherit;
   font-size:14px;
-  font-weight:400;
-  background:var(--input-bg);
-
-  text-align:left;
 }
 
+/* iOS fix interno */
 input[type="date"]::-webkit-datetime-edit{
   padding:0;
   margin:0;
-  text-align:left;
+  line-height:48px;
 }
 
-
-  
-/* icono calendario (WebKit: Chrome, Safari, iOS) */
 input[type="date"]::-webkit-calendar-picker-indicator{
   filter: invert(1) opacity(0.6);
-  cursor:pointer;
 }
 
 /* Firefox */
@@ -1817,7 +1815,7 @@ function goToStep2(){
 
   // 🔥 ESTO SIEMPRE SE EJECUTA (clave)
   currentStep = 2;
-  history.pushState({ step: 2 }, "", "#step2");
+  history.replaceState({ step: 2 }, "", location.pathname);
   saveState();
   updateStepTitle();
 
@@ -2060,8 +2058,8 @@ if (summaryWrapper && config) {
 
   updateStepTitle();
   update();
-if (currentStep === 2) {
-scrollToStep2Card();
+if (currentStep === 2 && !performance.navigation.type) {
+  scrollToStep2Card();
 }
 }
 
@@ -2248,13 +2246,11 @@ localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 function forceStep2RescueIfPending() {
 
   const hasInitPoint = sessionStorage.getItem('mp_init_point');
-const savedStep = Number(sessionStorage.getItem('currentStep'));
-const savedPicadas = sessionStorage.getItem('picadas');
+  const savedStep = Number(sessionStorage.getItem('currentStep'));
 
-  // Si intentó pagar y hay pedido guardado
-if (hasInitPoint && savedPicadas && currentStep !== 2) {
+  // 🔒 SOLO si realmente estaba en Step 2
+  if (hasInitPoint && savedStep === 2) {
 
-    // Forzar Step 2 SIEMPRE
     currentStep = 2;
     sessionStorage.setItem('currentStep', 2);
 
@@ -2264,14 +2260,11 @@ if (hasInitPoint && savedPicadas && currentStep !== 2) {
     document.getElementById("metodosPago").style.display = "block";
     document.getElementById("backBtnInline").style.display = "block";
     enforceStep2LayoutOrder();
-      
+
     banner.style.pointerEvents = "none";
 
     updateStepTitle();
     update();
-  scrollToStep2Card();
-
-    console.log("🟡 Rescate local forzado a Step 2");
   }
 }
 
