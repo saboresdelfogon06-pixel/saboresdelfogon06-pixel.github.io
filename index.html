@@ -1908,6 +1908,7 @@ saveState();
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 let sticky, stickyBtn, stickyTotal;
+let summaryVisible = false;
 
 
 const PRICES = {
@@ -3451,10 +3452,21 @@ document.addEventListener('DOMContentLoaded', () => {
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
   updateStickyCTA();
-  const summaryWrapper = document.getElementById("summaryWrapper");
+const summaryWrapper = document.getElementById("summaryWrapper");
 
-  if (summaryWrapper && sticky) {
-  }
+if (summaryWrapper && sticky) {
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      summaryVisible = entry.isIntersecting;
+      updateStickyCTA(); // 🔥 recalcular cada vez que cambia
+    });
+  }, {
+    threshold: 0.4
+  });
+
+  observer.observe(summaryWrapper);
+}
   bannerSlides.forEach((s, index) => {
     const slide = document.createElement("div");
     slide.className = "banner-slide";
@@ -3515,37 +3527,43 @@ document.addEventListener("visibilitychange", () => {
     bannerTimer = setTimeout(nextSlide, 5000);
   }
 });
-
+  
 function updateStickyCTA(){
 
   if(!sticky) return;
 
-  // Total visible correcto según step
   const stepTotal = currentStep === 2
     ? total
     : picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 
   stickyTotal.textContent = `$${stepTotal.toLocaleString()}`;
 
-if(currentStep === 1){
+  // 🔴 Si el resumen está visible → ocultar SIEMPRE
+  if(summaryVisible){
+    sticky.classList.add("hidden");
+    return;
+  }
 
-  const totalPicadas = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+  // 🟢 Si NO está visible → aplicar lógica normal
 
-  stickyBtn.textContent = "Continuar";
-  stickyBtn.onclick = goToStep2;
+  if(currentStep === 1){
 
-  sticky.classList.toggle("hidden", totalPicadas === 0);
+    const totalPicadas = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+
+    stickyBtn.textContent = "Continuar";
+    stickyBtn.onclick = goToStep2;
+
+    sticky.classList.toggle("hidden", totalPicadas === 0);
+  }
+
+  if(currentStep === 2){
+
+    stickyBtn.textContent = "Pagar";
+    stickyBtn.onclick = goWA;
+
+    sticky.classList.remove("hidden");
+  }
 }
-
-if(currentStep === 2){
-
-  stickyBtn.textContent = "Pagar";
-  stickyBtn.onclick = goWA;
-
-  sticky.classList.remove("hidden");
-}
-}
-
 function showSlide(i, animate = true){
   bannerIndex = i;
   track.style.transition = animate ? "transform .6s ease" : "none";
