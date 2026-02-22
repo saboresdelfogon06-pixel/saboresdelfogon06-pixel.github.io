@@ -1815,9 +1815,10 @@ function goToStep2(){
   }
 
   // 🔥 ESTO SIEMPRE SE EJECUTA (clave)
-  currentStep = 2;
-  history.replaceState({ step: 2 }, "", location.pathname);
-  saveState();
+currentStep = 2;
+sessionStorage.setItem('currentStep', 2);
+history.replaceState({ step: 2 }, "", location.pathname);
+saveState();
   updateStepTitle();
 
   document.getElementById("config").style.display = "none";
@@ -3489,10 +3490,18 @@ banner.addEventListener("touchend", e => {
 
 
 function syncBannerWithModel(model){
-  if (!model || !bannerReady) return;
+
+  if (!model) return;
 
   const i = bannerSlides.findIndex(s => s.model === model);
-  if (i >= 0) showSlide(i, false);
+
+  if (i >= 0) {
+    bannerIndex = i;
+
+    if (bannerReady) {
+      showSlide(i, false);
+    }
+  }
 }
 
 
