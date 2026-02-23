@@ -3435,7 +3435,8 @@ body: JSON.stringify({
   items: picadas.map(p => ({
     model: p.model,
     size: p.size,
-    price: p.price
+    price: p.price,
+    notes: p.notes || ""
   })),
   envio: ship,
   orderDate: orderDate.value,
