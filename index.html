@@ -1352,8 +1352,8 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   </div>
 
   <!-- CARD WHATSAPP + INSTAGRAM -->
-  <div class="info-card reassurance-card" id="reassuranceBlock">
-
+<div class="info-card reassurance-card" id="reassuranceBlockStep1">
+  
     <div class="reassurance-text">
       ¿Tenés dudas antes de hacer el pedido?
     </div>
@@ -1517,7 +1517,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 
   <!-- 6️⃣ WHATSAPP + INSTAGRAM -->
-  <div class="info-card reassurance-card" id="reassuranceBlock">
+  <div class="info-card reassurance-card" id="reassuranceBlockStep2">
 
     <div class="reassurance-text">
       ¿Tenés dudas antes de finalizar el pedido?
@@ -1716,10 +1716,9 @@ function goBackToStep1(){
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
   document.getElementById("backBtnInline").style.display = "none";
-  document.getElementById("reassuranceBlock").style.display = "block";
+  document.getElementById("reassuranceBlockStep1").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("reassuranceBlock").style.display = "none";
-
+  document.getElementById("reassuranceBlockStep2").style.display = "none";
   banner.style.pointerEvents = "auto";
 
 
@@ -2041,8 +2040,8 @@ saveState();
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
   document.getElementById("metodosPago").style.display = "block";
-  document.getElementById("reassuranceBlock").style.display = "block";
-
+ document.getElementById("reassuranceBlockStep1").style.display = "none";
+ document.getElementById("reassuranceBlockStep2").style.display = "block";
   banner.style.pointerEvents = "none";
 
   update();
