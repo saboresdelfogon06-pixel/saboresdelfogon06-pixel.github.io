@@ -460,10 +460,16 @@ body.sticky-visible{
     0 1px 0 rgba(255,255,255,.02) inset;
 
   position: fixed;
-  top: env(safe-area-inset-top, 12px);
-  left: 12px;
-  right: 12px;
+
+  top: 12px;                /* 🔥 VOLVEMOS A FIJO */
+  left: 50%;                /* 🔥 CENTRADO REAL */
+  transform: translateX(-50%);
+  width: calc(100% - 24px); /* 🔥 MISMO MARGEN SIEMPRE */
+
+  max-width: 720px;         /* 🔥 ALINEADO CON .container */
   z-index: 999;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 .mini-banner .left {
   display: flex;
@@ -505,7 +511,9 @@ body.sticky-visible{
   transform: scale(0.96);
   }
 
-
+.container {
+  padding-top: 72px;
+}
 .favicon {
   width: 96px;           /* Tamaño del favicon (cuadrado) */
   height: 96px;          /* Tamaño del favicon (cuadrado) */
@@ -3654,15 +3662,14 @@ function updateStickyCTA(){
     ? document.getElementById("summaryWrapperStep1")
     : document.getElementById("summaryWrapperStep2");
 
-let summaryIsVisible = false;
+  let summaryIsVisible = false;
 
 if(summaryEl){
   const rect = summaryEl.getBoundingClientRect();
-  const viewportMiddle = window.innerHeight / 2;
 
   summaryIsVisible =
-    rect.top <= viewportMiddle &&
-    rect.bottom >= viewportMiddle;
+    rect.top < window.innerHeight &&
+    rect.bottom > 0;
 }
 
   const stepTotal = currentStep === 2
