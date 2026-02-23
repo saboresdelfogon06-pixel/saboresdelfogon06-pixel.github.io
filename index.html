@@ -1719,6 +1719,7 @@ function goBackToStep1(){
   document.getElementById("reassuranceBlockStep1").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
   document.getElementById("reassuranceBlockStep2").style.display = "none";
+  document.getElementById("step1").style.display = "block";
   banner.style.pointerEvents = "auto";
 
 
@@ -2034,14 +2035,14 @@ history.replaceState({ step: 2 }, "", location.pathname);
 saveState();
   updateStepTitle();
 
-  document.getElementById("config").style.display = "none";
+  document.getElementById("step1").style.display = "none";
   document.getElementById("step2").style.display = "block";
-  document.getElementById("infoOperativa").style.display = "none";
+  document.getElementById("step2").style.display = "block";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
   document.getElementById("metodosPago").style.display = "block";
- document.getElementById("reassuranceBlockStep1").style.display = "none";
  document.getElementById("reassuranceBlockStep2").style.display = "block";
+  document.getElementById("step1").style.display = "none";
   banner.style.pointerEvents = "none";
 
   update();
