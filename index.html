@@ -1174,7 +1174,7 @@ button.selected{
 }
 
 .sticky-cta.hidden{
-  transform: translateY(100%);
+  transform: translateY(120%);
   pointer-events:none;
 }
 
@@ -3583,22 +3583,13 @@ document.addEventListener('DOMContentLoaded', () => {
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
   updateStickyCTA();
+  window.addEventListener("scroll", () => {
+  requestAnimationFrame(updateStickyCTA);
+}, { passive: true });
 const summaryStep1 = document.getElementById("summaryWrapperStep1");
 const summaryStep2 = document.getElementById("summaryWrapperStep2");
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      summaryVisible = true;
-    } else {
-      summaryVisible = false;
-    }
-    updateStickyCTA();
-  });
-}, { threshold: 0.4 });
 
-if (summaryStep1) observer.observe(summaryStep1);
-if (summaryStep2) observer.observe(summaryStep2);
   bannerSlides.forEach((s, index) => {
     const slide = document.createElement("div");
     slide.className = "banner-slide";
@@ -3668,19 +3659,29 @@ function updateStickyCTA(){
 
   if(!sticky) return;
 
+  const summaryEl = currentStep === 1
+    ? document.getElementById("summaryWrapperStep1")
+    : document.getElementById("summaryWrapperStep2");
+
+  let summaryIsVisible = false;
+
+  if(summaryEl){
+    const rect = summaryEl.getBoundingClientRect();
+    summaryIsVisible =
+      rect.top < window.innerHeight &&
+      rect.bottom > 0;
+  }
+
   const stepTotal = currentStep === 2
     ? total
     : picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 
   stickyTotal.textContent = `$${stepTotal.toLocaleString()}`;
 
-  // 🔴 Si el resumen está visible → ocultar SIEMPRE
-  if(summaryVisible){
+  if(summaryIsVisible){
     sticky.classList.add("hidden");
     return;
   }
-
-  // 🟢 Si NO está visible → aplicar lógica normal
 
   if(currentStep === 1){
 
