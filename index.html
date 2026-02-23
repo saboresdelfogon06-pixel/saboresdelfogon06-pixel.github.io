@@ -1691,23 +1691,6 @@ function goBackToStep1(){
 
   banner.style.pointerEvents = "auto";
 
-  // 🔁 Obtener referencias UNA sola vez
-  const summaryWrapper = document.getElementById("summaryWrapper");
-  const infoOperativa = document.getElementById("infoOperativa");
-  const reassuranceBlock = document.getElementById("reassuranceBlock");
-
-  // 🔁 Mover summary arriba de infoOperativa
-  if (summaryWrapper && infoOperativa) {
-    infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
-  }
-
-  // 🔁 Mover reassurance debajo de infoOperativa
-  if (reassuranceBlock && infoOperativa) {
-    infoOperativa.parentNode.insertBefore(
-      reassuranceBlock,
-      infoOperativa.nextSibling
-    );
-  }
 
   update();
 
@@ -2244,24 +2227,6 @@ addr.value = sessionStorage.getItem('addr') || "";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
     document.getElementById("backBtnInline").style.display = "none";
-
-    const summaryWrapper = document.getElementById("summaryWrapper");
-    const infoOperativa = document.getElementById("infoOperativa");
-    const reassuranceBlock = document.getElementById("reassuranceBlock");
-
-    if (summaryWrapper && infoOperativa) {
-      infoOperativa.parentNode.insertBefore(
-        summaryWrapper,
-        infoOperativa
-      );
-    }
-
-    if (reassuranceBlock && infoOperativa) {
-      infoOperativa.parentNode.insertBefore(
-        reassuranceBlock,
-        infoOperativa.nextSibling
-      );
-    }
 
     updateStepTitle();
 
