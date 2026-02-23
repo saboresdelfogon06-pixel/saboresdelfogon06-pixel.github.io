@@ -1954,20 +1954,16 @@ function enforceStep2LayoutOrder() {
   const step2 = document.getElementById("step2");
   const summaryWrapper = document.getElementById("summaryWrapper");
   const paymentBlock = document.querySelector(".payment-block");
-  const shippingCard = document.getElementById("shippingCard");
   const reassuranceBlock = document.getElementById("reassuranceBlock");
 
-  if (!step2 || !summaryWrapper || !paymentBlock || !shippingCard) return;
+  if (!step2 || !summaryWrapper || !paymentBlock) return;
 
-  // 🔹 Asegurar que el summary quede dentro de step2
+  // 🔹 Asegurar que el summary esté dentro de step2
   if (!step2.contains(summaryWrapper)) {
     step2.appendChild(summaryWrapper);
   }
 
-  // 🔹 Asegurar orden dentro de step2
-  step2.insertBefore(summaryWrapper, paymentBlock);
-
-  // 🔹 Reassurance debajo de métodos de pago
+  // 🔹 Reassurance siempre debajo de payment-block
   if (reassuranceBlock) {
     paymentBlock.parentNode.insertBefore(
       reassuranceBlock,
