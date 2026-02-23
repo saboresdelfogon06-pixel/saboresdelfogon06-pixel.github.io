@@ -1263,6 +1263,12 @@ button.selected{
 textarea.control{
   line-height:1.5;
 }
+
+textarea.control::placeholder{
+  color: var(--muted);
+  opacity: 1;
+  font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -2930,16 +2936,12 @@ function renderInstructionsCard(){
           Instrucciones del pedido (opcional)
         </div>
 
-        <textarea
-          class="control"
-          placeholder=" "
-          style="height:90px; resize:none; padding-top:14px;"
-          oninput="setPicadaNotes(this.value)"
-        >${p.notes || ""}</textarea>
-
-        <div class="instructions-hint">
-          Ej: sin aceitunas, cambiar queso azul, agregar dedicatoria…
-        </div>
+<textarea
+  class="control"
+  placeholder="Ej: sin aceitunas, cambiar queso azul, agregar dedicatoria…"
+  style="height:68px; resize:none;"
+  oninput="setPicadaNotes(this.value)"
+>${p.notes || ""}</textarea>
       </div>
     `;
 
