@@ -404,9 +404,10 @@ button.selected{
   }
 }
 
-body.sticky-visible{
+  .container{
   padding-bottom: 110px;
 }
+
   .control,
   select.control,
   button.control{
@@ -1166,6 +1167,10 @@ button.selected{
   transition: transform .25s ease, opacity .2s ease;
 }
 
+  .sticky-cta.visible{
+  transform: translateY(0);
+  opacity: 1;
+}
 .sticky-cta.hidden{
   transform: translateY(120%);
   pointer-events:none;
@@ -3686,7 +3691,13 @@ if(summaryIsVisible){
 
     const shouldHide = totalPicadas === 0;
 
-sticky.classList.toggle("hidden", shouldHide);
+if(shouldHide){
+  sticky.classList.add("hidden");
+  sticky.classList.remove("visible");
+}else{
+  sticky.classList.remove("hidden");
+  sticky.classList.add("visible");
+}
 
 if(shouldHide){
   document.body.classList.remove("sticky-visible");
@@ -3701,6 +3712,7 @@ if(shouldHide){
     stickyBtn.onclick = goWA;
 
     sticky.classList.remove("hidden");
+    sticky.classList.add("visible");
 document.body.classList.add("sticky-visible");
   }
 }
