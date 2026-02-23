@@ -1252,6 +1252,17 @@ button.selected{
 .reassurance-btn.outline{
   background:transparent;
 }
+
+.instructions-hint{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:8px;
+  text-align:center;
+}
+
+textarea.control{
+  line-height:1.5;
+}
 </style>
 </head>
 <body>
@@ -1326,7 +1337,8 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
   <!-- CONFIGURADOR (cantidad, modelo, tamaño, contenido, media) -->
   <div id="config"></div>
-
+  
+  <div id="instructionsCardStep1"></div>
   <!-- RESUMEN -->
 <div class="section summary" id="summaryWrapperStep1">
   <div id="summaryStep1"></div>
@@ -2700,32 +2712,6 @@ ${tabs}
 
   </div>
 </div>
-
-${
-  p.model && p.size
-  ? `
-    <div class="section">
-      <label>Instrucciones del pedido (opcional)</label>
-
-      <textarea
-        class="control"
-        placeholder="Ej: sin aceitunas, cambiar queso azul, agregar dedicatoria..."
-        style="height:90px; resize:none;"
-        oninput="setPicadaNotes(this.value)"
-      >${p.notes || ""}</textarea>
-
-      <div style="
-        font-size:12px;
-        color:var(--muted);
-        margin-top:6px;
-        padding-left:2px;
-      ">
-        Podés indicarnos cambios o aclaraciones especiales.
-      </div>
-    </div>
-  `
-  : ``
-}
 ${
   !p.model
     ? `
@@ -2888,7 +2874,8 @@ if(media.type === "video"){
 
 
 `;
-requestAnimationFrame(()=>{
+  renderInstructionsCard();
+  requestAnimationFrame(()=>{
   update();
 
   document.querySelectorAll(".media-item video").forEach(v=>{
@@ -2942,7 +2929,38 @@ renderConfig();
 }
 
 
+function renderInstructionsCard(){
 
+  const container = document.getElementById("instructionsCardStep1");
+  const p = picadas[active];
+
+  if(!container) return;
+
+  if(p.model && p.size){
+
+    container.innerHTML = `
+      <div class="section">
+        <div class="field-label">
+          Instrucciones del pedido (opcional)
+        </div>
+
+        <textarea
+          class="control"
+          placeholder=" "
+          style="height:90px; resize:none; padding-top:14px;"
+          oninput="setPicadaNotes(this.value)"
+        >${p.notes || ""}</textarea>
+
+        <div class="instructions-hint">
+          Ej: sin aceitunas, cambiar queso azul, agregar dedicatoria…
+        </div>
+      </div>
+    `;
+
+  } else {
+    container.innerHTML = "";
+  }
+}
 
 
 function handleZoneChange() {
