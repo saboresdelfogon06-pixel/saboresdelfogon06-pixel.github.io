@@ -887,6 +887,16 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
   0 1px 0 rgba(255,255,255,.02) inset;
 }
 
+.shipping-card{
+  margin-top:16px;
+}
+
+.shipping-text{
+  font-size:13px;
+  line-height:1.6;
+  color:var(--muted);
+}
+
 .info-title{
   font-weight:600;
   color:var(--text);
@@ -1386,6 +1396,20 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
 <div class="error-msg" id="error-zone"></div>
 
+<div class="info-card shipping-card" id="shippingCard">
+  <div class="info-title">📦 Detalles del envío</div>
+
+  <div class="shipping-text">
+    Una vez confirmado el pago, nos comunicamos por WhatsApp
+    para coordinar fecha y horario de entrega.
+
+    <br><br>
+
+    Tu pedido se prepara artesanalmente el mismo día,
+    se envía refrigerado y listo para servir.
+  </div>
+</div>
+
 </div>
 
 <div class="payment-block">
@@ -1848,15 +1872,24 @@ function handleMiniBannerClick(){
   goToStep2();
 }
 
-  function enforceStep2LayoutOrder() {
+function enforceStep2LayoutOrder() {
 
   const step2 = document.getElementById("step2");
   const summaryWrapper = document.getElementById("summaryWrapper");
   const paymentBlock = document.querySelector(".payment-block");
+  const shippingCard = document.getElementById("shippingCard");
 
-  if (!step2 || !summaryWrapper || !paymentBlock) return;
+  if (!step2 || !summaryWrapper || !paymentBlock || !shippingCard) return;
 
-  // 🔥 Insertar resumen justo antes del bloque de pago
+  /*
+    Orden final:
+    Form
+    ShippingCard
+    Summary
+    PaymentBlock
+  */
+
+  step2.insertBefore(shippingCard, paymentBlock);
   step2.insertBefore(summaryWrapper, paymentBlock);
 }
 
