@@ -9,6 +9,18 @@
 <link rel="icon" href="images/LOGO96.webp" type="image/webp" sizes="96x96">
 <link rel="preconnect" href="https://connect.facebook.net">
 
+
+<style>
+html.preload body{
+  visibility:hidden;
+}
+</style>
+
+<script>
+document.documentElement.classList.add('preload');
+</script>
+
+  
 <style>
 :root{
   --bg:#181818;          /* antes #0f0f0f */
@@ -462,11 +474,6 @@ button.selected{
   left: 12px;
   right: 12px;
   z-index: 999;
-
-  transform: translate3d(0,0,0);
-  will-change: transform;
-  backface-visibility: hidden;
-  contain: layout paint;
 }
 .mini-banner .left {
   display: flex;
@@ -3868,6 +3875,7 @@ window.addEventListener('pageshow', async (event) => {
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
+  document.documentElement.classList.remove('preload');
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
