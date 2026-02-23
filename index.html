@@ -1201,8 +1201,6 @@ button.selected{
 
 .container{
   padding-bottom: calc(90px + env(safe-area-inset-bottom));
-  opacity:0;
-  transition: opacity .25s ease;
 }
 
 /* Espaciado uniforme entre cards en Step 2 */
@@ -1266,6 +1264,10 @@ textarea.control::placeholder{
   color: var(--muted);
   opacity: 1;
   font-size: 13px;
+}
+
+html, body {
+  background: var(--bg);
 }
 </style>
 </head>
@@ -3863,7 +3865,6 @@ window.addEventListener('pageshow', async (event) => {
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
-  document.querySelector('.container').style.opacity = "1";
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
