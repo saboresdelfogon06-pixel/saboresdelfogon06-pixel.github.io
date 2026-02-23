@@ -1692,7 +1692,8 @@ function goBackToStep1(){
     infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
   }
 
-  const reassuranceBlock = document.getElementById("reassuranceBlock");
+const reassuranceBlock = document.getElementById("reassuranceBlock");
+const infoOperativa = document.getElementById("infoOperativa");
 
 if (reassuranceBlock && infoOperativa) {
   infoOperativa.parentNode.insertBefore(
@@ -1954,28 +1955,22 @@ function enforceStep2LayoutOrder() {
   const summaryWrapper = document.getElementById("summaryWrapper");
   const paymentBlock = document.querySelector(".payment-block");
   const shippingCard = document.getElementById("shippingCard");
+  const reassuranceBlock = document.getElementById("reassuranceBlock");
 
   if (!step2 || !summaryWrapper || !paymentBlock || !shippingCard) return;
 
-  /*
-    Orden final:
-    Form
-    ShippingCard
-    Summary
-    PaymentBlock
-  */
-
+  // Orden Step 2
   step2.insertBefore(shippingCard, paymentBlock);
   step2.insertBefore(summaryWrapper, paymentBlock);
-  const reassuranceBlock = document.getElementById("reassuranceBlock");
 
-if (reassuranceBlock) {
-  paymentBlock.parentNode.insertBefore(
-    reassuranceBlock,
-    paymentBlock.nextSibling
-  );
+  // 🔥 Asegurar que el card quede debajo de métodos de pago
+  if (reassuranceBlock) {
+    paymentBlock.parentNode.insertBefore(
+      reassuranceBlock,
+      paymentBlock.nextSibling
+    );
+  }
 }
-} 
   
 function goToStep2(){
 
@@ -2279,6 +2274,14 @@ if (summaryWrapper && config) {
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
     document.getElementById("backBtnInline").style.display = "none";
+    const reassuranceBlock = document.getElementById("reassuranceBlock");
+const infoOperativa = document.getElementById("infoOperativa");
+
+if (reassuranceBlock && infoOperativa) {
+  infoOperativa.parentNode.insertBefore(
+    reassuranceBlock,
+    infoOperativa.nextSibling
+  );
   }
 
   updateStepTitle();
