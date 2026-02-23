@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -888,7 +889,7 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
 }
 
 .shipping-card{
-  margin-top:18px;
+  margin-top:16px;
 }
 
 .shipping-text{
@@ -1169,13 +1170,9 @@ button.selected{
 
 .sticky-cta.hidden{
   transform: translateY(100%);
-  opacity: 0;
   pointer-events:none;
 }
 
-.sticky-cta{
-  transition: transform .25s ease, opacity .25s ease;
-}
 .sticky-total{
   display:flex;
   flex-direction:column;
@@ -3628,18 +3625,12 @@ function updateStickyCTA(){
 
   stickyTotal.textContent = `$${stepTotal.toLocaleString()}`;
 
-// Ocultar sticky SOLO cuando el botón pagar del resumen está visible
-const payBtn = document.getElementById("payBtn");
-
-if(payBtn){
-  const rect = payBtn.getBoundingClientRect();
-  const visible = rect.top < window.innerHeight && rect.bottom > 0;
-
-  if(visible){
+  // 🔴 Si el resumen está visible → ocultar SIEMPRE
+  if(summaryVisible){
     sticky.classList.add("hidden");
     return;
   }
-}
+
   // 🟢 Si NO está visible → aplicar lógica normal
 
   if(currentStep === 1){
