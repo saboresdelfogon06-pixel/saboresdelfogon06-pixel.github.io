@@ -405,6 +405,7 @@ button.selected{
 
   body{
     font-size:14px;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom));
   }
 
   .control,
@@ -1158,7 +1159,7 @@ button.selected{
 
   border-top: 1px solid rgba(255,255,255,.05);
 
-  z-index: 999;
+  z-index: 50;
   transition: transform .25s ease;
 }
 
@@ -1199,9 +1200,6 @@ button.selected{
   transform: scale(.97);
 }
 
-.container{
-  padding-bottom: calc(90px + env(safe-area-inset-bottom));
-}
 
 /* Espaciado uniforme entre cards en Step 2 */
 #step2 .section.summary{
@@ -1269,6 +1267,8 @@ textarea.control::placeholder{
 html, body {
   background: var(--bg);
 }
+
+
 </style>
 </head>
 <body>
@@ -3852,6 +3852,9 @@ localStorage.setItem(
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
 window.addEventListener('pageshow', async (event) => {
+
+  if(event.persisted) return;
+
 
   handleReturnFromMP();
 
