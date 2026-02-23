@@ -1643,16 +1643,7 @@ sessionStorage.removeItem('orderDate');
 
   saveState();
 
-  // 🔁 Ahora sí volver a Step 1
-  currentStep = 1;
-  sessionStorage.setItem('currentStep', 1);
-  updateStepTitle();
-
-document.getElementById("step1").style.display = "block";
-document.getElementById("step2").style.display = "none";
-document.getElementById("backBtnInline").style.display = "none";
-
-  banner.style.pointerEvents = "auto";
+setStep(1);
 
 
   update(); // 🔥 esto vuelve a renderizar el resumen correctamente
@@ -2224,8 +2215,6 @@ addr.value = sessionStorage.getItem('addr') || "";
 
 setStep(savedStep === 2 ? 2 : 1);
 
-    updateStepTitle();
-
     // 🔥 Sincronizar banner después de render
     if (picadas[active] && picadas[active].model) {
       const savedModel = picadas[active].model;
@@ -2290,12 +2279,8 @@ enforceTomorrowDate();
  sessionStorage.removeItem('mp_init_point');
 sessionStorage.removeItem('order_fingerprint');
 document.getElementById("infoOperativa").style.display = "block";
-// Volver a Step 1 visualmente
-currentStep = 1;
-updateStepTitle();
 
-document.getElementById("step1").style.display = "block";
-document.getElementById("step2").style.display = "none";
+setStep(1);
 }
 
 function sendViewContentOnce(model, size, price) {
@@ -3844,7 +3829,6 @@ window.addEventListener('pageshow', async (event) => {
 
   clearTimeout(bannerTimer);
 
-  updateStepTitle();
   enforceTomorrowDate();
   update();
 
