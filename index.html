@@ -1638,13 +1638,6 @@ sessionStorage.removeItem('orderDate');
 
   banner.style.pointerEvents = "auto";
 
-const summaryWrapper = document.getElementById("summaryWrapper");
-const infoOperativa = document.getElementById("infoOperativa");
-
-if (summaryWrapper && infoOperativa) {
-  infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
-}
-
 
   update(); // 🔥 esto vuelve a renderizar el resumen correctamente
 }
@@ -2047,7 +2040,6 @@ saveState();
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
-  document.getElementById("summaryWrapper").style.display = "block";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("reassuranceBlock").style.display = "block";
 
@@ -3165,7 +3157,14 @@ txt += `<b>Total: $${totalVisible.toLocaleString()}</b>`;
 
 
 
-summary.innerHTML = `
+const summaryStep1El = document.getElementById("summaryStep1");
+const summaryStep2El = document.getElementById("summaryStep2");
+
+const targetSummary = currentStep === 1
+  ? summaryStep1El
+  : summaryStep2El;
+
+targetSummary.innerHTML = `
   <div class="summary-header">
     <div class="summary-title">Resumen</div>
     <button onclick="handleSummaryReset()" class="summary-close">✕</button>
@@ -3607,21 +3606,22 @@ document.addEventListener('DOMContentLoaded', () => {
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
   updateStickyCTA();
-const summaryWrapper = document.getElementById("summaryWrapper");
+const summaryStep1 = document.getElementById("summaryWrapperStep1");
+const summaryStep2 = document.getElementById("summaryWrapperStep2");
 
-if (summaryWrapper && sticky) {
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      summaryVisible = entry.isIntersecting;
-      updateStickyCTA(); // 🔥 recalcular cada vez que cambia
-    });
-  }, {
-    threshold: 0.4
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      summaryVisible = true;
+    } else {
+      summaryVisible = false;
+    }
+    updateStickyCTA();
   });
+}, { threshold: 0.4 });
 
-  observer.observe(summaryWrapper);
-}
+if (summaryStep1) observer.observe(summaryStep1);
+if (summaryStep2) observer.observe(summaryStep2);
   bannerSlides.forEach((s, index) => {
     const slide = document.createElement("div");
     slide.className = "banner-slide";
