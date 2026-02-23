@@ -26,11 +26,8 @@ body {
   background: var(--bg);
   color: var(--text);
   touch-action: manipulation;
-  overscroll-behavior-y: contain;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
 }
-
 .container {
   max-width: 720px;
   margin: auto;
@@ -1151,9 +1148,7 @@ button.selected{
   right: 0;
 
   opacity: 0;
-
-  transform: translateZ(0);
-  will-change: transform;
+  transform: translateY(120%);
 
   background: #181818;
   /* backdrop-filter eliminado */
@@ -1274,8 +1269,8 @@ textarea.control::placeholder{
 
 html, body {
   background: var(--bg);
+  overscroll-behavior: none;
 }
-
 
 </style>
 </head>
@@ -3876,7 +3871,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadState();
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
+  requestAnimationFrame(() => {
   update();
+});
 
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
