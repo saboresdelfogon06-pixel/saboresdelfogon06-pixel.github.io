@@ -1211,7 +1211,47 @@ button.selected{
 #step2 .section.summary{
   margin-top: 16px; /* mismo que usan otras .section */
 }
-  
+
+.reassurance-card{
+  margin-top:14px;
+  background:#1f1f1f;
+  border:1px solid rgba(255,255,255,.04);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.reassurance-text{
+  font-size:13px;
+  color:var(--muted);
+}
+
+.reassurance-buttons{
+  display:flex;
+  gap:10px;
+}
+
+.reassurance-btn{
+  flex:1;
+  text-align:center;
+  padding:10px 12px;
+  font-size:13px;
+  border-radius:8px;
+  text-decoration:none;
+  background:var(--input-bg);
+  color:var(--text);
+  border:1px solid var(--input-border);
+  transition:all .2s ease;
+}
+
+.reassurance-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 4px 10px rgba(0,0,0,.4);
+}
+
+.reassurance-btn.outline{
+  background:transparent;
+}
 </style>
 </head>
 <body>
@@ -1292,23 +1332,26 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
     <div class="info-item">• Pedidos con 24hs de anticipación</div>
     
   </div>
-<div id="step2" style="display:none;">
-  
+
 <div class="info-card reassurance-card" id="reassuranceBlock">
-  <div class="reassurance-item">
+
+  <div class="reassurance-text">
     ¿Tenés dudas antes de hacer el pedido?
-    <a href="https://wa.me/549XXXXXXXXXX" target="_blank">
-      Escribinos por WhatsApp
-    </a>.
   </div>
 
-  <div class="reassurance-item">
-    ¿Querés ver más fotos y reseñas?
-    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank">
-      Seguinos en Instagram
-    </a>.
+  <div class="reassurance-buttons">
+    <a href="https://wa.me/549XXXXXXXXXX" target="_blank" class="reassurance-btn">
+      WhatsApp
+    </a>
+
+    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank" class="reassurance-btn outline">
+      Instagram
+    </a>
   </div>
 </div>
+<div id="step2" style="display:none;">
+  
+
 <div class="section">
 <label>Nombre y apellido</label>
 <input
@@ -1633,7 +1676,8 @@ function goBackToStep1(){
   document.getElementById("step2").style.display = "none";
   document.getElementById("infoOperativa").style.display = "block";
   document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("backBtnInline").style.display = "none";
+  document.getElementById("backBtnInline").style.display = "none";\
+  document.getElementById("reassuranceBlock").style.display = "block";
 
 
   banner.style.pointerEvents = "auto";
@@ -2002,7 +2046,8 @@ saveState();
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
-
+  document.getElementById("reassuranceBlock").style.display = "none";
+  
   banner.style.pointerEvents = "none";
 
   update();
