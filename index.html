@@ -324,24 +324,22 @@ button.selected{
 .banner{
   width:100%;
   margin-top:8px;
-  height:420px;
+  height:220px; /* altura base (mobile) */
   border-radius:14px;
   overflow:hidden;
   position:relative;
   margin-bottom:16px;
   background:#000;
 
-box-shadow:
-  0 12px 30px rgba(0,0,0,.45),
-  0 1px 0 rgba(255,255,255,.05) inset;
-
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.45),
+    0 1px 0 rgba(255,255,255,.05) inset;
 }
 
-
-/* ===== HERO MÁS ALTO EN DESKTOP ===== */
+/* Desktop */
 @media (min-width: 1024px){
   .banner{
-    height: 420px;
+    height:420px;
   }
 }
 .banner-track{
