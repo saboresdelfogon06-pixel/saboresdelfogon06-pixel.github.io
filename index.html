@@ -3665,14 +3665,16 @@ function updateStickyCTA(){
     ? document.getElementById("summaryWrapperStep1")
     : document.getElementById("summaryWrapperStep2");
 
-  let summaryIsVisible = false;
+let summaryIsVisible = false;
 
-  if(summaryEl){
-    const rect = summaryEl.getBoundingClientRect();
-    summaryIsVisible =
-      rect.top < window.innerHeight &&
-      rect.bottom > 0;
-  }
+if(summaryEl){
+  const rect = summaryEl.getBoundingClientRect();
+  const viewportMiddle = window.innerHeight / 2;
+
+  summaryIsVisible =
+    rect.top <= viewportMiddle &&
+    rect.bottom >= viewportMiddle;
+}
 
   const stepTotal = currentStep === 2
     ? total
