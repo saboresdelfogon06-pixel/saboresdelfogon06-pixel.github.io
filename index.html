@@ -451,25 +451,21 @@ button.selected{
   font-size: 13px;
   color: var(--text);
   border-radius: 12px;
-  
+
   box-shadow:
     0 6px 18px rgba(0,0,0,.45),
     0 1px 0 rgba(255,255,255,.02) inset;
-
-  z-index: 999;
 
   position: fixed;
   top: 12px;
   left: 12px;
   right: 12px;
+  z-index: 999;
+
   transform: translate3d(0,0,0);
-  transition: transform 0.3s ease;
   will-change: transform;
-  transform: translateZ(0);
   backface-visibility: hidden;
 }
-
-
 .mini-banner .left {
   display: flex;
   align-items: center;
