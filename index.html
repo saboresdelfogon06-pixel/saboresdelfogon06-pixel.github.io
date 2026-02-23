@@ -8,18 +8,6 @@
 <link rel="preload" as="image" href="images/IMG_7762.webp" type="image/webp" fetchpriority="high">
 <link rel="icon" href="images/LOGO96.webp" type="image/webp" sizes="96x96">
 <link rel="preconnect" href="https://connect.facebook.net">
-
-
-<style>
-html.preload body{
-  visibility:hidden;
-}
-</style>
-
-<script>
-document.documentElement.classList.add('preload');
-</script>
-
   
 <style>
 :root{
@@ -472,7 +460,7 @@ body.sticky-visible{
     0 1px 0 rgba(255,255,255,.02) inset;
 
   position: fixed;
-  top: 12px;
+  top: env(safe-area-inset-top, 12px);
   left: 12px;
   right: 12px;
   z-index: 999;
@@ -3877,33 +3865,21 @@ localStorage.setItem(
   "sdf_page_views",
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
-window.addEventListener('pageshow', async (event) => {
-
-  if(event.persisted) return;
-
+document.addEventListener('DOMContentLoaded', async () => {
 
   handleReturnFromMP();
-
   loadState();
-
   clearTimeout(bannerTimer);
-
   enforceTomorrowDate();
   update();
 
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
-  document.documentElement.classList.remove('preload');
+  if(sticky){
+    sticky.style.opacity = "1";
+  }
 
-  // 🔥 Activar sticky después de layout estable
-requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-    if(sticky){
-      sticky.style.opacity = "1";
-    }
-  });
-});
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
