@@ -2256,43 +2256,42 @@ addr.value = sessionStorage.getItem('addr') || "";
     history.replaceState({ step: 1 }, "", location.pathname);
     banner.style.pointerEvents = "auto";
 
-
     document.getElementById("config").style.display = "block";
-    const summaryWrapper = document.getElementById("summaryWrapper");
-const config = document.getElementById("config");
-
-if (summaryWrapper && config) {
-  config.parentNode.insertBefore(
-    summaryWrapper,
-    document.getElementById("infoOperativa")
-  );
-}
-
     document.getElementById("step2").style.display = "none";
     document.getElementById("infoOperativa").style.display = "block";
     document.getElementById("metodosPago").style.display = "none";
     document.getElementById("backBtnInline").style.display = "none";
+
+    const summaryWrapper = document.getElementById("summaryWrapper");
+    const infoOperativa = document.getElementById("infoOperativa");
     const reassuranceBlock = document.getElementById("reassuranceBlock");
-const infoOperativa = document.getElementById("infoOperativa");
 
-if (reassuranceBlock && infoOperativa) {
-  infoOperativa.parentNode.insertBefore(
-    reassuranceBlock,
-    infoOperativa.nextSibling
-  );
+    if (summaryWrapper && infoOperativa) {
+      infoOperativa.parentNode.insertBefore(
+        summaryWrapper,
+        infoOperativa
+      );
+    }
+
+    if (reassuranceBlock && infoOperativa) {
+      infoOperativa.parentNode.insertBefore(
+        reassuranceBlock,
+        infoOperativa.nextSibling
+      );
+    }
+
+    updateStepTitle();
+
+    // 🔥 Sincronizar banner después de render
+    if (picadas[active] && picadas[active].model) {
+      const savedModel = picadas[active].model;
+      setTimeout(() => {
+        syncBannerWithModel(savedModel);
+      }, 0);
+    }
+
+    update();
   }
-
-  updateStepTitle();
-  // 🔥 Sincronizar banner después de render
-if (picadas[active] && picadas[active].model) {
-  const savedModel = picadas[active].model;
-  setTimeout(() => {
-    syncBannerWithModel(savedModel);
-  }, 0);
-}
-  update();
-}
-}
 
 function buildPicadas(n){
   picadas = Array.from({ length: n }, () => ({
