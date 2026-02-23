@@ -1630,11 +1630,9 @@ sessionStorage.removeItem('orderDate');
   sessionStorage.setItem('currentStep', 1);
   updateStepTitle();
 
-  document.getElementById("config").style.display = "block";
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("infoOperativa").style.display = "block";
-  document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("backBtnInline").style.display = "none";
+document.getElementById("step1").style.display = "block";
+document.getElementById("step2").style.display = "none";
+document.getElementById("backBtnInline").style.display = "none";
 
   banner.style.pointerEvents = "auto";
 
@@ -1707,24 +1705,17 @@ function goBackToStep1(){
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
 
-  currentStep = 1;
-  history.replaceState({ step: 1 }, "", location.pathname);
-  sessionStorage.setItem('currentStep', 1);
+currentStep = 1;
+history.replaceState({ step: 1 }, "", location.pathname);
+sessionStorage.setItem('currentStep', 1);
 
-  document.getElementById("config").style.display = "block";
-  document.getElementById("step2").style.display = "none";
-  document.getElementById("infoOperativa").style.display = "block";
-  document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("backBtnInline").style.display = "none";
-  document.getElementById("reassuranceBlockStep1").style.display = "block";
-  document.getElementById("metodosPago").style.display = "none";
-  document.getElementById("reassuranceBlockStep2").style.display = "none";
-  document.getElementById("step1").style.display = "block";
-  banner.style.pointerEvents = "auto";
+document.getElementById("step1").style.display = "block";
+document.getElementById("step2").style.display = "none";
+document.getElementById("backBtnInline").style.display = "none";
 
+banner.style.pointerEvents = "auto";
 
-  update();
-
+update();
   setTimeout(() => {
     snapToClosestStep();
   }, 50);
@@ -2028,25 +2019,20 @@ function goToStep2(){
     }).catch(()=>{});
   }
 
-  // 🔥 ESTO SIEMPRE SE EJECUTA (clave)
 currentStep = 2;
 sessionStorage.setItem('currentStep', 2);
 history.replaceState({ step: 2 }, "", location.pathname);
 saveState();
-  updateStepTitle();
+updateStepTitle();
 
-  document.getElementById("step1").style.display = "none";
-  document.getElementById("step2").style.display = "block";
-  document.getElementById("step2").style.display = "block";
-  document.getElementById("metodosPago").style.display = "block";
-  document.getElementById("backBtnInline").style.display = "block";
-  document.getElementById("metodosPago").style.display = "block";
- document.getElementById("reassuranceBlockStep2").style.display = "block";
-  document.getElementById("step1").style.display = "none";
-  banner.style.pointerEvents = "none";
+document.getElementById("step1").style.display = "none";
+document.getElementById("step2").style.display = "block";
+document.getElementById("backBtnInline").style.display = "block";
 
-  update();
-  scrollToStep2Card();
+banner.style.pointerEvents = "none";
+
+update();
+scrollToStep2Card();
 }
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
@@ -2243,11 +2229,8 @@ addr.value = sessionStorage.getItem('addr') || "";
     history.replaceState({ step: currentStep }, "", location.pathname);
     banner.style.pointerEvents = "none";
 
-    document.getElementById("config").style.display = "none";
     document.getElementById("step2").style.display = "block";
-    document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("backBtnInline").style.display = "block";
-    document.getElementById("metodosPago").style.display = "block";
 
   } else {
 
@@ -2255,11 +2238,9 @@ addr.value = sessionStorage.getItem('addr') || "";
     history.replaceState({ step: 1 }, "", location.pathname);
     banner.style.pointerEvents = "auto";
 
-    document.getElementById("config").style.display = "block";
-    document.getElementById("step2").style.display = "none";
-    document.getElementById("infoOperativa").style.display = "block";
-    document.getElementById("metodosPago").style.display = "none";
-    document.getElementById("backBtnInline").style.display = "none";
+document.getElementById("step1").style.display = "block";
+document.getElementById("step2").style.display = "none";
+document.getElementById("backBtnInline").style.display = "none";
 
     updateStepTitle();
 
@@ -2331,7 +2312,7 @@ document.getElementById("infoOperativa").style.display = "block";
 currentStep = 1;
 updateStepTitle();
 
-document.getElementById("config").style.display = "block";
+document.getElementById("step1").style.display = "block";
 document.getElementById("step2").style.display = "none";
 }
 
@@ -2460,12 +2441,9 @@ function forceStep2RescueIfPending() {
     currentStep = 2;
     sessionStorage.setItem('currentStep', 2);
 
-    document.getElementById("config").style.display = "none";
-    document.getElementById("step2").style.display = "block";
-    document.getElementById("infoOperativa").style.display = "none";
-    document.getElementById("metodosPago").style.display = "block";
-    document.getElementById("backBtnInline").style.display = "block";
-
+document.getElementById("step1").style.display = "none";
+document.getElementById("step2").style.display = "block";
+document.getElementById("backBtnInline").style.display = "block";
     banner.style.pointerEvents = "none";
 
     updateStepTitle();
