@@ -1549,7 +1549,6 @@ const deliveryTime = document.getElementById('deliveryTime');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
 const zone       = document.getElementById('zone');
-const summary    = document.getElementById('summary');
 const config     = document.getElementById('config');
 const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
@@ -2338,7 +2337,6 @@ function resetForNextOrder() {
   buildPicadas(1);
 
   // 🔹 Reset visual y botones
-  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
  const payBtn = document.getElementById("payBtn");
 if (payBtn) {
   payBtn.disabled = false;
@@ -3256,9 +3254,6 @@ if (!payBtn) return;
 payBtn.disabled = false;
 payBtn.style.opacity = 1;
 payBtn.textContent = "Pagar";
-
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar";
 }
 
 
