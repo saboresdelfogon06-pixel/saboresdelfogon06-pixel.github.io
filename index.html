@@ -2697,28 +2697,29 @@ ${tabs}
       </button>
     </div>
   </div>
+  
 ${
   p.model && p.size
   ? `
-  <div class="section">
-    <label>Instrucciones del pedido (opcional)</label>
+    <div class="section">
+      <label>Instrucciones del pedido (opcional)</label>
 
-    <textarea
-      class="control"
-      placeholder="Ej: sin aceitunas, cambiar queso azul, agregar dedicatoria..."
-      style="height:90px; resize:none;"
-      oninput="setPicadaNotes(this.value)"
-    >${p.notes || ""}</textarea>
+      <textarea
+        class="control"
+        placeholder="Ej: sin aceitunas, cambiar queso azul, agregar dedicatoria..."
+        style="height:90px; resize:none;"
+        oninput="setPicadaNotes(this.value)"
+      >${p.notes || ""}</textarea>
 
-    <div style="
-      font-size:12px;
-      color:var(--muted);
-      margin-top:6px;
-      padding-left:2px;
-    ">
-      Podés indicarnos cambios o aclaraciones especiales.
+      <div style="
+        font-size:12px;
+        color:var(--muted);
+        margin-top:6px;
+        padding-left:2px;
+      ">
+        Podés indicarnos cambios o aclaraciones especiales.
+      </div>
     </div>
-  </div>
   `
   : ``
 }
