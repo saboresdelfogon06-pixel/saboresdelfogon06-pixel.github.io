@@ -2223,24 +2223,27 @@ addr.value = sessionStorage.getItem('addr') || "";
 
   const savedStep = Number(sessionStorage.getItem('currentStep'));
 
-  if (savedStep === 2) {
+if (savedStep === 2) {
 
-    currentStep = 2;
-    history.replaceState({ step: currentStep }, "", location.pathname);
-    banner.style.pointerEvents = "none";
+  currentStep = 2;
+  history.replaceState({ step: 2 }, "", location.pathname);
+  banner.style.pointerEvents = "none";
 
-    document.getElementById("step2").style.display = "block";
-    document.getElementById("backBtnInline").style.display = "block";
+  document.getElementById("step1").style.display = "none";   // 🔥 FALTABA
+  document.getElementById("step2").style.display = "block";
+  document.getElementById("backBtnInline").style.display = "block";
 
-  } else {
+} else {
 
-    currentStep = 1;
-    history.replaceState({ step: 1 }, "", location.pathname);
-    banner.style.pointerEvents = "auto";
+  currentStep = 1;
+  history.replaceState({ step: 1 }, "", location.pathname);
+  banner.style.pointerEvents = "auto";
 
-document.getElementById("step1").style.display = "block";
-document.getElementById("step2").style.display = "none";
-document.getElementById("backBtnInline").style.display = "none";
+  document.getElementById("step1").style.display = "block";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("backBtnInline").style.display = "none";
+
+}
 
     updateStepTitle();
 
