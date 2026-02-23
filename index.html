@@ -1669,7 +1669,6 @@ function goBackToStep1(){
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
 
-
   currentStep = 1;
   history.replaceState({ step: 1 }, "", location.pathname);
   sessionStorage.setItem('currentStep', 1);
@@ -1681,33 +1680,32 @@ function goBackToStep1(){
   document.getElementById("backBtnInline").style.display = "none";
   document.getElementById("reassuranceBlock").style.display = "block";
 
-
   banner.style.pointerEvents = "auto";
 
-    // 🔁 Mover summary de vuelta arriba (Step 1)
+  // 🔁 Obtener referencias UNA sola vez
   const summaryWrapper = document.getElementById("summaryWrapper");
   const infoOperativa = document.getElementById("infoOperativa");
+  const reassuranceBlock = document.getElementById("reassuranceBlock");
 
+  // 🔁 Mover summary arriba de infoOperativa
   if (summaryWrapper && infoOperativa) {
     infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
   }
 
-const reassuranceBlock = document.getElementById("reassuranceBlock");
-const infoOperativa = document.getElementById("infoOperativa");
-
-if (reassuranceBlock && infoOperativa) {
-  infoOperativa.parentNode.insertBefore(
-    reassuranceBlock,
-    infoOperativa.nextSibling
-  );
-}
+  // 🔁 Mover reassurance debajo de infoOperativa
+  if (reassuranceBlock && infoOperativa) {
+    infoOperativa.parentNode.insertBefore(
+      reassuranceBlock,
+      infoOperativa.nextSibling
+    );
+  }
 
   update();
-  setTimeout(() => {
-  snapToClosestStep();
-}, 50);
-}
 
+  setTimeout(() => {
+    snapToClosestStep();
+  }, 50);
+}
 function showResumeNoticeIfNeeded() {
 
   const orderId = window.currentOrderId;
