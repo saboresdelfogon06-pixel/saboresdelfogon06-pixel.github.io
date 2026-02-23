@@ -1322,9 +1322,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   <button id="backBtnInline" onclick="goBackToStep1()">← Volver</button>
 </div>
 <div id="config"></div>
-<div class="section summary" id="summaryWrapper" style="position:relative">
-  <div id="summary"></div>
-</div>
 <div class="info-card" id="infoOperativa">
     <div class="info-title">Información operativa</div>
     <div class="info-item">• La imagen del banner corresponde al modelo seleccionado</div>
@@ -1341,25 +1338,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   </div>
 
 </div>
-
-<div class="info-card reassurance-card" id="reassuranceBlock">
-
-  <div class="reassurance-text">
-    ¿Tenés dudas antes de hacer el pedido?
-  </div>
-
-  <div class="reassurance-buttons">
-<a 
-  href="https://wa.me/5491123284020?text=%C2%A1Hola%21%20me%20gustar%C3%ADa%20consultar..." 
-  target="_blank" 
-  class="reassurance-btn">
-  WhatsApp
-</a>
-    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank" class="reassurance-btn outline">
-      Instagram
-    </a>
-  </div>
-</div>
+  
 <div id="step2" style="display:none;">
   
 
@@ -1482,6 +1461,36 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
     Tu pedido se prepara artesanalmente el mismo día,
     se envía refrigerado y listo para servir.
+  </div>
+</div>
+
+<div class="section summary" id="summaryWrapper" style="position:relative">
+  <div id="summary"></div>
+</div>
+
+<div class="payment-block">
+  <div class="payment-sub">
+    Serás redirigido a Mercado Pago para completar el pago de forma segura 🔒.
+  </div>
+</div>
+
+<div class="info-card reassurance-card" id="reassuranceBlock">
+
+  <div class="reassurance-text">
+    ¿Tenés dudas antes de hacer el pedido?
+  </div>
+
+  <div class="reassurance-buttons">
+    <a 
+      href="https://wa.me/5491123284020?text=%C2%A1Hola%21%20me%20gustar%C3%ADa%20consultar..." 
+      target="_blank" 
+      class="reassurance-btn">
+      WhatsApp
+    </a>
+
+    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank" class="reassurance-btn outline">
+      Instagram
+    </a>
   </div>
 </div>
 
@@ -1947,40 +1956,6 @@ function handleMiniBannerClick(){
   goToStep2();
 }
 
-function enforceStep2LayoutOrder() {
-
-  const step2 = document.getElementById("step2");
-  const formSection = step2.querySelector(".section");
-  const shippingCard = document.getElementById("shippingCard");
-  const summaryWrapper = document.getElementById("summaryWrapper");
-  const paymentBlock = step2.querySelector(".payment-block");
-  const reassuranceBlock = document.getElementById("reassuranceBlock");
-
-  if (!step2 || !formSection) return;
-
-  // 1️⃣ Datos de envío ya es formSection (no mover)
-
-  // 2️⃣ Detalles del envío
-  if (shippingCard && formSection.nextSibling !== shippingCard) {
-    step2.insertBefore(shippingCard, formSection.nextSibling);
-  }
-
-  // 3️⃣ Resumen
-  if (summaryWrapper && shippingCard.nextSibling !== summaryWrapper) {
-    step2.insertBefore(summaryWrapper, shippingCard.nextSibling);
-  }
-
-  // 4️⃣ Métodos de pago
-  if (paymentBlock && summaryWrapper.nextSibling !== paymentBlock) {
-    step2.insertBefore(paymentBlock, summaryWrapper.nextSibling);
-  }
-
-  // 5️⃣ Consultas
-  if (reassuranceBlock && paymentBlock.nextSibling !== reassuranceBlock) {
-    step2.insertBefore(reassuranceBlock, paymentBlock.nextSibling);
-  }
-}
-  
 function goToStep2(){
 
   const orderId = window.currentOrderId;
@@ -2048,7 +2023,6 @@ saveState();
 
   document.getElementById("config").style.display = "none";
   document.getElementById("step2").style.display = "block";
-  enforceStep2LayoutOrder();
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
@@ -2258,7 +2232,6 @@ addr.value = sessionStorage.getItem('addr') || "";
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("backBtnInline").style.display = "block";
     document.getElementById("metodosPago").style.display = "block";
-    enforceStep2LayoutOrder();
 
   } else {
 
@@ -2494,7 +2467,6 @@ function forceStep2RescueIfPending() {
     document.getElementById("infoOperativa").style.display = "none";
     document.getElementById("metodosPago").style.display = "block";
     document.getElementById("backBtnInline").style.display = "block";
-    enforceStep2LayoutOrder();
 
     banner.style.pointerEvents = "none";
 
