@@ -2157,7 +2157,6 @@ if (backupKeys.length > 0) {
 
 function loadState() {
 
-currentStep = Number(sessionStorage.getItem('currentStep')) || 1;
 clientWhatsapp.value = sessionStorage.getItem('clientWhatsapp') || "";
 const savedPicadas = sessionStorage.getItem('picadas');
 deliveryTime.value = sessionStorage.getItem('deliveryTime') || "";
@@ -2225,7 +2224,6 @@ setStep(savedStep === 2 ? 2 : 1);
 
     update();
   }
-}
 function buildPicadas(n){
   picadas = Array.from({ length: n }, () => ({
     model: null,
@@ -2265,7 +2263,6 @@ enforceTomorrowDate();
 
   // 5. reset visual
   showSlide(0, false);
-  summary.innerHTML = "Completá todos los pasos para poder ir a pagar.";
   const payBtn = document.getElementById("payBtn");
   if (payBtn) {
   payBtn.disabled = false;
