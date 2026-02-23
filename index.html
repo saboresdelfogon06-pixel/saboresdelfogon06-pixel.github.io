@@ -1959,11 +1959,15 @@ function enforceStep2LayoutOrder() {
 
   if (!step2 || !summaryWrapper || !paymentBlock || !shippingCard) return;
 
-  // Orden Step 2
-  step2.insertBefore(shippingCard, paymentBlock);
+  // 🔹 Asegurar que el summary quede dentro de step2
+  if (!step2.contains(summaryWrapper)) {
+    step2.appendChild(summaryWrapper);
+  }
+
+  // 🔹 Asegurar orden dentro de step2
   step2.insertBefore(summaryWrapper, paymentBlock);
 
-  // 🔥 Asegurar que el card quede debajo de métodos de pago
+  // 🔹 Reassurance debajo de métodos de pago
   if (reassuranceBlock) {
     paymentBlock.parentNode.insertBefore(
       reassuranceBlock,
