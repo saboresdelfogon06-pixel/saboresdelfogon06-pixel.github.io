@@ -27,7 +27,6 @@ body {
   color: var(--text);
   touch-action: manipulation;
   overscroll-behavior: auto;
-  visibility: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
 }
@@ -452,7 +451,7 @@ button.selected{
   font-size: 13px;
   color: var(--text);
   border-radius: 12px;
-
+  
   box-shadow:
     0 6px 18px rgba(0,0,0,.45),
     0 1px 0 rgba(255,255,255,.02) inset;
@@ -463,7 +462,7 @@ button.selected{
   top: 12px;
   left: 12px;
   right: 12px;
-
+  transform: translate3d(0,0,0);
   transition: transform 0.3s ease;
   will-change: transform;
   transform: translateZ(0);
@@ -1205,6 +1204,8 @@ button.selected{
 
 .container{
   padding-bottom: calc(90px + env(safe-area-inset-bottom));
+  opacity:0;
+  transition: opacity .25s ease;
 }
 
 /* Espaciado uniforme entre cards en Step 2 */
@@ -3866,7 +3867,7 @@ window.addEventListener('pageshow', async (event) => {
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
-  document.body.style.visibility = "visible";
+  document.querySelector('.container').style.opacity = "1";
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
