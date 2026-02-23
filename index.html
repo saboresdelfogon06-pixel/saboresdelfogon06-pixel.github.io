@@ -3070,7 +3070,9 @@ function lightUpdate(){
 }
 
 function update() {
-  const summaryContainer = document.querySelector('.section.summary');
+  const summaryContainer = currentStep === 1
+  ? document.getElementById("summaryWrapperStep1")
+  : document.getElementById("summaryWrapperStep2");
   total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
 
  let txt = picadas.map((p,i) => {
