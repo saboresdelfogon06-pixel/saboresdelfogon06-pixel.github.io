@@ -1333,6 +1333,15 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
     
   </div>
 
+    <div class="info-card" id="metodosPago">
+    <div class="info-title">Métodos de pago</div>
+    <div class="info-item">• Tarjeta de crédito</div>
+    <div class="info-item">• Tarjeta de débito</div>
+    <div class="info-item">• Dinero en cuenta</div>
+  </div>
+
+</div>
+
 <div class="info-card reassurance-card" id="reassuranceBlock">
 
   <div class="reassurance-text">
@@ -1483,15 +1492,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   <div class="payment-sub">
     Serás redirigido a Mercado Pago para completar el pago de forma segura 🔒. 
   </div>
-
-  <div class="info-card" id="metodosPago">
-    <div class="info-title">Métodos de pago</div>
-    <div class="info-item">• Tarjeta de crédito</div>
-    <div class="info-item">• Tarjeta de débito</div>
-    <div class="info-item">• Dinero en cuenta</div>
-  </div>
-
-</div>
 
 
 </div>
@@ -1950,23 +1950,34 @@ function handleMiniBannerClick(){
 function enforceStep2LayoutOrder() {
 
   const step2 = document.getElementById("step2");
+  const formSection = step2.querySelector(".section");
+  const shippingCard = document.getElementById("shippingCard");
   const summaryWrapper = document.getElementById("summaryWrapper");
-  const paymentBlock = document.querySelector(".payment-block");
+  const paymentBlock = step2.querySelector(".payment-block");
   const reassuranceBlock = document.getElementById("reassuranceBlock");
 
-  if (!step2 || !summaryWrapper || !paymentBlock) return;
+  if (!step2 || !formSection) return;
 
-  // 🔹 Asegurar que el summary esté dentro de step2
-  if (!step2.contains(summaryWrapper)) {
-    step2.appendChild(summaryWrapper);
+  // 1️⃣ Datos de envío ya es formSection (no mover)
+
+  // 2️⃣ Detalles del envío
+  if (shippingCard && formSection.nextSibling !== shippingCard) {
+    step2.insertBefore(shippingCard, formSection.nextSibling);
   }
 
-  // 🔹 Reassurance siempre debajo de payment-block
-  if (reassuranceBlock) {
-    paymentBlock.parentNode.insertBefore(
-      reassuranceBlock,
-      paymentBlock.nextSibling
-    );
+  // 3️⃣ Resumen
+  if (summaryWrapper && shippingCard.nextSibling !== summaryWrapper) {
+    step2.insertBefore(summaryWrapper, shippingCard.nextSibling);
+  }
+
+  // 4️⃣ Métodos de pago
+  if (paymentBlock && summaryWrapper.nextSibling !== paymentBlock) {
+    step2.insertBefore(paymentBlock, summaryWrapper.nextSibling);
+  }
+
+  // 5️⃣ Consultas
+  if (reassuranceBlock && paymentBlock.nextSibling !== reassuranceBlock) {
+    step2.insertBefore(reassuranceBlock, paymentBlock.nextSibling);
   }
 }
   
@@ -2041,8 +2052,7 @@ saveState();
   document.getElementById("infoOperativa").style.display = "none";
   document.getElementById("metodosPago").style.display = "block";
   document.getElementById("backBtnInline").style.display = "block";
-  document.getElementById("reassuranceBlock").style.display = "none";
-  
+
   banner.style.pointerEvents = "none";
 
   update();
