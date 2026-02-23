@@ -417,7 +417,7 @@ button.selected{
 
   body{
     font-size:14px;
-    padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    padding-bottom: 110px;
   }
 
   .control,
@@ -1154,6 +1154,9 @@ button.selected{
   left: 0;
   right: 0;
 
+  transform: translateZ(0);
+  will-change: transform;
+
   background: #181818;
   /* backdrop-filter eliminado */
 
@@ -1161,7 +1164,7 @@ button.selected{
   align-items:center;
   justify-content:space-between;
 
-  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  padding: 12px 16px 16px;
   gap: 14px;
 
   border-top: 1px solid rgba(255,255,255,.05);
