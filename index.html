@@ -1293,6 +1293,22 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
     
   </div>
 <div id="step2" style="display:none;">
+  
+<div class="info-card reassurance-card" id="reassuranceBlock">
+  <div class="reassurance-item">
+    ¿Tenés dudas antes de hacer el pedido?
+    <a href="https://wa.me/549XXXXXXXXXX" target="_blank">
+      Escribinos por WhatsApp
+    </a>.
+  </div>
+
+  <div class="reassurance-item">
+    ¿Querés ver más fotos y reseñas?
+    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank">
+      Seguinos en Instagram
+    </a>.
+  </div>
+</div>
 <div class="section">
 <label>Nombre y apellido</label>
 <input
@@ -1630,6 +1646,15 @@ function goBackToStep1(){
     infoOperativa.parentNode.insertBefore(summaryWrapper, infoOperativa);
   }
 
+  const reassuranceBlock = document.getElementById("reassuranceBlock");
+
+if (reassuranceBlock && infoOperativa) {
+  infoOperativa.parentNode.insertBefore(
+    reassuranceBlock,
+    infoOperativa.nextSibling
+  );
+}
+
   update();
   setTimeout(() => {
   snapToClosestStep();
@@ -1896,6 +1921,13 @@ function enforceStep2LayoutOrder() {
 
   step2.insertBefore(shippingCard, paymentBlock);
   step2.insertBefore(summaryWrapper, paymentBlock);
+  const reassuranceBlock = document.getElementById("reassuranceBlock");
+
+if (reassuranceBlock) {
+  paymentBlock.parentNode.insertBefore(
+    reassuranceBlock,
+    paymentBlock.nextSibling
+  );
 }
 
 function goToStep2(){
