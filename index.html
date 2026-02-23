@@ -1156,6 +1156,8 @@ button.selected{
   left: 0;
   right: 0;
 
+  opacity: 0;
+
   transform: translateZ(0);
   will-change: transform;
 
@@ -1172,7 +1174,7 @@ button.selected{
   border-top: 1px solid rgba(255,255,255,.05);
 
   z-index: 50;
-  transition: transform .25s ease;
+  transition: transform .25s ease, opacity .2s ease;
 }
 
 .sticky-cta.hidden{
@@ -3894,6 +3896,15 @@ window.addEventListener('pageshow', async (event) => {
   showResumeNoticeIfNeeded();
 
   document.documentElement.classList.remove('preload');
+
+  // 🔥 Activar sticky después de layout estable
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    if(sticky){
+      sticky.style.opacity = "1";
+    }
+  });
+});
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
