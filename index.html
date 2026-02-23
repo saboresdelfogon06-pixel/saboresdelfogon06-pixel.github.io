@@ -1386,187 +1386,132 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 
   
 <div id="step2" style="display:none;">
-  
 
-<div class="section">
-<label>Nombre y apellido</label>
-<input
-  id="clientName"
-  class="control"
-  placeholder="Ingrese su nombre completo"
-  oninput="formatClientName(this); lightUpdate()"
-  onblur="update()"
-/>
-<div class="error-msg" id="error-clientName"></div>
-
-<div class="form-grid">
-
-  <div class="form-col">
-    <label>Fecha</label>
+  <div class="section">
+    <label>Nombre y apellido</label>
     <input
-      id="orderDate"
-      type="date"
+      id="clientName"
       class="control"
-      oninput="update()">
-  </div>
-
-  <div class="form-col">
-    <label>Horario</label>
-    <select id="deliveryTime" class="control" onchange="update()">
-      <option value="">Horarios de entrega</option>
-      <option value="11-14">11:00 a.m – 14:00 p.m</option>
-      <option value="15-19">15:00 p.m – 19:00 p.m</option>
-    </select>
-  </div>
-
-</div>
-
-
-<div class="error-msg" id="error-orderDate"></div>
-
-<div class="form-grid">
-
-  <div class="form-col">
-    <label>Localidad</label>
-    <select id="zone" class="control" onchange="handleZoneChange()">
-  <option value="">Seleccionar</option>
-  <option value="manual">Ingresar manualmente</option>
-
-  <option value="Francisco Álvarez|0">Francisco Álvarez</option>
-  <option value="La reja|0">La reja</option>
-  <option value="Moreno|0">Moreno</option>
-
-  <option value="Paso del Rey|5000">Paso del Rey</option>  
-  <option value="General Rodríguez|8000">General Rodríguez</option>
-  <option value="Merlo|8000">Merlo</option>
-  <option value="Ituzaingó|8000">Ituzaingó</option>
-  <option value="San Antonio de Padua|8000">San Antonio de Padua</option>
-  <option value="Morón|8000">Morón</option>
-  <option value="Castelar|8000">Castelar</option>
-  <option value="Hurlingham|8000">Hurlingham</option>
-  <option value="La Matanza|8000">La Matanza</option>
-  <option value="Ramos Mejía|8000">Ramos Mejía</option>
-  <option value="San Justo|8000">San Justo</option>
-
-  <option value="San Miguel|8000">San Miguel</option>
-  <option value="Vicente López|8000">Vicente López</option>
-  <option value="Olivos|8000">Olivos</option>
-  <option value="San Isidro|8000">San Isidro</option>
-  <option value="Pilar|8000">Pilar</option>
-
-  <option value="Ciudad Autónoma de Buenos Aires (CABA)|8000">
-    Ciudad Autónoma de Buenos Aires (CABA)
-  </option>
-
-</select>
-
-  <input
-      type="text"
-      id="manualZone"
-      class="control"
-      placeholder="Ingresá tu localidad"
-      style="display:none;"
-      oninput="formatManualZone(this); setZoneManual(); lightUpdate()"
-    />
-  </div>
-
-  <div class="form-col">
-    <label>Dirección y altura</label>
-    <input
-      id="addr"
-      class="control"
-      placeholder="Ingrese la dirección"
-      oninput="formatAddress(this); lightUpdate()"
+      placeholder="Ingrese su nombre completo"
+      oninput="formatClientName(this); lightUpdate()"
       onblur="update()"
     />
+    <div class="error-msg" id="error-clientName"></div>
+
+    <div class="form-grid">
+      <div class="form-col">
+        <label>Fecha</label>
+        <input
+          id="orderDate"
+          type="date"
+          class="control"
+          oninput="update()">
+      </div>
+
+      <div class="form-col">
+        <label>Horario</label>
+        <select id="deliveryTime" class="control" onchange="update()">
+          <option value="">Horarios de entrega</option>
+          <option value="11-14">11:00 a.m – 14:00 p.m</option>
+          <option value="15-19">15:00 p.m – 19:00 p.m</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="error-msg" id="error-orderDate"></div>
+
+    <div class="form-grid">
+      <div class="form-col">
+        <label>Localidad</label>
+        <select id="zone" class="control" onchange="handleZoneChange()">
+          <option value="">Seleccionar</option>
+          <option value="manual">Ingresar manualmente</option>
+          <option value="Francisco Álvarez|0">Francisco Álvarez</option>
+          <option value="La reja|0">La reja</option>
+          <option value="Moreno|0">Moreno</option>
+          <option value="Paso del Rey|5000">Paso del Rey</option>
+          <option value="General Rodríguez|8000">General Rodríguez</option>
+          <option value="Merlo|8000">Merlo</option>
+          <option value="Ituzaingó|8000">Ituzaingó</option>
+          <option value="San Antonio de Padua|8000">San Antonio de Padua</option>
+          <option value="Morón|8000">Morón</option>
+          <option value="Castelar|8000">Castelar</option>
+          <option value="Hurlingham|8000">Hurlingham</option>
+          <option value="La Matanza|8000">La Matanza</option>
+          <option value="Ramos Mejía|8000">Ramos Mejía</option>
+          <option value="San Justo|8000">San Justo</option>
+          <option value="San Miguel|8000">San Miguel</option>
+          <option value="Vicente López|8000">Vicente López</option>
+          <option value="Olivos|8000">Olivos</option>
+          <option value="San Isidro|8000">San Isidro</option>
+          <option value="Pilar|8000">Pilar</option>
+          <option value="Ciudad Autónoma de Buenos Aires (CABA)|8000">
+            Ciudad Autónoma de Buenos Aires (CABA)
+          </option>
+        </select>
+
+        <input
+          type="text"
+          id="manualZone"
+          class="control"
+          placeholder="Ingresá tu localidad"
+          style="display:none;"
+          oninput="formatManualZone(this); setZoneManual(); lightUpdate()"
+        />
+      </div>
+
+      <div class="form-col">
+        <label>Dirección y altura</label>
+        <input
+          id="addr"
+          class="control"
+          placeholder="Ingrese la dirección"
+          oninput="formatAddress(this); lightUpdate()"
+          onblur="update()"
+        />
+      </div>
+    </div>
+
+    <div class="error-msg" id="error-addr"></div>
+
+    <label>WhatsApp</label>
+    <input
+      id="clientWhatsapp"
+      class="control"
+      placeholder="Ej: 1123456789"
+      inputmode="numeric"
+      maxlength="10"
+      oninput="handleWhatsappInput(); lightUpdate()"
+    />
+    <div class="error-msg" id="error-clientWhatsapp"></div>
+    <div class="error-msg" id="error-zone"></div>
   </div>
 
-</div>
-<div class="error-msg" id="error-addr"></div>
-<label>WhatsApp</label>
-<input
-  id="clientWhatsapp"
-  class="control"
-  placeholder="Ej: 1123456789"
-  inputmode="numeric"
-  maxlength="10"
-  oninput="handleWhatsappInput(); lightUpdate()"
-/>
-<div class="error-msg" id="error-clientWhatsapp"></div>
-
-<div class="error-msg" id="error-zone"></div>
-</div>
-  
-<div class="info-card shipping-card" id="shippingCard">
-  <div class="info-title">📦 Detalles del envío</div>
-
-  <div class="shipping-text">
-    Una vez confirmado el pago, nos comunicamos por WhatsApp
-    para coordinar fecha y horario de entrega.
-
-    <br><br>
-
-    Tu pedido se prepara artesanalmente el mismo día,
-    se envía refrigerado y listo para servir.
-  </div>
-</div>
-</div>
-
-  <div class="section summary" id="summaryWrapper" style="position:relative">
-  <div id="summary"></div>
-</div>
-
-  <div class="info-card" id="infoOperativa">
-  <div class="info-title">
-    Información operativa
+  <!-- CARD ENVÍO -->
+  <div class="info-card shipping-card" id="shippingCard">
+    <div class="info-title">📦 Detalles del envío</div>
+    <div class="shipping-text">
+      Una vez confirmado el pago, nos comunicamos por WhatsApp
+      para coordinar fecha y horario de entrega.
+      <br><br>
+      Tu pedido se prepara artesanalmente el mismo día,
+      se envía refrigerado y listo para servir.
+    </div>
   </div>
 
-  <div class="info-item">
-    • La imagen del banner corresponde al modelo seleccionado
+  <!-- BLOQUE MERCADO PAGO -->
+  <div class="payment-block">
+    <div class="payment-sub">
+      Serás redirigido a Mercado Pago para completar el pago de forma segura 🔒.
+    </div>
   </div>
 
-  <div class="info-item">
-    • Envío refrigerado a CABA, Zona Oeste y alrededores
-  </div>
-
-  <div class="info-item">
-    • Pedidos con 24hs de anticipación
-  </div>
-</div>
-
-<div class="payment-block">
-
-  <div class="payment-sub">
-    Serás redirigido a Mercado Pago para completar el pago de forma segura 🔒. 
-  </div>
-
-
-</div>
-
-    <div class="info-card" id="metodosPago">
+  <!-- MÉTODOS DE PAGO -->
+  <div class="info-card" id="metodosPago">
     <div class="info-title">Métodos de pago</div>
     <div class="info-item">• Tarjeta de crédito</div>
     <div class="info-item">• Tarjeta de débito</div>
     <div class="info-item">• Dinero en cuenta</div>
-  </div>
-
-  <div class="info-card reassurance-card" id="reassuranceBlock">
-
-  <div class="reassurance-text">
-    ¿Tenés dudas antes de hacer el pedido?
-  </div>
-
-  <div class="reassurance-buttons">
-    <a 
-      href="https://wa.me/5491123284020?text=%C2%A1Hola%21%20me%20gustar%C3%ADa%20consultar..." 
-      target="_blank" 
-      class="reassurance-btn">
-      WhatsApp
-    </a>
-
-    <a href="https://www.instagram.com/saboresfogon.ar/" target="_blank" class="reassurance-btn outline">
-      Instagram
-    </a>
   </div>
 </div>
 </div>
