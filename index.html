@@ -414,12 +414,14 @@ button.selected{
    estilo Instagram / Twitter
    =============================== */
 @media (max-width:480px){
-
   body{
     font-size:14px;
-    padding-bottom: 110px;
   }
+}
 
+body.sticky-visible{
+  padding-bottom: 110px;
+}
   .control,
   select.control,
   button.control{
@@ -3678,11 +3680,12 @@ function updateStickyCTA(){
 
   stickyTotal.textContent = `$${stepTotal.toLocaleString()}`;
 
-  if(summaryIsVisible){
-    sticky.classList.add("hidden");
-    return;
-  }
-
+if(summaryIsVisible){
+  sticky.classList.add("hidden");
+  document.body.classList.remove("sticky-visible");
+  return;
+}
+  
   if(currentStep === 1){
 
     const totalPicadas = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
@@ -3690,7 +3693,15 @@ function updateStickyCTA(){
     stickyBtn.textContent = "Continuar";
     stickyBtn.onclick = goToStep2;
 
-    sticky.classList.toggle("hidden", totalPicadas === 0);
+    const shouldHide = totalPicadas === 0;
+
+sticky.classList.toggle("hidden", shouldHide);
+
+if(shouldHide){
+  document.body.classList.remove("sticky-visible");
+}else{
+  document.body.classList.add("sticky-visible");
+}
   }
 
   if(currentStep === 2){
@@ -3699,6 +3710,7 @@ function updateStickyCTA(){
     stickyBtn.onclick = goWA;
 
     sticky.classList.remove("hidden");
+document.body.classList.add("sticky-visible");
   }
 }
 function showSlide(i, animate = true){
