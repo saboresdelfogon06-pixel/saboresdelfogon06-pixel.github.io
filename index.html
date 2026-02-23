@@ -2654,50 +2654,53 @@ config.innerHTML = `
 ${tabs}
 
 <div class="section">
-<div class="model-size-grid">
+  <div class="model-size-grid">
 
-  <div class="model-group">
-<div class="field-label">Modelo</div>
+    <div class="model-group">
+      <div class="field-label">Modelo</div>
 
-    <div class="model-col">
-      <button
-        class="control ${p.model==='Clásica y Elegante'?'selected':''}"
-        onclick="setModel('Clásica y Elegante')">
-        Clásica y Elegante
-      </button>
+      <div class="model-col">
+        <button
+          class="control ${p.model==='Clásica y Elegante'?'selected':''}"
+          onclick="setModel('Clásica y Elegante')">
+          Clásica y Elegante
+        </button>
 
-      <button
-        class="control ${p.model==='Fresca y Colorida'?'selected':''}"
-        onclick="setModel('Fresca y Colorida')">
-        Fresca y Colorida
-      </button>
+        <button
+          class="control ${p.model==='Fresca y Colorida'?'selected':''}"
+          onclick="setModel('Fresca y Colorida')">
+          Fresca y Colorida
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="size-group">
-<div class="field-label">Tamaño</div>
+    <div class="size-group">
+      <div class="field-label">Tamaño</div>
 
-    <div class="size-col">
-      <button
-        class="control ${p.size===4?'selected':''}"
-        onclick="handleSizeClick(4, PRICES[4])">
-        4 personas
-      </button>
+      <div class="size-col">
+        <button
+          class="control ${p.size===4?'selected':''}"
+          onclick="handleSizeClick(4, PRICES[4])">
+          4 personas
+        </button>
 
-      <button
-        class="control ${p.size===6?'selected':''}"
-        onclick="handleSizeClick(6, PRICES[6])">
-        6 personas
-      </button>
+        <button
+          class="control ${p.size===6?'selected':''}"
+          onclick="handleSizeClick(6, PRICES[6])">
+          6 personas
+        </button>
 
-      <button
-        class="control ${p.size===10?'selected':''}"
-        onclick="handleSizeClick(10, PRICES[10])">
-        10 personas
-      </button>
+        <button
+          class="control ${p.size===10?'selected':''}"
+          onclick="handleSizeClick(10, PRICES[10])">
+          10 personas
+        </button>
+      </div>
     </div>
+
   </div>
-  
+</div>
+
 ${
   p.model && p.size
   ? `
@@ -2723,9 +2726,6 @@ ${
   `
   : ``
 }
-</div>
-  </div>
-</div>
 ${
   !p.model
     ? `
