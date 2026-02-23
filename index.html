@@ -26,7 +26,7 @@ body {
   background: var(--bg);
   color: var(--text);
   touch-action: manipulation;
-  overscroll-behavior: auto;
+  overscroll-behavior-y: contain;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; /* 🔑 inercia iOS */
 }
@@ -468,8 +468,6 @@ body.sticky-visible{
 
   max-width: 720px;         /* 🔥 ALINEADO CON .container */
   z-index: 999;
-  will-change: transform;
-  backface-visibility: hidden;
 }
 .mini-banner .left {
   display: flex;
