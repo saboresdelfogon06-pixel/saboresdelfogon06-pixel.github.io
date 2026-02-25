@@ -2238,6 +2238,7 @@ else {
   // =====================================
 
   const savedStep = Number(sessionStorage.getItem('currentStep'));
+  
 
 setStep(savedStep === 2 ? 2 : 1, false);
 
@@ -3893,11 +3894,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   handleReturnFromMP();
   loadState();
+
+  const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
+  history.replaceState({ step: savedStep }, "", location.pathname);
+
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
+
   requestAnimationFrame(() => {
-  update();
-});
+    update();
+  });
 
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
