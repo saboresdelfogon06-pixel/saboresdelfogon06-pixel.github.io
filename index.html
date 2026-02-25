@@ -3278,8 +3278,8 @@ updateStickyCTA();
   
 function updateTotalsOnly(){
 
-  if(!zoneName){
-  ship = 0;
+if(!zoneName && zone.value){
+  setZone();
 }
 
 total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
