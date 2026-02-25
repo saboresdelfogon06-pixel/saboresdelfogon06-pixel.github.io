@@ -429,17 +429,22 @@ button.selected{
 }
 
 @keyframes blink-gold {
-  0%, 100% { border-color: var(--accent); background: rgba(211,174,9,0.15); }
-  50% { border-color: var(--accent); background: transparent; }
+  0%, 100% {
+    border-color: var(--accent);
+    background: rgba(211,174,9,0.18);
+  }
+  50% {
+    border-color: var(--accent);
+    background: transparent;
+  }
 }
 
 .model-hint {
   border-color: var(--accent) !important;
-  background: rgba(211,174,9,0.12) !important;
+  background: rgba(211,174,9,0.18) !important;
   box-shadow: 0 0 0 1px var(--accent);
-  animation: blink-gold 0.8s ease-in-out 2;
+  animation: blink-gold 0.25s linear 4;
 }
-
 .error-msg {
   color: #ff4d4f;
   font-size: 12px;
