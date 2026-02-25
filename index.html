@@ -2233,15 +2233,6 @@ else {
   renderConfig();   // reconstruye toda la UI
   enforceTomorrowDate();
 
-  // =====================================
-  // 🔥 RESTAURAR STEP (NUEVO)
-  // =====================================
-
-  const savedStep = Number(sessionStorage.getItem('currentStep'));
-  
-
-setStep(savedStep === 2 ? 2 : 1, false);
-
     // 🔥 Sincronizar banner después de render
     if (picadas[active] && picadas[active].model) {
       const savedModel = picadas[active].model;
@@ -3896,6 +3887,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadState();
 
   const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
+
+  setStep(savedStep, false);   // 🔥 moverlo acá
   history.replaceState({ step: savedStep }, "", location.pathname);
 
   clearTimeout(bannerTimer);
