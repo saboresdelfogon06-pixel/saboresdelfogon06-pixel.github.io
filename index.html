@@ -1286,6 +1286,10 @@ html, body {
   overscroll-behavior: none;
 }
 
+body.preload {
+  visibility: hidden;
+}
+
 .size-col button.control{
   font-size:16px;
   font-weight:600;
@@ -1294,7 +1298,7 @@ html, body {
 
 </style>
 </head>
-<body>
+<body class="preload">
 
 <div class="modal" id="imgModal" onclick="closeModal()">
   <button>Cerrar</button>
@@ -3940,7 +3944,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if(sticky){
     sticky.style.opacity = "1";
   }
-
+  document.body.classList.remove("preload");
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
