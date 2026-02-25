@@ -1729,14 +1729,14 @@ function scrollToStep2Card() {
 }
 function goBackToStep1(){
 
-  const orderId = window.currentOrderId;
-  const key = "ic_sent_" + orderId;
+  setStep(1);
 
-zoneName = "";
-ship = 0;
-sessionStorage.removeItem('zone');
-setStep(1);
-update();
+  // 🔹 NO tocar ship
+  // 🔹 NO tocar zoneName
+  // 🔹 NO borrar sessionStorage
+
+  update();
+
   setTimeout(() => {
     snapToClosestStep();
   }, 50);
@@ -3137,8 +3137,8 @@ function update() {
   const summaryContainer = currentStep === 1
   ? document.getElementById("summaryWrapperStep1")
   : document.getElementById("summaryWrapperStep2");
-if(!zoneName){
-  ship = 0;
+if(!zoneName && zone.value){
+  setZone();
 }
 
 total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
@@ -3893,6 +3893,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   handleReturnFromMP();
   loadState();
+  forceStep2RescueIfPending();
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
   requestAnimationFrame(() => {
