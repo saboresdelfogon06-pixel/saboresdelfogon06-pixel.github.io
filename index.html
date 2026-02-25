@@ -3921,11 +3921,12 @@ document.querySelectorAll('.control').forEach(el => {
   });
 });
 
-if (event.state && event.state.step) {
-  setStep(event.state.step, false);
-  update();
-}
-
+window.addEventListener("popstate", function (event) {
+  if (event.state && event.state.step) {
+    setStep(event.state.step, false);
+    update();
+  }
+});
   
 </script>
 <script>
