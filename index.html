@@ -2421,17 +2421,13 @@ function handleReturnFromMP() {
 }
 function forceStep2RescueIfPending() {
 
-  const hasInitPoint = sessionStorage.getItem('mp_init_point');
   const savedStep = Number(sessionStorage.getItem('currentStep'));
 
-  // 🔒 SOLO si realmente estaba en Step 2
-  if (hasInitPoint && savedStep === 2) {
-
-setStep(2);
-update();
+  if (savedStep === 2) {
+    setStep(2);
+    update();
   }
 }
-
 async function rescueCheckoutIfNeeded() {
 
   const orderId = window.currentOrderId;
