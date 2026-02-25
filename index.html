@@ -2419,15 +2419,7 @@ function handleReturnFromMP() {
     console.log('✅ Pago aprobado → pedido reseteado');
   }
 }
-function forceStep2RescueIfPending() {
 
-  const savedStep = Number(sessionStorage.getItem('currentStep'));
-
-  if (savedStep === 2) {
-    setStep(2);
-    update();
-  }
-}
 async function rescueCheckoutIfNeeded() {
 
   const orderId = window.currentOrderId;
@@ -3899,7 +3891,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   handleReturnFromMP();
   loadState();
-  forceStep2RescueIfPending();
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
   requestAnimationFrame(() => {
