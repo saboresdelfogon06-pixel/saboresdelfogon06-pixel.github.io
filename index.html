@@ -3281,7 +3281,7 @@ function updateTotalsOnly(){
   ship = 0;
 }
 
-total = picadas.reduce(...) + ship;
+total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
 
   // 🔹 Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
