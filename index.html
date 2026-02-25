@@ -1975,17 +1975,37 @@ function handleMiniBannerClick(){
 
 function goToStep2(){
 
-  const orderId = window.currentOrderId;
-  const key = "ic_sent_" + orderId;
-  const alreadySent = sessionStorage.getItem(key);
-
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
   if(!allPicadasValid){
+
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-    highlightPicada(incompleteIndex);
+    active = incompleteIndex;
+    renderConfig();
+
+    const current = picadas[active];
+    const modelBtns = document.querySelectorAll('.model-col button.control');
+    const sizeBtns  = document.querySelectorAll('.size-col button.control');
+
+    if(!current.model && !current.size){
+      flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
+    }
+    else if(!current.model){
+      flashHighlight([...modelBtns], 'model-hint', 1800);
+    }
+    else if(!current.size){
+      flashHighlight([...sizeBtns], 'model-hint', 1800);
+    }
+
     return;
   }
+
+  // 👇 tracking lo dejamos igual que ya lo tenías
+  setStep(2);
+  saveState();
+  update();
+  scrollToStep2Card();
+}
 
   // 🔹 SOLO el tracking va protegido
   if (!alreadySent) {
@@ -3129,8 +3149,12 @@ function update() {
   ? document.getElementById("summaryWrapperStep1")
   : document.getElementById("summaryWrapperStep2");
   
-total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
+const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 
+total = currentStep === 2
+  ? subtotal + ship
+  : subtotal;
+  
  let txt = picadas.map((p,i) => {
     const modelName = p.model || "Seleccione un modelo";
     const size = p.size || 0;
@@ -3270,7 +3294,11 @@ function updateTotalsOnly(){
   ship = 0;
 }
 
-total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
+const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+
+total = currentStep === 2
+  ? subtotal + ship
+  : subtotal;
 
   // 🔹 Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
