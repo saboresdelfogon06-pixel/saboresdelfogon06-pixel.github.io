@@ -1727,13 +1727,10 @@ function scrollToStep2Card() {
 
 }
 function goBackToStep1(){
+  setStep(1);
+  saveState();
+  update();
 
-  const orderId = window.currentOrderId;
-  const key = "ic_sent_" + orderId;
-
-localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
-setStep(1);
-update();
   setTimeout(() => {
     snapToClosestStep();
   }, 50);
@@ -1960,7 +1957,6 @@ function updateStepTitle() {
 
 function handleMiniBannerClick(){
 
-  // Si ya estamos en Step 2 → volver arriba suave
   if(currentStep === 2){
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
@@ -1968,15 +1964,12 @@ function handleMiniBannerClick(){
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
-if(!p.model){
-  targets = document.querySelectorAll('.model-col button.control');
-} 
+  if(!allPicadasValid){
+    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+    highlightPicada(incompleteIndex);
+    return;
+  }
 
-if(p.model && !p.size){
-  targets = document.querySelectorAll('.size-col button.control');
-}
-
-  // 🟢 Si está completo → ir a Step 2
   goToStep2();
 }
 
@@ -3135,10 +3128,7 @@ function update() {
   const summaryContainer = currentStep === 1
   ? document.getElementById("summaryWrapperStep1")
   : document.getElementById("summaryWrapperStep2");
-if(currentStep !== 2){
-  ship = 0;
-}
-
+  
 total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
 
  let txt = picadas.map((p,i) => {
