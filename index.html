@@ -1734,6 +1734,7 @@ function goBackToStep1(){
 zoneName = "";
 ship = 0;
 sessionStorage.removeItem('zone');
+localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 setStep(1);
 update();
   setTimeout(() => {
@@ -3910,14 +3911,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
-document.querySelectorAll('.control').forEach(el => {
-  el.addEventListener('input', () => {
+document.addEventListener('input', e => {
+  if(e.target.classList.contains('control')){
     clearAllHighlights();
-  });
+  }
+});
 
-  el.addEventListener('change', () => {
+document.addEventListener('change', e => {
+  if(e.target.classList.contains('control')){
     clearAllHighlights();
-  });
+  }
 });
 
 window.addEventListener("popstate", function (event) {
