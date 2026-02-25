@@ -1658,7 +1658,7 @@ sessionStorage.removeItem('orderDate');
   // 🔥 CLAVE: NO tocar summaryWrapper
   // 🔥 CLAVE: NO tocar currentStep todavía
 
-  saveState();
+localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 
 setStep(1);
 
