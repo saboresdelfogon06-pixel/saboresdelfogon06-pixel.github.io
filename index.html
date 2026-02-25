@@ -3615,8 +3615,6 @@ const summaryStep2 = document.getElementById("summaryWrapperStep2");
 
   bannerReady = true;          // 🔥 CLAVE
   showSlide(bannerIndex, false); // 🔥 fuerza render inicial
-});
-
 // 👁️ Observer para pausar autoplay cuando el banner no está visible
 const bannerObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
