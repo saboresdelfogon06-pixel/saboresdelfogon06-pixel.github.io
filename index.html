@@ -1853,7 +1853,33 @@ function highlightPicada(index){
   });
 }
 
+function validateStep1BeforeContinue() {
 
+  const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+
+  if (incompleteIndex === -1) {
+    return true; // todo correcto
+  }
+
+  highlightPicada(incompleteIndex);
+
+  const p = picadas[incompleteIndex];
+
+  const modelBtns = document.querySelectorAll('.model-col button.control');
+  const sizeBtns  = document.querySelectorAll('.size-col button.control');
+
+  if (!p.model && !p.size) {
+    flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
+  } 
+  else if (!p.model) {
+    flashHighlight([...modelBtns], 'model-hint', 1800);
+  } 
+  else if (!p.size) {
+    flashHighlight([...sizeBtns], 'model-hint', 1800);
+  }
+
+  return false;
+}
 
 const modelData = {
   "Clásica y Elegante": {
@@ -3213,7 +3239,7 @@ ${ currentStep === 2 ? `
 
   ${
     currentStep === 1
-    ? `<button class="summary-cta" onclick="goToStep2()">Continuar</button>`
+   ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) goToStep2()">Continuar</button>`
     : `<button class="summary-cta" id="payBtn" onclick="goWA()">Pagar</button>`
   }
 </div>
@@ -3714,7 +3740,11 @@ function updateStickyCTA(){
 
   if(currentStep === 1){
     stickyBtn.textContent = "Continuar";
-    stickyBtn.onclick = goToStep2;
+    stickyBtn.onclick = () => {
+  if (validateStep1BeforeContinue()) {
+    goToStep2();
+  }
+};
   } else {
     stickyBtn.textContent = "Pagar";
     stickyBtn.onclick = goWA;
