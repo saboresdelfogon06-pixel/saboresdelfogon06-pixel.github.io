@@ -3921,15 +3921,10 @@ document.querySelectorAll('.control').forEach(el => {
   });
 });
 
-window.addEventListener("popstate", function (event) {
-
-  // 🔒 Solo reaccionar si el estado realmente indica step 1
-  if (event.state && event.state.step === 1) {
-    goBackToStep1();
-  }
-
-});
-
+if (event.state && event.state.step) {
+  setStep(event.state.step, false);
+  update();
+}
 
   
 </script>
