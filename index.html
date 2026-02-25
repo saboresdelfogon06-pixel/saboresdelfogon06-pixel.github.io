@@ -1565,6 +1565,7 @@ const imgModal = document.getElementById('imgModal');
 const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
 const banner = document.getElementById("heroBanner");
+let lastStickyState = null;
 // 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
 deliveryTime.addEventListener("change", function(){
   this.setAttribute("value", this.value);
@@ -3580,7 +3581,7 @@ document.addEventListener('DOMContentLoaded', () => {
   sticky = document.getElementById("stickyCTA");
   stickyBtn = document.getElementById("stickyBtn");
   stickyTotal = document.getElementById("stickyTotal");
-  window.addEventListener("scroll", () => {
+  window.addEventListener("scroll", updateStickyCTA, { passive: true });
   requestAnimationFrame(updateStickyCTA);
 }, { passive: true });
 const summaryStep1 = document.getElementById("summaryWrapperStep1");
@@ -3662,13 +3663,12 @@ function updateStickyCTA(){
 
   let summaryIsVisible = false;
 
-if(summaryEl){
-  const rect = summaryEl.getBoundingClientRect();
-
-  summaryIsVisible =
-    rect.top < window.innerHeight &&
-    rect.bottom > 0;
-}
+  if(summaryEl){
+    const rect = summaryEl.getBoundingClientRect();
+    summaryIsVisible =
+      rect.top < window.innerHeight &&
+      rect.bottom > 0;
+  }
 
   const stepTotal = currentStep === 2
     ? total
@@ -3676,44 +3676,30 @@ if(summaryEl){
 
   stickyTotal.textContent = `$${stepTotal.toLocaleString()}`;
 
-if(summaryIsVisible){
-  sticky.classList.add("hidden");
-  document.body.classList.remove("sticky-visible");
-  return;
-}
-  
-  if(currentStep === 1){
+  let newState;
 
+  if(summaryIsVisible){
+    newState = "hidden";
+  } else if(currentStep === 1){
     const totalPicadas = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
-
-    stickyBtn.textContent = "Continuar";
-    stickyBtn.onclick = goToStep2;
-
-    const shouldHide = totalPicadas === 0;
-
-if(shouldHide){
-  sticky.classList.add("hidden");
-  sticky.classList.remove("visible");
-}else{
-  sticky.classList.remove("hidden");
-  sticky.classList.add("visible");
-}
-
-if(shouldHide){
-  document.body.classList.remove("sticky-visible");
-}else{
-  document.body.classList.add("sticky-visible");
-}
+    newState = totalPicadas === 0 ? "hidden" : "visible";
+  } else {
+    newState = "visible";
   }
 
-  if(currentStep === 2){
+  if(newState === lastStickyState) return;
 
+  lastStickyState = newState;
+
+  sticky.classList.remove("visible","hidden");
+  sticky.classList.add(newState);
+
+  if(currentStep === 1){
+    stickyBtn.textContent = "Continuar";
+    stickyBtn.onclick = goToStep2;
+  } else {
     stickyBtn.textContent = "Pagar";
     stickyBtn.onclick = goWA;
-
-    sticky.classList.remove("hidden");
-    sticky.classList.add("visible");
-document.body.classList.add("sticky-visible");
   }
 }
 function showSlide(i, animate = true){
