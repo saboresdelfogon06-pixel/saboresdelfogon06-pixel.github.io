@@ -3925,15 +3925,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
 
-  setStep(savedStep, false);   // 🔥 moverlo acá
+  setStep(savedStep, false);
   history.replaceState({ step: savedStep }, "", location.pathname);
 
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
 
-    update();
-  });
+  update();
 
+  // 🔥 Estas dos van ADENTRO
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
