@@ -1980,16 +1980,26 @@ function goToStep2(){
   if(!allPicadasValid){
 
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-    active = incompleteIndex;
-    renderConfig();
+active = incompleteIndex;
+renderConfig();
 
-    const current = picadas[active];
-    const modelBtns = document.querySelectorAll('.model-col button.control');
-    const sizeBtns  = document.querySelectorAll('.size-col button.control');
-    
-    if(!current.model && !current.size){
-      flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
-    }
+requestAnimationFrame(() => {
+
+  const current = picadas[active];
+  const modelBtns = document.querySelectorAll('.model-col button.control');
+  const sizeBtns  = document.querySelectorAll('.size-col button.control');
+
+  if(!current.model && !current.size){
+    flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
+  }
+  else if(!current.model){
+    flashHighlight([...modelBtns], 'model-hint', 1800);
+  }
+  else if(!current.size){
+    flashHighlight([...sizeBtns], 'model-hint', 1800);
+  }
+
+});
     else if(!current.model){
       flashHighlight([...modelBtns], 'model-hint', 1800);
     }
@@ -3937,17 +3947,6 @@ document.addEventListener('change', e => {
     clearAllHighlights();
   }
 });
-
-window.addEventListener("popstate", function (event) {
-
-  // 🔒 Solo reaccionar si el estado realmente indica step 1
-  if (event.state && event.state.step === 1) {
-    goBackToStep1();
-  }
-
-});
-
-
   
 </script>
 <script>
