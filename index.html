@@ -1591,11 +1591,14 @@ zone.addEventListener("change", function(){
 }
 
 
-function setStep(step) {
+function setStep(step, push = true) {
 
   currentStep = step;
   sessionStorage.setItem('currentStep', step);
-  history.pushState({ step }, "", location.pathname);
+
+  if (push) {
+    history.pushState({ step }, "", location.pathname);
+  }
 
   const isStep2 = step === 2;
 
@@ -1607,7 +1610,6 @@ function setStep(step) {
 
   updateStepTitle();
 }
-
 
 function handleSummaryReset(){
 
