@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1658,7 +1659,7 @@ sessionStorage.removeItem('orderDate');
   // 🔥 CLAVE: NO tocar summaryWrapper
   // 🔥 CLAVE: NO tocar currentStep todavía
 
-localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
+  saveState();
 
 setStep(1);
 
@@ -1727,10 +1728,15 @@ function scrollToStep2Card() {
 
 }
 function goBackToStep1(){
-  setStep(1);
-  saveState();
-  update();
 
+  const orderId = window.currentOrderId;
+  const key = "ic_sent_" + orderId;
+
+zoneName = "";
+ship = 0;
+sessionStorage.removeItem('zone');
+setStep(1);
+update();
   setTimeout(() => {
     snapToClosestStep();
   }, 50);
@@ -1957,10 +1963,30 @@ function updateStepTitle() {
 
 function handleMiniBannerClick(){
 
+  // Si ya estamos en Step 2 → volver arriba suave
   if(currentStep === 2){
     window.scrollTo({ top: 0, behavior: "smooth" });
     return;
   }
+
+  const allPicadasValid = picadas.every(p => p.model && p.size);
+
+  // 🔴 Si falta modelo o tamaño
+  if(!allPicadasValid){
+    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+    highlightPicada(incompleteIndex);
+    return;
+  }
+
+  // 🟢 Si está completo → ir a Step 2
+  goToStep2();
+}
+
+function goToStep2(){
+
+  const orderId = window.currentOrderId;
+  const key = "ic_sent_" + orderId;
+  const alreadySent = sessionStorage.getItem(key);
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
@@ -1970,43 +1996,6 @@ function handleMiniBannerClick(){
     return;
   }
 
-  goToStep2();
-}
-
-function goToStep2(){
-
-  const allPicadasValid = picadas.every(p => p.model && p.size);
-
-if(!allPicadasValid){
-
-  const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-
-  active = incompleteIndex;
-  renderConfig();
-
-  requestAnimationFrame(() => {
-
-    const current = picadas[active];
-    const modelBtns = document.querySelectorAll('.model-col button.control');
-    const sizeBtns  = document.querySelectorAll('.size-col button.control');
-
-    if(!current.model && !current.size){
-      flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
-    }
-    else if(!current.model){
-      flashHighlight([...modelBtns], 'model-hint', 1800);
-    }
-    else if(!current.size){
-      flashHighlight([...sizeBtns], 'model-hint', 1800);
-    }
-
-  });
-
-  return;
-}
-  const orderId = window.currentOrderId;
-  const key = "ic_sent_" + orderId;
-  const alreadySent = sessionStorage.getItem(key);
   // 🔹 SOLO el tracking va protegido
   if (!alreadySent) {
 
@@ -2051,14 +2040,11 @@ if(!allPicadasValid){
     }).catch(()=>{});
   }
 
-  // 👇 tracking lo dejamos igual que ya lo tenías
-  setStep(2);
-  saveState();
-  update();
-  scrollToStep2Card();
+setStep(2);
+saveState();
+update();
+scrollToStep2Card();
 }
-
-
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 let sticky, stickyBtn, stickyTotal;
@@ -2867,7 +2853,7 @@ if(media.type === "video"){
         </div>
 
         <div style="margin-top:8px;">
-          Pican hasta
+          Ideal para 
           <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
           presentada en una tabla de 
           <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
@@ -2889,7 +2875,7 @@ if(media.type === "video"){
         </div>
 
         <div style="margin-top:8px;">
-          Pican hasta 
+          Ideal para 
           <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
           presentada en una tabla de 
           <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
@@ -3151,13 +3137,12 @@ function update() {
   const summaryContainer = currentStep === 1
   ? document.getElementById("summaryWrapperStep1")
   : document.getElementById("summaryWrapperStep2");
-  
-const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+if(!zoneName){
+  ship = 0;
+}
 
-total = currentStep === 2
-  ? subtotal + ship
-  : subtotal;
-  
+total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
+
  let txt = picadas.map((p,i) => {
     const modelName = p.model || "Seleccione un modelo";
     const size = p.size || 0;
@@ -3297,11 +3282,7 @@ function updateTotalsOnly(){
   ship = 0;
 }
 
-const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
-
-total = currentStep === 2
-  ? subtotal + ship
-  : subtotal;
+total = picadas.reduce(...) + ship;
 
   // 🔹 Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
@@ -3930,17 +3911,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
-document.addEventListener('input', e => {
-  if(e.target.classList.contains('control')){
+document.querySelectorAll('.control').forEach(el => {
+  el.addEventListener('input', () => {
     clearAllHighlights();
-  }
+  });
+
+  el.addEventListener('change', () => {
+    clearAllHighlights();
+  });
 });
 
-document.addEventListener('change', e => {
-  if(e.target.classList.contains('control')){
-    clearAllHighlights();
+window.addEventListener("popstate", function (event) {
+
+  // 🔒 Solo reaccionar si el estado realmente indica step 1
+  if (event.state && event.state.step === 1) {
+    goBackToStep1();
   }
+
 });
+
+
   
 </script>
 <script>
