@@ -2042,17 +2042,18 @@ let summaryVisible = false;
 
 
 const PRICES = {
+  2: 40000,
   4: 60000,
   6: 85000,
   10: 110000
 };
 
 const SIZE_INFO = {
+  2: { pican: 3, medidas: "20 × 30 cm" },
   4: { pican: 6, medidas: "20 × 30 cm" },
   6: { pican: 8, medidas: "28 × 48 cm" },
   10: { pican: 12, medidas: "28 × 48 cm" }
 };
-
 const MANUAL_ZONE_SHIPPING = 10000;
 
 
@@ -2691,6 +2692,11 @@ ${tabs}
 
       <div class="size-col">
         <button
+         class="control ${p.size===2?'selected':''}"
+         onclick="handleSizeClick(2, PRICES[2])">
+         2 personas
+        </button>
+        <button
           class="control ${p.size===4?'selected':''}"
           onclick="handleSizeClick(4, PRICES[4])">
           4 personas
@@ -2886,7 +2892,7 @@ if(media.type === "video"){
 
 function handleSizeClick(s, p){
 
-  const allowedSizes = [4, 6, 10];
+  const allowedSizes = [2, 4, 6, 10];
   if (!allowedSizes.includes(s)) return;
 
   const current = picadas[active];
