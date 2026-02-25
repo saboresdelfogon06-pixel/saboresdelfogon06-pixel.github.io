@@ -1277,6 +1277,12 @@ html, body {
   overscroll-behavior: none;
 }
 
+.size-col button.control{
+  font-size:16px;
+  font-weight:600;
+  letter-spacing:0.5px;
+}
+
 </style>
 </head>
 <body>
@@ -1725,6 +1731,9 @@ function goBackToStep1(){
   const orderId = window.currentOrderId;
   const key = "ic_sent_" + orderId;
 
+zoneName = "";
+ship = 0;
+sessionStorage.removeItem('zone');
 setStep(1);
 update();
   setTimeout(() => {
@@ -2213,7 +2222,10 @@ addr.value = sessionStorage.getItem('addr') || "";
       ship = 0;
     }
   }
-
+else {
+  zoneName = "";
+  ship = 0;
+}
 
   renderConfig();   // reconstruye toda la UI
   enforceTomorrowDate();
@@ -3124,7 +3136,11 @@ function update() {
   const summaryContainer = currentStep === 1
   ? document.getElementById("summaryWrapperStep1")
   : document.getElementById("summaryWrapperStep2");
-  total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
+if(!zoneName){
+  ship = 0;
+}
+
+total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
 
  let txt = picadas.map((p,i) => {
     const modelName = p.model || "Seleccione un modelo";
@@ -3261,7 +3277,11 @@ updateStickyCTA();
   
 function updateTotalsOnly(){
 
-  total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + (zoneName ? ship : 0);
+  if(!zoneName){
+  ship = 0;
+}
+
+total = picadas.reduce(...) + ship;
 
   // 🔹 Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
