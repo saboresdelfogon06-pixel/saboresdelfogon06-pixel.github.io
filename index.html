@@ -2239,7 +2239,7 @@ else {
 
   const savedStep = Number(sessionStorage.getItem('currentStep'));
 
-setStep(savedStep === 2 ? 2 : 1);
+setStep(savedStep === 2 ? 2 : 1, false);
 
     // 🔥 Sincronizar banner después de render
     if (picadas[active] && picadas[active].model) {
