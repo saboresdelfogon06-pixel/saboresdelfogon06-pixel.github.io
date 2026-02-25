@@ -1595,7 +1595,7 @@ function setStep(step) {
 
   currentStep = step;
   sessionStorage.setItem('currentStep', step);
-  history.replaceState({ step }, "", location.pathname);
+  history.pushState({ step }, "", location.pathname);
 
   const isStep2 = step === 2;
 
@@ -3149,7 +3149,8 @@ if(!zoneName && zone.value){
   setZone();
 }
 
-total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
+const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+total = currentStep === 2 ? subtotal + ship : subtotal;
 
  let txt = picadas.map((p,i) => {
     const modelName = p.model || "Seleccione un modelo";
@@ -3290,7 +3291,8 @@ if(!zoneName && zone.value){
   setZone();
 }
 
-total = picadas.reduce((sum, p) => sum + (p.price || 0), 0) + ship;
+const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
+total = currentStep === 2 ? subtotal + ship : subtotal;
 
   // 🔹 Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
