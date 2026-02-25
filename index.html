@@ -1986,7 +1986,7 @@ function goToStep2(){
     const current = picadas[active];
     const modelBtns = document.querySelectorAll('.model-col button.control');
     const sizeBtns  = document.querySelectorAll('.size-col button.control');
-
+    
     if(!current.model && !current.size){
       flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
     }
@@ -2000,13 +2000,9 @@ function goToStep2(){
     return;
   }
 
-  // 👇 tracking lo dejamos igual que ya lo tenías
-  setStep(2);
-  saveState();
-  update();
-  scrollToStep2Card();
-}
-
+  const orderId = window.currentOrderId;
+  const key = "ic_sent_" + orderId;
+  const alreadySent = sessionStorage.getItem(key);
   // 🔹 SOLO el tracking va protegido
   if (!alreadySent) {
 
@@ -2051,11 +2047,14 @@ function goToStep2(){
     }).catch(()=>{});
   }
 
-setStep(2);
-saveState();
-update();
-scrollToStep2Card();
+  // 👇 tracking lo dejamos igual que ya lo tenías
+  setStep(2);
+  saveState();
+  update();
+  scrollToStep2Card();
 }
+
+
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
 let sticky, stickyBtn, stickyTotal;
