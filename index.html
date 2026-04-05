@@ -2728,28 +2728,36 @@ ${tabs}
       <div class="field-label">Cantidad de personas</div>
 
 <div class="size-col">
-<button class="control" onclick="handleSizeClick(2, p)">
+<button 
+  class="control ${p.size===2?'selected':''}" 
+  onclick="handleSizeClick(2, p)">
   <div>2 pers</div>
   <div style="font-size:12px; opacity:.8;">
     $${PRICES[2].toLocaleString()}
   </div>
 </button>
 
-<button class="control" onclick="handleSizeClick(4, p)">
+<button 
+  class="control ${p.size===4?'selected':''}" 
+  onclick="handleSizeClick(4, p)">
   <div>4 pers</div>
   <div style="font-size:12px; opacity:.8;">
     $${PRICES[4].toLocaleString()}
   </div>
 </button>
 
-<button class="control" onclick="handleSizeClick(6, p)">
+<button 
+  class="control ${p.size===6?'selected':''}" 
+  onclick="handleSizeClick(6, p)">
   <div>6 pers</div>
   <div style="font-size:12px; opacity:.8;">
     $${PRICES[6].toLocaleString()}
   </div>
 </button>
 
-<button class="control" onclick="handleSizeClick(10, p)">
+<button 
+  class="control ${p.size===10?'selected':''}" 
+  onclick="handleSizeClick(10, p)">
   <div>10 pers</div>
   <div style="font-size:12px; opacity:.8;">
     $${PRICES[10].toLocaleString()}
