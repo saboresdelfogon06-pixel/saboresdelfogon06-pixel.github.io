@@ -711,10 +711,12 @@ input[type="date"]::-moz-focus-inner{
 
 /* 🔽 SOLO BOTONES DE TAMAÑO */
 .size-col button.control{
-  padding:8px 6px;
-  height:42px;
-  font-size:13px;
-  line-height:1;
+  height:auto;
+  padding:10px 6px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:2px;
 }
 @media (max-width:480px){
   .model-size-grid{
@@ -2094,12 +2096,12 @@ let summaryVisible = false;
 
 
 const PRICES = {
-  2: 25000,
-  4: 31000,
-  6: 41000,
-  10: 51000
+  2: 35000,
+  4: 50000,
+  6: 70000,
+  10: 100000
 };
-
+  
 const SIZE_INFO = {
   2: { pican: 3, medidas: "20 × 30 cm" },
   4: { pican: 6, medidas: "20 × 30 cm" },
@@ -2726,29 +2728,33 @@ ${tabs}
       <div class="field-label">Cantidad de personas</div>
 
 <div class="size-col">
-  <button
-    class="control ${p.size===2?'selected':''}"
-    onclick="handleSizeClick(2, PRICES[2])">
-    2
-  </button>
+<button class="control" onclick="handleSizeClick(2, p)">
+  <div>2 pers</div>
+  <div style="font-size:12px; opacity:.8;">
+    $${PRICES[2].toLocaleString()}
+  </div>
+</button>
 
-  <button
-    class="control ${p.size===4?'selected':''}"
-    onclick="handleSizeClick(4, PRICES[4])">
-    4
-  </button>
+<button class="control" onclick="handleSizeClick(4, p)">
+  <div>4 pers</div>
+  <div style="font-size:12px; opacity:.8;">
+    $${PRICES[4].toLocaleString()}
+  </div>
+</button>
 
-  <button
-    class="control ${p.size===6?'selected':''}"
-    onclick="handleSizeClick(6, PRICES[6])">
-    6
-  </button>
+<button class="control" onclick="handleSizeClick(6, p)">
+  <div>6 pers</div>
+  <div style="font-size:12px; opacity:.8;">
+    $${PRICES[6].toLocaleString()}
+  </div>
+</button>
 
-  <button
-    class="control ${p.size===10?'selected':''}"
-    onclick="handleSizeClick(10, PRICES[10])">
-    10
-  </button>
+<button class="control" onclick="handleSizeClick(10, p)">
+  <div>10 pers</div>
+  <div style="font-size:12px; opacity:.8;">
+    $${PRICES[10].toLocaleString()}
+  </div>
+</button>
     </div>
     </div>
 
