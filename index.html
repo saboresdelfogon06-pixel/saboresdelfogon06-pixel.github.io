@@ -308,7 +308,7 @@ button.selected{
   max-height:80%;
   border-radius:12px;
 }
-.modal button{
+.modal > button{
   position:absolute;
   top:20px;
   right:20px;
@@ -1355,6 +1355,8 @@ body.preload {
 
 .lead-submit{
   width:100%;
+  display:block;
+  position:static;
   margin-top:8px;
   background:var(--accent);
   color:#2a2a2a;
@@ -1381,7 +1383,7 @@ body.preload {
 </div>
 
     <!-- MODAL CONTACTO PRE-PAGO -->
-<div class="modal" id="leadModal">
+<div class="modal" id="leadModal" onclick="closeLeadModal()">
   <div class="lead-modal-card" onclick="event.stopPropagation()">
     <button class="lead-close" onclick="closeLeadModal()">✕</button>
 
@@ -1393,31 +1395,21 @@ body.preload {
       los datos de envío.
     </div>
 
-    <label>Email</label>
-    <input
-      id="leadEmail"
-      class="control"
-      type="email"
-      placeholder="Ej: nombre@gmail.com"
-      oninput="clearLeadErrors(); saveLeadState();"
-    />
+<label>WhatsApp o email</label>
+<input
+  id="leadContact"
+  class="control"
+  type="text"
+  inputmode="text"
+  placeholder="Ej: 1123456789 o nombre@gmail.com"
+  oninput="clearLeadErrors(); normalizeLeadContact(this); saveLeadState();"
+/>
 
-    <label>WhatsApp</label>
-    <input
-      id="leadWhatsapp"
-      class="control"
-      type="tel"
-      inputmode="numeric"
-      placeholder="Ej: 1123456789"
-      oninput="formatLeadWhatsapp(this); clearLeadErrors(); saveLeadState();"
-    />
+<div id="leadError" class="error-msg" style="margin-top:4px;"></div>
 
-    <div id="leadError" class="error-msg" style="margin-top:4px;"></div>
-
-    <button class="lead-submit" onclick="submitLeadAndContinue()">
-      Continuar al pago
-    </button>
-
+<button type="button" class="lead-submit" onclick="submitLeadAndContinue()">
+  Continuar al pago
+</button>
     <div class="instructions-hint">
       Los datos de envío se completan después del pago aprobado.
     </div>
@@ -1433,7 +1425,7 @@ body.preload {
     <div class="sticky-amount" id="stickyTotal">$0</div>
   </div>
 
-  <button id="stickyBtn" class="sticky-btn" onclick="if(validateStep1BeforeContinue()) openLeadModal()">
+  <button id="stickyBtn" class="sticky-btn" type="button">
     Continuar
   </button>
 </div>
@@ -2217,6 +2209,16 @@ let picadas=[],active=0,ship=0,zoneName="", total=0;
 let sticky, stickyBtn, stickyTotal;
 let summaryVisible = false;
 
+  document.addEventListener("DOMContentLoaded", () => {
+  const stickyBtnEl = document.getElementById("stickyBtn");
+
+  if (stickyBtnEl) {
+    stickyBtnEl.addEventListener("click", function(e){
+      e.preventDefault();
+      if (validateStep1BeforeContinue()) openLeadModal();
+    });
+  }
+});
 
 const PRICES = {
   2: 35000,
