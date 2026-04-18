@@ -1494,6 +1494,50 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 </div> <!-- cierre step1 -->
 <div id="step2" style="display:none;">
 
+  <!-- MODAL CONTACTO PRE-PAGO -->
+<div class="modal" id="leadModal">
+  <div class="lead-modal-card" onclick="event.stopPropagation()">
+    <button class="lead-close" onclick="closeLeadModal()">✕</button>
+
+    <div class="lead-title">Antes de pagar</div>
+    <div class="lead-text">
+      Dejanos tu <b>email o WhatsApp</b> para poder identificar tu pedido.
+      <br><br>
+      Después de que el pago sea aprobado, te vamos a redirigir para completar
+      los datos de envío.
+    </div>
+
+    <label>Email</label>
+    <input
+      id="leadEmail"
+      class="control"
+      type="email"
+      placeholder="Ej: nombre@gmail.com"
+      oninput="clearLeadErrors(); saveLeadState();"
+    />
+
+    <label>WhatsApp</label>
+    <input
+      id="leadWhatsapp"
+      class="control"
+      type="tel"
+      inputmode="numeric"
+      placeholder="Ej: 1123456789"
+      oninput="formatLeadWhatsapp(this); clearLeadErrors(); saveLeadState();"
+    />
+
+    <div id="leadError" class="error-msg" style="margin-top:4px;"></div>
+
+    <button class="lead-submit" onclick="submitLeadAndContinue()">
+      Continuar al pago
+    </button>
+
+    <div class="instructions-hint">
+      Los datos de envío se completan después del pago aprobado.
+    </div>
+  </div>
+</div>
+
   <!-- 1️⃣ DATOS DE ENVÍO -->
   <div class="section">
     <label>Nombre y apellido</label>
@@ -4170,49 +4214,7 @@ loadPixelOnce();
 })();
 </script>
 
-<!-- MODAL CONTACTO PRE-PAGO -->
-<div class="modal" id="leadModal">
-  <div class="lead-modal-card" onclick="event.stopPropagation()">
-    <button class="lead-close" onclick="closeLeadModal()">✕</button>
 
-    <div class="lead-title">Antes de pagar</div>
-    <div class="lead-text">
-      Dejanos tu <b>email o WhatsApp</b> para poder identificar tu pedido.
-      <br><br>
-      Después de que el pago sea aprobado, te vamos a redirigir para completar
-      los datos de envío.
-    </div>
-
-    <label>Email</label>
-    <input
-      id="leadEmail"
-      class="control"
-      type="email"
-      placeholder="Ej: nombre@gmail.com"
-      oninput="clearLeadErrors(); saveLeadState();"
-    />
-
-    <label>WhatsApp</label>
-    <input
-      id="leadWhatsapp"
-      class="control"
-      type="tel"
-      inputmode="numeric"
-      placeholder="Ej: 1123456789"
-      oninput="formatLeadWhatsapp(this); clearLeadErrors(); saveLeadState();"
-    />
-
-    <div id="leadError" class="error-msg" style="margin-top:4px;"></div>
-
-    <button class="lead-submit" onclick="submitLeadAndContinue()">
-      Continuar al pago
-    </button>
-
-    <div class="instructions-hint">
-      Los datos de envío se completan después del pago aprobado.
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
