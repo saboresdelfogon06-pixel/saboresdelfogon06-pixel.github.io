@@ -2274,41 +2274,7 @@ function loadLeadState(){
   leadContact.value = sessionStorage.getItem('leadContact') || "";
 }
 
-function clearLeadErrors(){
-  if (leadError) leadError.textContent = "";
-  if (leadContact) leadContact.classList.remove('error');
-}
 
-function validateLeadContact(){
-  const contact = leadContact ? leadContact.value.trim() : "";
-  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
-  const cleanPhone = contact.replace(/\D/g, "");
-  const isWhatsapp = cleanPhone.length >= 8;
-
-  if (!contact){
-    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email para continuar.";
-    if (leadContact) leadContact.classList.add('error');
-    return false;
-  }
-
-  if (!isEmail && !isWhatsapp){
-    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email válido.";
-    if (leadContact) leadContact.classList.add('error');
-    return false;
-  }
-
-  return true;
-}
-
-function submitLeadAndContinue(){
-  clearLeadErrors();
-
-  if(!validateLeadContact()) return;
-
-  saveLeadState();
-  closeLeadModal();
-  startCheckoutFlow();
-}
 
   document.addEventListener("DOMContentLoaded", () => {
   const stickyBtnEl = document.getElementById("stickyBtn");
