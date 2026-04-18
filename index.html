@@ -2664,10 +2664,7 @@ async function rescueCheckoutIfNeeded() {
     const data = await res.json();
 
     // Si está confirmado → ir a gracias
-    if (data.status === "confirmed") {
-      window.location.href = "/gracias";
-      return;
-    }
+if (data.status === "confirmed") {
 
     console.log("🔁 Pago pendiente, usuario sigue en Step 2");
 
@@ -3459,7 +3456,7 @@ ${ currentStep === 2 ? `
   ${
     currentStep === 1
  ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) openLeadModal()">Continuar</button>`
-    : `<button class="summary-cta" id="payBtn" onclick="goWA()">Pagar</button>`
+    : `<button class="summary-cta" id="payBtn" onclick="submitShippingAfterPayment()">Finalizar envío</button>`
   }
 </div>
 
@@ -3643,6 +3640,65 @@ window.location.assign(mpData.init_point);
     console.error("ERROR goWA:", err);
     alert("Error técnico al iniciar el pago");
   }
+}
+
+async function submitShippingAfterPayment() {
+  const orderId = window.currentOrderId;
+
+  const payload = {
+    order_id: orderId,
+    clientName: clientName.value.trim(),
+    clientWhatsapp: (() => {
+      const contact = leadContact ? leadContact.value.trim() : "";
+      const cleanPhone = contact.replace(/\D/g, "");
+      return cleanPhone || "";
+    })(),
+    zone: zoneName || "",
+    address: addr.value.trim(),
+    orderDate: orderDate.value || "",
+    deliveryTime: deliveryTime.value || ""
+  };
+
+  if (!payload.clientName) {
+    alert("Ingresá nombre y apellido.");
+    return;
+  }
+
+  if (!payload.zone) {
+    alert("Seleccioná una localidad.");
+    return;
+  }
+
+  if (!payload.address) {
+    alert("Ingresá la dirección.");
+    return;
+  }
+
+  if (!payload.orderDate) {
+    alert("Seleccioná una fecha.");
+    return;
+  }
+
+  if (!payload.deliveryTime) {
+    alert("Seleccioná un horario.");
+    return;
+  }
+
+  const res = await fetch("https://saboresdelfogon.com/api/orders/shipping", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json().catch(() => null);
+
+  if (!res.ok) {
+    console.error("SHIPPING SAVE ERROR:", res.status, data);
+    alert("No se pudo guardar el envío.");
+    return;
+  }
+
+  window.location.href = "/gracias?order_id=" + encodeURIComponent(orderId);
 }
   
 function openModal(src){
