@@ -3599,31 +3599,21 @@ async function goWA() {
     const mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        order_id: orderId,
-        clientName: "",
-        clientEmail: isEmail ? contact : "",
-        clientWhatsapp: isWhatsapp ? cleanPhone : "",
-        total,
-        fingerprint: getOrderFingerprint(),
-        currency: "ARS",
-        items: picadas.map(p => ({
-          model: p.model,
-          size: p.size,
-          price: p.price,
-          notes: p.notes || ""
-        })),
-        envio: 0,
-        orderDate: "",
-        deliveryTime: "",
-        zone: "",
-        address: "",
-        fbp: fbIds.fbp || null,
-        fbc: fbIds.fbc || null,
-        user_agent: clientUserAgent,
-        screen_width: window.screen.width,
-        screen_height: window.screen.height
-      })
+body: JSON.stringify({
+  order_id: orderId,
+  clientEmail: isEmail ? contact : "",
+  clientWhatsapp: isWhatsapp ? cleanPhone : "",
+  total,
+  items: picadas.map(p => ({
+    model: p.model,
+    size: p.size,
+    price: p.price,
+    notes: p.notes || ""
+  })),
+  fbp: fbIds.fbp || null,
+  fbc: fbIds.fbc || null,
+  user_agent: clientUserAgent
+})
     });
 
 if (!mpRes.ok) {
