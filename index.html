@@ -4134,14 +4134,47 @@ localStorage.setItem(
   Number(localStorage.getItem("sdf_page_views")) + 1
 );
 document.addEventListener('DOMContentLoaded', async () => {
-
-  handleReturnFromMP();
   loadState();
 
-  const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
+  const params = new URLSearchParams(window.location.search);
+  const status =
+    params.get('status') ||
+    params.get('collection_status');
 
-  setStep(savedStep, false);
-  history.replaceState({ step: savedStep }, "", location.pathname);
+  const isApprovedReturn = status === 'approved';
+
+  if (isApprovedReturn) {
+    sessionStorage.removeItem('mp_init_point');
+    sessionStorage.removeItem('order_fingerprint');
+
+    setStep(2, false);
+    saveState();
+    update();
+
+    requestAnimationFrame(() => {
+      scrollToStep2Card();
+    });
+
+    history.replaceState({ step: 2 }, "", location.pathname);
+  } else {
+    const savedStep = Number(sessionStorage.getItem('currentStep')) || 1;
+    setStep(savedStep, false);
+    history.replaceState({ step: savedStep }, "", location.pathname);
+  }
+
+  clearTimeout(bannerTimer);
+  enforceTomorrowDate();
+
+  update();
+
+  await rescueCheckoutIfNeeded();
+  showResumeNoticeIfNeeded();
+
+  if(sticky){
+    sticky.style.opacity = "1";
+  }
+  document.body.classList.remove("preload");
+});
 
   clearTimeout(bannerTimer);
   enforceTomorrowDate();
