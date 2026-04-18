@@ -3389,7 +3389,7 @@ ${ currentStep === 2 ? `
 
   ${
     currentStep === 1
-   ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) openLeadModal()">Continuar</button>`
+ ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) openLeadModal()">Continuar</button>`
     : `<button class="summary-cta" id="payBtn" onclick="goWA()">Pagar</button>`
   }
 </div>
@@ -3976,19 +3976,19 @@ function openLeadModal(){
     return;
   }
 
+  if (!leadModal) return;
   leadModal.classList.add('open');
 }
-
 function closeLeadModal(){
+  if (!leadModal) return;
   leadModal.classList.remove('open');
 }
 
 function clearLeadErrors(){
-  leadError.textContent = "";
-  leadEmail.classList.remove('error');
-  leadWhatsapp.classList.remove('error');
+  if (leadError) leadError.textContent = "";
+  if (leadEmail) leadEmail.classList.remove('error');
+  if (leadWhatsapp) leadWhatsapp.classList.remove('error');
 }
-
 function formatLeadWhatsapp(input){
   input.value = input.value.replace(/\D/g, '').slice(0, 10);
 }
@@ -4003,6 +4003,7 @@ function saveLeadState(){
 }
 
 function loadLeadState(){
+  if (!leadEmail || !leadWhatsapp) return;
   leadEmail.value = sessionStorage.getItem('leadEmail') || "";
   leadWhatsapp.value = sessionStorage.getItem('leadWhatsapp') || "";
 }
