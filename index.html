@@ -3626,11 +3626,12 @@ async function goWA() {
       })
     });
 
-    if (!mpRes.ok) {
-      console.error("MP HTTP error:", mpRes.status);
-      alert("No se pudo iniciar el pago. Intentá nuevamente.");
-      return;
-    }
+if (!mpRes.ok) {
+  const errorData = await mpRes.json().catch(() => null);
+  console.error("MP HTTP error:", mpRes.status, errorData);
+  alert("No se pudo iniciar el pago. Revisá la consola.");
+  return;
+}
 
     const mpData = await mpRes.json();
 
