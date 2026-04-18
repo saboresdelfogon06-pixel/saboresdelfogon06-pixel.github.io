@@ -4179,24 +4179,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   await rescueCheckoutIfNeeded();
   showResumeNoticeIfNeeded();
 
-  if(sticky){
+  if (sticky) {
     sticky.style.opacity = "1";
   }
-  document.body.classList.remove("preload");
-});
 
-  clearTimeout(bannerTimer);
-  enforceTomorrowDate();
-
-  update();
-
-  // 🔥 Estas dos van ADENTRO
-  await rescueCheckoutIfNeeded();
-  showResumeNoticeIfNeeded();
-
-  if(sticky){
-    sticky.style.opacity = "1";
-  }
   document.body.classList.remove("preload");
 });
 // 🔒 bloquear zoom por gesto (iOS / Safari)
