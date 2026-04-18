@@ -3631,13 +3631,19 @@ try {
 
 if (!mpRes.ok) {
   console.error("MP HTTP error:", mpRes.status, mpData || rawText);
-  alert("No se pudo iniciar el pago.");
+  alert(
+    "HTTP " + mpRes.status + "\n\n" +
+    JSON.stringify(mpData || rawText, null, 2)
+  );
   return;
 }
 
 if (!mpData || !mpData.init_point) {
   console.error("MP missing init_point:", mpData);
-  alert("No se pudo iniciar el pago.");
+  alert(
+    "Sin init_point\n\n" +
+    JSON.stringify(mpData || {}, null, 2)
+  );
   return;
 }
 
