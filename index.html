@@ -3622,7 +3622,6 @@ if (!mpRes.ok) {
   alert("No se pudo iniciar el pago. Revisá la consola.");
   return;
 }
-
     const mpData = await mpRes.json();
 
     if (!mpData.init_point) {
