@@ -2624,29 +2624,27 @@ function handleReturnFromMP() {
   // 🔒 SOLO ejecutar si realmente venimos de Mercado Pago
   const comingFromMP = document.referrer.includes("mercadopago");
 
-  if (status === 'approved' && comingFromMP) {
+if (status === 'approved') {
 
-    localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
+  sessionStorage.removeItem('mp_init_point');
+  sessionStorage.removeItem('order_fingerprint');
 
-    resetForNextOrder();
+  setStep(2);
+  saveState();
+  update();
 
-    sessionStorage.removeItem('mp_init_point');
-    sessionStorage.removeItem('order_fingerprint');
-    sessionStorage.removeItem('order_id');
+  requestAnimationFrame(() => {
+    scrollToStep2Card();
+  });
 
-    sessionStorage.setItem('order_id', generateOrderId());
-    sessionStorage.setItem('token', generateToken());
+  window.history.replaceState(
+    {},
+    document.title,
+    window.location.pathname
+  );
 
-    window.history.replaceState(
-      {},
-      document.title,
-      window.location.pathname
-    );
-
-    window.scrollTo({ top: 0, behavior: 'auto' });
-
-    console.log('✅ Pago aprobado → pedido reseteado');
-  }
+  console.log('✅ Pago aprobado → abrir Step 2 para completar envío');
+}
 }
 
 async function rescueCheckoutIfNeeded() {
