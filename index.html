@@ -3572,20 +3572,20 @@ payBtn.textContent = "Pagar";
 
 async function goWA() {
 
-const payBtn = document.getElementById("payBtn");
+  const payBtn = document.getElementById("payBtn");
 
-if (payBtn && payBtn.disabled) return;
+  if (payBtn && payBtn.disabled) return;
 
   const orderId = window.currentOrderId;
 
-  // Bloquear botón y cambiar estilo
-  payBtn.disabled = true;
-  payBtn.style.opacity = 0.6;
-  payBtn.textContent = "Procesando...";
+  if (payBtn) {
+    payBtn.disabled = true;
+    payBtn.style.opacity = 0.6;
+    payBtn.textContent = "Procesando.";
+  }
 
-
-// 🔴 Limpiar errores previos
-document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+  // 🔴 Limpiar errores previos
+  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
 // Validar que todas las picadas tengan modelo y tamaño
 const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
@@ -3955,9 +3955,9 @@ function updateStickyCTA(){
 
   if(currentStep === 1){
     stickyBtn.textContent = "Continuar";
-    stickyBtn.onclick = () => {
+stickyBtn.onclick = () => {
   if (validateStep1BeforeContinue()) {
-    goToStep2();
+    openLeadModal();
   }
 };
   } else {
