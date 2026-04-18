@@ -3698,7 +3698,15 @@ async function submitShippingAfterPayment() {
     return;
   }
 
-  window.location.href = "/gracias?order_id=" + encodeURIComponent(orderId);
+setStep(2);
+saveState();
+update();
+
+requestAnimationFrame(() => {
+  scrollToStep2Card();
+});
+
+return;
 }
   
 function openModal(src){
