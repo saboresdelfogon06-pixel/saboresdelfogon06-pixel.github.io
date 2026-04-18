@@ -1704,6 +1704,10 @@ const leadModal = document.getElementById('leadModal');
 const leadContact = document.getElementById('leadContact');
 const leadError = document.getElementById('leadError');
 
+let picadas = [], active = 0, ship = 0, zoneName = "", total = 0;
+let sticky, stickyBtn, stickyTotal;
+let summaryVisible = false;
+  
 let lastStickyState = null;
 // 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
 deliveryTime.addEventListener("change", function(){
