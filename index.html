@@ -3471,13 +3471,7 @@ ${ currentStep === 2 ? `
 
 const allPicadasValid = picadas.every(p => p.model && p.size);
 
-const valid =
-  allPicadasValid &&
-  clientName.value.trim() &&
-  clientWhatsapp.value.trim() &&
-  orderDate.value &&
-  deliveryTime.value &&
-  zoneName;
+const valid = allPicadasValid;
 
 
   summaryContainer.style.display = 'block';
@@ -3569,209 +3563,93 @@ payBtn.style.opacity = 1;
 payBtn.textContent = "Pagar";
 }
 
-
 async function goWA() {
-
-  const payBtn = document.getElementById("payBtn");
-
-  if (payBtn && payBtn.disabled) return;
-
   const orderId = window.currentOrderId;
 
-  if (payBtn) {
-    payBtn.disabled = true;
-    payBtn.style.opacity = 0.6;
-    payBtn.textContent = "Procesando.";
+  const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+  if (incompleteIndex !== -1) {
+    highlightPicada(incompleteIndex);
+    return;
   }
 
-  // 🔴 Limpiar errores previos
-  document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
+  const contact = leadContact ? leadContact.value.trim() : "";
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+  const cleanPhone = contact.replace(/\D/g, "");
+  const isWhatsapp = cleanPhone.length >= 8;
 
-// Validar que todas las picadas tengan modelo y tamaño
-const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-
-
-if (incompleteIndex !== -1) {
-  highlightPicada(incompleteIndex);
-
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar";
-  return;
-}
-
-
-const campos = [];
-
-
-let primeroInvalido = null;
-
-campos.forEach(c => {
-  const elem = document.getElementById(c.id);
-  let valor = elem.value.trim();
-
-  // Localidad manual
-  if (c.id === 'zone' && valor === 'manual') {
-    const manual = document.getElementById('manualZone');
-    valor = manual.value.trim();
-
-    if (!valor) {
-      flashHighlight([manual], 'error', 1800);
-      if (!primeroInvalido) primeroInvalido = manual;
-      return;
-    }
+  if (!contact || (!isEmail && !isWhatsapp)) {
+    clearLeadErrors();
+    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email válido.";
+    if (leadContact) leadContact.classList.add("error");
+    return;
   }
-
-  if (!valor) {
-    flashHighlight([elem], 'error', 1800);
-    if (!primeroInvalido) primeroInvalido = elem;
-  }
-});
-
-if (primeroInvalido) {
-
-  // 📳 Vibración sutil en móviles compatibles
-  if (navigator.vibrate) {
-    navigator.vibrate(80);
-  }
-
-setTimeout(() => {
-
-  const miniBanner = document.querySelector('.mini-banner');
-  const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
-
-  // 🔹 Buscar el bloque completo del formulario
-  const formSection = primeroInvalido.closest('.section');
-
-  if (!formSection) return;
-
-  const rect = formSection.getBoundingClientRect();
-  const absoluteTop = rect.top + window.pageYOffset;
-
-  const offset = 12;
-
-  window.scrollTo({
-    top: absoluteTop - miniHeight - offset,
-    behavior: 'smooth'
-  });
-
-}, 50);
-
-
-  payBtn.disabled = false;
-  payBtn.style.opacity = 1;
-  payBtn.textContent = "Pagar";
-  return;
-}
-
 
   const fbIds = getFacebookIdentifiers();
   const clientUserAgent = navigator.userAgent;
-  const whatsappFinal = "549" + clientWhatsapp.value;
 
+  const subtotal = picadas.reduce((sum, p) => sum + Number(p.price || 0), 0);
+  total = subtotal;
 
-const payload = {
-  order_id: window.currentOrderId,
-  token: window.currentToken,
-  nombre: clientName.value,
-  whatsapp: whatsappFinal,
-  envio: ship,
-  horario: deliveryTime.value,
-  picadas: picadas.map(p => ({
-    model: p.model,
-    size: p.size,
-    price: p.price
-  }))
-};
+  try {
+    saveState();
 
+    sessionStorage.removeItem('mp_init_point');
+    sessionStorage.removeItem('order_fingerprint');
 
-  try{
+    const mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        order_id: orderId,
+        clientName: "",
+        clientEmail: isEmail ? contact : "",
+        clientWhatsapp: isWhatsapp ? cleanPhone : "",
+        total,
+        fingerprint: getOrderFingerprint(),
+        currency: "ARS",
+        items: picadas.map(p => ({
+          model: p.model,
+          size: p.size,
+          price: p.price,
+          notes: p.notes || ""
+        })),
+        envio: 0,
+        orderDate: "",
+        deliveryTime: "",
+        zone: "",
+        address: "",
+        fbp: fbIds.fbp || null,
+        fbc: fbIds.fbc || null,
+        user_agent: clientUserAgent,
+        screen_width: window.screen.width,
+        screen_height: window.screen.height
+      })
+    });
 
-saveState();
-    
-let mpRes;
-try {
+    if (!mpRes.ok) {
+      console.error("MP HTTP error:", mpRes.status);
+      alert("No se pudo iniciar el pago. Intentá nuevamente.");
+      return;
+    }
 
+    const mpData = await mpRes.json();
 
-// limpiar preferencia previa
-sessionStorage.removeItem('mp_init_point');
-sessionStorage.removeItem('order_fingerprint');
+    if (!mpData.init_point) {
+      console.error("MP missing init_point:", mpData);
+      alert("No se pudo iniciar el pago. Intentá nuevamente.");
+      return;
+    }
 
-  mpRes = await fetch("https://saboresdelfogon.com/api/mp/create-preference", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-body: JSON.stringify({
-  order_id: window.currentOrderId,
-  clientName: clientName.value,
-  clientWhatsapp: whatsappFinal,
-  total,
-  fingerprint: getOrderFingerprint(),
-  currency: "ARS",
-  items: picadas.map(p => ({
-    model: p.model,
-    size: p.size,
-    price: p.price,
-    notes: p.notes || ""
-  })),
-  envio: ship,
-  orderDate: orderDate.value,
-  deliveryTime: deliveryTime.value,
-  zone: zoneName,
-  address: addr.value,
+    sessionStorage.setItem('mp_init_point', mpData.init_point);
+    sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
 
-// 🔑 META IDENTIFIERS
-fbp: fbIds.fbp || null,
-fbc: fbIds.fbc || null,
-user_agent: clientUserAgent,
-screen_width: window.screen.width,
-screen_height: window.screen.height
-})
-  });
-} catch (err) {
-  console.error("Network error MP:", err);
-  alert("No se pudo iniciar el pago. Intentá nuevamente.");
-  resetPayButton();
-  return;
-}
-
-if (!mpRes.ok) {
-  console.error("MP HTTP error:", mpRes.status);
-  alert("No se pudo iniciar el pago. Intentá nuevamente.");
-  resetPayButton();
-  return;
-}
-
-let mpData;
-try {
-  mpData = await mpRes.json();
-} catch (err) {
-  console.error("MP invalid JSON");
-  alert("No se pudo iniciar el pago. Intentá nuevamente.");
-  resetPayButton();
-  return;
-}
-
-if (!mpData.init_point) {
-  console.error("MP missing init_point:", mpData);
-  alert("No se pudo iniciar el pago. Intentá nuevamente.");
-  resetPayButton();
-  return;
-}
-
-// 💾 Guardar init_point y fingerprint del pedido
-sessionStorage.setItem('mp_init_point', mpData.init_point);
-sessionStorage.setItem('order_fingerprint', getOrderFingerprint());
-
-window.location.href = mpData.init_point;
+    window.location.href = mpData.init_point;
 
   } catch (err) {
     console.error("ERROR goWA:", err);
-    alert("Error técnico al enviar el pedido");
-    resetPayButton();
+    alert("Error técnico al iniciar el pago");
   }
-
 }
-
   
 function openModal(src){
  modalImg.src=src;
