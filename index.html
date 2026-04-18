@@ -4057,48 +4057,43 @@ function closeLeadModal(){
 
 function clearLeadErrors(){
   if (leadError) leadError.textContent = "";
-  if (leadEmail) leadEmail.classList.remove('error');
-  if (leadWhatsapp) leadWhatsapp.classList.remove('error');
-}
-function formatLeadWhatsapp(input){
-  input.value = input.value.replace(/\D/g, '').slice(0, 10);
+  if (leadContact) leadContact.classList.remove('error');
 }
 
 function isValidEmail(email){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 }
 
+function normalizeLeadContact(input){
+  if (!input) return;
+  input.value = input.value.trimStart();
+}
+
 function saveLeadState(){
-  sessionStorage.setItem('leadEmail', leadEmail.value.trim());
-  sessionStorage.setItem('leadWhatsapp', leadWhatsapp.value.trim());
+  if (!leadContact) return;
+  sessionStorage.setItem('leadContact', leadContact.value.trim());
 }
 
 function loadLeadState(){
-  if (!leadEmail || !leadWhatsapp) return;
-  leadEmail.value = sessionStorage.getItem('leadEmail') || "";
-  leadWhatsapp.value = sessionStorage.getItem('leadWhatsapp') || "";
+  if (!leadContact) return;
+  leadContact.value = sessionStorage.getItem('leadContact') || "";
 }
 
 function validateLeadContact(){
-  const email = leadEmail.value.trim();
-  const whatsapp = leadWhatsapp.value.trim();
+  const contact = leadContact ? leadContact.value.trim() : "";
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+  const cleanPhone = contact.replace(/\D/g, "");
+  const isWhatsapp = cleanPhone.length >= 8;
 
-  if(!email && !whatsapp){
-    leadError.textContent = "Ingresá un email o un WhatsApp para continuar.";
-    leadEmail.classList.add('error');
-    leadWhatsapp.classList.add('error');
+  if (!contact){
+    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email para continuar.";
+    if (leadContact) leadContact.classList.add('error');
     return false;
   }
 
-  if(email && !isValidEmail(email)){
-    leadError.textContent = "Ingresá un email válido.";
-    leadEmail.classList.add('error');
-    return false;
-  }
-
-  if(whatsapp && whatsapp.length < 8){
-    leadError.textContent = "Ingresá un WhatsApp válido.";
-    leadWhatsapp.classList.add('error');
+  if (!isEmail && !isWhatsapp){
+    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email válido.";
+    if (leadContact) leadContact.classList.add('error');
     return false;
   }
 
@@ -4112,10 +4107,8 @@ function submitLeadAndContinue(){
 
   saveLeadState();
   closeLeadModal();
-
   startCheckoutFlow();
-}  
-
+}
 
 function syncBannerWithModel(model){
 
