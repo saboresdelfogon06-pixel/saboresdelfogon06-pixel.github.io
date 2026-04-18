@@ -2666,7 +2666,16 @@ async function rescueCheckoutIfNeeded() {
     // Si está confirmado → ir a gracias
 if (data.status === "confirmed") {
 
-    console.log("🔁 Pago pendiente, usuario sigue en Step 2");
+  setStep(2);
+  saveState();
+  update();
+
+  requestAnimationFrame(() => {
+    scrollToStep2Card();
+  });
+
+  return;
+}
 
   } catch (e) {
     console.log("Rescue backend check failed");
