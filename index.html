@@ -1701,8 +1701,7 @@ const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
 const banner = document.getElementById("heroBanner");
 const leadModal = document.getElementById('leadModal');
-const leadEmail = document.getElementById('leadEmail');
-const leadWhatsapp = document.getElementById('leadWhatsapp');
+const leadContact = document.getElementById('leadContact');
 const leadError = document.getElementById('leadError');
 
 let lastStickyState = null;
@@ -2157,6 +2156,18 @@ function startCheckoutFlow(){
     return;
   }
 
+  const contact = leadContact ? leadContact.value.trim() : "";
+  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+  const cleanPhone = contact.replace(/\D/g, "");
+  const isWhatsapp = cleanPhone.length >= 8;
+
+  if (!contact || (!isEmail && !isWhatsapp)) {
+    clearLeadErrors();
+    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email válido.";
+    if (leadContact) leadContact.classList.add("error");
+    return;
+  }
+
   const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
   total = subtotal;
 
@@ -2188,8 +2199,9 @@ function startCheckoutFlow(){
         order_id: window.currentOrderId,
         total,
         items: picadas,
-        lead_email: leadEmail.value.trim(),
-        lead_whatsapp: leadWhatsapp.value.trim(),
+        lead_contact: contact,
+        lead_email: isEmail ? contact : "",
+        lead_whatsapp: isWhatsapp ? cleanPhone : "",
         fbp: getFacebookIdentifiers().fbp,
         fbc: getFacebookIdentifiers().fbc,
         user_agent: navigator.userAgent,
@@ -2202,7 +2214,49 @@ function startCheckoutFlow(){
     }).catch(()=>{});
   }
 
-  goWA(); // o tu función real de checkout / Mercado Pago
+  goWA();
+}
+
+function normalizeLeadContact(input){
+  if (!input) return;
+  input.value = input.value.trimStart();
+}
+
+function saveLeadState(){
+  if (!leadContact) return;
+  sessionStorage.setItem('leadContact', leadContact.value.trim());
+}
+
+function loadLeadState(){
+  if (!leadContact) return;
+  leadContact.value = sessionStorage.getItem('leadContact') || "";
+}
+
+function clearLeadErrors(){
+  if (leadError) leadError.textContent = "";
+  if (leadContact) leadContact.classList.remove('error');
+}
+
+function openLeadModal(){
+  const allPicadasValid = picadas.every(p => p.model && p.size);
+
+  if(!allPicadasValid){
+    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+    highlightPicada(incompleteIndex);
+    return;
+  }
+
+  if (!leadModal) return;
+  leadModal.classList.add('open');
+}
+
+function closeLeadModal(){
+  if (!leadModal) return;
+  leadModal.classList.remove('open');
+}
+
+function submitLeadAndContinue(){
+  startCheckoutFlow();
 }
 
 let picadas=[],active=0,ship=0,zoneName="", total=0;
