@@ -2255,6 +2255,25 @@ function loadLeadState(){
   leadContact.value = sessionStorage.getItem('leadContact') || "";
 }
 
+function isValidEmail(email){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+function normalizeLeadContact(input){
+  if (!input) return;
+  input.value = input.value.trimStart();
+}
+
+function saveLeadState(){
+  if (!leadContact) return;
+  sessionStorage.setItem('leadContact', leadContact.value.trim());
+}
+
+function loadLeadState(){
+  if (!leadContact) return;
+  leadContact.value = sessionStorage.getItem('leadContact') || "";
+}
+
 function clearLeadErrors(){
   if (leadError) leadError.textContent = "";
   if (leadContact) leadContact.classList.remove('error');
