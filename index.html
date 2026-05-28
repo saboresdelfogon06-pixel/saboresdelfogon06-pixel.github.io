@@ -3272,7 +3272,7 @@ function update() {
   const summaryContainer = currentStep === 1
   ? document.getElementById("summaryWrapperStep1")
   : document.getElementById("summaryWrapperStep2");
-if(!zoneName && zone.value){
+if(zone && !zoneName && zone.value){
   setZone();
 }
 
@@ -3343,7 +3343,7 @@ ${ currentStep === 2 ? `
   <span>Envío refrigerado</span>
   <span>
     ${zoneName || "Sin localidad"}
-    ${addr.value ? ` – ${addr.value}` : ""}
+    ${addr && addr.value ? ` – ${addr.value}` : ""}
   </span>
   <span>$${ship.toLocaleString()}</span>
 </div>
@@ -3408,10 +3408,10 @@ updateStickyCTA();
   
 function updateTotalsOnly(){
 
-if(!zoneName && zone.value){
+if(zone && !zoneName && zone.value){
   setZone();
 }
-
+  
 const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 total = currentStep === 2 ? subtotal + ship : subtotal;
 
@@ -3432,7 +3432,7 @@ total = currentStep === 2 ? subtotal + ship : subtotal;
   const shippingLine = document.querySelector('.summary-shipping span:nth-child(2)');
   if (shippingLine) {
     shippingLine.innerHTML =
-      `${zoneName || "Sin localidad"}${addr.value ? " – " + addr.value : ""}`;
+      `${zoneName || "Sin localidad"}${addr && addr.value ? " – " + addr.value : ""}`;
   }
 
   updateStickyCTA();
