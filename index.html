@@ -2293,9 +2293,15 @@ if (backupKeys.length > 0) {
 
 function loadState() {
 
-clientWhatsapp.value = sessionStorage.getItem('clientWhatsapp') || "";
+
 const savedPicadas = sessionStorage.getItem('picadas');
-deliveryTime.value = sessionStorage.getItem('deliveryTime') || "";
+if(clientWhatsapp){
+  clientWhatsapp.value = sessionStorage.getItem('clientWhatsapp') || "";
+}
+
+if(deliveryTime){
+  deliveryTime.value = sessionStorage.getItem('deliveryTime') || "";
+}
 
   if (!savedPicadas) {
     buildPicadas(1);
@@ -2315,13 +2321,23 @@ const savedActive = Number(sessionStorage.getItem('activePicada'));
     ? savedActive
     : 0;
 
-clientName.value = sessionStorage.getItem('clientName') || "";
-orderDate.value = sessionStorage.getItem('orderDate') || "";
-addr.value = sessionStorage.getItem('addr') || "";
+if(clientName){
+  clientName.value = sessionStorage.getItem('clientName') || "";
+}
+
+if(orderDate){
+  orderDate.value = sessionStorage.getItem('orderDate') || "";
+}
+
+if(addr){
+  addr.value = sessionStorage.getItem('addr') || "";
+}
 
   const savedZone = sessionStorage.getItem('zone');
   if (savedZone !== null) {
-    zone.value = savedZone;
+    if(zone){
+  zone.value = savedZone;
+}
 
     if (savedZone === "manual") {
       const manualInput = document.getElementById('manualZone');
