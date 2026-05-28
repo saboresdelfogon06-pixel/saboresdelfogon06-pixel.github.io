@@ -1531,160 +1531,34 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 </div> <!-- cierre step1 -->
 <div id="step2" style="display:none;">
 
-
-  <!-- 1️⃣ DATOS DE ENVÍO -->
   <div class="section">
-    <label>Nombre y apellido</label>
+    <label>¿Para qué fecha querés consultar?</label>
     <input
-      id="clientName"
+      id="orderDate"
+      type="date"
       class="control"
-      placeholder="Ingrese su nombre completo"
-      oninput="formatClientName(this); lightUpdate()"
-      onblur="update()"
+      oninput="update()"
     />
-    <div class="error-msg" id="error-clientName"></div>
-
-    <div class="form-grid">
-      <div class="form-col">
-        <label>Fecha</label>
-        <input
-          id="orderDate"
-          type="date"
-          class="control"
-          oninput="update()">
-      </div>
-
-      <div class="form-col">
-        <label>Horario</label>
-        <select id="deliveryTime" class="control" onchange="update()">
-          <option value="">Horarios de entrega</option>
-          <option value="11-14">11:00 a.m – 14:00 p.m</option>
-          <option value="15-19">15:00 p.m – 19:00 p.m</option>
-        </select>
-      </div>
-    </div>
 
     <div class="error-msg" id="error-orderDate"></div>
-
-    <div class="form-grid">
-      <div class="form-col">
-        <label>Localidad</label>
-        <select id="zone" class="control" onchange="handleZoneChange()">
-<option value="">Seleccionar</option>
-<option value="manual">Ingresar manualmente</option>
-
-<option value="Francisco Álvarez|0">Francisco Álvarez</option>
-
-<option value="Moreno|5000">Moreno</option>
-<option value="Paso del Rey|5000">Paso del Rey</option>
-<option value="General Rodríguez|5000">General Rodríguez</option>
-
-<option value="Merlo|8000">Merlo</option>
-<option value="Ituzaingó|8000">Ituzaingó</option>
-<option value="San Antonio de Padua|8000">San Antonio de Padua</option>
-<option value="Morón|8000">Morón</option>
-<option value="Castelar|8000">Castelar</option>
-<option value="Hurlingham|8000">Hurlingham</option>
-<option value="La Matanza|8000">La Matanza</option>
-<option value="Ramos Mejía|8000">Ramos Mejía</option>
-<option value="San Justo|8000">San Justo</option>
-<option value="San Miguel|8000">San Miguel</option>
-<option value="Vicente López|8000">Vicente López</option>
-<option value="Olivos|8000">Olivos</option>
-<option value="San Isidro|8000">San Isidro</option>
-<option value="Pilar|8000">Pilar</option>
-
-<option value="Ciudad Autónoma de Buenos Aires (CABA)|10000">
-  Ciudad Autónoma de Buenos Aires (CABA)
-</option>
-        </select>
-
-        <input
-          type="text"
-          id="manualZone"
-          class="control"
-          placeholder="Ingresá tu localidad"
-          style="display:none;"
-          oninput="formatManualZone(this); setZoneManual(); lightUpdate()"
-        />
-      </div>
-
-      <div class="form-col">
-        <label>Dirección y altura</label>
-        <input
-          id="addr"
-          class="control"
-          placeholder="Ingrese la dirección"
-          oninput="formatAddress(this); lightUpdate()"
-          onblur="update()"
-        />
-      </div>
-    </div>
-
-    <div class="error-msg" id="error-addr"></div>
-
-    <label>WhatsApp</label>
-    <input
-      id="clientWhatsapp"
-      class="control"
-      placeholder="Ej: 1123456789"
-      inputmode="numeric"
-      maxlength="10"
-      oninput="handleWhatsappInput(); lightUpdate()"
-    />
-    <div class="error-msg" id="error-clientWhatsapp"></div>
-    <div class="error-msg" id="error-zone"></div>
   </div>
 
+  <div class="section summary" id="summaryWrapperStep2">
+    <div id="summaryStep2"></div>
+  </div>
 
-  <!-- 2️⃣ DETALLES DEL ENVÍO -->
-  <div class="info-card shipping-card" id="shippingCard">
-    <div class="info-title">📦 Detalles del envío</div>
+  <div class="info-card shipping-card">
+    <div class="info-title">📦 Coordinamos por WhatsApp</div>
     <div class="shipping-text">
-      Una vez confirmado el pago, nos comunicamos por WhatsApp
-      para coordinar fecha y horario de entrega.
-      <br><br>
-      Tu pedido se prepara artesanalmente el mismo día,
-      se envía refrigerado y listo para servir.
+      Te abrimos WhatsApp con tu consulta ya armada para confirmar disponibilidad,
+      entrega y reserva.
     </div>
   </div>
 
-
-  <!-- 3️⃣ RESUMEN -->
-<div class="section summary" id="summaryWrapperStep2">
-  <div id="summaryStep2"></div>
-</div>
-
-  <!-- 4️⃣ REDIRECCIÓN A MERCADO PAGO -->
-  <div class="payment-block">
-    <div class="payment-sub">
-      Serás redirigido a Mercado Pago para completar el pago de forma segura 🔒.
-    </div>
-  </div>
-  
-  <!-- 6️⃣ WHATSAPP + INSTAGRAM -->
-  <div class="info-card reassurance-card" id="reassuranceBlockStep2">
-
-    <div class="reassurance-text">
-      ¿Tenés dudas antes de finalizar el pedido?
-    </div>
-
-    <div class="reassurance-buttons">
-      <a 
-        href="https://wa.me/5491123284020?text=%C2%A1Hola%21%20me%20gustar%C3%ADa%20consultar..." 
-        target="_blank" 
-        class="reassurance-btn">
-        WhatsApp
-      </a>
-
-      <a 
-        href="https://www.instagram.com/saboresfogon.ar/" 
-        target="_blank" 
-        class="reassurance-btn outline">
-        Instagram
-      </a>
-    </div>
-
+  <div class="pay">
+    <button type="button" onclick="goWA()">
+      Consultar por WhatsApp
+    </button>
   </div>
 
 </div>
@@ -2114,7 +1988,7 @@ function updateStepTitle() {
   if (currentStep === 1) {
     el.innerHTML = `
       <span style="font-weight:600;">Paso 1 de 2</span> - 
-      Elegí cantidad, modelo y tamaño:
+      Elegí tamaño y fecha:
     `;
   } else {
     el.innerHTML = `
@@ -2282,7 +2156,12 @@ function loadLeadState(){
   if (stickyBtnEl) {
     stickyBtnEl.addEventListener("click", function(e){
       e.preventDefault();
-      if (validateStep1BeforeContinue()) openLeadModal();
+      if (validateStep1BeforeContinue()) {
+  setStep(2);
+  saveState();
+  update();
+  scrollToStep2Card();
+}
     });
   }
 });
@@ -3910,7 +3789,10 @@ function updateStickyCTA(){
     stickyBtn.textContent = "Continuar";
 stickyBtn.onclick = () => {
   if (validateStep1BeforeContinue()) {
-    openLeadModal();
+    setStep(2);
+    saveState();
+    update();
+    scrollToStep2Card();
   }
 };
   } else {
