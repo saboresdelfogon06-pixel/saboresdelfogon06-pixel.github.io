@@ -2346,12 +2346,12 @@ if(addr){
       }
       zoneName = "Zona fuera de rango";
       ship = MANUAL_ZONE_SHIPPING;
-    } else if (savedZone) {
-      setZone();
-    } else {
-      zoneName = "";
-      ship = 0;
-    }
+} else if (savedZone && zone) {
+  setZone();
+} else {
+  zoneName = "";
+  ship = 0;
+}
   }
 else {
   zoneName = "";
