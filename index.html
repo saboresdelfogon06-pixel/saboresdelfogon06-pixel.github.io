@@ -2220,12 +2220,11 @@ window.currentToken   = sessionStorage.getItem('token');
 function saveState(){
   sessionStorage.setItem('picadas', JSON.stringify(picadas));
   sessionStorage.setItem('activePicada', active);
-  sessionStorage.setItem('clientName', clientName.value);
-  sessionStorage.setItem('orderDate', orderDate.value);
-  sessionStorage.setItem('addr', addr.value);
-  sessionStorage.setItem('zone', zone.value);
-  sessionStorage.setItem('clientWhatsapp', clientWhatsapp.value);
-  sessionStorage.setItem('deliveryTime', deliveryTime.value);
+sessionStorage.setItem('clientName', clientName ? clientName.value : "");
+sessionStorage.setItem('addr', addr ? addr.value : "");
+sessionStorage.setItem('zone', zone ? zone.value : "");
+sessionStorage.setItem('clientWhatsapp', clientWhatsapp ? clientWhatsapp.value : "");
+sessionStorage.setItem('deliveryTime', deliveryTime ? deliveryTime.value : "");
   sessionStorage.setItem('currentStep', currentStep);
 localStorage.setItem(
   'sf_backup_order_' + window.currentOrderId,
