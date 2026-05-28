@@ -1569,9 +1569,6 @@ const deliveryTime = document.getElementById('deliveryTime');
 const orderDate  = document.getElementById('orderDate');
 const addr       = document.getElementById('addr');
 const zone       = document.getElementById('zone');
-const config     = document.getElementById('config');
-const imgModal = document.getElementById('imgModal');
-const modalImg = document.getElementById('modalImg');
 const clientWhatsapp = document.getElementById('clientWhatsapp');
 const banner = document.getElementById("heroBanner");
 const leadModal = document.getElementById('leadModal');
@@ -1584,14 +1581,17 @@ let summaryVisible = false;
   
 let lastStickyState = null;
 // 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
-deliveryTime.addEventListener("change", function(){
-  this.setAttribute("value", this.value);
-});
+if(deliveryTime){
+  deliveryTime.addEventListener("change", function(){
+    this.setAttribute("value", this.value);
+  });
+}
 
-zone.addEventListener("change", function(){
-  this.setAttribute("value", this.value);
-});
-
+if(zone){
+  zone.addEventListener("change", function(){
+    this.setAttribute("value", this.value);
+  });
+}
 
   function clearAllHighlights() {
   document.querySelectorAll('.model-hint, .error').forEach(el => {
