@@ -1473,8 +1473,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 </div>
 
 <div class="step-header">
-  <p id="stepTitle"></p>
-  <button id="backBtnInline" onclick="goBackToStep1()">← Volver</button>
+  <p id="stepTitle">Elegí tamaño y fecha</p>
 </div>
 
 <div id="step1">
@@ -1488,20 +1487,6 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   <div id="summaryStep1"></div>
 </div>
   
-  <!-- INFORMACIÓN OPERATIVA -->
-  <div class="info-card" id="infoOperativa">
-    <div class="info-title">
-      Información operativa
-    </div>
-    
-    <div class="info-item">
-      • Envío refrigerado a CABA, Zona Oeste y alrededores
-    </div>
-
-    <div class="info-item">
-      • Pedidos con 24hs de anticipación
-    </div>
-  </div>
 
   <!-- CARD WHATSAPP + INSTAGRAM -->
 <div class="info-card reassurance-card" id="reassuranceBlockStep1">
@@ -1529,39 +1514,7 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
   </div>
 
 </div> <!-- cierre step1 -->
-<div id="step2" style="display:none;">
 
-  <div class="section">
-    <label>¿Para qué fecha querés consultar?</label>
-    <input
-      id="orderDate"
-      type="date"
-      class="control"
-      oninput="update()"
-    />
-
-    <div class="error-msg" id="error-orderDate"></div>
-  </div>
-
-  <div class="section summary" id="summaryWrapperStep2">
-    <div id="summaryStep2"></div>
-  </div>
-
-  <div class="info-card shipping-card">
-    <div class="info-title">📦 Coordinamos por WhatsApp</div>
-    <div class="shipping-text">
-      Te abrimos WhatsApp con tu consulta ya armada para confirmar disponibilidad,
-      entrega y reserva.
-    </div>
-  </div>
-
-  <div class="pay">
-    <button type="button" onclick="goWA()">
-      Consultar por WhatsApp
-    </button>
-  </div>
-
-</div>
 <script>
 const ORDERS_API_URL = 'https://script.google.com/macros/s/AKfycbyZfBtAjy8VaJgi_311oil8qrIuZ8rg9UqWz6WqP9en_wPNOo1fZTEF3Zp_TanZtDL7lQ/exec';
 const clientName = document.getElementById('clientName');
@@ -1866,99 +1819,19 @@ function highlightPicada(index){
 
 function validateStep1BeforeContinue() {
 
-  const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
+  const incompleteIndex = picadas.findIndex(p => !p.size);
 
   if (incompleteIndex === -1) {
-    return true; // todo correcto
+    return true;
   }
 
   highlightPicada(incompleteIndex);
 
-  const p = picadas[incompleteIndex];
-
-  const modelBtns = document.querySelectorAll('.model-col button.control');
-  const sizeBtns  = document.querySelectorAll('.size-col button.control');
-
-  if (!p.model && !p.size) {
-    flashHighlight([...modelBtns, ...sizeBtns], 'model-hint', 1800);
-  } 
-  else if (!p.model) {
-    flashHighlight([...modelBtns], 'model-hint', 1800);
-  } 
-  else if (!p.size) {
-    flashHighlight([...sizeBtns], 'model-hint', 1800);
-  }
+  const sizeBtns = document.querySelectorAll('.size-col button.control');
+  flashHighlight([...sizeBtns], 'model-hint', 1800);
 
   return false;
 }
-
-const modelData = {
-  "Clásica y Elegante": {
-    img: "images/IMG_7762.webp",
-    fiambres: [
-      "Sopresatta italiana",
-      "Jamón crudo",
-      "Lomo ahumado",
-      "Panceta ahumada"
-    ],
-    quesos: [
-      "Brie",
-      "Queso azul",
-      "Pepato"
-    ],
-    dips: [
-      "Dip de mermelada",
-      "Dip queso crema",
-      "Dip aceitunas"
-    ]
-  },
-
-  "Fresca y Colorida": {
-    img: "images/IMG_7761.webp",
-    fiambres: [
-      "Jamón cocido",
-      "Salamín chacarero",
-      "Longaniza",
-      "Panceta ahumada"
-    ],
-    quesos: [
-      "Brie",
-      "Pategrás",
-      "Sardo"
-    ],
-    dips: [
-      "Dip de mermelada",
-      "Dip queso crema",
-      "Dip aceitunas"
-    ]
-  }
-};
-
-const mediaData = {
-  "Clásica y Elegante": {
-
-10: [
-  { type: "video", src: "images/cye 10 personas.mp4" },
-  { type: "video", src: "images/Clásica y elegante 10 personas  (2).mp4" }
-],
-
-    // 🟡 NUEVO 6 PERSONAS
-    6: [
-      { type: "video", src: "images/cye 6 personas.mp4" },
-      { type: "video", src: "images/cye 6 personas 4.mp4" }
-    ]
-  },
-
-  "Fresca y Colorida": {
-
-    // 🟢 NUEVO 6 PERSONAS
-    6: [
-      { type: "video", src: "images/fyc 6 personas.mp4" },
-      { type: "video", src: "images/fyc 6 personas 2.mp4" },
-      { type: "video", src: "images/fyc 6 personas 3.mp4" }
-    ]
-  }
-};
 
 function getRandomMedia(model, size, picadaIndex){
 
@@ -2175,10 +2048,26 @@ const PRICES = {
 };
   
 const SIZE_INFO = {
-  2: { pican: 3, medidas: "20 × 30 cm" },
-  4: { pican: 6, medidas: "20 × 30 cm" },
-  6: { pican: 8, medidas: "28 × 48 cm" },
-  10: { pican: 12, medidas: "28 × 48 cm" }
+  2: {
+    medidas: "20 × 30 cm",
+    peso: "450 g aprox.",
+    pan: "500 g"
+  },
+  4: {
+    medidas: "20 × 30 cm",
+    peso: "800 g aprox.",
+    pan: "500 g"
+  },
+  6: {
+    medidas: "50 × 28 cm",
+    peso: "1,1 kg aprox.",
+    pan: "1 kg"
+  },
+  10: {
+    medidas: "50 × 28 cm",
+    peso: "1,6 kg aprox.",
+    pan: "1 kg"
+  }
 };
 const MANUAL_ZONE_SHIPPING = 10000;
 
@@ -2374,15 +2263,15 @@ else {
   }
 function buildPicadas(n){
   picadas = Array.from({ length: n }, () => ({
-    model: null,
+    model: "Picada artesanal",
     size: null,
     price: 0,
     notes: ""
   }));
+
   active = 0;
   renderConfig();
 }
-
 function resetAll(){
   sessionStorage.removeItem('picadas');
 sessionStorage.removeItem('clientName');
@@ -2714,321 +2603,78 @@ function removeLastPicada(){
 
 function renderConfig(){
 
+  const p = picadas[active];
 
+  config.innerHTML = `
+    <div class="section">
+      <div class="size-group">
+        <div class="field-label">Elegí el tamaño</div>
 
- const p = picadas[active];
+        <div class="size-col" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <button class="control ${p.size===2?'selected':''}" onclick="handleSizeClick(2)">
+            <div>2 personas</div>
+            <div style="font-size:12px;opacity:.8;">$${PRICES[2].toLocaleString()}</div>
+          </button>
 
-  let tabs = `
-<div class="section qty-section">
-  <div style="display:flex;gap:12px;">
+          <button class="control ${p.size===6?'selected':''}" onclick="handleSizeClick(6)">
+            <div>6 personas</div>
+            <div style="font-size:12px;opacity:.8;">$${PRICES[6].toLocaleString()}</div>
+          </button>
 
-    <!-- CANTIDAD -->
-    <div style="flex:1;">
-     <label>Elegí la cantidad</label>
+          <button class="control ${p.size===4?'selected':''}" onclick="handleSizeClick(4)">
+            <div>4 personas</div>
+            <div style="font-size:12px;opacity:.8;">$${PRICES[4].toLocaleString()}</div>
+          </button>
 
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button
-          class="control qty-btn"
-          onclick="removeLastPicada()"
-          ${picadas.length <= 1 ? 'disabled' : ''}>
-          −
-        </button>
-
-        <div style="
-          flex:1;
-          text-align:center;
-          font-size:18px;
-          font-weight:600;
-          background:var(--input-bg);
-          border:1px solid var(--input-border);
-          border-radius:8px;
-          height:48px;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-        ">
-          ${picadas.length}
-        </div>
-
-        <button
-          class="control qty-btn"
-          onclick="addPicada()">
-          +
-        </button>
-      </div>
-    </div>
-
-    <!-- EDITAR -->
-    <div style="flex:1;">
-      <label>Editar</label>
-      <select
-        class="control"
-        onchange="setActivePicada(Number(this.value))">
-        ${picadas.map((_,i)=>`
-          <option value="${i}" ${i===active?'selected':''}>
-            Picada ${i+1}
-          </option>
-        `).join("")}
-      </select>
-    </div>
-
-  </div>
-</div>
-`;
-
-
-const dipsText = p.model
-  ? modelData[p.model].dips.join(" · ")
-  : "";
-
-
-
-// 🔹 NUEVO: reset color del aviso a gris si hay modelo
-const hint = document.getElementById('modelHint');
-if(hint){
-  hint.style.color = p.model ? '#9a958d' : '#9a958d';
-}
-
-
-config.innerHTML = `
-
-${tabs}
-
-<div class="section">
-  <div class="model-size-grid">
-
-    <div class="model-group">
-      <div class="field-label">Modelo</div>
-
-      <div class="model-col">
-        <button
-          class="control ${p.model==='Clásica y Elegante'?'selected':''}"
-          onclick="setModel('Clásica y Elegante')">
-          Clásica y Elegante
-        </button>
-
-        <button
-          class="control ${p.model==='Fresca y Colorida'?'selected':''}"
-          onclick="setModel('Fresca y Colorida')">
-          Fresca y Colorida
-        </button>
-      </div>
-    </div>
-
-    <div class="size-group">
-      <div class="field-label">Cantidad de personas</div>
-
-<div class="size-col">
-<button 
-  class="control ${p.size===2?'selected':''}" 
-  onclick="handleSizeClick(2)">
-  <div>2 pers</div>
-  <div style="font-size:12px; opacity:.8;">
-    $${PRICES[2].toLocaleString()}
-  </div>
-</button>
-
-<button 
-  class="control ${p.size===4?'selected':''}" 
-  onclick="handleSizeClick(4)">
-  <div>4 pers</div>
-  <div style="font-size:12px; opacity:.8;">
-    $${PRICES[4].toLocaleString()}
-  </div>
-</button>
-
-<button 
-  class="control ${p.size===6?'selected':''}" 
-  onclick="handleSizeClick(6)">
-  <div>6 pers</div>
-  <div style="font-size:12px; opacity:.8;">
-    $${PRICES[6].toLocaleString()}
-  </div>
-</button>
-
-<button 
-  class="control ${p.size===10?'selected':''}" 
-  onclick="handleSizeClick(10)">
-  <div>10 pers</div>
-  <div style="font-size:12px; opacity:.8;">
-    $${PRICES[10].toLocaleString()}
-  </div>
-</button>
-    </div>
-    </div>
-
-  </div>
-</div>
-${
-  !p.model
-    ? `
-      <div class="section">
-        <label>Contenido</label>
-        <div style="text-align:center; color:var(--muted); padding:8px 0;">
-          🧀 Seleccioná un modelo para ver el contenido
+          <button class="control ${p.size===10?'selected':''}" onclick="handleSizeClick(10)">
+            <div>10 personas</div>
+            <div style="font-size:12px;opacity:.8;">$${PRICES[10].toLocaleString()}</div>
+          </button>
         </div>
       </div>
-    `
-    : !p.size
-      ? `
-        <div class="section">
-          <label>Contenido</label>
-          <div style="text-align:center; color:var(--muted); padding:8px 0;">
-            Seleccioná un tamaño para ver el contenido
-          </div>
-        </div>
-      `
-      : `
-        <div class="section">
-          <label>Contenido</label>
+    </div>
 
+    <div class="section">
+      <label>Descripción</label>
+
+      ${
+        !p.size
+        ? `<div style="color:var(--muted);text-align:center;padding:8px 0;">Seleccioná un tamaño para ver la descripción</div>`
+        : `
           <div class="picada-content">
             <div class="picada-left">
-              <div class="picada-grid">
+              <div class="content-category">📏 Tamaño</div>
+              <ul>
+                <li>${SIZE_INFO[p.size].medidas}</li>
+                <li>${SIZE_INFO[p.size].peso}</li>
+              </ul>
 
-                <div>
-                  <div class="content-category">🥩 Fiambres:</div>
-                  <ul>
-                    ${modelData[p.model].fiambres.map(f => `<li>${f}</li>`).join("")}
-                  </ul>
-
-                  <div class="content-category">🥣 Dips:</div>
-                  <ul>
-                    ${modelData[p.model].dips.map(d => `<li>${d}</li>`).join("")}
-                  </ul>
-                </div>
-
-                <div>
-                  <div class="content-category">🧀 Quesos:</div>
-                  <ul>
-                    ${modelData[p.model].quesos.map(q => `<li>${q}</li>`).join("")}
-                  </ul>
-
-                  <div class="content-category">🍇 Extras:</div>
-                  <ul>
-                    <li>Uvas</li>
-                    <li>Mix frutos secos</li>
-                    ${p.size === 6 || p.size === 10 ? `<li>Tomatitos deshidratados</li>` : ""}
-                  </ul>
-                </div>
-
-              </div>
+              <div class="content-category">🥖 Incluye</div>
+              <ul>
+                <li>Pan de regalo: ${SIZE_INFO[p.size].pan}</li>
+                <li>Envío refrigerado gratis</li>
+                <li>Producción artesanal con reserva previa</li>
+              </ul>
             </div>
           </div>
-        </div>
-${
-  p.model &&
-  p.size &&
-  mediaData[p.model] &&
-  mediaData[p.model][p.size]
-  ? `
-    <div class="section">
-      <div class="media-grid">
-        ${
-          getRandomMedia(p.model, p.size, active).map(media => {
+        `
+      }
+    </div>
 
-if(media.type === "video"){
-  return `
-    <div class="media-item">
-      <video
-        src="${media.src}"
-        muted
-        playsinline
-        loop
-        preload="metadata"
-        loading="lazy"
-        poster="images/placeholder.webp">
-      </video>
+    <div class="section">
+      <label>Elegí una fecha</label>
+      <input
+        id="orderDate"
+        type="date"
+        class="control"
+        oninput="update()"
+      />
+      <div class="error-msg" id="error-orderDate"></div>
     </div>
   `;
-}
-            if(media.type === "image"){
-              return `
-                <div class="media-item">
-                  <img src="${media.src}" onclick="openModal('${media.src}')">
-                </div>
-              `;
-            }
 
-          }).join("")
-        }
-      </div>
-    </div>
-  `
-  : ``
-}
-        <div class="section">
-  <label>Información</label>
-
-  <div style="font-size:13px; line-height:1.7; color:var(--muted); padding:4px 6px 2px 6px;">
-
-    ${
-      p.model === "Clásica y Elegante"
-      ? `
-        <div style="margin-bottom:12px; color:var(--text); font-weight:600;">
-          La que nunca falla.
-        </div>
-
-        <div style="margin-bottom:10px;">
-          Imaginá una mesa lista, una copa servida y esa charla que empieza tranquila 
-          y termina en risas. Pensada para encuentros donde querés quedar bien 
-          sin complicarte.
-        </div>
-
-        <div style="margin-bottom:10px;">
-          Sabores intensos, cortes seleccionados y quesos que equilibran cada bocado.
-        </div>
-
-        <div style="margin-top:8px;">
-          Pican hasta
-          <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
-          presentada en una tabla de 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
-        </div>
-      `
-      : `
-        <div style="margin-bottom:12px; color:var(--text); font-weight:600;">
-          Liviana, vibrante y distinta.
-        </div>
-
-        <div style="margin-bottom:10px;">
-          Perfecta para tardes relajadas o noches donde la charla se estira 
-          sin mirar el reloj.
-        </div>
-
-        <div style="margin-bottom:10px;">
-          Contrastes dulces y salados, colores que invitan y combinaciones 
-          que sorprenden en cada bocado.
-        </div>
-
-        <div style="margin-top:8px;">
-          Pican hasta 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].pican} personas</b>,
-          presentada en una tabla de 
-          <b style="color:var(--text);">${SIZE_INFO[p.size].medidas}</b>.
-        </div>
-      `
-    }
-
-    <div style="margin-top:12px; font-weight:500; color:var(--text);">
-      Preparada artesanalmente el mismo día del envío.
-    </div>
-
-  </div>
-</div>
-      `
-}
-
-
-`;
-  renderInstructionsCard();
-  requestAnimationFrame(()=>{
+  enforceTomorrowDate();
   update();
-
-  document.querySelectorAll(".media-item video").forEach(v=>{
-    videoObserver.observe(v);
-  });
-});
 }
 
 function handleSizeClick(s){
@@ -3358,7 +3004,7 @@ ${ currentStep === 2 ? `
 
   ${
     currentStep === 1
- ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) openLeadModal()">Continuar</button>`
+ ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) goWA()">Consultar por WhatsApp</button>`
     : `<button class="summary-cta" id="payBtn" onclick="submitShippingAfterPayment()">Finalizar envío</button>`
   }
 </div>
