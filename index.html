@@ -2618,32 +2618,60 @@ function renderConfig(){
       </div>
     </div>
 
-    <div class="section">
-      <label>Descripción</label>
+<div class="section">
+  <label>Descripción</label>
 
-      ${
-        !p.size
-        ? `<div style="color:var(--muted);text-align:center;padding:8px 0;">Seleccioná un tamaño para ver la descripción</div>`
-        : `
-          <div class="picada-content">
-            <div class="picada-left">
-              <div class="content-category">📏 Tamaño</div>
-              <ul>
-                <li>${SIZE_INFO[p.size].medidas}</li>
-                <li>${SIZE_INFO[p.size].peso}</li>
-              </ul>
+  ${
+    !p.size
+    ? `<div style="color:var(--muted);text-align:center;padding:8px 0;">Seleccioná un tamaño para ver la descripción</div>`
+    : `
+      <div class="picada-content">
 
-              <div class="content-category">🥖 Incluye</div>
-              <ul>
-                <li>Pan de regalo: ${SIZE_INFO[p.size].pan}</li>
-                <li>Envío refrigerado gratis</li>
-                <li>Producción artesanal con reserva previa</li>
-              </ul>
-            </div>
+        <div class="picada-grid">
+          <div>
+            <div class="content-category">📏 Tamaño</div>
+            <ul>
+              <li>${SIZE_INFO[p.size].medidas}</li>
+              <li>${SIZE_INFO[p.size].peso}</li>
+            </ul>
           </div>
-        `
-      }
-    </div>
+
+          <div>
+            <div class="content-category">🥖 Incluye</div>
+            <ul>
+              <li>Pan de regalo: ${SIZE_INFO[p.size].pan}</li>
+              <li>Envío refrigerado gratis</li>
+              <li>Producción artesanal con reserva previa</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="content-category" style="margin-top:10px;">🧀 Contenido de la picada</div>
+
+        <div class="picada-grid">
+          <div>
+            <ul>
+              <li>Sopresatta italiana</li>
+              <li>Jamón crudo</li>
+              <li>Lomo ahumado</li>
+              <li>Panceta ahumada</li>
+            </ul>
+          </div>
+
+          <div>
+            <ul>
+              <li>Brie</li>
+              <li>Queso azul</li>
+              <li>Pepato</li>
+              <li>Dips artesanales</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    `
+  }
+</div>
 
     <div class="section">
       <label>Elegí una fecha</label>
