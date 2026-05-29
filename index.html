@@ -1473,9 +1473,8 @@ CABA y Zona Oeste <span class="dot"></span> Producción artesanal
 </div>
 
 <div class="step-header">
-  <p id="stepTitle">Elegí tamaño y fecha</p>
+  <p id="stepTitle">Elegí tamaño, fecha y consultá por WhatsApp</p>
 </div>
-
 <div id="step1">
 
   <!-- CONFIGURADOR (cantidad, modelo, tamaño, contenido, media) -->
@@ -1846,17 +1845,7 @@ function updateStepTitle() {
   const el = document.getElementById("stepTitle");
   if (!el) return;
 
-  if (currentStep === 1) {
-    el.innerHTML = `
-      <span style="font-weight:600;">Paso 1 de 2</span> - 
-      Elegí tamaño y fecha:
-    `;
-  } else {
-    el.innerHTML = `
-      <span style="font-weight:600;">Paso 2 de 2</span> - 
-      Completá datos de envío:
-    `;
-  }
+  el.innerHTML = `Elegí tamaño, fecha y consultá por WhatsApp`;
 }
 
 
@@ -2589,7 +2578,62 @@ function renderConfig(){
 
   const p = picadas[active];
 
-  config.innerHTML = `
+config.innerHTML = `
+
+    <div class="section qty-section">
+      <div style="display:flex;gap:12px;">
+
+        <div style="flex:1;">
+          <label>Elegí la cantidad</label>
+
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button
+              class="control qty-btn"
+              onclick="removeLastPicada()"
+              ${picadas.length <= 1 ? 'disabled' : ''}>
+              −
+            </button>
+
+            <div style="
+              flex:1;
+              text-align:center;
+              font-size:18px;
+              font-weight:600;
+              background:var(--input-bg);
+              border:1px solid var(--input-border);
+              border-radius:8px;
+              height:48px;
+              display:flex;
+              align-items:center;
+              justify-content:center;
+            ">
+              ${picadas.length}
+            </div>
+
+            <button
+              class="control qty-btn"
+              onclick="addPicada()">
+              +
+            </button>
+          </div>
+        </div>
+
+        <div style="flex:1;">
+          <label>Editar picada</label>
+          <select
+            class="control"
+            onchange="setActivePicada(Number(this.value))">
+            ${picadas.map((_,i)=>`
+              <option value="${i}" ${i===active?'selected':''}>
+                Picada ${i+1}
+              </option>
+            `).join("")}
+          </select>
+        </div>
+
+      </div>
+    </div>
+
     <div class="section">
       <div class="size-group">
         <div class="field-label">Elegí el tamaño</div>
