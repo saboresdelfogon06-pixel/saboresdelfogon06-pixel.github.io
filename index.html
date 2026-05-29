@@ -2521,10 +2521,10 @@ function addPicada(){
   const current = picadas[active];
 
   // 🔒 Si la picada actual no está completa, no duplicar
-  if(!current.model || !current.size){
-    highlightPicada(active);
-    return;
-  }
+if(!current.size){
+  highlightPicada(active);
+  return;
+}
 
   // 🔥 DUPLICAR la picada actual
   picadas.push({
@@ -2741,23 +2741,8 @@ function handleSizeClick(s){
   const current = picadas[active];
 
 // 🔒 BLOQUEO: no permitir tamaño sin modelo
-if(!current.model){
-
-  const modelBtns = document.querySelectorAll('.model-col button.control');
-  const hint = document.getElementById('modelHint');
-
-  if(hint) hint.style.color = '#ffffff';
-
-  flashHighlight([...modelBtns], 'model-hint', 1800);
-
-  // 🔥 quitar foco del botón de tamaño (fix desktop)
-  if(document.activeElement){
-    document.activeElement.blur();
-  }
-
-  return;
-}
-
+// 🔒 Ya no hay modelos: asegurar modelo único
+current.model = "Picada artesanal";
 // 🔒 NO permitir deseleccionar
 if(current.size === s) {
   if(document.activeElement){
