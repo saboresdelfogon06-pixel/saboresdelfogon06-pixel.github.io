@@ -2030,11 +2030,8 @@ function loadLeadState(){
   if (stickyBtnEl) {
     stickyBtnEl.addEventListener("click", function(e){
       e.preventDefault();
-      if (validateStep1BeforeContinue()) {
-  setStep(2);
-  saveState();
-  update();
-  scrollToStep2Card();
+if (validateStep1BeforeContinue()) {
+  goWA();
 }
     });
   }
@@ -3446,20 +3443,17 @@ function updateStickyCTA(){
   sticky.classList.remove("visible","hidden");
   sticky.classList.add(newState);
 
-  if(currentStep === 1){
-    stickyBtn.textContent = "Continuar";
-stickyBtn.onclick = () => {
-  if (validateStep1BeforeContinue()) {
-    setStep(2);
-    saveState();
-    update();
-    scrollToStep2Card();
-  }
-};
-  } else {
-    stickyBtn.textContent = "Pagar";
-    stickyBtn.onclick = goWA;
-  }
+if(currentStep === 1){
+  stickyBtn.textContent = "Consultar por WhatsApp";
+  stickyBtn.onclick = () => {
+    if (validateStep1BeforeContinue()) {
+      goWA();
+    }
+  };
+} else {
+  stickyBtn.textContent = "Consultar por WhatsApp";
+  stickyBtn.onclick = goWA;
+}
 }
 function showSlide(i, animate = true){
   bannerIndex = i;
