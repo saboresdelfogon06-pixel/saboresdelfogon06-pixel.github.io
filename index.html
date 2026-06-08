@@ -3045,7 +3045,7 @@ ${ currentStep === 2 ? `
 
   ${
     currentStep === 1
- ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) goWA()">Consultar por WhatsApp</button>`
+ ? `<button class="summary-cta" onclick="if(validateStep1BeforeContinue()) goWA()">Reservar por WhatsApp</button>`
     : `<button class="summary-cta" id="payBtn" onclick="submitShippingAfterPayment()">Finalizar envío</button>`
   }
 </div>
@@ -3488,14 +3488,14 @@ function updateStickyCTA(){
   sticky.classList.add(newState);
 
 if(currentStep === 1){
-  stickyBtn.textContent = "Consultar por WhatsApp";
+  stickyBtn.textContent = "Reservar por WhatsApp";
   stickyBtn.onclick = () => {
     if (validateStep1BeforeContinue()) {
       goWA();
     }
   };
 } else {
-  stickyBtn.textContent = "Consultar por WhatsApp";
+  stickyBtn.textContent = "Reservar por WhatsApp";
   stickyBtn.onclick = goWA;
 }
 }
