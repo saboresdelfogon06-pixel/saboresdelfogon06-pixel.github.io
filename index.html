@@ -1067,6 +1067,23 @@ button.selected{
 
   .picada-grid{
   display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  align-items:start;
+}
+
+.picada-grid ul{
+  margin:0;
+  padding-left:18px;
+}
+
+@media(max-width:768px){
+  .picada-grid{
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+  }
+}
+  display:grid;
   grid-template-columns: 1fr 1fr;
   gap:16px;
 }
