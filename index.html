@@ -21,6 +21,19 @@
   --input-border:#3a3a3a;
 }
 
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html{
+  width:100%;
+  min-height:100%;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -35,8 +48,8 @@ body {
   padding: 16px;
   padding-top: 72px;
 
-  height: auto;        /* 🔑 */
-  overflow: visible;   /* 🔑 */
+  height: auto;        /*  */
+  overflow: visible;   /*  */
 }
 
 /* HEADER */
@@ -183,7 +196,7 @@ select.control:not([value=""]) {
 }
 
 
-/* 🔥 Unificar placeholder */
+/*  Unificar placeholder */
 input.control::placeholder {
   color: var(--muted);
   opacity: 1;
@@ -399,20 +412,19 @@ button.selected{
    MEJOR LEGIBILIDAD EN MÓVIL
    estilo Instagram / Twitter
    =============================== */
+.container{
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+
 @media (max-width:480px){
   body{
     font-size:14px;
   }
-}
-
-  .container{
-  padding-bottom: 110px;
-}
 
   .control,
   select.control,
   button.control{
-    font-size:12px;
+    font-size:14px;
   }
 
   label{
@@ -468,12 +480,12 @@ button.selected{
 
   position: fixed;
 
-  top: 12px;                /* 🔥 VOLVEMOS A FIJO */
-  left: 50%;                /* 🔥 CENTRADO REAL */
+  top: 12px;                /*  VOLVEMOS A FIJO */
+  left: 50%;                /*  CENTRADO REAL */
   transform: translateX(-50%);
-  width: calc(100% - 24px); /* 🔥 MISMO MARGEN SIEMPRE */
+  width: calc(100% - 24px); /*  MISMO MARGEN SIEMPRE */
 
-  max-width: 720px;         /* 🔥 ALINEADO CON .container */
+  max-width: 720px;         /*  ALINEADO CON .container */
   z-index: 999;
 }
 .mini-banner .left {
@@ -486,7 +498,7 @@ button.selected{
   display: flex;
   align-items: center;
   gap: 0px;
-  color: var(--muted);      /* 👈 gris elegante */
+  color: var(--muted);      /*  gris elegante */
   text-decoration: none;
   font-weight: 600;
 }
@@ -496,7 +508,7 @@ button.selected{
   height: auto;
   object-fit: contain;
   flex-shrink: 0;
-  transform: translateY(6px); /* 👈 lo baja */
+  transform: translateY(6px); /*  lo baja */
 }
 
 
@@ -545,8 +557,8 @@ button.selected{
 .delivery-hint{
   font-size:12px;
   color: var(--muted);
-  margin-top:-4px;   /* 👈 lo acerca al horario */
-  margin-bottom:12px; /* 👈 separa de Localidad */
+  margin-top:-4px;   /*  lo acerca al horario */
+  margin-bottom:12px; /*  separa de Localidad */
 }
 
 input[type="date"].control{
@@ -677,7 +689,7 @@ input[type="date"]::-moz-focus-inner{
   gap:14px;
 }
 
-/* 🔹 Subtítulos unificados */
+/*  Subtítulos unificados */
 .field-label{
   font-size:12px;
   letter-spacing:.2px;
@@ -693,7 +705,7 @@ input[type="date"]::-moz-focus-inner{
 .size-group{
   display:flex;
   flex-direction:column;
-  gap:2px;   /* 🔥 antes 4px */
+  gap:2px;   /*  antes 4px */
 }
 
 .model-col,
@@ -709,18 +721,37 @@ input[type="date"]::-moz-focus-inner{
   text-align:center;
 }
 
-/* 🔽 SOLO BOTONES DE TAMAÑO */
+/* Botones de tamaño */
+.size-col{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px;
+}
+
 .size-col button.control{
-  height:auto;
+  min-width:0;
+  height:62px;
   padding:10px 6px;
   display:flex;
   flex-direction:column;
+  align-items:center;
   justify-content:center;
-  gap:2px;
+  gap:3px;
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:0;
+  line-height:1.15;
+  white-space:nowrap;
+}
+
+.size-price{
+  font-size:12px;
+  opacity:.82;
+  font-weight:400;
 }
 @media (max-width:480px){
   .model-size-grid{
-    flex-direction:column; /* 🔥 mantener vertical */
+    flex-direction:column; /*  mantener vertical */
   }
 }
 
@@ -733,8 +764,8 @@ input[type="date"]::-moz-focus-inner{
 
   .size-col button{
     padding:8px 6px;
-    height:42px;
-    font-size:12px;
+    height:62px;
+    font-size:14px;
   }
 
 }
@@ -754,14 +785,14 @@ input[type="date"]::-moz-focus-inner{
 
 .picada-left{
   padding-right:0px;   /* ya lo tenés, lo dejamos */
-  padding-left:12px;     /* 👈 sangría general del bloque */
+  padding-left:12px;     /*  sangría general del bloque */
   font-size:13px;
   line-height:1.45;
 }
 
 .picada-left ul{
   margin:6px 0 14px;
-  padding-left:22px;     /* 👈 sangría real de lista */
+  padding-left:22px;     /*  sangría real de lista */
 }
 
 .picada-left li{
@@ -773,7 +804,18 @@ input[type="date"]::-moz-focus-inner{
   margin-bottom:4px;
   font-size:13px;
   color:var(--text);
-  font-weight:600;   /* 👈 no bold fuerte */
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.inline-icon{
+  width:15px;
+  height:15px;
+  flex:0 0 15px;
+  color:var(--accent);
+  display:inline-block;
 }
 .summary-header{
   display:flex;
@@ -788,7 +830,7 @@ input[type="date"]::-moz-focus-inner{
   color:var(--text);
 }
 
-/* 🧠 FIX autofill navegador (Chrome / Safari / iOS) */
+/*  FIX autofill navegador (Chrome / Safari / iOS) */
 input.control:-webkit-autofill,
 input.control:-webkit-autofill:hover,
 input.control:-webkit-autofill:focus,
@@ -880,7 +922,7 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  text-align: left; /* 👈 alineado a la izquierda como pediste */
+  text-align: left; /*  alineado a la izquierda como pediste */
 }
 
   .info-card{
@@ -942,7 +984,7 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
   color: var(--muted);
   letter-spacing:.2px;
   transition: opacity .4s ease;
-  animation: pulse-text 2.8s ease-in-out infinite; /* 🔥 sincronizado */
+  animation: pulse-text 2.8s ease-in-out infinite; /*  sincronizado */
 }
 
 
@@ -952,7 +994,7 @@ box-shadow: 0 0 0px 1000px var(--input-bg) inset;
   background: var(--accent);
   border-radius:50%;
   flex-shrink:0;
-  margin: 0 8px 0 0;   /* 👈 mismo espaciado visual que subtitle */
+  margin: 0 8px 0 0;   /*  mismo espaciado visual que subtitle */
   animation: pulse-dot 2.8s ease-in-out infinite;
 }
 
@@ -1169,7 +1211,7 @@ button.selected{
   align-items:center;
   justify-content:space-between;
 
-  padding: 12px 16px 16px;
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
   gap: 14px;
 
   border-top: 1px solid rgba(255,255,255,.05);
@@ -1293,9 +1335,9 @@ body.preload {
 }
 
 .size-col button.control{
-  font-size:16px;
-  font-weight:600;
-  letter-spacing:0.5px;
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:0;
 }
 
 /* ===============================
@@ -1385,7 +1427,7 @@ body.preload {
     <!-- MODAL CONTACTO PRE-PAGO -->
 <div class="modal" id="leadModal" onclick="closeLeadModal()">
   <div class="lead-modal-card" onclick="event.stopPropagation()">
-    <button class="lead-close" onclick="closeLeadModal()">✕</button>
+    <button class="lead-close" onclick="closeLeadModal()"></button>
 
     <div class="lead-title">Antes de pagar</div>
     <div class="lead-text">
@@ -1533,7 +1575,7 @@ let sticky, stickyBtn, stickyTotal;
 let summaryVisible = false;
   
 let lastStickyState = null;
-// 🔹 Sincronizar atributo value en selects (para CSS gris/blanco)
+//  Sincronizar atributo value en selects (para CSS gris/blanco)
 if(deliveryTime){
   deliveryTime.addEventListener("change", function(){
     this.setAttribute("value", this.value);
@@ -1565,7 +1607,7 @@ function handleSummaryReset(){
 
   if(currentStep === 1){
 
-    // 🔹 Resetear solo pedido (modelos y tamaños)
+    //  Resetear solo pedido (modelos y tamaños)
     picadas = picadas.map(() => ({
       model: null,
       size: null,
@@ -1583,7 +1625,7 @@ function handleSummaryReset(){
 
 } else if(currentStep === 2){
 
-  // 🔹 Limpiar solo datos de envío
+  //  Limpiar solo datos de envío
   clientName.value = "";
   clientWhatsapp.value = "";
   addr.value = "";
@@ -1607,16 +1649,16 @@ sessionStorage.removeItem('zone');
 sessionStorage.removeItem('deliveryTime');
 sessionStorage.removeItem('orderDate');
 
-  // 🔥 CLAVE: NO tocar picadas
-  // 🔥 CLAVE: NO tocar summaryWrapper
-  // 🔥 CLAVE: NO tocar currentStep todavía
+  //  CLAVE: NO tocar picadas
+  //  CLAVE: NO tocar summaryWrapper
+  //  CLAVE: NO tocar currentStep todavía
 
   saveState();
 
 setStep(1);
 
 
-  update(); // 🔥 esto vuelve a renderizar el resumen correctamente
+  update(); //  esto vuelve a renderizar el resumen correctamente
 }
 }
 
@@ -1673,7 +1715,7 @@ function scrollToStep2Card() {
 
     window.scrollTo({
       top: absoluteTop - miniHeight - offset,
-      behavior: "auto" // 🔥 clave: sin smooth
+      behavior: "auto" //  clave: sin smooth
     });
 
   });
@@ -1683,9 +1725,9 @@ function goBackToStep1(){
 
   setStep(1);
 
-  // 🔹 NO tocar ship
-  // 🔹 NO tocar zoneName
-  // 🔹 NO borrar sessionStorage
+  //  NO tocar ship
+  //  NO tocar zoneName
+  //  NO borrar sessionStorage
 
   update();
 
@@ -1711,7 +1753,7 @@ const savedDate = sessionStorage.getItem('orderDate');
 
 if (hoursPassed > 1) {
 
-  // 🛑 Evitar duplicado
+  //  Evitar duplicado
   if (document.getElementById("resumeNotice")) return;
 
   const notice = document.createElement("div");
@@ -1727,7 +1769,7 @@ if (hoursPassed > 1) {
   `;
 
   notice.innerHTML = `
-    🕒 Tu pedido sigue guardado. Podés continuar el pago cuando quieras.
+    Tu pedido sigue guardado. Podés continuar el pago cuando quieras.
   `;
 
   const paymentBlock = document.querySelector(".payment-block");
@@ -1771,17 +1813,17 @@ function highlightPicada(index){
 
       if (!banner || !intro || !box) return;
 
-      // 🔹 Altura del mini banner fijo
+      //  Altura del mini banner fijo
       const miniBanner = document.querySelector('.mini-banner');
       const miniHeight = miniBanner ? miniBanner.offsetHeight : 0;
 
-      // 🔹 Posición inferior del bloque intro
+      //  Posición inferior del bloque intro
       const introBottom = intro.getBoundingClientRect().bottom + window.pageYOffset;
 
-      // 🔹 Ajuste fino visual
+      //  Ajuste fino visual
       const offset = 6;
 
-      // 🔹 Scroll exacto
+      //  Scroll exacto
       window.scrollTo({
         top: introBottom - miniHeight - offset,
         behavior: 'smooth'
@@ -1826,12 +1868,12 @@ function getRandomMedia(model, size, picadaIndex){
 
   const media = mediaData[model][size];
 
-  // 🔒 Si hay 1 o 2 elementos, devolver directos
+  //  Si hay 1 o 2 elementos, devolver directos
   if(media.length <= 2){
     return media;
   }
 
-  // 🔹 Shuffle simple determinístico por índice
+  //  Shuffle simple determinístico por índice
   const start = picadaIndex % media.length;
 
   return [
@@ -1859,14 +1901,14 @@ function handleMiniBannerClick(){
 
   const allPicadasValid = picadas.every(p => p.model && p.size);
 
-  // 🔴 Si falta modelo o tamaño
+  //  Si falta modelo o tamaño
   if(!allPicadasValid){
     const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
     highlightPicada(incompleteIndex);
     return;
   }
 
-  // 🟢 Si está completo → ir a Step 2
+  //  Si está completo → ir a Step 2
   openLeadModal();
 }
 function startCheckoutFlow(){
@@ -2034,7 +2076,7 @@ deliveryTime: deliveryTime ? deliveryTime.value : "",
 }));
 }
 
-// 🔄 Restaurar desde backup si se cerró navegador
+//  Restaurar desde backup si se cerró navegador
 if (!sessionStorage.getItem('picadas')) {
 
   const backupKeys = Object.keys(localStorage)
@@ -2073,7 +2115,7 @@ if (backupKeys.length > 0) {
       window.currentOrderId = data.order_id;
       window.currentToken   = data.token;
 
-      console.log("🔁 Pedido restaurado desde backup aislado");
+      console.log(" Pedido restaurado desde backup aislado");
     } catch(e) {
       console.log("Backup inválido");
     }
@@ -2105,7 +2147,7 @@ if(deliveryTime){
     return;
   }
 
-  // 🔹 Restaurar picada activa
+  //  Restaurar picada activa
 const savedActive = Number(sessionStorage.getItem('activePicada'));
   active = Number.isInteger(savedActive) && savedActive < picadas.length
     ? savedActive
@@ -2151,7 +2193,7 @@ else {
   renderConfig();   // reconstruye toda la UI
   enforceTomorrowDate();
 
-    // 🔥 Sincronizar banner después de render
+    //  Sincronizar banner después de render
     if (picadas[active] && picadas[active].model) {
       const savedModel = picadas[active].model;
       setTimeout(() => {
@@ -2193,7 +2235,7 @@ clientName.value = "";
 addr.value = "";
 zone.value = "";
 
-// 🔹 Fecha vuelve a la más cercana disponible
+//  Fecha vuelve a la más cercana disponible
 enforceTomorrowDate();
 
 
@@ -2222,7 +2264,7 @@ function sendViewContentOnce(model, size, price) {
   return;
 }
 function resetForNextOrder() {
-  // 🔹 Reset de inputs y variables locales
+  //  Reset de inputs y variables locales
   clientName.value = "";
   addr.value = "";
   zone.value = "";
@@ -2232,10 +2274,10 @@ function resetForNextOrder() {
   active = 0;
 
   enforceTomorrowDate();
-  // 🔹 Limpiar picadas y generar un nuevo array vacío con 1 picada
+  //  Limpiar picadas y generar un nuevo array vacío con 1 picada
   buildPicadas(1);
 
-  // 🔹 Reset visual y botones
+  //  Reset visual y botones
  const payBtn = document.getElementById("payBtn");
 if (payBtn) {
   payBtn.disabled = false;
@@ -2244,13 +2286,13 @@ if (payBtn) {
 }
   document.getElementById('cartTotal').textContent = '$0';
 
-  // 🔹 Limpiar errores visuales
+  //  Limpiar errores visuales
   document.querySelectorAll('.control').forEach(el => el.classList.remove('error'));
 
 localStorage.removeItem('sf_backup_order_' + window.currentOrderId);
 
 
-// 🔐 Limpiar preferencia de Mercado Pago
+//  Limpiar preferencia de Mercado Pago
 sessionStorage.removeItem('mp_init_point');
 
 }
@@ -2264,7 +2306,7 @@ function handleReturnFromMP() {
     params.get('status') ||
     params.get('collection_status');
 
-  // 🔒 SOLO ejecutar si realmente venimos de Mercado Pago
+  //  SOLO ejecutar si realmente venimos de Mercado Pago
   const comingFromMP = document.referrer.includes("mercadopago");
 
 if (status === 'approved') {
@@ -2286,7 +2328,7 @@ if (status === 'approved') {
     window.location.pathname
   );
 
-  console.log('✅ Pago aprobado → abrir Step 2 para completar envío');
+  console.log(' Pago aprobado → abrir Step 2 para completar envío');
 }
 }
 
@@ -2341,16 +2383,16 @@ function setModel(model){
 
   const current = picadas[active];
 
-  // 🔒 No permitir deseleccionar modelo
+  //  No permitir deseleccionar modelo
   if(current.model === model) return;
 
   current.model = model;
 
-  // ✅ Mantener tamaño si ya estaba elegido
+  //  Mantener tamaño si ya estaba elegido
   if(current.size){
     current.price = PRICES[current.size];
   }
-// 🔥 Hacer titilar tamaños si aún no hay tamaño elegido
+//  Hacer titilar tamaños si aún no hay tamaño elegido
 if(!current.size){
   setTimeout(() => {
     const sizeBtns = document.querySelectorAll('.size-col button.control');
@@ -2407,13 +2449,13 @@ function addPicada(){
 
   const current = picadas[active];
 
-  // 🔒 Si la picada actual no está completa, no duplicar
+  //  Si la picada actual no está completa, no duplicar
 if(!current.size){
   highlightPicada(active);
   return;
 }
 
-  // 🔥 DUPLICAR la picada actual
+  //  DUPLICAR la picada actual
   picadas.push({
     model: current.model,
     size: current.size,
@@ -2421,7 +2463,7 @@ if(!current.size){
     notes: current.notes || ""
   });
 
-  // 🔹 Seleccionar automáticamente la nueva
+  //  Seleccionar automáticamente la nueva
   active = picadas.length - 1;
 
   saveState();
@@ -2465,6 +2507,21 @@ function renderConfig(){
 
   const p = picadas[active];
 
+  const iconSize = `
+    <svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7Zm3-1a1 1 0 0 0-1 1v2h12V7a1 1 0 0 0-1-1H7Zm11 5H6v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-6Z"/>
+    </svg>`;
+
+  const iconIncludes = `
+    <svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M12 2 3 6.2v11.6L12 22l9-4.2V6.2L12 2Zm0 2.2 5.7 2.7L12 9.6 6.3 6.9 12 4.2ZM5 8.5l6 2.8v8.1l-6-2.8V8.5Zm8 10.9v-8.1l6-2.8v8.1l-6 2.8Z"/>
+    </svg>`;
+
+  const iconContent = `
+    <svg class="inline-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path fill="currentColor" d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 2v14h10V5H7Zm2 3h6v2H9V8Zm0 4h6v2H9v-2Zm0 4h4v2H9v-2Z"/>
+    </svg>`;
+
 config.innerHTML = `
 
     <div class="section qty-section">
@@ -2485,7 +2542,7 @@ config.innerHTML = `
               flex:1;
               text-align:center;
               font-size:18px;
-              font-weight:600;
+              font-weight:500;
               background:var(--input-bg);
               border:1px solid var(--input-border);
               border-radius:8px;
@@ -2525,28 +2582,39 @@ config.innerHTML = `
       <div class="size-group">
         <div class="field-label">Elegí el tamaño</div>
 
-        <div class="size-col" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <button class="control ${p.size===2?'selected':''}" onclick="handleSizeClick(2)">
+        <div class="size-col">
+          <button class="control ${p.size===2?'selected':''}" onclick="handleSizeClick(2)" aria-label="Picada para 2 personas">
             <div>2 personas</div>
-            <div style="font-size:12px;opacity:.8;">$${PRICES[2].toLocaleString()}</div>
+            <div class="size-price">$${PRICES[2].toLocaleString()}</div>
           </button>
 
-          <button class="control ${p.size===6?'selected':''}" onclick="handleSizeClick(6)">
-            <div>6 personas</div>
-            <div style="font-size:12px;opacity:.8;">$${PRICES[6].toLocaleString()}</div>
-          </button>
-
-          <button class="control ${p.size===4?'selected':''}" onclick="handleSizeClick(4)">
+          <button class="control ${p.size===4?'selected':''}" onclick="handleSizeClick(4)" aria-label="Picada para 4 personas">
             <div>4 personas</div>
-            <div style="font-size:12px;opacity:.8;">$${PRICES[4].toLocaleString()}</div>
+            <div class="size-price">$${PRICES[4].toLocaleString()}</div>
           </button>
 
-          <button class="control ${p.size===10?'selected':''}" onclick="handleSizeClick(10)">
+          <button class="control ${p.size===6?'selected':''}" onclick="handleSizeClick(6)" aria-label="Picada para 6 personas">
+            <div>6 personas</div>
+            <div class="size-price">$${PRICES[6].toLocaleString()}</div>
+          </button>
+
+          <button class="control ${p.size===10?'selected':''}" onclick="handleSizeClick(10)" aria-label="Picada para 10 personas">
             <div>10 personas</div>
-            <div style="font-size:12px;opacity:.8;">$${PRICES[10].toLocaleString()}</div>
+            <div class="size-price">$${PRICES[10].toLocaleString()}</div>
           </button>
         </div>
       </div>
+    </div>
+
+    <div class="section">
+      <label>Elegí una fecha</label>
+      <input
+        id="orderDate"
+        type="date"
+        class="control"
+        oninput="update()"
+      />
+      <div class="error-msg" id="error-orderDate"></div>
     </div>
 
 <div class="section">
@@ -2560,7 +2628,7 @@ config.innerHTML = `
 
         <div class="picada-grid">
           <div>
-            <div class="content-category">📏 Tamaño</div>
+            <div class="content-category">${iconSize}<span>Tamaño</span></div>
             <ul>
               <li>${SIZE_INFO[p.size].medidas}</li>
               <li>${SIZE_INFO[p.size].peso}</li>
@@ -2568,7 +2636,7 @@ config.innerHTML = `
           </div>
 
           <div>
-            <div class="content-category">🥖 Incluye</div>
+            <div class="content-category">${iconIncludes}<span>Incluye</span></div>
             <ul>
               <li>Pan de regalo: ${SIZE_INFO[p.size].pan}</li>
               <li>Envío refrigerado gratis</li>
@@ -2577,7 +2645,7 @@ config.innerHTML = `
           </div>
         </div>
 
-        <div class="content-category" style="margin-top:10px;">🧀 Contenido de la picada</div>
+        <div class="content-category" style="margin-top:10px;">${iconContent}<span>Contenido de la picada</span></div>
 
         <div class="picada-grid">
           <div>
@@ -2603,17 +2671,6 @@ config.innerHTML = `
     `
   }
 </div>
-
-    <div class="section">
-      <label>Elegí una fecha</label>
-      <input
-        id="orderDate"
-        type="date"
-        class="control"
-        oninput="update()"
-      />
-      <div class="error-msg" id="error-orderDate"></div>
-    </div>
   `;
 
   enforceTomorrowDate();
@@ -2627,10 +2684,10 @@ function handleSizeClick(s){
 
   const current = picadas[active];
 
-// 🔒 BLOQUEO: no permitir tamaño sin modelo
-// 🔒 Ya no hay modelos: asegurar modelo único
+//  BLOQUEO: no permitir tamaño sin modelo
+//  Ya no hay modelos: asegurar modelo único
 current.model = "Picada artesanal";
-// 🔒 NO permitir deseleccionar
+//  NO permitir deseleccionar
 if(current.size === s) {
   if(document.activeElement){
     document.activeElement.blur();
@@ -2684,7 +2741,7 @@ function handleZoneChange() {
   const zoneSelect = document.getElementById('zone');
   const manualInput = document.getElementById('manualZone');
 
-  // 👉 Opción "Seleccionar localidad"
+  //  Opción "Seleccionar localidad"
   if (zoneSelect.value === "") {
     manualInput.style.display = 'none';
     zoneName = "";
@@ -2703,7 +2760,7 @@ function handleZoneChange() {
   return;
 }
 
-  // 👉 Localidad normal
+  //  Localidad normal
   manualInput.style.display = 'none';
   setZone();
 }
@@ -2822,7 +2879,7 @@ function enforceTomorrowDate() {
     sessionStorage.setItem('orderDate', tomorrowStr);
   }
 
-  // 🔥 IMPORTANTE: limpiar listener anterior
+  //  IMPORTANTE: limpiar listener anterior
   dateInput.onchange = null;
 
   dateInput.onchange = function () {
@@ -2879,7 +2936,7 @@ const targetSummary = currentStep === 1
 targetSummary.innerHTML = `
   <div class="summary-header">
     <div class="summary-title">Resumen</div>
-    <button onclick="handleSummaryReset()" class="summary-close">✕</button>
+    <button onclick="handleSummaryReset()" class="summary-close"></button>
   </div>
 
   <div class="summary-content">
@@ -2952,12 +3009,12 @@ if (payBtn) {
   payBtn.classList.toggle("enabled", valid);
 }
 
-// 🔄 Si el pedido cambió, invalidar checkout previo
+//  Si el pedido cambió, invalidar checkout previo
 const savedFingerprint = sessionStorage.getItem('order_fingerprint');
 const currentFingerprint = getOrderFingerprint();
 
 if (savedFingerprint && savedFingerprint !== currentFingerprint) {
-  // 🔐 limpiar checkout previo
+  //  limpiar checkout previo
   sessionStorage.removeItem('mp_init_point');
   sessionStorage.removeItem('order_fingerprint');
 }
@@ -2975,10 +3032,10 @@ if(zone && !zoneName && zone.value){
 const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
 total = currentStep === 2 ? subtotal + ship : subtotal;
 
-  // 🔹 Mini banner
+  //  Mini banner
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString()}`;
 
-  // 🔹 Total resumen
+  //  Total resumen
   const totalValue = document.querySelector('.total-left div:last-child');
   if (totalValue) {
     const stepTotal = currentStep === 2
@@ -2988,7 +3045,7 @@ total = currentStep === 2 ? subtotal + ship : subtotal;
     totalValue.textContent = `$${stepTotal.toLocaleString()}`;
   }
 
-  // 🔹 Línea envío
+  //  Línea envío
   const shippingLine = document.querySelector('.summary-shipping span:nth-child(2)');
   if (shippingLine) {
     shippingLine.innerHTML =
@@ -3231,7 +3288,7 @@ banner.addEventListener("touchstart", e => {
 const track = document.getElementById("bannerTrack");
 const bannerModel = document.getElementById("bannerModel");
 // ===============================
-// 🎥 VIDEO PERFORMANCE FIX (GLOBAL)
+//  VIDEO PERFORMANCE FIX (GLOBAL)
 // ===============================
 const videoObserver = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
@@ -3285,9 +3342,9 @@ const summaryStep2 = document.getElementById("summaryWrapperStep2");
     track.appendChild(slide);
   });
 
-  bannerReady = true;          // 🔥 CLAVE
-  showSlide(bannerIndex, false); // 🔥 fuerza render inicial
-// 👁️ Observer para pausar autoplay cuando el banner no está visible
+  bannerReady = true;          //  CLAVE
+  showSlide(bannerIndex, false); //  fuerza render inicial
+// ️ Observer para pausar autoplay cuando el banner no está visible
 const bannerObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
 
@@ -3313,7 +3370,7 @@ if (banner) {
 
 
 
-// 👁️ Pausar autoplay si el usuario cambia de pestaña
+// ️ Pausar autoplay si el usuario cambia de pestaña
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     clearTimeout(bannerTimer);
@@ -3384,7 +3441,7 @@ function showSlide(i, animate = true){
   const slide = bannerSlides[i];
   bannerModel.textContent = slide.model;
 
-  // ⚡ Lazy-load de imagen si es slide > 0
+  //  Lazy-load de imagen si es slide > 0
   const slideEl = track.children[i];
   const img = slideEl.querySelector('img[data-src]');
   if(img){
@@ -3413,7 +3470,7 @@ banner.onclick = () => {
 
   const model = bannerSlides[bannerIndex].model;
 
-  setModel(model); // 🔥 usar la función oficial
+  setModel(model); //  usar la función oficial
 };
 
 
@@ -3537,7 +3594,7 @@ let scrollTimeout;
 
 
 
-// 🔥 URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
+//  URGENCIA ROTATIVA INTELIGENTE (solo si es visible)
 
 const urgencyMessages = [
   "Reservá hoy y asegurá tu fecha",
@@ -3562,7 +3619,7 @@ function rotateUrgency(){
   }, 400);
 }
 
-// 👁️ Observer para detectar visibilidad real
+// ️ Observer para detectar visibilidad real
 const urgencyObserver = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
     urgencyVisible = entry.isIntersecting;
@@ -3651,7 +3708,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.body.classList.remove("preload");
 });
-// 🔒 bloquear zoom por gesto (iOS / Safari)
+//  bloquear zoom por gesto (iOS / Safari)
 document.addEventListener('gesturestart', e => e.preventDefault());
 document.addEventListener('gesturechange', e => e.preventDefault());
 document.addEventListener('gestureend', e => e.preventDefault());
