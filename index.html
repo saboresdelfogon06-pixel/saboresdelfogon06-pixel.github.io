@@ -1091,11 +1091,11 @@ button.selected{
   
 .picada-grid{
   display:grid;
-  grid-template-columns:1fr 1.35fr 1fr;
-  gap:18px;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
   align-items:start;
 }
-
+  
 .picada-grid > div{
   display:flex;
   flex-direction:column;
@@ -1155,8 +1155,16 @@ padding:0 12px;
 
 }
 
-  .picada-accompaniments{
-  padding-top:4px;
+.picada-accompaniments{
+  text-align:center;
+  max-width:100%;
+}
+
+.picada-accompaniments .content-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px 24px;
+  margin-top:12px;
 }
 
 .picada-accompaniments .content-category{
@@ -1164,9 +1172,6 @@ padding:0 12px;
   text-align:left;
 }
 
-.picada-accompaniments .content-list{
-  margin-top:8px;
-}
   display:grid;
   grid-template-columns: 1fr 1fr;
   gap:16px;
