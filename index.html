@@ -1869,79 +1869,7 @@ function handleMiniBannerClick(){
   // 🟢 Si está completo → ir a Step 2
   openLeadModal();
 }
-
 function startCheckoutFlow(){
-
-  const orderId = window.currentOrderId;
-  const key = "ic_sent_" + orderId;
-  const alreadySent = sessionStorage.getItem(key);
-
-  const allPicadasValid = picadas.every(p => p.model && p.size);
-
-  if(!allPicadasValid){
-    const incompleteIndex = picadas.findIndex(p => !p.model || !p.size);
-    highlightPicada(incompleteIndex);
-    return;
-  }
-
-  const contact = leadContact ? leadContact.value.trim() : "";
-  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
-  const cleanPhone = contact.replace(/\D/g, "");
-  const isWhatsapp = cleanPhone.length >= 8;
-
-  if (!contact || (!isEmail && !isWhatsapp)) {
-    clearLeadErrors();
-    if (leadError) leadError.textContent = "Ingresá un WhatsApp o un email válido.";
-    if (leadContact) leadContact.classList.add("error");
-    return;
-  }
-
-  const subtotal = picadas.reduce((sum, p) => sum + (p.price || 0), 0);
-  total = subtotal;
-
-  if (!alreadySent) {
-    sessionStorage.setItem(key, "1");
-
-    const eventId = crypto.randomUUID();
-
-    if (typeof fbq === "function") {
-      fbq('track', 'InitiateCheckout', {
-        value: total,
-        currency: 'ARS',
-        contents: picadas.map(p => ({
-          id: p.model + "_" + p.size,
-          quantity: 1,
-          item_price: p.price
-        })),
-        content_type: 'product'
-      }, {
-        eventID: eventId
-      });
-    }
-
-    fetch("https://saboresdelfogon.com/api/meta/initiate-checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        event_id: eventId,
-        order_id: window.currentOrderId,
-        total,
-        items: picadas,
-        lead_contact: contact,
-        lead_email: isEmail ? contact : "",
-        lead_whatsapp: isWhatsapp ? cleanPhone : "",
-        fbp: getFacebookIdentifiers().fbp,
-        fbc: getFacebookIdentifiers().fbc,
-        user_agent: navigator.userAgent,
-        session_id: localStorage.getItem("sdf_session_id"),
-        session_start: localStorage.getItem("sdf_session_start"),
-        page_views: localStorage.getItem("sdf_page_views"),
-        screen_width: window.screen.width,
-        screen_height: window.screen.height
-      })
-    }).catch(()=>{});
-  }
-
   goWA();
 }
 
@@ -2290,50 +2218,9 @@ document.getElementById("infoOperativa").style.display = "block";
 
 setStep(1);
 }
-
 function sendViewContentOnce(model, size, price) {
-
-  const orderId = window.currentOrderId;
-  const key = "vc_sent_" + orderId;
-
-  if (sessionStorage.getItem(key)) return;
-
-  sessionStorage.setItem(key, "1");
-
-  const eventId = crypto.randomUUID();
-
-  const fbIds = getFacebookIdentifiers();
-
-  // ===== PIXEL =====
-  if (typeof fbq === "function") {
-fbq('track', 'ViewContent', {
-  content_name: model,
-  content_category: 'Picadas',
-  content_ids: [model + "_" + size],
-  content_type: 'product',
-  value: price || 0,
-  currency: 'ARS'
-}, {
-  eventID: eventId
-});
-  }
-
-  // ===== CAPI =====
-  fetch("https://saboresdelfogon.com/api/meta/view-content", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      event_id: eventId,
-      content_name: model,
-      value: price || 0,
-      order_id: window.currentOrderId, 
-      fbp: fbIds.fbp,
-      fbc: fbIds.fbc,
-      user_agent: navigator.userAgent
-    })
-  }).catch(()=>{});
+  return;
 }
-
 function resetForNextOrder() {
   // 🔹 Reset de inputs y variables locales
   clientName.value = "";
@@ -3065,20 +2952,6 @@ if (payBtn) {
   payBtn.classList.toggle("enabled", valid);
 }
 
-
- if(valid && !window._checkoutTracked){
-  if (typeof fbq === "function") {
-    fbq('trackCustom', 'FormCompleted', {
-      content_name: 'Formulario Picada Completo',
-      content_category: 'Picadas',
-      value: total,
-      currency: 'ARS',
-      num_items: picadas.length
-    });
-  }
-  window._checkoutTracked = true;
-}
-  if(!valid) window._checkoutTracked = false;
 // 🔄 Si el pedido cambió, invalidar checkout previo
 const savedFingerprint = sessionStorage.getItem('order_fingerprint');
 const currentFingerprint = getOrderFingerprint();
@@ -3825,7 +3698,6 @@ s.parentNode.insertBefore(t,s)}
 (window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
 fbq('init','1389872189131519');
-fbq('track','PageView');
   }
   
 loadPixelOnce();
