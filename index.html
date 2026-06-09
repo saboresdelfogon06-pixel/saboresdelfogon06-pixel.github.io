@@ -1131,10 +1131,41 @@ padding:0 12px;
 }
 
 @media(max-width:768px){
+
   .picada-grid{
-    grid-template-columns:1fr 1fr 1fr;
-    gap:10px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
   }
+
+  .picada-grid > div{
+    align-items:flex-start;
+    padding:0;
+  }
+
+  .picada-grid > div::after{
+    display:none;
+  }
+
+  .content-category{
+    justify-content:flex-start;
+    text-align:left;
+    margin-bottom:8px;
+  }
+
+}
+
+  .picada-accompaniments{
+  padding-top:4px;
+}
+
+.picada-accompaniments .content-category{
+  justify-content:flex-start;
+  text-align:left;
+}
+
+.picada-accompaniments .content-list{
+  margin-top:8px;
 }
   display:grid;
   grid-template-columns: 1fr 1fr;
