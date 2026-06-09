@@ -801,9 +801,9 @@ input[type="date"]::-moz-focus-inner{
 
 .content-category{
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:center;
-  gap:6px;
+  gap:4px;
   font-size:.78rem;
   font-weight:700;
   text-transform:uppercase;
@@ -1088,7 +1088,7 @@ button.selected{
 .picada-divider{
   height:1px;
   background:rgba(255,255,255,.10);
-  margin:16px 0;
+  margin:10px 0;
 }
   
 .picada-grid{
@@ -1101,11 +1101,11 @@ button.selected{
 .picada-grid > div{
   display:flex;
   flex-direction:column;
-  align-items:center;
+  align-items:flex-start;
   position:relative;
-padding:0 12px;
+  padding:0 8px;
 }
-
+  
 .picada-grid > div:not(:last-child)::after{
   content:"";
   position:absolute;
@@ -1123,8 +1123,8 @@ padding:0 12px;
 }
 
 .picada-grid li{
-  margin:6px 0;
-  line-height:1.35;
+  margin:3px 0;
+  line-height:1.25;
 }
 
 .picada-grid ul{
@@ -1152,7 +1152,7 @@ padding:0 12px;
   }
 
   .content-category{
-    justify-content:center;
+    justify-content:flex-start;
     text-align:center;
     margin-bottom:10px;
   }
@@ -1161,12 +1161,11 @@ padding:0 12px;
 
 .content-accompaniments-text{
   text-align:center;
-  line-height:1.7;
+  line-height:1.55;
   color:rgba(255,255,255,.85);
   max-width:500px;
-  margin:12px auto 0;
+  margin:6px auto 0;
 }
-
 .picada-accompaniments .content-list{
   width:100%;
   max-width:420px;
@@ -1188,10 +1187,6 @@ padding:0 12px;
   text-align:left;
 }
 
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:16px;
-}
 
 .picada-grid ul{
   margin:6px 0 12px;
@@ -1592,9 +1587,9 @@ body.preload {
   }
 
 .picada-accompaniments{
-  border-top:1px solid rgba(255,255,255,.12);
-  padding-top:22px;
-  margin-top:22px;
+  border-top:none;
+  padding-top:10px;
+  margin-top:10px;
 
   display:flex;
   flex-direction:column;
@@ -2875,7 +2870,9 @@ config.innerHTML = `
 
 <div class="picada-accompaniments">
 
-  <div class="content-category">Acompañamientos</div>
+  <div class="content-title content-title--accompaniments">
+  ACOMPAÑAMIENTOS
+</div>
 
 <div class="content-accompaniments-text">
   Dip de queso crema con ciboulette · Tomate deshidratado · Frutos secos · Dip de mermelada · Uvas
