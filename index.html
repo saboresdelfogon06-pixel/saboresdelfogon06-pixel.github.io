@@ -1133,28 +1133,29 @@ padding:0 12px;
 @media(max-width:768px){
 
   .picada-grid{
-    display:flex;
-    flex-direction:column;
-    gap:16px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    align-items:start;
   }
 
   .picada-grid > div{
-    align-items:flex-start;
-    padding:0;
+    align-items:center;
+    padding:0 8px;
   }
 
-  .picada-grid > div::after{
-    display:none;
+  .picada-grid > div:not(:last-child)::after{
+    display:block;
+    height:100%;
   }
 
   .content-category{
-    justify-content:flex-start;
-    text-align:left;
-    margin-bottom:8px;
+    justify-content:center;
+    text-align:center;
+    margin-bottom:10px;
   }
 
 }
-
 .picada-accompaniments{
   text-align:center;
   max-width:100%;
@@ -1162,9 +1163,12 @@ padding:0 12px;
 
 .picada-accompaniments .content-list{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px 24px;
+  grid-template-columns:1fr;
+  gap:8px;
   margin-top:12px;
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .picada-accompaniments .content-category{
@@ -1549,11 +1553,10 @@ body.preload {
 
 .content-list li{
   position:relative;
-  padding-left:14px;
-  margin-bottom:6px;
-  line-height:1.45;
+  padding-left:16px;
+  margin-bottom:8px;
+  line-height:1.55;
 }
-
 .content-list li::before{
   content:"•";
   position:absolute;
