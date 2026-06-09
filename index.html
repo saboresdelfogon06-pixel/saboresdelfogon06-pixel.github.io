@@ -1085,8 +1085,8 @@ button.selected{
 
 .picada-divider{
   height:1px;
-  background:rgba(255,255,255,.12);
-  margin:14px 0;
+  background:rgba(255,255,255,.10);
+  margin:16px 0;
 }
   
 .picada-grid{
@@ -1497,8 +1497,60 @@ body.preload {
   margin-bottom:5px;
 }
 
-.content-list li::marker{
-  color:#000;
+/* ==========================
+   CONTENIDO PICADA
+   ========================== */
+
+.picada-accompaniments{
+  padding-top:2px;
+}
+
+.content-list{
+  list-style:none;
+  padding-left:0;
+  margin-top:10px;
+}
+
+.content-list li{
+  position:relative;
+  padding-left:14px;
+  margin-bottom:6px;
+  line-height:1.45;
+}
+
+.content-list li::before{
+  content:"•";
+  position:absolute;
+  left:0;
+  top:0;
+  color:var(--accent);
+  font-size:14px;
+  font-weight:700;
+}
+
+@media (max-width:768px){
+
+  .picada-grid{
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+
+  .picada-grid > div{
+    padding:0 8px;
+  }
+
+  .picada-grid > div:not(:last-child)::after{
+    height:100%;
+  }
+
+  .picada-accompaniments{
+    text-align:center;
+  }
+
+  .picada-accompaniments .content-list{
+    max-width:320px;
+    margin:10px auto 0;
+  }
 }
   
 </style>
