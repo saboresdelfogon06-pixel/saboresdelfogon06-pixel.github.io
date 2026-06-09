@@ -800,14 +800,16 @@ input[type="date"]::-moz-focus-inner{
 }
 
 .content-category{
-  margin-top:6px;
-  margin-bottom:4px;
-  font-size:13px;
-  color:var(--text);
-  font-weight:600;
   display:flex;
   align-items:center;
+  justify-content:center;
   gap:6px;
+  font-size:.78rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted);
+  text-align:center;
 }
 
 .inline-icon{
@@ -1065,11 +1067,42 @@ button.selected{
   z-index:-1;
 }
 
-  .picada-grid{
+.picada-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px;
+  margin-top:14px;
+  text-align:center;
   align-items:start;
+}
+
+.picada-grid > div{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+padding:0 12px;
+}
+
+.picada-grid > div:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  top:8px;
+  right:0;
+  width:1px;
+  height:85%;
+  background:rgba(255,255,255,.08);
+}
+  
+.picada-grid ul{
+  list-style:none;
+  padding:0;
+  margin:8px 0 0;
+}
+
+.picada-grid li{
+  margin:6px 0;
+  line-height:1.35;
 }
 
 .picada-grid ul{
@@ -1432,6 +1465,12 @@ body.preload {
   transform:translateY(-1px);
 }
 
+.content-list{
+  text-align:center;
+  line-height:1.55;
+  color:var(--text);
+}
+  
 </style>
 </head>
 <body class="preload">
@@ -2643,81 +2682,47 @@ config.innerHTML = `
     : `
       <div class="picada-content">
 
-        <div class="picada-grid">
-          <div>
-            <div class="content-category">${iconSize}<span>Tamaño</span></div>
-            <ul>
-              <li>${SIZE_INFO[p.size].medidas}</li>
-              <li>${SIZE_INFO[p.size].peso}</li>
-            </ul>
-          </div>
-
-          <div>
-            <div class="content-category">${iconIncludes}<span>Incluye</span></div>
-            <ul>
-              <li>Pan de regalo: ${SIZE_INFO[p.size].pan}</li>
-              <li>Envío refrigerado gratis</li>
-              <li>Producción artesanal con reserva previa</li>
-            </ul>
-          </div>
-        </div>
-        
-      <div class="content-category" style="margin-top:10px;">
-  ${iconContent}<span>Selección premium de fiambres y quesos</span>
-</div>
-
 <div class="picada-grid">
 
   <div>
-
     <div class="content-category">Fiambres</div>
-    <ul>
-      <li>Spianatta</li>
-      <li>Bondiola serrana</li>
-      <li>Cantimpalo ahumado a quebracho</li>
-      <li>Longaniza</li>
-      <li>Mortadela</li>
-      <li>Jamón crudo</li>
-      <li>Jamón cocido</li>
-      <li>Lomo ahumado</li>
-    </ul>
 
- <div class="picada-grid">
-
-  <div>
-    <div class="content-category">Fiambres</div>
-    <ul>
-      <li>Spianatta</li>
-      <li>Bondiola serrana</li>
-      <li>Cantimpalo ahumado a quebracho</li>
-      <li>Longaniza</li>
-      <li>Mortadela</li>
-      <li>Jamón crudo</li>
-      <li>Jamón cocido</li>
-      <li>Lomo ahumado</li>
-    </ul>
+    <div class="content-list">
+      Spianatta<br>
+      Bondiola serrana<br>
+      Cantimpalo ahumado a quebracho<br>
+      Longaniza<br>
+      Mortadela<br>
+      Jamón crudo<br>
+      Jamón cocido<br>
+      Lomo ahumado
+    </div>
   </div>
 
   <div>
     <div class="content-category">Quesos</div>
-    <ul>
-      <li>Brie</li>
-      <li>Burrata</li>
-      <li>Azul</li>
-      <li>Tybo</li>
-    </ul>
+
+    <div class="content-list">
+      Brie<br>
+      Burrata<br>
+      Azul<br>
+      Tybo
+    </div>
   </div>
 
   <div>
     <div class="content-category">Acompañamientos</div>
-    <ul>
-      <li>Tomate deshidratado</li>
-      <li>Frutos secos</li>
-      <li>Uvas</li>
-      <li>Dip de queso crema con ciboulette</li>
-      <li>Dip de mermelada</li>
-    </ul>
+
+    <div class="content-list">
+      Tomate deshidratado<br>
+      Frutos secos<br>
+      Uvas<br>
+      Dip de queso crema con ciboulette<br>
+      Dip de mermelada
+    </div>
   </div>
+
+</div>
 
 </div>
 
