@@ -3061,9 +3061,6 @@ async function goWA() {
 
   const fbIds = getFacebookIdentifiers();
 
-  const contact = leadContact ? leadContact.value.trim() : "";
-  const cleanPhone = contact.replace(/\D/g, "");
-
   await fetch("https://saboresdelfogon.com/api/lead-attribution", {
     method: "POST",
     headers: {
@@ -3071,7 +3068,6 @@ async function goWA() {
     },
     body: JSON.stringify({
       order_id: orderId,
-      ph: cleanPhone,
       fbp: fbIds.fbp,
       fbc: fbIds.fbc,
       user_agent: navigator.userAgent,
