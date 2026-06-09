@@ -810,6 +810,8 @@ input[type="date"]::-moz-focus-inner{
   letter-spacing:.08em;
   color:var(--muted);
   text-align:center;
+  letter-spacing:.12em;
+font-size:.95rem;
 }
 
 .inline-icon{
@@ -1156,19 +1158,21 @@ padding:0 12px;
   }
 
 }
-.picada-accompaniments{
-  text-align:center;
-  max-width:100%;
-}
 
 .picada-accompaniments .content-list{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:8px;
-  margin-top:12px;
+  width:100%;
   max-width:420px;
-  margin-left:auto;
-  margin-right:auto;
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  margin-top:16px;
+  padding:18px;
+
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
 }
 
 .picada-accompaniments .content-category{
@@ -1541,9 +1545,6 @@ body.preload {
    CONTENIDO PICADA
    ========================== */
 
-.picada-accompaniments{
-  padding-top:2px;
-}
 
 .content-list{
   list-style:none;
@@ -1582,10 +1583,15 @@ body.preload {
     height:100%;
   }
 
-  .picada-accompaniments{
-    text-align:center;
-  }
+.picada-accompaniments{
+  border-top:1px solid rgba(255,255,255,.12);
+  padding-top:22px;
+  margin-top:22px;
 
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
   .picada-accompaniments .content-list{
     max-width:320px;
     margin:10px auto 0;
