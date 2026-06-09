@@ -1067,12 +1067,32 @@ button.selected{
   z-index:-1;
 }
 
+
+.picada-info-top{
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.picada-specs{
+  font-size:13px;
+  line-height:1.5;
+  color:var(--muted);
+}
+
+.picada-specs strong{
+  color:var(--text);
+}
+
+.picada-divider{
+  height:1px;
+  background:rgba(255,255,255,.12);
+  margin:14px 0;
+}
+  
 .picada-grid{
   display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:20px;
-  margin-top:14px;
-  text-align:center;
+  grid-template-columns:1fr 1.35fr 1fr;
+  gap:18px;
   align-items:start;
 }
 
@@ -1466,9 +1486,19 @@ body.preload {
 }
 
 .content-list{
-  text-align:center;
-  line-height:1.55;
+  text-align:left;
   color:var(--text);
+  line-height:1.45;
+  margin-top:10px;
+  padding-left:18px;
+}
+
+.content-list li{
+  margin-bottom:5px;
+}
+
+.content-list li::marker{
+  color:#000;
 }
   
 </style>
@@ -2682,44 +2712,68 @@ config.innerHTML = `
     : `
       <div class="picada-content">
 
-<div class="picada-grid">
-
-  <div>
-    <div class="content-category">Fiambres</div>
-
-    <div class="content-list">
-      Spianatta<br>
-      Bondiola serrana<br>
-      Cantimpalo ahumado a quebracho<br>
-      Longaniza<br>
-      Mortadela<br>
-      Jamón crudo<br>
-      Jamón cocido<br>
-      Lomo ahumado
-    </div>
+<div class="picada-info-top">
+  <div class="picada-specs">
+    ${
+      [2,4].includes(p.size)
+      ? `
+      <strong>Tabla para ${p.size} personas</strong><br>
+      20 × 30 cm · ${
+        p.size === 2 ? "450 g" : "900 g"
+      } · Incluye 500 g de pan de campo<br>
+      Envío gratis
+      `
+      : `
+      <strong>Tabla para ${p.size} personas</strong><br>
+      28 × 50 cm · ${
+        p.size === 6 ? "1,1 kg" : "1,6 kg aprox."
+      } · Incluye 1 kg de pan de campo<br>
+      Envío gratis
+      `
+    }
   </div>
+</div>
+
+<div class="picada-divider"></div>
+
+<div class="picada-grid">
 
   <div>
     <div class="content-category">Quesos</div>
 
-    <div class="content-list">
-      Brie<br>
-      Burrata<br>
-      Azul<br>
-      Tybo
-    </div>
+    <ul class="content-list">
+      <li>Burrata</li>
+      <li>Brie</li>
+      <li>Tybo</li>
+      <li>Azul</li>
+    </ul>
+  </div>
+
+  <div>
+    <div class="content-category">Fiambres</div>
+
+    <ul class="content-list">
+      <li>Cantimpalo ahumado a quebracho</li>
+      <li>Bondiola serrana</li>
+      <li>Jamón cocido</li>
+      <li>Lomo ahumado</li>
+      <li>Jamón crudo</li>
+      <li>Mortadela</li>
+      <li>Spianatta</li>
+      <li>Longaniza</li>
+    </ul>
   </div>
 
   <div>
     <div class="content-category">Acompañamientos</div>
 
-    <div class="content-list">
-      Tomate deshidratado<br>
-      Frutos secos<br>
-      Uvas<br>
-      Dip de queso crema con ciboulette<br>
-      Dip de mermelada
-    </div>
+    <ul class="content-list">
+      <li>Dip de queso crema con ciboulette</li>
+      <li>Tomate deshidratado</li>
+      <li>Frutos secos</li>
+      <li>Dip de mermelada</li>
+      <li>Uvas</li>
+    </ul>
   </div>
 
 </div>
